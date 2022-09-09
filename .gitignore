@@ -1,0 +1,13 @@
+# Folders
+.idea
+.vscode
+.history
+
+tmp
+build
+coverage
+node_modules
+
+# Files
+.env
+.DS_STORE
