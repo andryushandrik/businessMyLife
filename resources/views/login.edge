@@ -1,0 +1,15 @@
+@layout('layouts/auth')
+
+@section('body')
+  <section id="entrance">
+    <form action="">
+      <h1 class="text-center">Вход</h1>
+      <input type="text" placeholder="e-mail" class="mb-3">
+      <div class="password mb-3">
+        <input placeholder="Пароль" name="password" type="password" autocomplete="current-password" minlength="4" maxlength="8" size="8">
+        <button type="button" data-state="invisible" class="pass_btn"></button>
+      </div>
+      <button class="btn_main btn_2 m-auto">Войти</button>
+    </form>
+  </section>
+@endsection

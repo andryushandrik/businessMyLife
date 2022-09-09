@@ -1,0 +1,283 @@
+@import "common.css";
+
+body {
+    width: 1920px;
+    height: 100vh;
+    display: grid;
+    grid-template-rows: 70px auto;
+    grid-template-columns: 320px auto;
+    grid-template-areas: 
+    "header header"
+    "sidebar main";
+}
+@media (max-width: 1620px){
+    body {
+        width: 1620px;
+        grid-template-columns: 320px 1300px;
+    }
+}
+@media (max-width: 1200px){
+    body {
+        width: 1200px;
+        grid-template-columns: 270px 930px;
+    }
+}
+/* @media (max-width: 1024px){
+    body {
+        grid-template-areas: 
+        "header header"
+        "main main"; 
+    }
+} */
+
+header {
+    grid-area: header;
+    background-color: #343A40;
+    /* width: 100%;
+    height: 70px; */
+}
+.header-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;;
+}
+.header-btn:hover, .header-btn:active {color: var(--color-1);}
+.header-btn svg path {fill: #fff;}
+.header-btn:hover svg path, .header-btn:active svg path {fill: var(--color-1);}
+.hamburger {display: none;}
+.logo {max-width: 250px;}
+/* @media (max-width: 1024px){
+    .hamburger {display: block;}
+}
+@media (max-width: 767px){
+    .logo {max-width: 200px;}
+}
+@media (max-width: 575px){
+    .logo {display: none;}
+} */
+
+
+aside {
+    grid-area: sidebar;
+    background-color: #212529;
+    color: #fff;
+    height: calc(100vh - 70px);
+    overflow-y: auto;
+    padding: 1.5em 0;
+    /* width: 320px; */
+}
+nav.menu ul {
+    list-style: none;
+    padding: 0;
+}
+nav.menu a {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    color: #fff;
+    width: 100%;
+    padding: 1em .5em 1em 2em;
+    border-left: 3px solid transparent;
+    opacity: .6;
+    transition: .2s;
+}
+nav.menu span {flex: 1;}
+nav.menu svg {
+    width: 1.25em;
+    height: 1.25em;
+    margin-right: .5em;
+}
+nav.menu a:hover, nav.menu a:focus {
+    background-color: rgb(255 255 255 / 8%);
+    opacity: 1;
+}
+nav.menu a:active, nav.menu a.active {
+    background-color: rgb(255 255 255 / 8%);
+    border-left: 3px solid var(--color-2);
+    font-weight: 500;
+    opacity: 1;
+}
+.close-aside {
+    display: none;
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    width: 1em;
+    height: 1em;
+}
+.close-aside svg {
+    width: 100%;
+    height: 100%;
+}
+.close-aside svg path {fill: var(--color-1);}
+.close-aside:hover svg path, .close-aside:active svg path {fill: var(--color-2);}
+/* @media (max-width: 1199px){
+    aside {padding: 1em 0;}
+    nav.menu a {padding: 1em .5em 1em 1em;}
+} */
+/* @media (max-width: 1024px){
+    aside {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 320px;
+        max-width: 100%;
+        height: 100vh;
+        z-index: 10000;
+        transition: .3s;
+        padding: 2em 0 1em;
+    }
+    .close-aside {
+        display: flex;
+    }
+}
+@media (max-width: 575px){
+    aside {width: 100%;}
+} */
+
+
+main {
+    grid-area: main;
+    background-color: #fff;
+    padding: 2em;
+    height: calc(100vh - 70px);
+    overflow-y: auto;
+    /* width: 1600px; */
+}
+/* @media (max-width: 1199px){
+    main {padding: 1em;}
+} */
+.btn_sort svg path {fill: #dadada;}
+.btn_sort[data-sort="z-to-a"] svg path:first-child {fill: #52575C;}
+.btn_sort[data-sort="a-to-z"] svg path:last-child {fill: #52575C;}
+
+.table td, .table th {padding: 1em;}
+.table td:first-child, .table th:first-child {text-align: center;}
+.table thead th {border-bottom: unset;}
+tbody tr:nth-child(2n+1){background-color: #FBFBFB;}
+.table-bordered td, .table-bordered th {border: 1px solid #E8E8E8;}
+
+.btn_edit svg path, .btn_delete svg path {
+    fill: var(--color-2);
+    transition: .2s;;
+}
+.btn_edit:hover svg path, .btn_delete:hover svg path,
+.btn_edit:active svg path, .btn_delete:active svg path {
+    fill: var(--color-1);
+}
+
+
+
+/* PAGINATION */
+.page-item:not(:first-child){margin-left: 4px;}
+.page-link {
+    background-color: transparent;
+    color: #252733;
+    border: 1px solid #E8E8E8;
+    border-radius: 2px;
+    width: 2em;
+    height: 2em;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    outline: none;
+    font-size: .9em;
+    transition: .2s;
+}
+.page-link:hover, .page-link:active, .page-link.active {
+    background-color: transparent;
+    border: 1px solid var(--color-1);
+    color: #252733;
+    outline: none;
+}
+.page-link:active {background-color:var(--color-1);}
+.page-link svg path {fill: #52575C;}
+.page-link.link-disabled svg path {fill:#E8E8E8;}
+
+
+/* блокирование */
+.btn-lock {
+    width: 16px;
+    height: 21px;
+    background: url(../images/icons/unlocked.png) no-repeat center;
+    background-size: contain;
+}
+.btn-lock.locked {
+    background: url(../images/icons/locked.png) no-repeat center;
+    background-size: contain;
+}
+
+
+/* кнопка публикации */
+.btn-public::before {
+    content: "Ошибка";
+}
+.btn-public[data-state="not-published"]::before {
+    content: "Публиковать";
+}
+.btn-public[data-state="published"] {
+    background-color: #E8E8E8;
+    color: #52575C;
+}
+.btn-public[data-state="published"]::before {
+    content: "Опубликовано";
+}
+
+/* entrance page */
+#entrance {
+    grid-column: span 2;
+    grid-row: span 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#entrance form {
+    width: calc(100% - 2em);
+    max-width: 550px;
+    background: #FFFFFF;
+    box-shadow: 0px 8px 36px rgba(0, 0, 0, 0.16);
+    text-align: center;
+    padding: 3em;
+}
+.password {
+    position: relative;
+}
+.password input {position: relative;}
+.password button {
+  position: absolute;
+  bottom: .75em;
+  right: 1em;
+  width: 1.25em;
+  height: 1.25em;
+  display: flex;
+}
+.password button[data-state="invisible"] {
+  background: url(../images/icons/eye_closed.svg) no-repeat center;
+  background-size: contain;
+}
+.password button[data-state="visible"] {
+  background: url(../images/icons/eye_open.svg) no-repeat center;
+  background-size: contain;
+}
+.password button img {width: 100%;}
+
+
+/* .mobile-screensaver {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--color-2);
+    color: #fff;
+    z-index: 1000000000;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+} */
+/* @media (max-width: 1024px){
+    .mobile-screensaver {display: flex;}
+} */
