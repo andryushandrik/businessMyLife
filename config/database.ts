@@ -59,4 +59,11 @@ export default databaseConfig
 
 export const TABLES_NAMES = {
   ROLES: 'roles',
+  NEWS: "news"
 } as const
+
+
+/**
+ * News
+ */
+export const NEWS_DESCRIPTION_MAX_LENGTH = 8192
