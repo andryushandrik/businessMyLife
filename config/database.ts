@@ -58,5 +58,10 @@ const databaseConfig: DatabaseConfig = {
 export default databaseConfig
 
 export const TABLES_NAMES = {
+  /**
+   * * User
+   */
+
   ROLES: 'roles',
+  USERS_TYPES: 'usersTypes',
 } as const

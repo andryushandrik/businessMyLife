@@ -2,7 +2,7 @@
 import type { ModelAttributes } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 
-import Role from 'App/Models/Role'
+import Role from 'App/Models/User/Role'
 import Logger from '@ioc:Adonis/Core/Logger'
 import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
 import { ROLES_NAMES } from 'Config/user'

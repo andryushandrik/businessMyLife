@@ -13,6 +13,11 @@ export default class extends BaseSeeder {
   }
 
   public async run () {
-    await this.runSeeder(await import('../Role'))
+    /**
+     * * User
+     */
+
+    await this.runSeeder(await import('../User/Role'))
+    await this.runSeeder(await import('../User/UserType'))
   }
 }
