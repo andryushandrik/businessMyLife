@@ -35,6 +35,14 @@ const databaseConfig: DatabaseConfig = {
     */
     pg: {
       client: 'pg',
+      debug: false,
+      healthCheck: false,
+      migrations: {
+        naturalSort: true,
+      },
+      seeders: {
+        paths: ['./database/seeders/MainSeeder'],
+      },
       connection: {
         host: Env.get('PG_HOST'),
         port: Env.get('PG_PORT'),
@@ -42,14 +50,13 @@ const databaseConfig: DatabaseConfig = {
         password: Env.get('PG_PASSWORD', ''),
         database: Env.get('PG_DB_NAME'),
       },
-      migrations: {
-        naturalSort: true,
-      },
-      healthCheck: false,
-      debug: false,
     },
 
   }
 }
 
 export default databaseConfig
+
+export const TABLES_NAMES = {
+  ROLES: 'roles',
+} as const
