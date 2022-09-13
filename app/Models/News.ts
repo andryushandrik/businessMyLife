@@ -2,10 +2,11 @@
 import type { DateTime } from "luxon";
 // * Types
 
-import { BaseModel, column } from "@ioc:Adonis/Lucid/Orm";
+import { BaseModel, column, beforeCreate, beforeSave } from "@ioc:Adonis/Lucid/Orm";
+import cyrillicToTranslit from 'cyrillic-to-translit-js'
 
 export default class News extends BaseModel {
-  public readonly columns = [
+  public static readonly columns = [
     'id', "slug", "title", "description", "viewsCount", 
     "suptitle", "image", "readingTimeFrom", "readingTimeTo",
     'createdAt', 'updatedAt',
@@ -47,4 +48,30 @@ export default class News extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime;
+
+    /**
+   * Hooks
+   */
+
+  @beforeCreate()
+  public static setDefaultViewsCount(news: News){
+    if(!news.$dirty.viewsCount){
+      news.viewsCount = 0
+    }
+  }
+
+  @beforeSave()
+  public static formatSlug(news: News){
+    let formattedSlug: string
+    if(news.$dirty.slug){
+      const rawSlug = news.$dirty.slug.toLowerCase().replaceAll(' ', '_')
+      formattedSlug = cyrillicToTranslit().transform(rawSlug)
+    }
+    else{
+      const rawSlug = news.$dirty.title.toLowerCase().replaceAll(' ', '_')
+      formattedSlug = cyrillicToTranslit().transform(rawSlug)
+    }
+
+    news.slug = formattedSlug
+  }
 }

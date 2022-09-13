@@ -27,3 +27,12 @@ Route.get('/', async ({ view }) => {
 Route.get('/auth', async ({ view }) => {
   return view.render('login')
 })
+
+/**
+ * News
+ */
+
+Route.group(() => {
+  Route.get('/', 'NewsController.index')
+  Route.post('/', 'NewsController.create')
+}).prefix('/news')

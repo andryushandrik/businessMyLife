@@ -2,22 +2,22 @@
 import type { ModelAttributes } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 
-import Role from 'App/Models/Role'
 import Logger from '@ioc:Adonis/Core/Logger'
+import UserType from 'App/Models/User/UserType'
 import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
-import { ROLES_NAMES } from 'Config/user'
+import { TYPES_NAMES } from 'Config/user'
 
 export default class extends BaseSeeder {
   public async run () {
 
     try {
-      const roles: Partial<ModelAttributes<Role>>[] = []
+      const types: Partial<ModelAttributes<UserType>>[] = []
 
-      for (const item of ROLES_NAMES) {
-        roles.push({ name: item })
+      for (const item of TYPES_NAMES) {
+        types.push({ name: item })
       }
 
-      await Role.createMany(roles)
+      await UserType.createMany(types)
     } catch (err: any) {
       Logger.error(err)
     }

@@ -5,7 +5,7 @@ import type { DateTime } from 'luxon'
 import { BaseModel, beforeSave, column } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Role extends BaseModel {
-  public readonly columns = [
+  public static readonly columns = [
     'id',
     'name',
     'createdAt', 'updatedAt',
