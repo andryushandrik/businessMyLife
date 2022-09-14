@@ -25,3 +25,15 @@ Route.group(() => {
   Route.get('/:id', 'NewsController.showOne')
   
 }).prefix('/news')
+
+/**
+ * Feedback
+ */
+
+Route.group(() => {
+  Route.get('/', 'FeedbackController.index')
+  Route.get('/:id', 'FeedbackController.showOne')
+  
+  Route.patch('/:id', 'FeedbackController.complete')
+  Route.delete('/:id', 'FeedbackController.delete')
+}).prefix("/feedback")

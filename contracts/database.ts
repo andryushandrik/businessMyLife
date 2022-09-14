@@ -16,6 +16,11 @@ export type PaginationConfig = {
     page: number,
     baseUrl?: string,
     limit?: number,
-    orderByColumn?: string,
+    orderByColumn?: string | OrderByMultipleType[],
     orderBy?: 'asc' | 'desc',
   }
+
+export type OrderByMultipleType = {
+  column: string,
+  order: "asc" | "desc"
+}

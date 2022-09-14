@@ -102,6 +102,7 @@ export default class NewsController {
 
     try {
       await NewsService.delete(parseInt(params.id));
+      session.flash({success: "Новость была удалена"}) 
       response.redirect().back();
     } catch (error) {
       session.flash({ error: error.message });
