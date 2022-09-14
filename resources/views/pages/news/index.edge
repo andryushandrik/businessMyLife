@@ -39,7 +39,7 @@
                   <td>{{ item.title }}</td>
                   <td>{{ item.slug }}</td>
                   <td>{{ item.viewsCount }}</td>
-                  <td><img src="{{await item.imageUrl()}}" alt="{{await item.imageUrl()}}" class="news_cover_img"/></td>
+                  <td><img src="{{ getImage(item.image) }}" alt="" class="news_cover_img"/></td>
                   <td>
                     <div class="dropdown">
                       <button type="button" class="btn btn-success light sharp" data-toggle="dropdown"

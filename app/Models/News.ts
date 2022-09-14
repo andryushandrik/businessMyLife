@@ -82,19 +82,4 @@ export default class News extends BaseModel {
       await Drive.delete(item.image)
     }
   }
-
-
-  /**
-   * Methods
-   */
-
-  public async imageUrl(): Promise<string> {
-    let filePath = this.image
-    
-    //This is done to properly display images from faker
-    if(this.image && !this.image.startsWith("http")){
-      filePath = `/uploads/${this.image}`
-    }
-    return filePath ?? "/uploads/placeholder.jpg"
-  }
 }
