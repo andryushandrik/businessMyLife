@@ -2,8 +2,9 @@
 import type { DateTime } from "luxon";
 // * Types
 
-import { BaseModel, column, beforeCreate, beforeSave } from "@ioc:Adonis/Lucid/Orm";
+import { BaseModel, column, beforeCreate, beforeSave, beforeDelete } from "@ioc:Adonis/Lucid/Orm";
 import cyrillicToTranslit from 'cyrillic-to-translit-js'
+import Drive from "@ioc:Adonis/Core/Drive"
 
 export default class News extends BaseModel {
   public static readonly columns = [
@@ -20,9 +21,6 @@ export default class News extends BaseModel {
   public id: number;
 
   @column()
-  public slug: string;
-
-  @column()
   public title: string;
 
   @column()
@@ -32,16 +30,19 @@ export default class News extends BaseModel {
   public viewsCount: number;
 
   @column()
-  public suptitle?: string;
+  public slug?: string | null;
 
   @column()
-  public image?: string;
+  public suptitle?: string | null;
 
   @column()
-  public readingTimeFrom?: number;
+  public image?: string | null;
 
   @column()
-  public readingTimeTo?: number;
+  public readingTimeFrom?: number | null;
+
+  @column()
+  public readingTimeTo?: number | null;
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;
@@ -54,24 +55,46 @@ export default class News extends BaseModel {
    */
 
   @beforeCreate()
-  public static setDefaultViewsCount(news: News){
-    if(!news.$dirty.viewsCount){
-      news.viewsCount = 0
+  public static setDefaultViewsCount(item: News){
+    if(!item.$dirty.viewsCount){
+      item.viewsCount = 0
+    }
+
+    if(!item.slug && item.title){
+      const rawSlug = (item.title as any).toLowerCase().replaceAll(' ', '_')
+      const formattedSlug = cyrillicToTranslit().transform(rawSlug)
+      item.slug = formattedSlug
     }
   }
 
   @beforeSave()
-  public static formatSlug(news: News){
-    let formattedSlug: string
-    if(news.$dirty.slug){
-      const rawSlug = news.$dirty.slug.toLowerCase().replaceAll(' ', '_')
-      formattedSlug = cyrillicToTranslit().transform(rawSlug)
+  public static formatSlug(item: News){
+    if(item.$dirty.slug){
+      const rawSlug = item.$dirty.slug.toLowerCase().replaceAll(' ', '_')
+      const formattedSlug = cyrillicToTranslit().transform(rawSlug)
+      item.slug = formattedSlug
     }
-    else{
-      const rawSlug = news.$dirty.title.toLowerCase().replaceAll(' ', '_')
-      formattedSlug = cyrillicToTranslit().transform(rawSlug)
-    }
+  }
 
-    news.slug = formattedSlug
+  @beforeDelete()
+  public static async deleteStoredImage(item: News){
+    if(item.image){
+      await Drive.delete(item.image)
+    }
+  }
+
+
+  /**
+   * Methods
+   */
+
+  public async imageUrl(): Promise<string> {
+    let filePath = this.image
+    
+    //This is done to properly display images from faker
+    if(this.image && !this.image.startsWith("http")){
+      filePath = `/uploads/${this.image}`
+    }
+    return filePath ?? "/uploads/placeholder.jpg"
   }
 }

@@ -12,6 +12,7 @@ export default class extends BaseSchema {
        * Not nullable collumns
        */
 
+      table.string('slug').unique().notNullable()
       table.string('title').notNullable()
       table.string('description', NEWS_DESCRIPTION_MAX_LENGTH).notNullable()
       table.integer('viewsCount').unsigned().notNullable()
@@ -20,7 +21,6 @@ export default class extends BaseSchema {
        * Nullable collumns
        */
 
-      table.string('slug').unique()
       table.string('suptitle')
       table.string('image')
       table.integer('readingTimeFrom').unsigned()
