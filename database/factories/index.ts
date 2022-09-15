@@ -1,7 +1,12 @@
 import User from 'App/Models/User/User'
 import Factory from '@ioc:Adonis/Lucid/Factory'
+import UserImage from 'App/Models/User/UserImage'
 import { DateTime } from 'luxon'
 import { RoleNames, UserExperienceTypes, UserTypeNames } from 'Config/user'
+
+/**
+ * * User
+ */
 
 export const UserFactory = Factory
   .define(User, ({ faker }) => {
@@ -30,5 +35,12 @@ export const UserFactory = Factory
       roleId: RoleNames.USER + 1,
       typeId: faker.datatype.number({ min: UserTypeNames.PHYSICAL_PERSON + 1, max: UserTypeNames.LIMITED_LIABILITY_COMPANY + 1 }),
     }
+  })
+  .relation('images', () => UserImageFactory)
+  .build()
+
+export const UserImageFactory = Factory
+  .define(UserImage, ({ faker }) => {
+    return { image: faker.image.avatar() }
   })
   .build()

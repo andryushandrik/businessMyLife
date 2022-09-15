@@ -1,7 +1,7 @@
 // * Types
 import type BlockUntilValidator from 'App/Validators/BlockUntilValidator'
 import type { Err } from 'Contracts/response'
-import type { PaginateConfig } from 'Contracts/services'
+import type { PaginateConfig, ServiceConfig } from 'Contracts/services'
 import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 
@@ -19,7 +19,7 @@ export default class UserService {
     }
   }
 
-  public static async get(id: User['id']): Promise<User> {
+  public static async get(id: User['id'], { relations }: ServiceConfig<User> = {}): Promise<User> {
     let item: User | null
 
     try {
@@ -31,6 +31,17 @@ export default class UserService {
 
     if (!item)
       throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.ERROR } as Err
+
+    try {
+      if (relations) {
+        for (const relation of relations) {
+          await item.load(relation)
+        }
+      }
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+    }
 
     return item
   }

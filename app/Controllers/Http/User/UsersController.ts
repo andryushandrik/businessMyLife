@@ -29,7 +29,7 @@ export default class UsersController {
     const id: User['id'] = params.id
 
     try {
-      const item: User = await UserService.get(id)
+      const item: User = await UserService.get(id, { relations: ['images'] })
 
       return view.render('pages/user/get', { item, RoleNames })
     } catch (err: Err | any) {

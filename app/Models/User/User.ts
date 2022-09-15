@@ -2,12 +2,14 @@
 import type Role from '../User/Role'
 import type UserType from './UserType'
 import type { DateTime } from 'luxon'
+import type { HasMany } from '@ioc:Adonis/Lucid/Orm'
 import type { UserExperienceTypes } from 'Config/user'
 // * Types
 
+import UserImage from './UserImage'
 import Hash from '@ioc:Adonis/Core/Hash'
 import { GLOBAL_DATETIME_FORMAT } from 'Config/app'
-import { BaseModel, beforeSave, column, computed } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, beforeSave, column, computed, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import { ROLE_NAMES, USER_EXPERIENCE_TYPES, USER_TYPE_NAMES } from 'Config/user'
 
 export default class User extends BaseModel {
@@ -143,6 +145,13 @@ export default class User extends BaseModel {
   public get typeForUser(): string {
     return USER_TYPE_NAMES[this.typeId - 1]
   }
+
+  /**
+   * * Relations
+   */
+
+  @hasMany(() => UserImage)
+  public images: HasMany<typeof UserImage>
 
   /**
    * * Hooks
