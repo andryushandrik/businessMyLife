@@ -67,3 +67,10 @@ export const TABLES_NAMES = {
   USERS_TYPES: 'usersTypes',
   USERS_IMAGES: 'usersImages',
 } as const
+
+/**
+ * * User
+ */
+
+export const USER_PASSWORD_MIN_LENGTH: number = 8
+export const USER_PASSWORD_MAX_LENGTH: number = 50

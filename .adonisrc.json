@@ -17,7 +17,8 @@
     "./start/routes",
     "./start/kernel",
     "./start/database",
-    "./start/view"
+    "./start/view",
+    "./start/validator"
   ],
   "providers": [
     "./providers/AppProvider",

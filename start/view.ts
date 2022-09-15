@@ -12,8 +12,8 @@ import View from '@ioc:Adonis/Core/View'
 import { IMG_PLACEHOLDER } from 'Config/drive'
 
 View.global('getImage', (imgPath: string | null) => {
-  if(imgPath && !imgPath.startsWith('http')) // If faker
-    return `/uploads/${imgPath}`
+  if(imgPath && imgPath.startsWith('http')) // If faker
+    return imgPath
 
-  return imgPath ?? IMG_PLACEHOLDER
+  return `/uploads/${imgPath ?? IMG_PLACEHOLDER}`
 })
