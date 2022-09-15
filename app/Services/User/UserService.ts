@@ -19,11 +19,16 @@ export default class UserService {
     }
   }
 
-  public static async get(id: User['id'], { relations }: ServiceConfig<User> = {}): Promise<User> {
+  public static async get(id: User['id'], config?: ServiceConfig<User>): Promise<User>
+  public static async get(email: User['email'], config?: ServiceConfig<User>): Promise<User>
+  public static async get(idOrEmail: User['id'] | User['email'], { relations }: ServiceConfig<User> = {}): Promise<User> {
     let item: User | null
 
     try {
-      item = await User.find(id)
+      if (typeof idOrEmail === 'number')
+        item = await User.find(idOrEmail)
+      else
+        item = await User.findBy('email', idOrEmail)
     } catch (err: any) {
       Logger.error(err)
       throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err

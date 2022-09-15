@@ -20,29 +20,60 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.get('/auth', async ({ view }) => {
-  return view.render('pages/login')
-})
-
-Route.get('/', 'IndexController.home').as('home')
-
 /**
- * * User
+ * * Auth
  */
 
 Route.group(() => {
 
-  Route.get('/', 'User/UsersController.paginate').as('paginate')
+  Route.get('/login', 'AuthController.login').as('login')
+  Route.post('/login', 'AuthController.loginAction').as('loginAction')
+
+  Route.get('/logout', 'AuthController.logout').as('logout')
+
+}).prefix('auth').as('auth')
+
+Route.group(() => {
+
+  Route.get('/', 'IndexController.home').as('home')
+
+  /**
+   * * User
+   */
 
   Route.group(() => {
 
-    Route.patch('/toModerator/:userId', 'User/RolesController.changeRoleToModerator').as('changeRoleToModerator')
-    Route.patch('/toUser/:userId', 'User/RolesController.changeRoleToUser').as('changeRoleToUser')
+    Route.get('/', 'User/UsersController.paginate').as('paginate')
 
-  }).prefix('role').as('role')
+    Route.group(() => {
 
-  Route.get('/:id', 'User/UsersController.get').as('get')
-  Route.patch('/:id', 'User/UsersController.blockUntil').as('block')
-  Route.delete('/:id', 'User/UsersController.delete').as('delete')
+      Route.patch('/toModerator/:userId', 'User/RolesController.changeRoleToModerator').where('id', {
+        match: /^[0-9]+$/,
+        cast: (id) => Number(id),
+      }).as('changeRoleToModerator')
 
-}).prefix('user').as('user')
+      Route.patch('/toUser/:userId', 'User/RolesController.changeRoleToUser').where('id', {
+        match: /^[0-9]+$/,
+        cast: (id) => Number(id),
+      }).as('changeRoleToUser')
+
+    }).prefix('role').as('role')
+
+    Route.get('/:id', 'User/UsersController.get').where('id', {
+      match: /^[0-9]+$/,
+      cast: (id) => Number(id),
+    }).as('get')
+
+    Route.patch('/:id', 'User/UsersController.blockUntil').where('id', {
+      match: /^[0-9]+$/,
+      cast: (id) => Number(id),
+    }).as('block')
+
+    Route.delete('/:id', 'User/UsersController.delete').where('id', {
+      match: /^[0-9]+$/,
+      cast: (id) => Number(id),
+    }).as('delete')
+
+  }).prefix('user').as('user')
+
+}).middleware('CheckAdminPanelAccess')
