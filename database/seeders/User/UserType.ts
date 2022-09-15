@@ -5,7 +5,7 @@ import type { ModelAttributes } from '@ioc:Adonis/Lucid/Orm'
 import Logger from '@ioc:Adonis/Core/Logger'
 import UserType from 'App/Models/User/UserType'
 import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
-import { TYPES_NAMES } from 'Config/user'
+import { USER_TYPE_NAMES } from 'Config/user'
 
 export default class extends BaseSeeder {
   public async run () {
@@ -13,7 +13,7 @@ export default class extends BaseSeeder {
     try {
       const types: Partial<ModelAttributes<UserType>>[] = []
 
-      for (const item of TYPES_NAMES) {
+      for (const item of USER_TYPE_NAMES) {
         types.push({ name: item })
       }
 

@@ -214,3 +214,5 @@ export const profiler: ProfilerConfig = {
 |
 */
 export const validator: ValidatorConfig = {}
+
+export const GLOBAL_DATETIME_FORMAT: string = 'dd.MM.yyyy'

@@ -20,10 +20,29 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.get('/', async ({ view }) => {
-  return view.render('pages.index')
-})
-
 Route.get('/auth', async ({ view }) => {
   return view.render('pages/login')
 })
+
+Route.get('/', 'IndexController.home').as('home')
+
+/**
+ * * User
+ */
+
+Route.group(() => {
+
+  Route.get('/', 'User/UsersController.paginate').as('paginate')
+
+  Route.group(() => {
+
+    Route.patch('/toModerator/:userId', 'User/RolesController.changeRoleToModerator').as('changeRoleToModerator')
+    Route.patch('/toUser/:userId', 'User/RolesController.changeRoleToUser').as('changeRoleToUser')
+
+  }).prefix('role').as('role')
+
+  Route.get('/:id', 'User/UsersController.get').as('get')
+  Route.patch('/:id', 'User/UsersController.blockUntil').as('block')
+  Route.delete('/:id', 'User/UsersController.delete').as('delete')
+
+}).prefix('user').as('user')

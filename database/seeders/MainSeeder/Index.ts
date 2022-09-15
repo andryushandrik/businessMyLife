@@ -19,5 +19,6 @@ export default class extends BaseSeeder {
 
     await this.runSeeder(await import('../User/Role'))
     await this.runSeeder(await import('../User/UserType'))
+    await this.runSeeder(await import('../User/User'))
   }
 }
