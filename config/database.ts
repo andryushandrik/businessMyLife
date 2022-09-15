@@ -59,6 +59,7 @@ export default databaseConfig;
 export const TABLES_NAMES = {
   NEWS: "news",
   FEEDBACKS: "feedbacks",
+  BANNERS: "banners",
 
   /**
    * * User
@@ -81,3 +82,9 @@ export const NEWS_SUPTITLE_MAX_LENGTH = 1024;
  */
 
 export const FEEDBACK_QUESTION_MAX_LENGTH = 8192;
+
+/**
+ * Banners
+ */
+
+ export const BANNERS_DESCRIPTION_MAX_LENGTH = 2048;

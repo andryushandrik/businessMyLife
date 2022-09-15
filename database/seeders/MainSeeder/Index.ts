@@ -27,6 +27,7 @@ export default class extends BaseSeeder {
 
      await this.runSeeder(await import("../News"));
      await this.runSeeder(await import("../Feedback"));
+     await this.runSeeder(await import("../Banner"));
 
   }
 }

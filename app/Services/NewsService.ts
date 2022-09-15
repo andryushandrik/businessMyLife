@@ -41,7 +41,7 @@ export default class NewsService {
     try {
       newsItem = await News.create({ ...payload, image: undefined }, {client: trx})
     } catch (error: any) {
-      trx.rollback()
+      await trx.rollback()
       throw new Error(error)
     }
 
@@ -50,7 +50,7 @@ export default class NewsService {
         const uploadedFilePath = await this.uploadImage(newsItem.id, payload.image)
         await newsItem.merge({image: uploadedFilePath}).save()
       } catch (error) {
-        trx.rollback()
+        await trx.rollback()
         throw new Error("Произошла ошибка во время загрузки файла")
       }
     }

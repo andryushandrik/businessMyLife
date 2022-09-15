@@ -15,6 +15,7 @@ import Application from '@ioc:Adonis/Core/Application'
  */
 
  export const NEWS_FOLDER_PATH: string = 'News'
+ export const BANNERS_FOLDER_PATH: string = 'Banners'
  export const IMG_PLACEHOLDER: string = '/uploads/placeholder.jpg'
 
 /*

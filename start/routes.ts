@@ -36,4 +36,22 @@ Route.group(() => {
   
   Route.patch('/:id', 'FeedbackController.complete')
   Route.delete('/:id', 'FeedbackController.delete')
+  
 }).prefix("/feedback")
+
+/**
+ * Banners
+ */
+
+Route.group(() => {
+  Route.get('/', 'BannerController.index')
+  
+  Route.get('/create', 'BannerController.showCreate')
+  Route.post('/create', 'BannerController.create')
+  Route.patch('/edit/:id', 'BannerController.edit')
+  Route.delete('/delete/:id', 'BannerController.delete')
+
+  Route.get('/edit/:id', 'BannerController.showEdit')
+  Route.get('/:id', 'BannerController.showOne')
+
+}).prefix("/banners")

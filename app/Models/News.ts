@@ -59,7 +59,10 @@ export default class News extends BaseModel {
     if(!item.$dirty.viewsCount){
       item.viewsCount = 0
     }
-
+  }
+  
+  @beforeCreate()
+  public static setDefaultSlug(item: News){
     if(!item.slug && item.title){
       const rawSlug = (item.title as any).toLowerCase().replaceAll(' ', '_')
       const formattedSlug = cyrillicToTranslit().transform(rawSlug)

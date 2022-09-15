@@ -1,10 +1,10 @@
 @layout('layouts/index')
 
-@set('title', 'Создать новость')
+@set('title', `Баннер - ${item.title}`)
 
 @section('styles')
-    <link href="/css/news.css" rel="stylesheet">
-    <link href="/vendor/summernote/summernote.css" rel="stylesheet">
+  <link href="/css/banner.css" rel="stylesheet">
+  <link href="/vendor/summernote/summernote.css" rel="stylesheet">
 @endsection
 
 @section('body')
@@ -12,7 +12,7 @@
     <div class="card">
       <div class="card-header">
         <h4 class="card-title">{{ title }}</h4>
-        <a href="/news" class="btn btn-primary btn-sm">Назад</a>
+        <a href="/banners" class="btn btn-primary btn-sm">Назад</a>
       </div>
       <div class="card-body">
         <div class="basic-form">
@@ -21,13 +21,13 @@
                   {{ flashMessages.get('error')}}
                 </div>
             @endif
-
-          <form action="/news/create" method="POST" enctype="multipart/form-data">
+          <form action="{{ route('BannerController.edit', { id: item.id }, { qs: { _method: 'PATCH' } }) }}" method="POST" enctype="multipart/form-data">
 
             <div class="form-group">
               <label class="mb-1"><strong>Название *</strong></label>
-              <input type="string" class="form-control" name="title" value="{{ flashMessages.get('title') ?? '' }}">
+              <input type="string" class="form-control" name="title" value="{{ item.title ?? '' }}">
 
+              
               @if(flashMessages.has('errors.title'))
                 <div class="invalid-feedback d-block">
                   {{ flashMessages.get('errors.title')[0] }}
@@ -37,8 +37,7 @@
 
             <div class="form-group">
                 <label class="mb-1"><strong>Описание *</strong></label>
-                <textarea id="summernote" class="summernote" name="description">{{ flashMessages.get('description') ?? '' }}</textarea>
-                
+                <textarea class="form-control summernote" id="summernote" name="description">{{ item.description ?? '' }}</textarea>
                 @if(flashMessages.has('errors.description'))
                   <div class="invalid-feedback d-block">
                     {{ flashMessages.get('errors.description')[0] }}
@@ -46,26 +45,10 @@
                 @endif
               </div>
 
-            <div class="form-group">
-                <label class="mb-1">Слаг</label>
-                <input type="string" class="form-control" name="slug" value="{{ flashMessages.get('slug') ?? '' }}">
-   
-                @if(flashMessages.has('errors.slug'))
-                  <div class="invalid-feedback d-block">
-                    {{ flashMessages.get('errors.slug')[0] }}
-                  </div>
-                @endif
-            </div>
-
-            <div class="form-group">
-                <label class="mb-1">Подзаголовок</label>
-                <input type="string" class="form-control" name="suptitle" value="{{ flashMessages.get('suptitle') ?? '' }}">
-   
-                @if(flashMessages.has('errors.suptitle'))
-                  <div class="invalid-feedback d-block">
-                    {{ flashMessages.get('errors.suptitle')[0] }}
-                  </div>
-                @endif
+            <div class="form-group mb-3">
+                <label class="mb-1">Текущее изображение</label>
+                <br>
+                <img src="{{ getImage(item.image) }}" class="news_image" alt="">
             </div>
 
             <div class="form-group">
@@ -82,7 +65,7 @@
             {{ csrfField() }}
 
             <div class="text-right">
-              <button type="submit" class="btn btn-primary btn-block">Создать</button>
+              <button type="submit" class="btn btn-primary btn-block">Сохранить</button>
             </div>
           </form>
 

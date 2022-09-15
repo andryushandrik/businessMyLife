@@ -28,7 +28,7 @@ export default class NewsController {
     try {
         newsItem = await NewsService.get(params.id)
     } catch (error: any) {
-        session.flash(error.message)
+        session.flash({error: error.message})
         response.redirect("/news")
         return
     }
@@ -50,8 +50,14 @@ export default class NewsController {
     }
   }
 
-  public async showCreate({ view }: HttpContextContract) {
-    return view.render("./pages/news/create");
+  public async showCreate({ view, session, response }: HttpContextContract) {
+    
+    try {
+      return view.render("./pages/news/create");
+    } catch (error: any) {
+      session.flash({ error: error.message });
+      response.redirect().back();
+    }
   }
 
   public async edit({ request, response, session }: HttpContextContract) {
