@@ -29,6 +29,17 @@ export default class AppProvider {
 
       return query
     })
+
+    /**
+     * * Random
+     */
+
+    ModelQueryBuilder.macro('random', async function() {
+      let allRecords = await this.orderBy('id', 'desc')
+      let randomQuery: number = Math.floor(Math.random() * allRecords.length)
+
+      return await this.where('id', allRecords[randomQuery].id).first()
+    })
   }
 
   public async ready() {

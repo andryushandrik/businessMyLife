@@ -1,0 +1,200 @@
+@layout('layouts/index')
+
+@set('title', `Пользователь - ${item.fullName}`)
+
+@section('styles')
+  <link rel="stylesheet" href="/vendor/pickadate/themes/default.css">
+  <link rel="stylesheet" href="/vendor/pickadate/themes/default.date.css">
+@endsection
+
+@section('body')
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">{{ title }}</h4>
+
+        <div class="d-flex">
+          {{--  @if(item.isBlocked)
+            <form action="{{ route('users.unblock', { id: item.id }) }}" method="POST">
+              {{ csrfField() }}
+              <button type="submit" class="btn btn-primary btn-sm">Разблокировать</button>
+            </form>
+          @else
+            <form action="{{ route('users.block', { id: item.id }) }}" method="POST">
+              {{ csrfField() }}
+              <button type="submit" class="btn btn-danger btn-sm">Заблокировать</button>
+            </form>
+          @endif  --}}
+
+          @if((item.roleId - 1) == RoleNames.USER)
+            <form action="{{ route('user.role.changeRoleToModerator', { userId: item.id }, { qs: { _method: 'PATCH' } }) }}" method="POST">
+              {{ csrfField() }}
+              <button type="submit" class="btn btn-primary btn-sm">Сделать модератором</button>
+            </form>
+          @else
+            <form action="{{ route('user.role.changeRoleToUser', { userId: item.id }, { qs: { _method: 'PATCH' } }) }}" method="POST">
+              {{ csrfField() }}
+              <button type="submit" class="btn btn-danger btn-sm">Сделать пользователем</button>
+            </form>
+          @endif
+
+          <a href="{{ route('user.paginate') }}" class="ml-3 btn btn-primary btn-sm">Назад</a>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="basic-form">
+
+          <div class="form-group">
+            <label class="mb-1">ID</label>
+            <input type="string" class="form-control" value="{{ item.id }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Имя</label>
+            <input type="string" class="form-control" value="{{ item.firstName }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Фамилия</label>
+            <input type="string" class="form-control" value="{{ item.lastName }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Фамилия</label>
+            <input type="string" class="form-control" value="{{ item.patronymic }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Email</label>
+            <input type="string" class="form-control" value="{{ item.email }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Опыт в сфере</label>
+            <input type="string" class="form-control" value="{{ item.experienceTypeForUser }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Название компании (указывается при регистрации)</label>
+            <input type="string" class="form-control" value="{{ item.companyName ?? '' }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Дата рождения</label>
+            <input type="string" class="form-control" value="{{ item.birthdayForUser }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Город</label>
+            <input type="string" class="form-control" value="{{ item.city ?? '' }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Телефон</label>
+            <input type="string" class="form-control" value="{{ item.phone ?? '' }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Аватарка</label>
+            <img src="{{ getImage(item.avatar) }}" class="d-block" width="250" height="350" style="object-fit: cover" alt="">
+          </div>
+
+          <div class="form-group mb-3">
+            <label class="mb-1">Остальные изображения из профиля</label>
+            <br>
+
+            @each(imageItem in item.images)
+              <img src="{{ getImage(imageItem.image) }}" width="250" height="350" alt="">
+            @endeach
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Место работы (отображается в профиле)</label>
+            <input type="string" class="form-control" value="{{ item.placeOfWork ?? '' }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Хобби</label>
+            <input type="string" class="form-control" value="{{ item.hobby ?? '' }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">ИНН</label>
+            <input type="string" class="form-control" value="{{ item.taxpayerIdentificationNumber ?? '' }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">ОГРН / ОГРНИП</label>
+            <input type="string" class="form-control" value="{{ item.mainStateRegistrationNumber ?? '' }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Юр адрес</label>
+            <input type="string" class="form-control" value="{{ item.legalAddress ?? '' }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Роль</label>
+            <input type="string" class="form-control" value="{{ item.roleForUser }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Тип профиля</label>
+            <input type="string" class="form-control" value="{{ item.typeForUser }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Дата регистрации</label>
+            <input type="string" class="form-control" value="{{ item.createdAtForUser }}" disabled>
+          </div>
+
+          @if(item.blockedUntil)
+            <div class="form-group">
+              <label class="mb-1">Заблокирован до</label>
+              <input type="string" class="form-control" value="{{ item.blockedUntilForUser }}" disabled>
+            </div>
+          @endif
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">Заблокировать</h4>
+      </div>
+
+      <div class="card-body">
+        <div class="basic-form">
+
+          <form action="{{ route('user.block', { id: item.id }, { qs: { _method: 'PATCH' } }) }}" method="POST">
+            {{ csrfField() }}
+
+            <div class="form-group">
+              <label class="mb-1">Заблокировать до</label>
+              <input name="blockedUntil" class="datepicker-default form-control" id="datepicker" value="{{ flashMessages.get('blockedUntil') ?? '' }}">
+
+              @if(flashMessages.has('errors.blockedUntil'))
+                <div class="invalid-feedback d-block">
+                  {{ flashMessages.get('errors.blockedUntil')[0] }}
+                </div>
+              @endif
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-sm">Подтвердить</button>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+@endsection
+
+@section('scripts')
+  <script src="/vendor/pickadate/picker.js"></script>
+  <script src="/vendor/pickadate/picker.time.js"></script>
+  <script src="/vendor/pickadate/picker.date.js"></script>
+  <script src="/js/plugins-init/pickadate-init.js"></script>
+@endsection
