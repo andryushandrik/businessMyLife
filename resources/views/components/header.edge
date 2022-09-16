@@ -13,9 +13,9 @@
         <ul class="navbar-nav header-right">
           <li class="nav-item dropdown header-profile">
             <a class="nav-link" href="javascript:;" role="button" data-toggle="dropdown">
-              <img src="{{ getImage(currentUser.avatar) }}" width="20" alt="" />
+              <img src="{{ getImage(currentUser?.avatar) }}" width="20" alt="" />
               <div class="header-info">
-                <span>Привет,<strong> {{ currentUser.firstName }}</strong></span>
+                <span>Привет,<strong> {{ currentUser?.firstName }}</strong></span>
               </div>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
