@@ -2,6 +2,7 @@ import Factory from '@ioc:Adonis/Lucid/Factory'
 import News from 'App/Models/News'
 import Feedback from 'App/Models/Feedback'
 import Banner from 'App/Models/Banner'
+import Partner from 'App/Models/Partner'
 
 export const NewsFactory = Factory.define(News, ({faker}) => {
     return {
@@ -30,5 +31,14 @@ export const BannerFactory = Factory.define(Banner, ({ faker }) => {
         image: faker.image.business(),
         title: faker.lorem.sentence(),
         description: faker.lorem.paragraph(3)
+    }
+}).build()
+
+export const PartnersFactory = Factory.define(Partner, ({faker}) => {
+    return {
+        title: faker.lorem.sentence(),
+        isTitleLink: faker.datatype.boolean(),
+        media: faker.image.abstract(),
+        mediaType: faker.datatype.number(1)
     }
 }).build()

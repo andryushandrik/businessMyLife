@@ -1,0 +1,86 @@
+@layout('layouts/index')
+
+@set('title', 'Партнеры')
+
+@section('styles')
+  <link href="/css/partners.css" rel="stylesheet">
+@endsection
+
+@section('body')
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">{{ title }}</h4>
+
+        <a href="/partners/create" class="btn btn-primary btn-sm">Создать</a>
+      </div>
+
+      <div class="card-body">
+        <div class="table-responsive">
+
+          <table class="table table-responsive-md">
+            <thead>
+              <tr>
+                <th class="width80"><strong>#</strong></th>
+
+                <th><strong>Название</strong></th>
+                <th><strong>Медиа</strong></th>
+
+                <th><strong>Действия</strong></th>
+              </tr>
+            </thead>
+            <tbody>
+
+              @each(item in items)
+                <tr>
+                  <td><strong>{{ item.id }}</strong></td>
+                  
+                  @if(item.isTitleLink)
+                  <td><a href="{{ item.media }}" class="link_clickable" target="_blank">{{ item.title }}</a></td>
+                  @else
+                  <td>{{ item.title }}</td>
+                  @endif
+                  
+                  @if(item.mediaType === 0)
+                  <td><img src="{{ getImage(item.media) }}" alt="" class="partners_cover_img"/></td>
+                  @else
+                  <td><img src="/uploads/video_placeholder.jpg" alt="" class="partners_cover_img"/></td>
+                  @endif
+                  <td>
+                    <div class="dropdown">
+                      <button type="button" class="btn btn-success light sharp" data-toggle="dropdown"
+                        aria-expanded="false">
+                        <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1">
+                          <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <rect x="0" y="0" width="24" height="24"></rect>
+                            <circle fill="#000000" cx="5" cy="12" r="2"></circle>
+                            <circle fill="#000000" cx="12" cy="12" r="2"></circle>
+                            <circle fill="#000000" cx="19" cy="12" r="2"></circle>
+                          </g>
+                        </svg>
+                      </button>
+                      <div class="dropdown-menu" style="">
+                        {{--  <a class="dropdown-item" href="{{ route('PartnersController.showOne', { id: item.id }) }}">Показать</a>
+                        <a class="dropdown-item" href="{{ route('PartnersController.edit', { id: item.id }) }}">Редактировать</a>
+
+                        <form action="{{ route('PartnersController.delete', { id: item.id }, { qs: { _method: 'DELETE' } }) }}" method="POST">  --}}
+                          <button type="submit" class="dropdown-item">Удалить</button>
+
+                          {{ csrfField() }}
+                        </form>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              @endeach
+
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  @!component('components/pagination', { obj: items })
+@endsection

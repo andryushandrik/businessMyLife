@@ -60,6 +60,7 @@ export const TABLES_NAMES = {
   NEWS: "news",
   FEEDBACKS: "feedbacks",
   BANNERS: "banners",
+  PARTNERS: "partners",
 
   /**
    * * User
@@ -88,3 +89,4 @@ export const FEEDBACK_QUESTION_MAX_LENGTH = 8192;
  */
 
  export const BANNERS_DESCRIPTION_MAX_LENGTH = 2048;
+

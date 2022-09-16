@@ -55,3 +55,12 @@ Route.group(() => {
   Route.get('/:id', 'BannerController.showOne')
 
 }).prefix("/banners")
+
+
+/**
+ * Partners
+ */
+
+Route.group(() => {
+  Route.get('/', 'PartnersController.index')
+}).prefix('/partners')
