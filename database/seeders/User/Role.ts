@@ -8,7 +8,7 @@ import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
 import { ROLE_NAMES } from 'Config/user'
 
 export default class extends BaseSeeder {
-  public async run () {
+  public async run() {
 
     try {
       const roles: Partial<ModelAttributes<Role>>[] = []

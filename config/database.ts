@@ -51,13 +51,14 @@ const databaseConfig: DatabaseConfig = {
         database: Env.get('PG_DB_NAME'),
       },
     },
-
-  }
+  },
 }
 
 export default databaseConfig
 
 export const TABLES_NAMES = {
+  NEWS: 'news',
+
   /**
    * * User
    */
@@ -67,6 +68,19 @@ export const TABLES_NAMES = {
   USERS_TYPES: 'usersTypes',
   USERS_IMAGES: 'usersImages',
 } as const
+
+/**
+ * * News
+ */
+
+export const NEWS_TITLE_MIN_LENGTH = 2
+export const NEWS_TITLE_MAX_LENGTH = 255
+
+export const NEWS_SUPTITLE_MIN_LENGTH = 2
+export const NEWS_SUPTITLE_MAX_LENGTH = 255
+
+export const NEWS_DESCRIPTION_MIN_LENGTH = 4
+export const NEWS_DESCRIPTION_MAX_LENGTH = 8192
 
 /**
  * * User

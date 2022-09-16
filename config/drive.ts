@@ -149,3 +149,9 @@ export default driveConfig({
 })
 
 export const IMG_PLACEHOLDER: string = 'placeholder.jpg'
+
+/**
+ * * News
+ */
+
+export const NEWS_FOLDER_PATH: string = 'News'

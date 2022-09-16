@@ -12,7 +12,9 @@ export default class extends BaseSeeder {
     await new Seeder.default(this.client).run()
   }
 
-  public async run () {
+  public async run() {
+    await this.runSeeder(await import('../News'))
+
     /**
      * * User
      */

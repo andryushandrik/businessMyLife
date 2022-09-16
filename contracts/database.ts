@@ -1,4 +1,6 @@
-import { SimplePaginatorContract } from '@ioc:Adonis/Lucid/Database'
+// * Types
+import type { SimplePaginatorContract } from '@ioc:Adonis/Lucid/Database'
+// * Types
 
 declare module '@ioc:Adonis/Lucid/Orm' {
   interface ModelQueryBuilderContract<

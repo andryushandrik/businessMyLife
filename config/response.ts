@@ -12,7 +12,7 @@ export enum ResponseCodes {
 export enum ResponseMessages {
   SUCCESS = 'Успешно!',
   ERROR = 'Что-то пошло не так, повторите попытку еще раз!',
-
+  
   /**
    * * Auth
    */

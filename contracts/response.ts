@@ -2,7 +2,8 @@
 import type { ResponseCodes, ResponseMessages } from 'Config/response'
 // * Types
 
-export type Err = { // Error name is global and already in use
+// Error name is global and already in use
+export type Err = {
   code: ResponseCodes,
   message: ResponseMessages,
   body?: any,

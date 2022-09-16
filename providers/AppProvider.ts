@@ -4,14 +4,13 @@ import type { ApplicationContract } from '@ioc:Adonis/Core/Application'
 // * Types
 
 export default class AppProvider {
-  constructor (protected app: ApplicationContract) {
-  }
+  constructor(protected app: ApplicationContract) {}
 
-  public register () {
+  public register() {
     // Register your own bindings
   }
 
-  public async boot () {
+  public async boot() {
     // IoC container is ready
 
     const { ModelQueryBuilder } = this.app.container.use('Adonis/Lucid/Database')
@@ -43,11 +42,11 @@ export default class AppProvider {
     })
   }
 
-  public async ready () {
+  public async ready() {
     // App is ready
   }
 
-  public async shutdown () {
+  public async shutdown() {
     // Cleanup, since app is going down
   }
 }
