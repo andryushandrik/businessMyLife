@@ -1,100 +1,73 @@
 // * Types
-import type { DateTime } from "luxon";
+import type { DateTime } from 'luxon'
 // * Types
 
-import { BaseModel, column, beforeCreate, beforeSave, beforeDelete } from "@ioc:Adonis/Lucid/Orm";
-import cyrillicToTranslit from 'cyrillic-to-translit-js'
-import Drive from "@ioc:Adonis/Core/Drive"
+import Drive from '@ioc:Adonis/Core/Drive'
+import { formatStringForCyrillic } from 'Helpers/index'
+import { BaseModel, column, beforeSave, beforeDelete } from '@ioc:Adonis/Lucid/Orm'
 
 export default class News extends BaseModel {
   public static readonly columns = [
-    'id', "slug", "title", "description", "viewsCount", 
-    "suptitle", "image", "readingTimeFrom", "readingTimeTo",
+    'id',
+    'slug', 'title', 'description', 'suptitle', 'image',
+    'viewsCount',
+    'readingTimeFrom', 'readingTimeTo',
     'createdAt', 'updatedAt',
   ] as const
-  
+
   /**
-   * Columns
+   * * Columns
    */
 
   @column({ isPrimary: true })
-  public id: number;
+  public id: number
 
   @column()
-  public title: string;
+  public slug: string
 
   @column()
-  public description: string;
+  public title: string
 
   @column()
-  public viewsCount: number;
+  public description: string
 
   @column()
-  public slug?: string | null;
+  public viewsCount: number
 
   @column()
-  public suptitle?: string | null;
+  public suptitle?: string
 
   @column()
-  public image?: string | null;
+  public image?: string
 
   @column()
-  public readingTimeFrom?: number | null;
+  public readingTimeFrom?: number
 
   @column()
-  public readingTimeTo?: number | null;
+  public readingTimeTo?: number
 
   @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime;
+  public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt: DateTime;
+  public updatedAt: DateTime
 
-    /**
-   * Hooks
+  /**
+   * * Hooks
    */
 
-  @beforeCreate()
-  public static setDefaultViewsCount(item: News){
-    if(!item.$dirty.viewsCount){
-      item.viewsCount = 0
-    }
-
-    if(!item.slug && item.title){
-      const rawSlug = (item.title as any).toLowerCase().replaceAll(' ', '_')
-      const formattedSlug = cyrillicToTranslit().transform(rawSlug)
-      item.slug = formattedSlug
-    }
-  }
-
   @beforeSave()
-  public static formatSlug(item: News){
-    if(item.$dirty.slug){
-      const rawSlug = item.$dirty.slug.toLowerCase().replaceAll(' ', '_')
-      const formattedSlug = cyrillicToTranslit().transform(rawSlug)
-      item.slug = formattedSlug
-    }
+  public static formatSlug(item: News) {
+    if (item.$dirty.slug)
+      item.slug = formatStringForCyrillic(item.slug, 'snakeCase', '_')
+
+    if (!item.slug)
+      item.slug = formatStringForCyrillic(item.title, 'snakeCase', '_')
   }
 
   @beforeDelete()
-  public static async deleteStoredImage(item: News){
-    if(item.image){
+  public static async deleteStoredImage(item: News) {
+    if (item.image)
       await Drive.delete(item.image)
-    }
-  }
-
-
-  /**
-   * Methods
-   */
-
-  public async imageUrl(): Promise<string> {
-    let filePath = this.image
-    
-    //This is done to properly display images from faker
-    if(this.image && !this.image.startsWith("http")){
-      filePath = `/uploads/${this.image}`
-    }
-    return filePath ?? "/uploads/placeholder.jpg"
   }
 }

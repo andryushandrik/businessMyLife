@@ -18,7 +18,7 @@
                 </div>
             @endif
 
-          <form action="/news/create" method="POST" enctype="multipart/form-data">
+          <form action="{{ route('news.store') }}" method="POST" enctype="multipart/form-data">
 
             <div class="form-group">
               <label class="mb-1"><strong>Название *</strong></label>
@@ -44,7 +44,7 @@
             <div class="form-group">
                 <label class="mb-1">Слаг</label>
                 <input type="string" class="form-control" name="slug" value="{{ flashMessages.get('slug') ?? '' }}">
-   
+
                 @if(flashMessages.has('errors.slug'))
                   <div class="invalid-feedback d-block">
                     {{ flashMessages.get('errors.slug')[0] }}
@@ -55,7 +55,7 @@
             <div class="form-group">
                 <label class="mb-1">Подзаголовок</label>
                 <input type="string" class="form-control" name="suptitle" value="{{ flashMessages.get('suptitle') ?? '' }}">
-   
+
                 @if(flashMessages.has('errors.suptitle'))
                   <div class="invalid-feedback d-block">
                     {{ flashMessages.get('errors.suptitle')[0] }}
@@ -66,7 +66,7 @@
             <div class="form-group">
                 <label class="mb-1">Изображение</label>
                 <input type="file" class="form-control" accept="image/png, image/jpeg, image/jpg" name="image" value="{{ flashMessages.get('image') ?? '' }}">
-   
+
                 @if(flashMessages.has('errors.image'))
                   <div class="invalid-feedback d-block">
                     {{ flashMessages.get('errors.image')[0] }}

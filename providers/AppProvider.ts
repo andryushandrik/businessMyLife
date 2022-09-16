@@ -1,5 +1,7 @@
-import type { PaginationConfig } from "Contracts/database";
-import { ApplicationContract } from "@ioc:Adonis/Core/Application";
+// * Types
+import type { PaginationConfig } from 'Contracts/database'
+import type { ApplicationContract } from '@ioc:Adonis/Core/Application'
+// * Types
 
 export default class AppProvider {
   constructor(protected app: ApplicationContract) {}
@@ -10,25 +12,23 @@ export default class AppProvider {
 
   public async boot() {
     // IoC container is ready
-    const { ModelQueryBuilder } = this.app.container.use(
-      "Adonis/Lucid/Database"
-    );
 
-    ModelQueryBuilder.macro(
-      "getViaPaginate",
-      async function (config: PaginationConfig) {
-        config.orderByColumn = config.orderByColumn ?? "id";
-        config.limit = config.limit ?? 100;
-        let query = await this.orderBy(
-          config.orderByColumn,
-          config.orderBy
-        ).paginate(config.page, config.limit);
+    const { ModelQueryBuilder } = this.app.container.use('Adonis/Lucid/Database')
 
-        if (config.baseUrl) return query.baseUrl(config.baseUrl);
+    /**
+     * * Paginate
+     */
 
-        return query;
-      }
-    );
+    ModelQueryBuilder.macro('getViaPaginate', async function(config: PaginationConfig) {
+      config.orderByColumn = config.orderByColumn ?? 'id'
+      config.limit = config.limit ?? 100
+      let query = await this.orderBy(config.orderByColumn, config.orderBy).paginate(config.page, config.limit)
+
+      if (config.baseUrl)
+        return query.baseUrl(config.baseUrl)
+
+      return query
+    })
   }
 
   public async ready() {

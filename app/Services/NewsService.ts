@@ -1,108 +1,127 @@
-import News from "App/Models/News";
-import Logger from "@ioc:Adonis/Core/Logger";
-import { PaginationConfig } from "Contracts/database";
-import { ModelPaginatorContract } from "@ioc:Adonis/Lucid/Orm";
-import NewsValidator from "App/Validators/NewsValidator";
-import type { MultipartFileContract } from "@ioc:Adonis/Core/BodyParser";
-import { NEWS_FOLDER_PATH } from "Config/drive";
-import Database from '@ioc:Adonis/Lucid/Database';
-import Drive from "@ioc:Adonis/Core/Drive"
+// * Types
+import type NewsValidator from 'App/Validators/NewsValidator'
+import type { Err } from 'Contracts/response'
+import type { PaginateConfig } from 'Contracts/services'
+import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
+import type { MultipartFileContract } from '@ioc:Adonis/Core/BodyParser'
+// * Types
+
+import News from 'App/Models/News'
+import Drive from '@ioc:Adonis/Core/Drive'
+import Logger from '@ioc:Adonis/Core/Logger'
+import { NEWS_FOLDER_PATH } from 'Config/drive'
+import { ResponseCodes, ResponseMessages } from 'Config/response'
 
 export default class NewsService {
-  public static async paginateNews(
-    paginationConfig: PaginationConfig
-  ): Promise<ModelPaginatorContract<News>> {
-    paginationConfig.page = paginationConfig.page ?? 1;
-    paginationConfig.limit = 9;
-    paginationConfig.baseUrl = "/news";
-
+  public static async paginateNews(config: PaginateConfig<News>): Promise<ModelPaginatorContract<News>> {
     try {
-      return await News.query().getViaPaginate(paginationConfig);
-    } catch (error: any) {
-      Logger.error(error);
-      throw new Error()
+      return await News.query().getViaPaginate(config)
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
     }
   }
 
-  public static async get(id: number){
-    try {
-      const item =  await News.find(id)
-      if(!item) throw new Error("Новость не найдена")
+  public static async get(id: News['id']): Promise<News> {
+    let item: News | null
 
-      return item
-    } catch (error) {
-      throw new Error(error)
+    try {
+      item =  await News.find(id)
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
     }
+
+    if (!item)
+      throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.ERROR } as Err
+
+    return item
   }
 
-  public static async create(payload: NewsValidator["schema"]["props"]) {
-    let newsItem: News
-    const trx = await Database.transaction()
+  public static async create(payload: NewsValidator['schema']['props']): Promise<News> {
+    let item: News
+
     try {
-      newsItem = await News.create({ ...payload, image: undefined }, {client: trx})
-    } catch (error: any) {
-      trx.rollback()
-      throw new Error(error)
+      item = await News.create({ ...payload, image: undefined })
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
     }
 
     if (payload.image) {
       try {
-        const uploadedFilePath = await this.uploadImage(newsItem.id, payload.image)
-        await newsItem.merge({image: uploadedFilePath}).save()
-      } catch (error) {
-        trx.rollback()
-        throw new Error("Произошла ошибка во время загрузки файла")
+        const uploadedFilePath: string = await this.uploadImage(item.id, payload.image)
+        await item.merge({ image: uploadedFilePath }).save()
+      } catch (err: Err | any) {
+        throw err
       }
     }
 
-    trx.commit()
+    return item
   }
 
-  public static async edit(id:number, payload: NewsValidator["schema"]["props"]){
-    let newsItem: News
-    const trx = await Database.transaction()
+  public static async update(id: News['id'], payload: NewsValidator['schema']['props']): Promise<News> {
+    let item: News
 
     try {
-      newsItem = await News.findOrFail(id, {client: trx})
-      await newsItem.merge({...payload, image: newsItem.image}).save()
-    } catch (error) {
-      trx.rollback()
-      throw new Error(error)
+      item = await this.get(id)
+    } catch (err: Err | any) {
+      throw err
     }
 
-    if(payload.image){
-      if(newsItem.image){
-        await Drive.delete(newsItem.image)
-      }
+    try {
+      await item.merge({ ...payload, image: item.image }).save()
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+    }
 
+    if (payload.image) {
       try {
-        const uploadedFilePath = await this.uploadImage(newsItem.id, payload.image)
-        await newsItem.merge({image: uploadedFilePath}).save()
-      } catch (error) {
-        trx.rollback()
-        throw new Error("Произошла ошибка во время загрузки файла")
+        if (item.image)
+          await Drive.delete(item.image)
+
+        const uploadedFilePath: string = await this.uploadImage(item.id, payload.image)
+        await item.merge({ image: uploadedFilePath }).save()
+      } catch (err: Err | any) {
+        Logger.error(err)
+        throw { code: ResponseCodes.SERVER_ERROR, message: ResponseMessages.ERROR } as Err
       }
     }
 
-    trx.commit()
+    return item
   }
 
-  public static async delete(id: number) {
+  public static async delete(id: News['id']): Promise<void> {
+    let item: News
+
     try {
-      const item = await News.find(id);
-      if (item) await item.delete();
-    } catch (error) {
-      throw new Error(error);
+      item = await this.get(id)
+    } catch (err: Err | any) {
+      throw err
+    }
+
+    try {
+      await item.delete()
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
     }
   }
 
-  public static async uploadImage(id: number, image: MultipartFileContract) {
-    const fileName = `${id}_${image.clientName}`
+  /**
+   * * Private methods
+   */
+
+  private static async uploadImage(id: News['id'], image: MultipartFileContract): Promise<string> {
+    const fileName: string = `${id}_${image.clientName}`
+
     try {
-      await image.moveToDisk(NEWS_FOLDER_PATH, {name: fileName})
+      await image.moveToDisk(NEWS_FOLDER_PATH, { name: fileName })
       return `${NEWS_FOLDER_PATH}/${fileName}`
-    } catch (error) {
-      throw new Error(error.message);
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.SERVER_ERROR, message: ResponseMessages.ERROR } as Err
     }
   }
 }

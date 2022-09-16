@@ -31,7 +31,7 @@
             <label class="mb-1">Слаг</label>
             <input type="string" class="form-control" value="{{ item.slug }}" disabled>
           </div>
-          
+
           <div class="form-group">
             <label class="mb-1">Подзаголовок</label>
             <input type="string" class="form-control" value="{{ item.suptitle }}" disabled>
@@ -40,7 +40,7 @@
           <div class="form-group mb-3">
             <label class="mb-1">Изображение</label>
             <br>
-            <img src="{{ await item.imageUrl() }}" class="news_image" alt="">
+            <img src="{{ getImage(item.image) }}" class="news_image" alt="">
           </div>
 
         </div>

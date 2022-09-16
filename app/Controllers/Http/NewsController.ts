@@ -1,111 +1,99 @@
-import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
-import NewsService from "App/Services/NewsService";
-import Logger from "@ioc:Adonis/Core/Logger";
-import { ModelPaginatorContract } from "@ioc:Adonis/Lucid/Orm";
-import News from "App/Models/News";
-import NewsValidator from "App/Validators/NewsValidator";
+// * Types
+import type News from 'App/Models/News'
+import type { Err } from 'Contracts/response'
+import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
+import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+// * Types
+
+import NewsService from 'App/Services/NewsService'
+import NewsValidator from 'App/Validators/NewsValidator'
+import { ResponseMessages } from 'Config/response'
 
 export default class NewsController {
-  public async index({ view, request }: HttpContextContract) {
-    const queryStringParams = request.qs();
-    const page = queryStringParams.page ? queryStringParams.page : 1;
+  public async index({ request, response, route, view, session }: HttpContextContract) {
+    const baseUrl: string = route!.pattern
+    const page: number = request.input('page', 1)
 
     try {
-      const news: ModelPaginatorContract<News> = await NewsService.paginateNews(
-        { page }
-      );
+      const news: ModelPaginatorContract<News> = await NewsService.paginateNews({ page, baseUrl })
 
-      return view.render("./pages/news/index", { news });
-    } catch (error: any) {
-      Logger.error(error);
-      throw new Error();
+      return view.render('pages/news/index', { news })
+    } catch (err: Err | any) {
+      session.flash('error', err.message)
+      return response.redirect().back()
     }
   }
 
-  public async showOne({view, response, session, params}: HttpContextContract){
-    let newsItem: News
-
-    try {
-        newsItem = await NewsService.get(params.id)
-    } catch (error: any) {
-        session.flash(error.message)
-        response.redirect("/news")
-        return
-    }
-
-    return view.render("./pages/news/show", {item: newsItem})
+  public async create({ view }: HttpContextContract) {
+    return view.render('pages/news/create')
   }
 
-  public async create({ request, response, session }: HttpContextContract) {
-    let payload = await request.validate(NewsValidator);
+  public async store({ request, response, session }: HttpContextContract) {
+    const payload = await request.validate(NewsValidator)
 
     try {
-      await NewsService.create(payload);
+      await NewsService.create(payload)
 
-      session.flash({ success: "Новость добавлена" });
-      response.redirect("/news");
-    } catch (error: any) {
-      session.flash({ error: error.message });
-      response.redirect().back();
+      session.flash('success', ResponseMessages.SUCCESS)
+      response.redirect().toRoute('news.index')
+    } catch (err: Err | any) {
+      session.flash('error', err.message)
+      response.redirect().back()
     }
   }
 
-  public async showCreate({ view }: HttpContextContract) {
-    return view.render("./pages/news/create");
-  }
-
-  public async edit({ request, response, session }: HttpContextContract) {
-    const payload = await request.validate(NewsValidator);
-    const { id } = request.params();
+  public async show({view, response, session, params}: HttpContextContract){
+    const id: News['id'] = params.id
 
     try {
-      await NewsService.edit(id as number, payload);
+      const item: News = await NewsService.get(id)
 
-      session.flash({ success: "Новость отредактирована" });
-      response.redirect("/news");
-    } catch (error: any) {
-      session.flash({ error: error.message });
-      response.redirect().back();
+      return view.render('pages/news/show', { item })
+    } catch (err: Err | any) {
+      session.flash('error', err.message)
+      return response.redirect().back()
     }
   }
 
-  public async showEdit({
-    view,
-    request,
-    response,
-    session,
-  }: HttpContextContract) {
-    const params = request.params();
-    const newsId = parseInt(params.id);
-
-    let newsItem: News;
+  public async edit({ view, response, params, session }: HttpContextContract) {
+    const id: News['id'] = params.id
 
     try {
-      newsItem = await NewsService.get(newsId);
-    } catch (error) {
-      session.flash(error.message);
-      response.redirect().back();
-      return;
-    }
+      const item: News = await NewsService.get(id)
 
-    return view.render("./pages/news/edit", { item: newsItem });
+      return view.render('pages/news/edit', { item })
+    } catch (err: Err | any) {
+      session.flash('error', err.message)
+      return response.redirect().back()
+    }
   }
 
-  public async delete({ request, response, session }: HttpContextContract) {
-    const params = request.params();
-
-    if (!parseInt(params.id)) {
-      session.flash({ error: "Что-то пошло не так" });
-      response.redirect().back();
-      return;
-    }
+  public async update({ request, response, session, params }: HttpContextContract) {
+    const id: News['id'] = params.id
+    const payload = await request.validate(NewsValidator)
 
     try {
-      await NewsService.delete(parseInt(params.id));
-      response.redirect().back();
-    } catch (error) {
-      session.flash({ error: error.message });
-      response.redirect().back();
+      await NewsService.update(id, payload)
+
+      session.flash('success', ResponseMessages.SUCCESS)
+      return response.redirect().toRoute('news.index')
+    } catch (err: Err | any) {
+      session.flash('error', err.message)
+      return response.redirect().back()
     }
+  }
+
+  public async destroy({ response, session, params }: HttpContextContract) {
+    const id: News['id'] = params.id
+
+    try {
+      await NewsService.delete(id)
+
+      session.flash('success', ResponseMessages.SUCCESS)
+    } catch (err: Err | any) {
+      session.flash('error', err.message)
+    }
+
+    response.redirect().back()
   }
 }

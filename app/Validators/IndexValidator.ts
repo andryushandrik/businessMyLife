@@ -1,4 +1,6 @@
-import { CustomMessages } from '@ioc:Adonis/Core/Validator'
+// * Types
+import type { CustomMessages } from '@ioc:Adonis/Core/Validator'
+// * Types
 
 export default class IndexValidator {
   protected messages: CustomMessages = {
