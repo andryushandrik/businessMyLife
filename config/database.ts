@@ -80,14 +80,14 @@ export const FEEDBACK_QUESTION_MAX_LENGTH: number = 8192
  * * News
  */
 
-export const NEWS_TITLE_MIN_LENGTH = 2
-export const NEWS_TITLE_MAX_LENGTH = 255
+export const NEWS_TITLE_MIN_LENGTH: number = 2
+export const NEWS_TITLE_MAX_LENGTH: number = 255
 
-export const NEWS_SUPTITLE_MIN_LENGTH = 2
-export const NEWS_SUPTITLE_MAX_LENGTH = 255
+export const NEWS_SUPTITLE_MIN_LENGTH: number = 2
+export const NEWS_SUPTITLE_MAX_LENGTH: number = 255
 
-export const NEWS_DESCRIPTION_MIN_LENGTH = 4
-export const NEWS_DESCRIPTION_MAX_LENGTH = 8192
+export const NEWS_DESCRIPTION_MIN_LENGTH: number = 4
+export const NEWS_DESCRIPTION_MAX_LENGTH: number = 8192
 
 /**
  * * User
