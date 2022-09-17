@@ -1,26 +1,21 @@
 // * Types
 import type { SimplePaginatorContract } from '@ioc:Adonis/Lucid/Database'
-import type { ModelObject } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 
 declare module '@ioc:Adonis/Lucid/Orm' {
-    interface ModelQueryBuilderContract<
-      Model extends LucidModel,
-      Result = InstanceType<Model>
-    > {
-      getViaPaginate(config: PaginationConfig): Promise<Result extends LucidRow ? ModelPaginatorContract<Result> : SimplePaginatorContract<Result>>,
-    }
+  interface ModelQueryBuilderContract<
+    Model extends LucidModel,
+    Result = InstanceType<Model>
+  > {
+    getViaPaginate(config: PaginationConfig): Promise<Result extends LucidRow ? ModelPaginatorContract<Result> : SimplePaginatorContract<Result>>,
+    random(): Promise<any>,
   }
+}
 
 export type PaginationConfig = {
-    page: number,
-    baseUrl?: string,
-    limit?: number,
-    orderByColumn?: string | OrderByMultipleType[],
-    orderBy?: 'asc' | 'desc',
-  }
-
-export type OrderByMultipleType = {
-  column: string,
-  order: "asc" | "desc"
+  page: number,
+  baseUrl?: string,
+  limit?: number,
+  orderByColumn?: string,
+  orderBy?: 'asc' | 'desc',
 }

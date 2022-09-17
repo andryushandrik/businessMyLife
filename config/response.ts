@@ -12,4 +12,13 @@ export enum ResponseCodes {
 export enum ResponseMessages {
   SUCCESS = 'Успешно!',
   ERROR = 'Что-то пошло не так, повторите попытку еще раз!',
+
+  /**
+   * * Auth
+   */
+
+  USER_NOT_FOUND = 'Пользователь не найден!',
+  VALIDATION_ERROR = 'Заполните пожалуйста все поля правильно!',
+  TOKEN_ERROR = 'Токен верификации пользователя не найден или просрочен!',
+  MISS_AUTH_HEADERS = 'Не найдены необходимые заголовки для авторизации!',
 }
