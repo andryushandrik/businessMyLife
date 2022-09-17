@@ -14,18 +14,6 @@
         <h4 class="card-title">{{ title }}</h4>
 
         <div class="d-flex">
-          {{--  @if(item.isBlocked)
-            <form action="{{ route('users.unblock', { id: item.id }) }}" method="POST">
-              {{ csrfField() }}
-              <button type="submit" class="btn btn-primary btn-sm">Разблокировать</button>
-            </form>
-          @else
-            <form action="{{ route('users.block', { id: item.id }) }}" method="POST">
-              {{ csrfField() }}
-              <button type="submit" class="btn btn-danger btn-sm">Заблокировать</button>
-            </form>
-          @endif  --}}
-
           @if((item.roleId - 1) == RoleNames.USER)
             <form action="{{ route('user.role.changeRoleToModerator', { userId: item.id }, { qs: { _method: 'PATCH' } }) }}" method="POST">
               {{ csrfField() }}

@@ -16,7 +16,7 @@ Route.group(() => {
 Route.group(() => {
 
   Route.get('/', 'IndexController.home').as('home')
-  
+
   Route.resource('/news', 'NewsController')
 
   /**
@@ -29,14 +29,14 @@ Route.group(() => {
 
     Route.group(() => {
 
-      Route.patch('/toModerator/:userId', 'User/RolesController.changeRoleToModerator').where('id', {
+      Route.patch('/toModerator/:userId', 'User/RolesController.changeRoleToModerator').where('userId', {
         match: /^[0-9]+$/,
-        cast: (id) => Number(id),
+        cast: (userId) => Number(userId),
       }).as('changeRoleToModerator')
 
-      Route.patch('/toUser/:userId', 'User/RolesController.changeRoleToUser').where('id', {
+      Route.patch('/toUser/:userId', 'User/RolesController.changeRoleToUser').where('userId', {
         match: /^[0-9]+$/,
-        cast: (id) => Number(id),
+        cast: (userId) => Number(userId),
       }).as('changeRoleToUser')
 
     }).prefix('role').as('role')
@@ -57,5 +57,5 @@ Route.group(() => {
     }).as('delete')
 
   }).prefix('user').as('user')
-  
+
 }).middleware('CheckAdminPanelAccess')
