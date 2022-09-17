@@ -9,13 +9,15 @@ Route.get('/auth', async ({ view }) => {
 })
 
 /**
- * Feedback
+ * * Feedback
  */
 
 Route.group(() => {
-  Route.get('/', 'FeedbackController.index')
-  Route.get('/:id', 'FeedbackController.showOne')
 
-  Route.patch('/:id', 'FeedbackController.complete')
-  Route.delete('/:id', 'FeedbackController.delete')
-}).prefix("/feedback")
+  Route.get('/', 'FeedbacksController.paginate').as('paginate')
+  Route.get('/:id', 'FeedbacksController.get').as('get')
+
+  Route.patch('/:id', 'FeedbacksController.complete').as('complete')
+  Route.delete('/:id', 'FeedbacksController.delete').as('delete')
+
+}).prefix('feedback').as('feedback')

@@ -5,8 +5,8 @@
  * file.
  */
 
-import Env from "@ioc:Adonis/Core/Env";
-import { DatabaseConfig } from "@ioc:Adonis/Lucid/Database";
+import Env from '@ioc:Adonis/Core/Env'
+import { DatabaseConfig } from '@ioc:Adonis/Lucid/Database'
 
 const databaseConfig: DatabaseConfig = {
   /*
@@ -19,7 +19,7 @@ const databaseConfig: DatabaseConfig = {
   | file.
   |
   */
-  connection: Env.get("DB_CONNECTION"),
+  connection: Env.get('DB_CONNECTION'),
 
   connections: {
     /*
@@ -34,41 +34,41 @@ const databaseConfig: DatabaseConfig = {
     |
     */
     pg: {
-      client: "pg",
+      client: 'pg',
       debug: false,
       healthCheck: false,
       migrations: {
         naturalSort: true,
       },
       seeders: {
-        paths: ["./database/seeders/MainSeeder"],
+        paths: ['./database/seeders/MainSeeder'],
       },
       connection: {
-        host: Env.get("PG_HOST"),
-        port: Env.get("PG_PORT"),
-        user: Env.get("PG_USER"),
-        password: Env.get("PG_PASSWORD", ""),
-        database: Env.get("PG_DB_NAME"),
+        host: Env.get('PG_HOST'),
+        port: Env.get('PG_PORT'),
+        user: Env.get('PG_USER'),
+        password: Env.get('PG_PASSWORD', ''),
+        database: Env.get('PG_DB_NAME'),
       },
     },
   },
-};
+}
 
-export default databaseConfig;
+export default databaseConfig
 
 export const TABLES_NAMES = {
-  FEEDBACKS: "feedbacks",
+  FEEDBACKS: 'feedbacks',
 
   /**
    * * User
    */
 
-  ROLES: "roles",
-  USERS_TYPES: "usersTypes",
-} as const;
+  ROLES: 'roles',
+  USERS_TYPES: 'usersTypes',
+} as const
 
 /**
- * FeedBacks
+ * * Feedback
  */
 
-export const FEEDBACK_QUESTION_MAX_LENGTH = 8192;
+export const FEEDBACK_QUESTION_MAX_LENGTH: number = 8192

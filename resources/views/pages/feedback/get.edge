@@ -1,22 +1,24 @@
 @layout('layouts/index')
 
-@set('title', "Обратная связь")
+@set('title', 'Обратная связь')
 
 @section('body')
   <div class="col-lg-12">
     <div class="card">
       <div class="card-header">
         <h4 class="card-title">Вопрос от - {{ item.name }}</h4>
-        
-        @if(!item.isCompleted)
-        <form action="{{ route('FeedbackController.complete', { id: item.id }, { qs: { _method: 'PATCH' } }) }}" method="POST">
-          <button type="submit" class="btn btn-primary btn-sm">Пометить как обработанное</button>
 
-          {{ csrfField() }}
-        </form>
-        @endif
-        
-        <a href="/feedback" class="btn btn-primary btn-sm">Назад</a>
+        <div>
+          @if(!item.isCompleted)
+            <form class="d-inline" action="{{ route('feedback.complete', { id: item.id }, { qs: { _method: 'PATCH' } }) }}" method="POST">
+              <button type="submit" class="btn btn-primary btn-sm">Пометить как обработанное</button>
+
+              {{ csrfField() }}
+            </form>
+          @endif
+
+          <a href="{{ route('feedback.paginate') }}" class="btn btn-primary btn-sm ml-2">Назад</a>
+        </div>
       </div>
       <div class="card-body">
         <div class="basic-form">
@@ -35,7 +37,7 @@
             <label class="mb-1"><strong>Вопрос</strong></label>
             <textarea class="form-control" disabled>{{ item.question }}</textarea>
           </div>
-          
+
         </div>
       </div>
     </div>

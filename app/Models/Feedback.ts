@@ -1,16 +1,19 @@
 // * Types
-import type { DateTime } from "luxon";
+import type { DateTime } from 'luxon'
 // * Types
 
 import { BaseModel, column, computed } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Feedback extends BaseModel {
   public static readonly columns = [
-    'id', 'name', 'email', 'question', 'createdAt', 'updatedAt',
+    'id',
+    'name', 'email',
+    'question',
+    'createdAt', 'updatedAt',
   ] as const
 
   /**
-   * Columns
+   * * Columns
    */
 
   @column({ isPrimary: true })
@@ -35,11 +38,11 @@ export default class Feedback extends BaseModel {
   public updatedAt: DateTime
 
   /**
-   * Computed
+   * * Computed properties
    */
 
   @computed()
-  public get isCompletedForUser(){
+  public get isCompletedForUser(): string {
     return this.isCompleted ? 'Да' : 'Нет'
   }
 }

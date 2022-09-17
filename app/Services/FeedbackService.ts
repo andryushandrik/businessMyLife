@@ -1,46 +1,79 @@
-import { ModelPaginatorContract } from "@ioc:Adonis/Lucid/Orm";
-import Feedback from "App/Models/Feedback";
-import { PaginationConfig } from "Contracts/database";
+// * Types
+import type { Err } from 'Contracts/response'
+import type { PaginationConfig } from 'Contracts/database'
+import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
+// * Types
+
+import Feedback from 'App/Models/Feedback'
+import Logger from '@ioc:Adonis/Core/Logger'
+import { ResponseCodes, ResponseMessages } from 'Config/response'
 
 export default class FeedbackService {
-  
-  public static async paginateFeedback(
-    paginationConfig: PaginationConfig
-  ): Promise<ModelPaginatorContract<Feedback>> {
-    paginationConfig.baseUrl = "/feedback";
-    paginationConfig.limit = 9;
+  public static async paginate(config: PaginationConfig, orderByIsCompleted?: 'asc' | 'desc'): Promise<ModelPaginatorContract<Feedback>> {
+    let query = Feedback.query()
+
+    if (orderByIsCompleted) {
+      query = query.orderBy([
+        { column: 'isCompleted', order: orderByIsCompleted },
+        { column: 'id', order: 'asc' },
+      ])
+    }
+
     try {
-      return await Feedback.query().getViaPaginate(paginationConfig)
-    } catch (error: any) {
-      throw new Error(error);
+      return await query.getViaPaginate(config)
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
     }
   }
 
-  public static async get(id: number){
+  public static async get(id: Feedback['id']): Promise<Feedback> {
+    let item: Feedback | null
+
     try {
-      const feedbackItem = await Feedback.findOrFail(id)
-      return feedbackItem 
-    } catch (error: any) {
-      throw new Error("Не удалось найти обратную связь")
+      item =  await Feedback.find(id)
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
     }
+
+    if (!item)
+      throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.ERROR } as Err
+
+    return item
   }
 
-  public static async markAsCompleted(id: number){
-    try {
-      const feedbackItem = await Feedback.findOrFail(id)
-      feedbackItem.isCompleted = true
-      await feedbackItem.save()
-    } catch (error: any) {
-      throw new Error(error.message)
-    }
-  }
+  public static async delete(id: Feedback['id']): Promise<void> {
+    let item: Feedback
 
-  public static async delete(id: number){
     try {
-      const item = await Feedback.findOrFail(id)
+      item = await this.get(id)
+    } catch (err: Err | any) {
+      throw err
+    }
+
+    try {
       await item.delete()
-    } catch (error: any) {
-      throw new Error('Произошла ошибка во время удаления')
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+    }
+  }
+
+  public static async markAsCompleted(id: Feedback['id']): Promise<void> {
+    let item: Feedback
+
+    try {
+      item = await this.get(id)
+    } catch (err: Err | any) {
+      throw err
+    }
+
+    try {
+      await item.merge({ isCompleted: true }).save()
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
     }
   }
 }
