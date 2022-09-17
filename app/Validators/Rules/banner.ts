@@ -1,23 +1,30 @@
-import { rules } from "@ioc:Adonis/Core/Validator"
-import { BANNERS_DESCRIPTION_MAX_LENGTH } from 'Config/database'
+// * Types
+import type { Rule } from '@ioc:Adonis/Core/Validator'
+// * Types
 
-export function getBannerTitleRules(){
-    return [
-        rules.minLength(5),
-        rules.maxLength(255)
-    ]
+import { rules } from '@ioc:Adonis/Core/Validator'
+import {
+  BANNER_DESCRIPTION_MAX_LENGTH, BANNER_DESCRIPTION_MIN_LENGTH,
+  BANNER_TITLE_MAX_LENGTH, BANNER_TITLE_MIN_LENGTH
+} from 'Config/database'
+
+export function getBannerTitleRules(): Rule[] {
+  return [
+    rules.minLength(BANNER_TITLE_MIN_LENGTH),
+    rules.maxLength(BANNER_TITLE_MAX_LENGTH),
+  ]
 }
 
-export function getBannerDescriptionRules(){
-    return [
-        rules.minLength(10),
-        rules.maxLength(BANNERS_DESCRIPTION_MAX_LENGTH)
-    ]
+export function getBannerDescriptionRules(): Rule[] {
+  return [
+    rules.minLength(BANNER_DESCRIPTION_MIN_LENGTH),
+    rules.maxLength(BANNER_DESCRIPTION_MAX_LENGTH),
+  ]
 }
 
-export function getBannerFileOptions(){
-    return {
-        size: "5mb",
-        extnames: ['jpeg', 'png', 'jpg']
-    }
+export function getBannerFileOptions() {
+  return {
+    size: '5mb',
+    extnames: ['jpeg', 'png', 'jpg'],
+  }
 }

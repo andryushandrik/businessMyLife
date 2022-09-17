@@ -12,7 +12,7 @@
       <div class="card-header">
         <h4 class="card-title">{{ title }}</h4>
 
-        <a href="/banners/create" class="btn btn-primary btn-sm">Создать</a>
+        <a href="{{ route('banners.create') }}" class="btn btn-primary btn-sm">Создать</a>
       </div>
 
       <div class="card-body">
@@ -32,7 +32,7 @@
             </thead>
             <tbody>
 
-              @each(item in items)
+              @each(item in banners)
                 <tr>
                   <td><strong>{{ item.id }}</strong></td>
                   <td>{{ item.title }}</td>
@@ -52,10 +52,10 @@
                         </svg>
                       </button>
                       <div class="dropdown-menu" style="">
-                        <a class="dropdown-item" href="{{ route('BannerController.showOne', { id: item.id }) }}">Показать</a>
-                        <a class="dropdown-item" href="{{ route('BannerController.edit', { id: item.id }) }}">Редактировать</a>
+                        <a class="dropdown-item" href="{{ route('banners.show', { id: item.id }) }}">Показать</a>
+                        <a class="dropdown-item" href="{{ route('banners.edit', { id: item.id }) }}">Редактировать</a>
 
-                        <form action="{{ route('BannerController.delete', { id: item.id }, { qs: { _method: 'DELETE' } }) }}" method="POST">
+                        <form action="{{ route('banners.destroy', { id: item.id }, { qs: { _method: 'DELETE' } }) }}" method="POST">
                           <button type="submit" class="dropdown-item">Удалить</button>
 
                           {{ csrfField() }}
@@ -74,5 +74,5 @@
     </div>
   </div>
 
-  @!component('components/pagination', { obj: items })
+  @!component('components/pagination', { obj: banners })
 @endsection

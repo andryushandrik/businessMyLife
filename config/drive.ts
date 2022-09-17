@@ -6,16 +6,16 @@
  */
 
 import Env from '@ioc:Adonis/Core/Env'
-import { driveConfig } from '@adonisjs/core/build/config'
 import Application from '@ioc:Adonis/Core/Application'
+import { driveConfig } from '@adonisjs/core/build/config'
 
+export const IMG_PLACEHOLDER: string = 'placeholder.jpg'
 
 /**
- * * User
+ * * Banner
  */
 
- export const BANNERS_FOLDER_PATH: string = 'Banners'
- export const IMG_PLACEHOLDER: string = '/uploads/placeholder.jpg'
+export const BANNER_FOLDER_PATH: string = 'Banners'
 
 /*
 |--------------------------------------------------------------------------
