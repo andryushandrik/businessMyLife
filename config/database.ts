@@ -57,14 +57,17 @@ const databaseConfig: DatabaseConfig = {
 export default databaseConfig
 
 export const TABLES_NAMES = {
+  NEWS: 'news',
   FEEDBACKS: 'feedbacks',
 
   /**
    * * User
    */
 
+  USERS: 'users',
   ROLES: 'roles',
   USERS_TYPES: 'usersTypes',
+  USERS_IMAGES: 'usersImages',
 } as const
 
 /**
@@ -72,3 +75,23 @@ export const TABLES_NAMES = {
  */
 
 export const FEEDBACK_QUESTION_MAX_LENGTH: number = 8192
+
+/**
+ * * News
+ */
+
+export const NEWS_TITLE_MIN_LENGTH = 2
+export const NEWS_TITLE_MAX_LENGTH = 255
+
+export const NEWS_SUPTITLE_MIN_LENGTH = 2
+export const NEWS_SUPTITLE_MAX_LENGTH = 255
+
+export const NEWS_DESCRIPTION_MIN_LENGTH = 4
+export const NEWS_DESCRIPTION_MAX_LENGTH = 8192
+
+/**
+ * * User
+ */
+
+export const USER_PASSWORD_MIN_LENGTH: number = 8
+export const USER_PASSWORD_MAX_LENGTH: number = 50

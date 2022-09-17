@@ -7,8 +7,10 @@
           <span class="nav-text">Меню</span>
         </a>
         <ul aria-expanded="false">
-          <li><a href="/">Главная</a></li>
+          <li><a href="{{ route('home') }}">Главная</a></li>
+          <li><a href="/news">Новости</a></li>
           <li><a href="{{ route('feedback.paginate') }}">Обратная связь</a></li>
+          <li><a href="{{ route('user.paginate') }}">Пользователи</a></li>
         </ul>
       </li>
     </ul>
