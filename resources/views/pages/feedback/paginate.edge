@@ -1,18 +1,23 @@
 @layout('layouts/index')
 
-@set('title', 'Новости')
+@set('title', 'Обратная связь')
 
 @section('styles')
-  <link href="/css/news.css" rel="stylesheet">
+  <link href="/css/feedback.css" rel="stylesheet">
 @endsection
 
 @section('body')
+
+  @if(flashMessages.has('errors'))
+    <div class="invalid-feedback d-block">
+      {{ flashMessages.get('error')}}
+    </div>
+  @endif
+
   <div class="col-lg-12">
     <div class="card">
       <div class="card-header">
         <h4 class="card-title">{{ title }}</h4>
-
-        <a href="/news/create" class="btn btn-primary btn-sm">Создать</a>
       </div>
 
       <div class="card-body">
@@ -23,23 +28,27 @@
               <tr>
                 <th class="width80"><strong>#</strong></th>
 
-                <th><strong>Заголовок</strong></th>
-                <th><strong>Слаг</strong></th>
-                <th><strong>Просмотры</strong></th>
-                <th><strong>Изображение</strong></th>
+                <th><strong>Имя</strong></th>
+                <th><strong>Email</strong></th>
+                <th><strong>Вопрос</strong></th>
+                <th><strong>Обработанный</strong></th>
 
                 <th><strong>Действия</strong></th>
               </tr>
             </thead>
             <tbody>
 
-              @each(item in news)
-                <tr>
+              @each(item in feedbacks)
+                @if(item.isCompleted)
+                  <tr class="feedback_completed">
+                @else
+                  <tr >
+                @endif
                   <td><strong>{{ item.id }}</strong></td>
-                  <td>{{ item.title }}</td>
-                  <td>{{ item.slug }}</td>
-                  <td>{{ item.viewsCount }}</td>
-                  <td><img src="{{ getImage(item.image) }}" class="news_cover_img"/></td>
+                  <td>{{ item.name }}</td>
+                  <td>{{ item.email }}</td>
+                  <td>{{ truncate(item.question, 100) }}</td>
+                  <td>{{ item.isCompletedForUser }}</td>
                   <td>
                     <div class="dropdown">
                       <button type="button" class="btn btn-success light sharp" data-toggle="dropdown"
@@ -54,10 +63,9 @@
                         </svg>
                       </button>
                       <div class="dropdown-menu" style="">
-                        <a class="dropdown-item" href="{{ route('NewsController.show', { id: item.id }) }}">Показать</a>
-                        <a class="dropdown-item" href="{{ route('NewsController.edit', { id: item.id }) }}">Редактировать</a>
+                        <a class="dropdown-item" href="{{ route('feedback.get', { id: item.id }) }}">Показать</a>
 
-                        <form action="{{ route('NewsController.destroy', { id: item.id }, { qs: { _method: 'DELETE' } }) }}" method="POST">
+                        <form action="{{ route('feedback.delete', { id: item.id }, { qs: { _method: 'DELETE' } }) }}" method="POST">
                           <button type="submit" class="dropdown-item">Удалить</button>
 
                           {{ csrfField() }}
@@ -76,5 +84,5 @@
     </div>
   </div>
 
-  @!component('components/pagination', { obj: news })
+  @!component('components/pagination', { obj: feedbacks })
 @endsection

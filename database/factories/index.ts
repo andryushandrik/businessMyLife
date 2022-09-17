@@ -1,5 +1,6 @@
 import News from 'App/Models/News'
 import User from 'App/Models/User/User'
+import Feedback from 'App/Models/Feedback'
 import Factory from '@ioc:Adonis/Lucid/Factory'
 import UserImage from 'App/Models/User/UserImage'
 import { DateTime } from 'luxon'
@@ -18,6 +19,17 @@ export const NewsFactory = Factory
 
       readingTimeFrom: faker.datatype.number(),
       readingTimeTo: faker.datatype.number(),
+    }
+  })
+  .build()
+
+export const FeedbackFactory = Factory
+  .define(Feedback, ({ faker }) => {
+    return {
+      isCompleted: faker.datatype.boolean(),
+      name: faker.name.fullName(),
+      email: faker.internet.email(),
+      question: faker.lorem.paragraph(5),
     }
   })
   .build()

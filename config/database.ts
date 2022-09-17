@@ -58,6 +58,7 @@ export default databaseConfig
 
 export const TABLES_NAMES = {
   NEWS: 'news',
+  FEEDBACKS: 'feedbacks',
 
   /**
    * * User
@@ -68,6 +69,12 @@ export const TABLES_NAMES = {
   USERS_TYPES: 'usersTypes',
   USERS_IMAGES: 'usersImages',
 } as const
+
+/**
+ * * Feedback
+ */
+
+export const FEEDBACK_QUESTION_MAX_LENGTH: number = 8192
 
 /**
  * * News

@@ -58,4 +58,18 @@ Route.group(() => {
 
   }).prefix('user').as('user')
 
+  /**
+   * * Feedback
+   */
+
+  Route.group(() => {
+
+    Route.get('/', 'FeedbacksController.paginate').as('paginate')
+    Route.get('/:id', 'FeedbacksController.get').as('get')
+
+    Route.patch('/:id', 'FeedbacksController.complete').as('complete')
+    Route.delete('/:id', 'FeedbacksController.delete').as('delete')
+
+  }).prefix('feedback').as('feedback')
+
 }).middleware('CheckAdminPanelAccess')
