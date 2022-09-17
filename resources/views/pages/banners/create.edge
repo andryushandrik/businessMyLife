@@ -38,7 +38,7 @@
             <div class="form-group">
                 <label class="mb-1"><strong>Описание *</strong></label>
                 <textarea id="summernote" class="summernote" name="description">{{ flashMessages.get('description') ?? '' }}</textarea>
-                
+
                 @if(flashMessages.has('errors.description'))
                   <div class="invalid-feedback d-block">
                     {{ flashMessages.get('errors.description')[0] }}
@@ -50,7 +50,7 @@
             <div class="form-group">
                 <label class="mb-1">Изображение</label>
                 <input type="file" class="form-control" accept="image/png, image/jpeg, image/jpg" name="image" value="{{ flashMessages.get('image') ?? '' }}">
-   
+
                 @if(flashMessages.has('errors.image'))
                   <div class="invalid-feedback d-block">
                     {{ flashMessages.get('errors.image')[0] }}

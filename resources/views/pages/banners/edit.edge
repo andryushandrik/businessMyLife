@@ -27,7 +27,7 @@
               <label class="mb-1"><strong>Название *</strong></label>
               <input type="string" class="form-control" name="title" value="{{ item.title ?? '' }}">
 
-              
+
               @if(flashMessages.has('errors.title'))
                 <div class="invalid-feedback d-block">
                   {{ flashMessages.get('errors.title')[0] }}
@@ -54,7 +54,7 @@
             <div class="form-group">
                 <label class="mb-1">Изображение</label>
                 <input type="file" class="form-control" accept="image/png, image/jpeg, image/jpg" name="image" value="{{ flashMessages.get('image') ?? '' }}">
-   
+
                 @if(flashMessages.has('errors.image'))
                   <div class="invalid-feedback d-block">
                     {{ flashMessages.get('errors.image')[0] }}

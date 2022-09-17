@@ -57,8 +57,6 @@ const databaseConfig: DatabaseConfig = {
 export default databaseConfig;
 
 export const TABLES_NAMES = {
-  NEWS: "news",
-  FEEDBACKS: "feedbacks",
   BANNERS: "banners",
 
   /**
@@ -68,20 +66,6 @@ export const TABLES_NAMES = {
   ROLES: "roles",
   USERS_TYPES: "usersTypes",
 } as const;
-
-/**
- * News
- */
-export const NEWS_DESCRIPTION_MAX_LENGTH = 8192;
-export const NEWS_TITLE_MAX_LENGTH = 1024;
-export const NEWS_SLUG_MAX_LENGTH = 1024;
-export const NEWS_SUPTITLE_MAX_LENGTH = 1024;
-
-/**
- * FeedBacks
- */
-
-export const FEEDBACK_QUESTION_MAX_LENGTH = 8192;
 
 /**
  * Banners
