@@ -1,4 +1,5 @@
 import News from 'App/Models/News'
+import Banner from 'App/Models/Banner'
 import User from 'App/Models/User/User'
 import Feedback from 'App/Models/Feedback'
 import Factory from '@ioc:Adonis/Lucid/Factory'
@@ -30,6 +31,16 @@ export const FeedbackFactory = Factory
       name: faker.name.fullName(),
       email: faker.internet.email(),
       question: faker.lorem.paragraph(5),
+    }
+  })
+  .build()
+
+export const BannerFactory = Factory
+  .define(Banner, ({ faker }) => {
+    return {
+      image: faker.image.business(),
+      title: faker.lorem.sentence(),
+      description: faker.lorem.paragraph(3),
     }
   })
   .build()

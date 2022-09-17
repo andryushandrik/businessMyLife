@@ -19,6 +19,8 @@ Route.group(() => {
 
   Route.resource('/news', 'NewsController')
 
+  Route.resource('/banners', 'BannersController')
+
   /**
    * * User
    */

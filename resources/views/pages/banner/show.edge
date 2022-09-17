@@ -12,7 +12,7 @@
     <div class="card">
       <div class="card-header">
         <h4 class="card-title">{{ title }}</h4>
-        <a href="{{ route('news.index') }}" class="btn btn-primary btn-sm">Назад</a>
+        <a href="{{ route('banners.index') }}" class="btn btn-primary btn-sm">Назад</a>
       </div>
       <div class="card-body">
         <div class="basic-form">
@@ -25,16 +25,6 @@
           <div class="form-group">
             <label class="mb-1"><strong>Описание</strong></label>
             <textarea id="summernote" class="summernote" disabled>{{ item.description }}</textarea>
-          </div>
-
-          <div class="form-group">
-            <label class="mb-1">Слаг</label>
-            <input type="string" class="form-control" value="{{ item.slug }}" disabled>
-          </div>
-
-          <div class="form-group">
-            <label class="mb-1">Подзаголовок</label>
-            <input type="string" class="form-control" value="{{ item.suptitle }}" disabled>
           </div>
 
           <div class="form-group mb-3">

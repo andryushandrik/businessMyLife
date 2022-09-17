@@ -155,3 +155,9 @@ export const IMG_PLACEHOLDER: string = 'placeholder.jpg'
  */
 
 export const NEWS_FOLDER_PATH: string = 'News'
+
+/**
+ * * Banner
+ */
+
+export const BANNER_FOLDER_PATH: string = 'Banners'

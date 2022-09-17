@@ -1,0 +1,11 @@
+.banner_cover_img {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+}
+
+.banner_image {
+    width: 400px;
+    height: 400px;
+    object-fit: contain;
+}

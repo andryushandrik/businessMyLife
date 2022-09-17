@@ -13,6 +13,7 @@ export default class extends BaseSeeder {
   }
 
   public async run() {
+    await this.runSeeder(await import('../Banner'))
     await this.runSeeder(await import('../Feedback'))
     await this.runSeeder(await import('../News'))
 
