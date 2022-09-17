@@ -15,7 +15,7 @@ export default class NewsController {
     const page: number = request.input('page', 1)
 
     try {
-      const news: ModelPaginatorContract<News> = await NewsService.paginateNews({ page, baseUrl })
+      const news: ModelPaginatorContract<News> = await NewsService.paginate({ page, baseUrl })
 
       return view.render('pages/news/index', { news })
     } catch (err: Err | any) {

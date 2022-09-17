@@ -1,6 +1,6 @@
 @layout('layouts/index')
 
-@set('title', 'Баннеры')
+@set('title', 'Новости')
 
 @section('styles')
   <link href="/css/banner.css" rel="stylesheet">
@@ -12,7 +12,7 @@
       <div class="card-header">
         <h4 class="card-title">{{ title }}</h4>
 
-        <a href="{{ route('banners.create') }}" class="btn btn-primary btn-sm">Создать</a>
+        <a href="{{ route('news.create') }}" class="btn btn-primary btn-sm">Создать</a>
       </div>
 
       <div class="card-body">
@@ -32,7 +32,7 @@
             </thead>
             <tbody>
 
-              @each(item in banners)
+              @each(item in news)
                 <tr>
                   <td><strong>{{ item.id }}</strong></td>
                   <td>{{ item.title }}</td>

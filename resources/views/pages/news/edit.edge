@@ -16,11 +16,12 @@
       </div>
       <div class="card-body">
         <div class="basic-form">
-            @if(flashMessages.has('errors.database'))
-                <div class="invalid-feedback d-block">
-                  {{ flashMessages.get('error')}}
-                </div>
-            @endif
+          @if(flashMessages.has('errors.database'))
+              <div class="invalid-feedback d-block">
+                {{ flashMessages.get('error')}}
+              </div>
+          @endif
+
           <form action="{{ route('news.update', { id: item.id }, { qs: { _method: 'PATCH' } }) }}" method="POST" enctype="multipart/form-data">
 
             <div class="form-group">
@@ -36,52 +37,53 @@
             </div>
 
             <div class="form-group">
-                <label class="mb-1"><strong>Описание *</strong></label>
-                <textarea class="form-control summernote" id="summernote" name="description">{{ item.description ?? '' }}</textarea>
-                @if(flashMessages.has('errors.description'))
-                  <div class="invalid-feedback d-block">
-                    {{ flashMessages.get('errors.description')[0] }}
-                  </div>
-                @endif
-              </div>
+              <label class="mb-1"><strong>Описание *</strong></label>
+              <textarea class="form-control summernote" id="summernote" name="description">{{ item.description ?? '' }}</textarea>
 
-            <div class="form-group">
-                <label class="mb-1">Слаг</label>
-                <input type="string" class="form-control" name="slug" value="{{ item.slug ?? '' }}">
-
-                @if(flashMessages.has('errors.slug'))
-                  <div class="invalid-feedback d-block">
-                    {{ flashMessages.get('errors.slug')[0] }}
-                  </div>
-                @endif
+              @if(flashMessages.has('errors.description'))
+                <div class="invalid-feedback d-block">
+                  {{ flashMessages.get('errors.description')[0] }}
+                </div>
+              @endif
             </div>
 
             <div class="form-group">
-                <label class="mb-1">Подзаголовок</label>
-                <input type="string" class="form-control" name="suptitle" value="{{ item.suptitle ?? '' }}">
+              <label class="mb-1">Слаг</label>
+              <input type="string" class="form-control" name="slug" value="{{ item.slug ?? '' }}">
 
-                @if(flashMessages.has('errors.suptitle'))
-                  <div class="invalid-feedback d-block">
-                    {{ flashMessages.get('errors.suptitle')[0] }}
-                  </div>
-                @endif
+              @if(flashMessages.has('errors.slug'))
+                <div class="invalid-feedback d-block">
+                  {{ flashMessages.get('errors.slug')[0] }}
+                </div>
+              @endif
+            </div>
+
+            <div class="form-group">
+              <label class="mb-1">Подзаголовок</label>
+              <input type="string" class="form-control" name="suptitle" value="{{ item.suptitle ?? '' }}">
+
+              @if(flashMessages.has('errors.suptitle'))
+                <div class="invalid-feedback d-block">
+                  {{ flashMessages.get('errors.suptitle')[0] }}
+                </div>
+              @endif
             </div>
 
             <div class="form-group mb-3">
-                <label class="mb-1">Текущее изображение</label>
-                <br>
-                <img src="{{ getImage(item.image) }}" class="news_image" alt="">
+              <label class="mb-1">Текущее изображение</label>
+              <br>
+              <img src="{{ getImage(item.image) }}" class="news_image" alt="">
             </div>
 
             <div class="form-group">
-                <label class="mb-1">Изображение</label>
-                <input type="file" class="form-control" accept="image/png, image/jpeg, image/jpg" name="image" value="{{ flashMessages.get('image') ?? '' }}">
+              <label class="mb-1">Изображение</label>
+              <input type="file" class="form-control" accept="image/png, image/jpeg, image/jpg" name="image" value="{{ flashMessages.get('image') ?? '' }}">
 
-                @if(flashMessages.has('errors.image'))
-                  <div class="invalid-feedback d-block">
-                    {{ flashMessages.get('errors.image')[0] }}
-                  </div>
-                @endif
+              @if(flashMessages.has('errors.image'))
+                <div class="invalid-feedback d-block">
+                  {{ flashMessages.get('errors.image')[0] }}
+                </div>
+              @endif
             </div>
 
             {{ csrfField() }}
