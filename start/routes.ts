@@ -9,31 +9,13 @@ Route.get('/auth', async ({ view }) => {
 })
 
 /**
- * News
- */
-
-Route.group(() => {
-  Route.get('/', 'NewsController.index')
-  Route.post('/', 'NewsController.create')
-  
-  Route.post('/create', 'NewsController.create')
-  Route.patch('/edit/:id', 'NewsController.edit')
-  Route.delete('/delete/:id', 'NewsController.delete')
-
-  Route.get('/create', 'NewsController.showCreate')
-  Route.get('/edit/:id', 'NewsController.showEdit')
-  Route.get('/:id', 'NewsController.showOne')
-  
-}).prefix('/news')
-
-/**
  * Feedback
  */
 
 Route.group(() => {
   Route.get('/', 'FeedbackController.index')
   Route.get('/:id', 'FeedbackController.showOne')
-  
+
   Route.patch('/:id', 'FeedbackController.complete')
   Route.delete('/:id', 'FeedbackController.delete')
 }).prefix("/feedback")

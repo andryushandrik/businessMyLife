@@ -13,7 +13,7 @@ export default class extends BaseSeeder {
   }
 
   public async run() {
-    
+
     /**
      * * User
      */
@@ -25,7 +25,6 @@ export default class extends BaseSeeder {
      * Others
      */
 
-     await this.runSeeder(await import("../News"));
      await this.runSeeder(await import("../Feedback"));
 
   }
