@@ -1,0 +1,98 @@
+@layout('layouts/index')
+
+@set('title', 'Создать партнера')
+
+@section('styles')
+<link href="/css/partners.css" rel="stylesheet">
+@endsection
+
+@section('body')
+<div class="col-lg-12">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">{{ title }}</h4>
+            <a href="/partners" class="btn btn-primary btn-sm">Назад</a>
+        </div>
+        <div class="card-body">
+            <div class="basic-form">
+                @if(flashMessages.has('errors.database'))
+                <div class="invalid-feedback d-block">
+                    {{ flashMessages.get('error')}}
+                </div>
+                @endif
+                @if(mediaType === 'video')
+                <form action="{{ route('PartnersController.create', { qs: { mediaType: 1 } }) }}" method="POST">
+                    @elseif(mediaType === 'image')
+                    <form action="{{ route('PartnersController.create', { qs: { mediaType: 0 } }) }}" method="POST"
+                        enctype="multipart/form-data">
+                        @endif
+
+                        <div class="form-group">
+                            <label class="mb-1"><strong>Название *</strong></label>
+                            <input type="string" class="form-control" name="title"
+                                value="{{ flashMessages.get('title') ?? '' }}">
+
+                            @if(flashMessages.has('errors.title'))
+                            <div class="invalid-feedback d-block">
+                                {{ flashMessages.get('errors.title')[0] }}
+                            </div>
+                            @endif
+                        </div>
+
+                        <div class="form-group">
+                            <label class="mb-1"><strong>Кликабельная ссылка *</strong></label>
+                            <div>
+                                <input type="radio" id="true" name="isTitleLink" value="true" checked>
+                                <label for="true">Да </label>
+                            </div>
+
+                            <div>
+                                <input type="radio" id="false" name="isTitleLink" value="false">
+                                <label for="false">Нет</label>
+                            </div>
+
+                            @if(flashMessages.has('errors.isTitleLink'))
+                            <div class="invalid-feedback d-block">
+                                {{ flashMessages.get('errors.isTitleLink')[0] }}
+                            </div>
+                            @endif
+                        </div>
+
+                        @if(mediaType === 'video')
+                        <div class="form-group">
+                            <label class="mb-1"><strong>Ссылка на видео*</strong></label>
+                            <input type="string" class="form-control" name="media"
+                                placeholder="Вставьте ссылку на видео с YouTube или RuTube"
+                                value="{{ flashMessages.get('media') ?? '' }}">
+                            @if(flashMessages.has('errors.media'))
+                            <div class="invalid-feedback d-block">
+                                {{ flashMessages.get('errors.media')[0] }}
+                            </div>
+                            @endif
+                        </div>
+                        @else
+                        <div class="form-group">
+                            <label class="mb-1">Изображение</label>
+                            <input type="file" class="form-control" accept="image/png, image/jpeg, image/jpg"
+                                name="media" value="{{ flashMessages.get('media') ?? '' }}">
+
+                            @if(flashMessages.has('errors.media'))
+                            <div class="invalid-feedback d-block">
+                                {{ flashMessages.get('errors.media')[0] }}
+                            </div>
+                            @endif
+                        </div>
+                        @end
+
+                        {{ csrfField() }}
+
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-primary btn-block">Создать</button>
+                        </div>
+                    </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

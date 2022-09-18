@@ -18,7 +18,13 @@
     "./start/routes",
     "./start/kernel",
     "./start/database",
-    "./start/view"
+    "./start/view",
+    {
+      "file": "./start/validator",
+      "environment": [
+        "web"
+      ]
+    }
   ],
   "providers": [
     "./providers/AppProvider",

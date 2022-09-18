@@ -22,23 +22,27 @@ export default class NewsController {
     }
   }
 
-  public async showOne({view, response, session, params}: HttpContextContract){
-    let newsItem: News
+  public async showOne({
+    view,
+    response,
+    session,
+    params,
+  }: HttpContextContract) {
+    let newsItem: News;
 
     try {
-        newsItem = await NewsService.get(params.id)
+      newsItem = await NewsService.get(params.id);
     } catch (error: any) {
-        session.flash({error: error.message})
-        response.redirect("/news")
-        return
+      session.flash({ error: error.message });
+      response.redirect("/news");
+      return;
     }
 
-    return view.render("./pages/news/show", {item: newsItem})
+    return view.render("./pages/news/show", { item: newsItem });
   }
 
   public async create({ request, response, session }: HttpContextContract) {
     let payload = await request.validate(NewsValidator);
-
     try {
       await NewsService.create(payload);
 
@@ -51,7 +55,6 @@ export default class NewsController {
   }
 
   public async showCreate({ view, session, response }: HttpContextContract) {
-    
     try {
       return view.render("./pages/news/create");
     } catch (error: any) {
@@ -108,7 +111,7 @@ export default class NewsController {
 
     try {
       await NewsService.delete(parseInt(params.id));
-      session.flash({success: "Новость была удалена"}) 
+      session.flash({ success: "Новость была удалена" });
       response.redirect().back();
     } catch (error) {
       session.flash({ error: error.message });

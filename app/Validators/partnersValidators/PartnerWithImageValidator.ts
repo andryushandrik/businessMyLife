@@ -1,16 +1,29 @@
-import { schema, CustomMessages } from '@ioc:Adonis/Core/Validator'
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import BasePartnerValidator from '../IndexValidator'
-import { getPartnerImageOptions } from '../Rules/partners'
+import { schema, CustomMessages } from "@ioc:Adonis/Core/Validator";
+import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
+import IndexValidator from "../IndexValidator";
+import {
+  getPartnersTitleRules,
+  getPartnerImageOptions,
+} from "../Rules/partners";
+import {
+  PARTNER_IMAGE_MEDIA_TYPE,
+  PARTNER_VIDEO_MEDIA_TYPE,
+} from "Config/database";
 
-export default class PartnerWithImageValidator extends BasePartnerValidator {
+export default class PartnerWithImageValidator extends IndexValidator {
   constructor(protected ctx: HttpContextContract) {
-    super()
+    super();
   }
 
   public schema = schema.create({
-    media: schema.file(getPartnerImageOptions())
-  })
+    title: schema.string({ trim: true }, getPartnersTitleRules()),
+    isTitleLink: schema.boolean(),
+    mediaType: schema.enum.optional([
+      PARTNER_IMAGE_MEDIA_TYPE,
+      PARTNER_VIDEO_MEDIA_TYPE,
+    ] as const),
+    media: schema.file(getPartnerImageOptions()),
+  });
 
-  public messages: CustomMessages = this.messages
+  public messages: CustomMessages = this.messages;
 }

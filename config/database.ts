@@ -88,5 +88,11 @@ export const FEEDBACK_QUESTION_MAX_LENGTH = 8192;
  * Banners
  */
 
- export const BANNERS_DESCRIPTION_MAX_LENGTH = 2048;
+export const BANNERS_DESCRIPTION_MAX_LENGTH = 2048;
 
+/**
+ * Partners
+ */
+
+export const PARTNER_IMAGE_MEDIA_TYPE = "0";
+export const PARTNER_VIDEO_MEDIA_TYPE = "1";

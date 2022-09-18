@@ -5,18 +5,14 @@
  * file.
  */
 
-import Env from '@ioc:Adonis/Core/Env'
-import { driveConfig } from '@adonisjs/core/build/config'
-import Application from '@ioc:Adonis/Core/Application'
+import Env from "@ioc:Adonis/Core/Env";
+import { driveConfig } from "@adonisjs/core/build/config";
+import Application from "@ioc:Adonis/Core/Application";
 
-
-/**
- * * User
- */
-
- export const NEWS_FOLDER_PATH: string = 'News'
- export const BANNERS_FOLDER_PATH: string = 'Banners'
- export const IMG_PLACEHOLDER: string = '/uploads/placeholder.jpg'
+export const NEWS_FOLDER_PATH: string = "News";
+export const BANNERS_FOLDER_PATH: string = "Banners";
+export const PARTNERS_FOLDER_PATH: string = "Partners";
+export const IMG_PLACEHOLDER: string = "/uploads/placeholder.jpg";
 
 /*
 |--------------------------------------------------------------------------
@@ -37,7 +33,7 @@ export default driveConfig({
   | the `DRIVE_DISK` environment variable.
   |
   */
-  disk: Env.get('DRIVE_DISK'),
+  disk: Env.get("DRIVE_DISK"),
 
   disks: {
     /*
@@ -50,8 +46,8 @@ export default driveConfig({
     |
     */
     local: {
-      driver: 'local',
-      visibility: 'public',
+      driver: "local",
+      visibility: "public",
 
       /*
       |--------------------------------------------------------------------------
@@ -62,7 +58,7 @@ export default driveConfig({
       | files.
       |
       */
-      root: Application.tmpPath('uploads'),
+      root: Application.tmpPath("uploads"),
 
       /*
       |--------------------------------------------------------------------------
@@ -86,7 +82,7 @@ export default driveConfig({
       | you are not registering routes with this prefix.
       |
       */
-      basePath: '/uploads',
+      basePath: "/uploads",
     },
 
     /*
@@ -134,7 +130,7 @@ export default driveConfig({
     //   keyFilename: Env.get('GCS_KEY_FILENAME'),
     //   bucket: Env.get('GCS_BUCKET'),
 
-      /*
+    /*
       |--------------------------------------------------------------------------
       | Uniform ACL - Google cloud storage only
       |--------------------------------------------------------------------------
@@ -155,4 +151,4 @@ export default driveConfig({
     //   usingUniformAcl: false,
     // },
   },
-})
+});
