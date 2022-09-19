@@ -58,6 +58,7 @@ export default databaseConfig
 
 export const TABLES_NAMES = {
   NEWS: 'news',
+  AREAS: 'areas',
   BANNERS: 'banners',
   FEEDBACKS: 'feedbacks',
 
@@ -70,6 +71,12 @@ export const TABLES_NAMES = {
   USERS_TYPES: 'usersTypes',
   USERS_IMAGES: 'usersImages',
 } as const
+
+/**
+ * * Area
+ */
+
+export const AREA_NAME_MAX_LENGTH: number = 255
 
 /**
  * * Feedback
