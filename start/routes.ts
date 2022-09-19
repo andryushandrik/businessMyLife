@@ -21,6 +21,8 @@ Route.group(() => {
 
   Route.resource('/banners', 'BannersController')
 
+  Route.resource('/areas', 'AreasController').except(['show'])
+
   /**
    * * User
    */

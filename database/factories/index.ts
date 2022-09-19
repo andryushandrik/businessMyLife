@@ -1,4 +1,5 @@
 import News from 'App/Models/News'
+import Area from 'App/Models/Area'
 import Banner from 'App/Models/Banner'
 import User from 'App/Models/User/User'
 import Feedback from 'App/Models/Feedback'
@@ -42,6 +43,12 @@ export const BannerFactory = Factory
       title: faker.lorem.sentence(),
       description: faker.lorem.paragraph(3),
     }
+  })
+  .build()
+
+export const AreaFactory = Factory
+  .define(Area, ({ faker }) => {
+    return { name: faker.helpers.unique(faker.lorem.word) }
   })
   .build()
 
