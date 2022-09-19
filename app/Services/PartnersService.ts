@@ -6,6 +6,7 @@ import PartnerWithImageValidator from "./../Validators/partnersValidators/Partne
 import Database from "@ioc:Adonis/Lucid/Database";
 import type { MultipartFileContract } from "@ioc:Adonis/Core/BodyParser";
 import { PARTNERS_FOLDER_PATH } from "Config/drive";
+import Drive from "@ioc:Adonis/Core/Drive";
 
 export default class PartnersService {
   public static async paginatePartners(
@@ -74,6 +75,69 @@ export default class PartnersService {
     }
 
     await trx.commit();
+  }
+
+  public static async editWithImage(
+    id: Partner["id"],
+    payload: PartnerWithImageValidator["schema"]["props"]
+  ) {
+    let partner: Partner;
+    const trx = await Database.transaction();
+
+    try {
+      partner = await Partner.findOrFail(id, { client: trx });
+      await partner
+        .merge({
+          ...payload,
+          mediaType: Number(payload.mediaType),
+          media: partner.media,
+          formattedVideoLink: null,
+        })
+        .save();
+    } catch (error) {
+      await trx.rollback();
+      console.log(error.message);
+      throw new Error("Произошла обишка во время редактирования");
+    }
+
+    if (payload.media) {
+      if (partner.media) {
+        await Drive.delete(partner.media);
+      }
+
+      try {
+        const filePath = await this.uploadImage(id, payload.media);
+        await partner.merge({ media: filePath }).save();
+      } catch (error) {
+        console.log(error.message);
+        trx.rollback();
+        throw new Error("Произошла ошибка во время загрузки файла");
+      }
+    }
+
+    await trx.commit();
+  }
+
+  public static async editWithVideo(
+    id: Partner["id"],
+    payload: PartnerWithVideoValidator["schema"]["props"]
+  ) {
+    let partner: Partner;
+
+    try {
+      partner = await Partner.findOrFail(id);
+
+      if (partner.media && partner.mediaType === 0) {
+        await Drive.delete(partner.media);
+      }
+
+      await partner
+        .merge({ ...payload, mediaType: Number(payload.mediaType) })
+        .save();
+    } catch (error) {
+      console.log(error);
+      throw new Error("Произошла ошибка во время редактирования");
+    }
   }
 
   public static async delete(id: Partner["id"]) {

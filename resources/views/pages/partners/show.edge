@@ -31,8 +31,12 @@
                 @if(item.mediaType === 1)
                 <label class="mb-1">Видео</label>
                 <br>
+                @if(item.formattedVideoLink)
                 <iframe width="700" height="500" frameBorder="0" allow="clipboard-write; autoplay" webkitAllowFullScreen
-                    mozallowfullscreen allowFullScreen src="{{item.media}}"></iframe>
+                    mozallowfullscreen allowFullScreen src="{{item.formattedVideoLink}}"></iframe>
+                    @else
+                    <img src="/uploads/video_placeholder.jpg" class="partners_image" alt="">
+                    @endif
                 @endif
 
             </div>

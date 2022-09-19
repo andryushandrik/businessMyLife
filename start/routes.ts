@@ -59,11 +59,13 @@ Route.group(() => {
 
 Route.group(() => {
   Route.get("/", "PartnersController.index");
-  Route.get("/:id", "PartnersController.showOne");
 
-  Route.get("/create/:media", "PartnersController.showCreate");
   Route.get("/create", "PartnersController.showCreate");
   Route.post("/create", "PartnersController.create");
 
+  Route.get("/edit/:id", "PartnersController.showEdit");
+  Route.patch("/edit/:id", "PartnersController.edit");
+
+  Route.get("/:id", "PartnersController.showOne");
   Route.delete("/:id", "PartnersController.delete");
 }).prefix("/partners");

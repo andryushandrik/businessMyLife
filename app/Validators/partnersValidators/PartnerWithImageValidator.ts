@@ -11,6 +11,8 @@ import {
 } from "Config/database";
 
 export default class PartnerWithImageValidator extends IndexValidator {
+  private readonly isUpdating =
+    this.ctx.request.method() === "PATCH" ? true : false;
   constructor(protected ctx: HttpContextContract) {
     super();
   }
@@ -22,7 +24,9 @@ export default class PartnerWithImageValidator extends IndexValidator {
       PARTNER_IMAGE_MEDIA_TYPE,
       PARTNER_VIDEO_MEDIA_TYPE,
     ] as const),
-    media: schema.file(getPartnerImageOptions()),
+    media: this.isUpdating
+      ? schema.file.optional(getPartnerImageOptions())
+      : schema.file(getPartnerImageOptions()),
   });
 
   public messages: CustomMessages = this.messages;

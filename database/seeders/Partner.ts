@@ -5,7 +5,7 @@ import { PartnersFactory } from "Database/factories";
 export default class extends BaseSeeder {
   public async run() {
     try {
-      await PartnersFactory.createMany(2);
+      await PartnersFactory.createMany(5);
     } catch (error) {
       Logger.error(error);
     }

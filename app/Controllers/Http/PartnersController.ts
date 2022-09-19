@@ -52,10 +52,11 @@ export default class PartnersController {
     response,
     session,
   }: HttpContextContract) {
-    const mediaType = request.param("media");
-    const supportedPaths = ["video", "image"];
-    if (!mediaType || !supportedPaths.includes(mediaType))
-      return response.redirect("/partners/create/image");
+    const mediaType = request.qs().mediaType ?? PARTNER_IMAGE_MEDIA_TYPE;
+
+    const supportedMediaTypes = ["0", "1"];
+    if (!mediaType || !supportedMediaTypes.includes(mediaType))
+      return response.redirect("/partners");
     try {
       return view.render("./pages/partners/create.edge", { mediaType });
     } catch (error) {
@@ -94,6 +95,68 @@ export default class PartnersController {
         });
         session.flash({ success: "Партнер успешно добавлен" });
         response.redirect("/partners");
+      } catch (error) {
+        session.flash({ error: error.message });
+        response.redirect().back();
+      }
+    }
+  }
+
+  public async showEdit({
+    request,
+    response,
+    view,
+    session,
+  }: HttpContextContract) {
+    const mediaType = request.qs().mediaType ?? PARTNER_IMAGE_MEDIA_TYPE;
+    const id = request.param("id");
+
+    let partner: Partner;
+
+    try {
+      partner = await PartnersService.get(id);
+    } catch (error) {
+      session.flash({ error: error.message });
+      response.redirect("/partners");
+      return;
+    }
+
+    return view.render("./pages/partners/edit", { item: partner, mediaType });
+  }
+
+  public async edit({ request, response, session }: HttpContextContract) {
+    const mediaType: number =
+      request.qs().mediaType ?? PARTNER_IMAGE_MEDIA_TYPE;
+    const id = request.param("id");
+
+    let payload:
+      | PartnerWithImageValidator["schema"]["props"]
+      | PartnerWithVideoValidator["schema"]["props"];
+
+    if (mediaType == 1) {
+      payload = await request.validate(PartnerWithVideoValidator);
+
+      try {
+        await PartnersService.editWithVideo(id, {
+          ...payload,
+          mediaType: PARTNER_VIDEO_MEDIA_TYPE,
+        });
+        session.flash({ success: "Партнер успешно отредактирован" });
+        return response.redirect("/partners");
+      } catch (error) {
+        session.flash({ error: error.message });
+        response.redirect().back();
+      }
+    } else {
+      payload = await request.validate(PartnerWithImageValidator);
+
+      try {
+        await PartnersService.editWithImage(id, {
+          ...payload,
+          mediaType: PARTNER_IMAGE_MEDIA_TYPE,
+        });
+        session.flash({ success: "Партнер успешно отредактирован" });
+        return response.redirect("/partners");
       } catch (error) {
         session.flash({ error: error.message });
         response.redirect().back();

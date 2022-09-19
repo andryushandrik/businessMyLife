@@ -30,6 +30,17 @@ export default class Partner extends BaseModel {
   @column()
   public mediaType: number;
 
+  /**
+   * Nullable columns
+   */
+
+  @column()
+  public formattedVideoLink?: string | null;
+
+  /**
+   * Timestamps
+   */
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;
 
@@ -40,19 +51,22 @@ export default class Partner extends BaseModel {
    * Hooks
    */
 
-  @beforeSave()
-  public static formatMediaLink(item: Partner) {
-    if (!item.media) return;
-    if (item.$dirty.mediaType === Number(PARTNER_VIDEO_MEDIA_TYPE)) {
-      const newMediaLink = this.formatIframeLink(item.media);
-      item.media = newMediaLink;
-    }
-  }
-
   @beforeCreate()
   public static async getDefaultImage(item: Partner) {
     if (!item.media) {
       item.media = IMG_PLACEHOLDER;
+    }
+  }
+
+  @beforeSave()
+  public static formatMediaLink(item: Partner) {
+    if (!item.media) return;
+    if (
+      item.$dirty.mediaType === Number(PARTNER_VIDEO_MEDIA_TYPE) ||
+      item.mediaType === Number(PARTNER_VIDEO_MEDIA_TYPE)
+    ) {
+      const newMediaLink = this.formatIframeLink(item.media);
+      item.formattedVideoLink = newMediaLink;
     }
   }
 

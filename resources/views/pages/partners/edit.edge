@@ -1,6 +1,6 @@
 @layout('layouts/index')
 
-@set('title', 'Создать партнера')
+@set('title', 'Редактировать партнера')
 
 @section('styles')
 <link href="/css/partners.css" rel="stylesheet">
@@ -21,16 +21,16 @@
                 </div>
                 @endif
                 @if(mediaType === '1')
-                <form action="{{ route('PartnersController.create', { qs: { mediaType: '1' } }) }}" method="POST">
-                    @elseif(mediaType === '0')
-                    <form action="{{ route('PartnersController.create', { qs: { mediaType: "0" } }) }}" method="POST"
+                <form action="{{ route('PartnersController.edit', { id: item.id }, { qs: { mediaType: mediaType, _method: "PATCH" } }) }}" method="POST">
+                    @else
+                    <form action="{{ route('PartnersController.edit', { id: item.id }, { qs: { mediaType: mediaType, _method: "PATCH" } }) }}" method="POST"
                         enctype="multipart/form-data">
                         @endif
 
                         <div class="form-group">
                             <label class="mb-1"><strong>Название *</strong></label>
                             <input type="string" class="form-control" name="title"
-                                value="{{ flashMessages.get('title') ?? '' }}">
+                                value="{{ item.title ?? '' }}">
 
                             @if(flashMessages.has('errors.title'))
                             <div class="invalid-feedback d-block">
@@ -42,12 +42,12 @@
                         <div class="form-group">
                             <label class="mb-1"><strong>Кликабельная ссылка *</strong></label>
                             <div>
-                                <input type="radio" id="true" name="isTitleLink" value="true" checked>
+                                <input type="radio" id="true" name="isTitleLink" value="true" checked="{{ item.isTitleLink }}">
                                 <label for="true">Да </label>
                             </div>
 
                             <div>
-                                <input type="radio" id="false" name="isTitleLink" value="false">
+                                <input type="radio" id="false" name="isTitleLink" value="false" >
                                 <label for="false">Нет</label>
                             </div>
 
@@ -59,22 +59,42 @@
                         </div>
 
                         @if(mediaType === '1')
-                        <div class="form-group">
+                        
+                            @if(item.mediaType == "1" && item.formattedVideoLink)
+                            <label class="mb-1">Видео</label>
+                            <br>
+                            <iframe width="700" height="500" frameBorder="0" allow="clipboard-write; autoplay" webkitAllowFullScreen
+                                mozallowfullscreen allowFullScreen src="{{item.formattedVideoLink}}"></iframe>
+                                @elseif(item.mediaType == "1" && !item.formattedVideoLink)
+                                <label class="mb-1">Видео</label>
+                                <br>
+                                <img src="/uploads/video_placeholder.jpg" class="partners_image" alt="">
+                                @endif
+                            
+                            <div class="form-group">
                             <label class="mb-1"><strong>Ссылка на видео*</strong></label>
                             <input type="string" class="form-control" name="media"
                                 placeholder="Вставьте ссылку на видео с YouTube или RuTube"
-                                value="{{ flashMessages.get('media') ?? '' }}">
+                                value="{{ item.media ?? '' }}">
                             @if(flashMessages.has('errors.media'))
                             <div class="invalid-feedback d-block">
                                 {{ flashMessages.get('errors.media')[0] }}
                             </div>
-                            @endif
+                        @endif
                         </div>
                         @else
+                        @if(item.mediaType == "0")
+                        <div class="form-group mb-3">
+                        <label class="mb-1">Изображение</label>
+                        <br>
+                        <img src="{{ getImage(item.media) }}" class="partners_image" alt="">
+                        </div>
+                        @endif
+
                         <div class="form-group">
                             <label class="mb-1"><strong>Изображение *</strong></label>
                             <input type="file" class="form-control" accept="image/png, image/jpeg, image/jpg"
-                                name="media" value="{{ flashMessages.get('media') ?? '' }}">
+                                name="media" value="{{ item.media ?? '' }}">
 
                             @if(flashMessages.has('errors.media'))
                             <div class="invalid-feedback d-block">
@@ -86,8 +106,16 @@
 
                         {{ csrfField() }}
 
+                        @if(mediaType === "1")
+                        <a class="btn btn-primary mb-3"
+                      href="{{ route('PartnersController.showEdit', { id: item.id }, {qs: { mediaType: "0" }}) }}">Сменить медиа файл на изображение</a>
+                        @else
+                        <a class="btn btn-primary mb-3"
+                      href="{{ route('PartnersController.showEdit', { id: item.id }, {qs: { mediaType: "1" }}) }}">Сменить медиа файл на видео</a>
+                        @endif
+
                         <div class="text-right">
-                            <button type="submit" class="btn btn-primary btn-block">Создать</button>
+                            <button type="submit" class="btn btn-primary btn-block">Сохранить</button>
                         </div>
                     </form>
 
