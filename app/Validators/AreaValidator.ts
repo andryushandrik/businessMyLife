@@ -13,8 +13,6 @@ export default class AreaValidator extends IndexValidator {
 
   constructor(protected ctx: HttpContextContract) {
     super()
-
-    console.log(this.currentAreaId)
   }
 
   /**
