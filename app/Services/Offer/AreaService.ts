@@ -1,11 +1,11 @@
 // * Types
-import type AreaValidator from 'App/Validators/AreaValidator'
+import type AreaValidator from 'App/Validators/Offer/AreaValidator'
 import type { Err } from 'Contracts/response'
 import type { PaginateConfig } from 'Contracts/services'
 import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 
-import Area from 'App/Models/Area'
+import Area from 'App/Models/Offer/Area'
 import Logger from '@ioc:Adonis/Core/Logger'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 
@@ -13,6 +13,15 @@ export default class AreaService {
   public static async paginate(config: PaginateConfig<Area>): Promise<ModelPaginatorContract<Area>> {
     try {
       return await Area.query().getViaPaginate(config)
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+    }
+  }
+
+  public static async getAll(): Promise<Area[]> {
+    try {
+      return await Area.all()
     } catch (err: any) {
       Logger.error(err)
       throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err

@@ -6,7 +6,7 @@ export default class extends BaseSeeder {
   public async run () {
 
     try {
-      await AreaFactory.createMany(10)
+      await AreaFactory.with('subsections', 2).createMany(10)
     } catch (err: any) {
       Logger.error(err)
     }
