@@ -1,9 +1,11 @@
 // * Types
 import type { DateTime } from 'luxon'
+import type { HasMany } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 
+import Subsection from './Subsection'
 import { GLOBAL_DATETIME_FORMAT } from 'Config/app'
-import { BaseModel, column, computed } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, computed, hasMany } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Area extends BaseModel {
   public static readonly columns = [
@@ -36,4 +38,11 @@ export default class Area extends BaseModel {
   public get createdAtForUser(): string {
     return this.createdAt.setLocale('ru-RU').toFormat(GLOBAL_DATETIME_FORMAT)
   }
+
+  /**
+   * * Relations
+   */
+
+  @hasMany(() => Subsection)
+  public subsections: HasMany<typeof Subsection>
 }

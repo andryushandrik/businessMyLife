@@ -58,9 +58,15 @@ export default databaseConfig
 
 export const TABLES_NAMES = {
   NEWS: 'news',
-  AREAS: 'areas',
   BANNERS: 'banners',
   FEEDBACKS: 'feedbacks',
+
+  /**
+   * * Offer
+   */
+
+  AREAS: 'areas',
+  SUBSECTIONS: 'subsections',
 
   /**
    * * User
@@ -71,12 +77,6 @@ export const TABLES_NAMES = {
   USERS_TYPES: 'usersTypes',
   USERS_IMAGES: 'usersImages',
 } as const
-
-/**
- * * Area
- */
-
-export const AREA_NAME_MAX_LENGTH: number = 255
 
 /**
  * * Feedback
@@ -106,6 +106,14 @@ export const BANNER_TITLE_MAX_LENGTH: number = 255
 
 export const BANNER_DESCRIPTION_MIN_LENGTH: number = 10
 export const BANNER_DESCRIPTION_MAX_LENGTH: number = 2048
+
+/**
+ * * Offer
+ */
+
+export const AREA_NAME_MAX_LENGTH: number = 255
+
+export const SUBSECTION_NAME_MAX_LENGTH: number = 255
 
 /**
  * * User

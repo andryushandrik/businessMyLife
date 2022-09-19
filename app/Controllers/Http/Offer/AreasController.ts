@@ -1,12 +1,12 @@
 // * Types
-import type Area from 'App/Models/Area'
+import type Area from 'App/Models/Offer/Area'
 import type { Err } from 'Contracts/response'
 import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 // * Types
 
-import AreaService from 'App/Services/AreaService'
-import AreaValidator from 'App/Validators/AreaValidator'
+import AreaService from 'App/Services/Offer/AreaService'
+import AreaValidator from 'App/Validators/Offer/AreaValidator'
 import { ResponseMessages } from 'Config/response'
 
 export default class AreasController {
