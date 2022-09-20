@@ -14,3 +14,4 @@ node_modules
 *.bak
 .env
 .DS_STORE
+*.mwb

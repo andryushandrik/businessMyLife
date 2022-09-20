@@ -73,9 +73,15 @@
                             
                             <div class="form-group">
                             <label class="mb-1"><strong>Ссылка на видео*</strong></label>
+                            @if(item.mediaType == "1")
                             <input type="string" class="form-control" name="media"
                                 placeholder="Вставьте ссылку на видео с YouTube или RuTube"
                                 value="{{ item.media ?? '' }}">
+                            @else
+                            <input type="string" class="form-control" name="media"
+                                placeholder="Вставьте ссылку на видео с YouTube или RuTube"
+                                value="">
+                            @endif
                             @if(flashMessages.has('errors.media'))
                             <div class="invalid-feedback d-block">
                                 {{ flashMessages.get('errors.media')[0] }}
