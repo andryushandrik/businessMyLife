@@ -7,27 +7,32 @@ import Database from "@ioc:Adonis/Lucid/Database";
 import type { MultipartFileContract } from "@ioc:Adonis/Core/BodyParser";
 import { PARTNERS_FOLDER_PATH } from "Config/drive";
 import Drive from "@ioc:Adonis/Core/Drive";
+import Logger from '@ioc:Adonis/Core/Logger'
+import { ResponseCodes, ResponseMessages } from 'Config/response';
+import { Err } from 'Contracts/response';
 
 export default class PartnersService {
   public static async paginatePartners(
     paginationConfig: PaginationConfig
   ): Promise<ModelPaginatorContract<Partner>> {
     paginationConfig.page = paginationConfig.page ?? 1;
-    paginationConfig.limit = 9;
+    paginationConfig.limit = paginationConfig.limit ?? 9;
     paginationConfig.baseUrl = "/partners";
 
     try {
       return await Partner.query().getViaPaginate(paginationConfig);
-    } catch (error) {
-      throw new Error("Произошла ошибка");
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
     }
   }
 
   public static async get(id: Partner["id"]) {
     try {
       return await Partner.findOrFail(id);
-    } catch (error) {
-      throw new Error("Партнер не найден");
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.ERROR } as Err
     }
   }
 
@@ -39,8 +44,9 @@ export default class PartnersService {
         ...payload,
         mediaType: Number(payload.mediaType),
       });
-    } catch (error) {
-      throw new Error(error.message);
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
     }
   }
 
@@ -59,9 +65,10 @@ export default class PartnersService {
         },
         { client: trx }
       );
-    } catch (error) {
+    } catch (err: any) {
+      Logger.error(err)
       await trx.rollback();
-      throw new Error("Произошла ошибка во время создания партнера");
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
     }
 
     if (payload.media) {
@@ -70,7 +77,7 @@ export default class PartnersService {
         await partner.merge({ media: filePath }).save();
       } catch (error) {
         await trx.rollback();
-        throw new Error("Произошла ошибка во время загрузки файла");
+        throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
       }
     }
 
@@ -94,10 +101,11 @@ export default class PartnersService {
           formattedVideoLink: null,
         })
         .save();
-    } catch (error) {
+      } catch (err: any) {
+      Logger.error(err)
       await trx.rollback();
-      console.log(error.message);
-      throw new Error("Произошла обишка во время редактирования");
+      
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
     }
 
     if (payload.media) {
@@ -108,10 +116,10 @@ export default class PartnersService {
       try {
         const filePath = await this.uploadImage(id, payload.media);
         await partner.merge({ media: filePath }).save();
-      } catch (error) {
-        console.log(error.message);
+      } catch (err: any) {
+        Logger.error(err)
         trx.rollback();
-        throw new Error("Произошла ошибка во время загрузки файла");
+        throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
       }
     }
 
@@ -134,18 +142,19 @@ export default class PartnersService {
       await partner
         .merge({ ...payload, mediaType: Number(payload.mediaType) })
         .save();
-    } catch (error) {
-      console.log(error);
-      throw new Error("Произошла ошибка во время редактирования");
-    }
+      } catch (err: any) {
+        Logger.error(err)
+        throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+      }
   }
 
   public static async delete(id: Partner["id"]) {
     try {
       const item = await Partner.findOrFail(id);
       await item.delete();
-    } catch (error: any) {
-      throw new Error("Произошла ошибка во время удаления");
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
     }
   }
 
