@@ -6,11 +6,8 @@
  */
 
 import Env from '@ioc:Adonis/Core/Env'
-import { driveConfig } from '@adonisjs/core/build/config'
 import Application from '@ioc:Adonis/Core/Application'
-
-export const PARTNERS_FOLDER_PATH: string = 'Partners'
-export const IMG_PLACEHOLDER: string = 'placeholder.jpg'
+import { driveConfig } from '@adonisjs/core/build/config'
 
 /*
 |--------------------------------------------------------------------------
@@ -150,3 +147,23 @@ export default driveConfig({
     // },
   },
 })
+
+export const IMG_PLACEHOLDER: string = 'placeholder.jpg'
+
+/**
+ * * Partner
+ */
+
+export const PARTNERS_FOLDER_PATH: string = 'Partners'
+
+/**
+ * * News
+ */
+
+export const NEWS_FOLDER_PATH: string = 'News'
+
+/**
+ * * Banner
+ */
+
+export const BANNER_FOLDER_PATH: string = 'Banners'

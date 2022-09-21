@@ -114,3 +114,5 @@ export default sessionConfig({
   */
   redisConnection: 'local',
 })
+
+export const SESSION_AUTH_KEY: string = 'authUser'
