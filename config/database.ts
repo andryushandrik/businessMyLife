@@ -59,6 +59,7 @@ export default databaseConfig
 export const TABLES_NAMES = {
   NEWS: 'news',
   BANNERS: 'banners',
+  PARTNERS: 'partners',
   FEEDBACKS: 'feedbacks',
 
   /**
@@ -77,6 +78,16 @@ export const TABLES_NAMES = {
   USERS_TYPES: 'usersTypes',
   USERS_IMAGES: 'usersImages',
 } as const
+
+/**
+ * * Partner
+ */
+
+export const PARTNER_TITLE_MIN_LENGTH: number = 4
+export const PARTNER_TITLE_MAX_LENGTH: number = 255
+
+export const PARTNER_VIDEO_LINK_MIN_LENGTH: number = 4
+export const PARTNER_VIDEO_LINK_MAX_LENGTH: number = 1024
 
 /**
  * * Feedback

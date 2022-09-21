@@ -1,6 +1,7 @@
 import News from 'App/Models/News'
 import Banner from 'App/Models/Banner'
 import User from 'App/Models/User/User'
+import Partner from 'App/Models/Partner'
 import Area from 'App/Models/Offer/Area'
 import Feedback from 'App/Models/Feedback'
 import Factory from '@ioc:Adonis/Lucid/Factory'
@@ -43,6 +44,17 @@ export const BannerFactory = Factory
       image: faker.image.business(),
       title: faker.lorem.sentence(),
       description: faker.lorem.paragraph(3),
+    }
+  })
+  .build()
+
+export const PartnersFactory = Factory
+  .define(Partner, ({ faker }) => {
+    return {
+      isTitleLink: faker.datatype.boolean(),
+      title: faker.lorem.sentence(),
+      media: faker.image.abstract(),
+      mediaType: faker.datatype.boolean(),
     }
   })
   .build()

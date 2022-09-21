@@ -72,8 +72,8 @@ export default driveConfig({
       | Base path - Local driver only
       |--------------------------------------------------------------------------
       |
-      | Base path is always required when "serveFiles = true". Also make sure
-      | the `basePath` is unique across all the disks using "local" driver and
+      | Base path is always required when 'serveFiles = true'. Also make sure
+      | the `basePath` is unique across all the disks using 'local' driver and
       | you are not registering routes with this prefix.
       |
       */
@@ -125,12 +125,12 @@ export default driveConfig({
     //   keyFilename: Env.get('GCS_KEY_FILENAME'),
     //   bucket: Env.get('GCS_BUCKET'),
 
-      /*
+    /*
       |--------------------------------------------------------------------------
       | Uniform ACL - Google cloud storage only
       |--------------------------------------------------------------------------
       |
-      | When using the Uniform ACL on the bucket, the "visibility" option is
+      | When using the Uniform ACL on the bucket, the 'visibility' option is
       | ignored. Since, the files ACL is managed by the google bucket policies
       | directly.
       |
@@ -149,6 +149,12 @@ export default driveConfig({
 })
 
 export const IMG_PLACEHOLDER: string = 'placeholder.jpg'
+
+/**
+ * * Partner
+ */
+
+export const PARTNERS_FOLDER_PATH: string = 'Partners'
 
 /**
  * * News

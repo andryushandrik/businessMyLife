@@ -1,5 +1,5 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
-import { FEEDBACK_QUESTION_MAX_LENGTH, TABLES_NAMES } from '../../config/database'
+import { FEEDBACK_QUESTION_MAX_LENGTH, TABLES_NAMES } from 'Config/database'
 
 export default class extends BaseSchema {
   protected tableName = TABLES_NAMES.FEEDBACKS

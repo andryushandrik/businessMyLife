@@ -1,3 +1,4 @@
+import './routes/api'
 import Route from '@ioc:Adonis/Core/Route'
 
 /**
@@ -20,6 +21,8 @@ Route.group(() => {
   Route.resource('/news', 'NewsController')
 
   Route.resource('/banners', 'BannersController')
+
+  Route.resource('/partners', 'PartnersController')
 
   /**
    * * Offer

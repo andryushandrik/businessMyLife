@@ -22,7 +22,7 @@ export default class AppProvider {
     ModelQueryBuilder.macro('getViaPaginate', async function(config: PaginationConfig) {
       config.orderByColumn = config.orderByColumn ?? 'id'
       config.limit = config.limit ?? 100
-      let query = await this.orderBy(config.orderByColumn, config.orderBy).paginate(config.page, config.limit)
+      const query = await this.orderBy(config.orderByColumn, config.orderBy).paginate(config.page, config.limit)
 
       if (config.baseUrl)
         return query.baseUrl(config.baseUrl)
@@ -35,8 +35,8 @@ export default class AppProvider {
      */
 
     ModelQueryBuilder.macro('random', async function() {
-      let allRecords = await this.orderBy('id', 'desc')
-      let randomQuery: number = Math.floor(Math.random() * allRecords.length)
+      const allRecords = await this.orderBy('id', 'desc')
+      const randomQuery: number = Math.floor(Math.random() * allRecords.length)
 
       return await this.where('id', allRecords[randomQuery].id).first()
     })
