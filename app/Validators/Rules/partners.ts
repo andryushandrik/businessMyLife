@@ -1,5 +1,12 @@
-import { Rule, rules } from '@ioc:Adonis/Core/Validator'
-import { PARTNER_TITLE_MAX_LENGTH, PARTNER_TITLE_MIN_LENGTH, PARTNER_VIDEO_LINK_MAX_LENGTH, PARTNER_VIDEO_LINK_MIN_LENGTH } from 'Config/database'
+// * Types
+import type { Rule } from '@ioc:Adonis/Core/Validator'
+// * Types
+
+import { rules } from '@ioc:Adonis/Core/Validator'
+import {
+  PARTNER_TITLE_MAX_LENGTH, PARTNER_TITLE_MIN_LENGTH,
+  PARTNER_VIDEO_LINK_MAX_LENGTH, PARTNER_VIDEO_LINK_MIN_LENGTH
+} from 'Config/database'
 
 export function getPartnersTitleRules(): Rule[] {
   return [

@@ -1,6 +1,5 @@
 // * Types
 import type { SimplePaginatorContract } from '@ioc:Adonis/Lucid/Database'
-import type { ModelObject } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 
 declare module '@ioc:Adonis/Lucid/Orm' {
@@ -13,14 +12,9 @@ declare module '@ioc:Adonis/Lucid/Orm' {
   }
 
 export type PaginationConfig = {
-    page: number,
-    baseUrl?: string,
-    limit?: number,
-    orderByColumn?: string | OrderByMultipleType[],
-    orderBy?: 'asc' | 'desc',
-  }
-
-export type OrderByMultipleType = {
-  column: string,
-  order: "asc" | "desc"
+  page: number,
+  baseUrl?: string,
+  limit?: number,
+  orderByColumn?: string,
+  orderBy?: 'asc' | 'desc',
 }

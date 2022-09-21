@@ -1,14 +1,18 @@
-import Partner from 'App/Models/Partner'
-import { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
-import PartnerWithVideoValidator from 'App/Validators/Partner/PartnerWithVideoValidator'
-import PartnerWithImageValidator from 'App/Validators/Partner/PartnerWithImageValidator'
-import Database, { TransactionClientContract } from '@ioc:Adonis/Lucid/Database'
+// * Types
+import type PartnerWithVideoValidator from 'App/Validators/Partner/PartnerWithVideoValidator'
+import type PartnerWithImageValidator from 'App/Validators/Partner/PartnerWithImageValidator'
+import type { Err } from 'Contracts/response'
+import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
+import type { PaginateConfig, ServiceConfig } from 'Contracts/services'
 import type { MultipartFileContract } from '@ioc:Adonis/Core/BodyParser'
-import { PARTNERS_FOLDER_PATH } from 'Config/drive'
+import type { TransactionClientContract } from '@ioc:Adonis/Lucid/Database'
+// * Types
+
+import Partner from 'App/Models/Partner'
 import Logger from '@ioc:Adonis/Core/Logger'
-import { Err } from 'Contracts/response'
+import Database from '@ioc:Adonis/Lucid/Database'
+import { PARTNERS_FOLDER_PATH } from 'Config/drive'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
-import { PaginateConfig, ServiceConfig } from 'Contracts/services'
 
 export default class PartnerService {
   public static async paginate(config: PaginateConfig<Partner>): Promise<ModelPaginatorContract<Partner>> {

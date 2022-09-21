@@ -1,6 +1,10 @@
-import { schema, CustomMessages } from '@ioc:Adonis/Core/Validator'
+// * Types
+import type { CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+// * Types
+
 import IndexValidator from '../IndexValidator'
+import { schema } from '@ioc:Adonis/Core/Validator'
 import { getPartnersTitleRules, getPartnerVideoRules } from '../Rules/partners'
 
 export default class PartnerWithVideoValidator extends IndexValidator {
@@ -10,9 +14,14 @@ export default class PartnerWithVideoValidator extends IndexValidator {
 
   public schema = schema.create({
     title: schema.string({ trim: true }, getPartnersTitleRules()),
-    isTitleLink: schema.boolean.optional(),
-    mediaType: schema.boolean(),
     media: schema.string({ trim: true }, getPartnerVideoRules()),
+    mediaType: schema.boolean(),
+
+    /**
+     * * Optional fields
+     */
+
+    isTitleLink: schema.boolean.optional(),
   })
 
   public messages: CustomMessages = this.messages

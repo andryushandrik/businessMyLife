@@ -1,10 +1,13 @@
+// * Types
+import type Partner from 'App/Models/Partner'
+import type { Err } from 'Contracts/response'
+import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+// * Types
+
 import PartnerService from 'App/Services/PartnerService'
 import PartnerWithImageValidator from 'App/Validators/Partner/PartnerWithImageValidator'
 import PartnerWithVideoValidator from 'App/Validators/Partner/PartnerWithVideoValidator'
-import Partner from './../../Models/Partner'
-import { Err } from 'Contracts/response'
-import { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import { ResponseMessages } from 'Config/response'
 
 export default class PartnersController {

@@ -1,5 +1,5 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
-import { TABLES_NAMES } from 'Config/database'
+import { PARTNER_VIDEO_LINK_MAX_LENGTH, TABLES_NAMES } from 'Config/database'
 
 export default class extends BaseSchema {
   protected tableName = TABLES_NAMES.PARTNERS
@@ -14,7 +14,7 @@ export default class extends BaseSchema {
 
       table.boolean('isTitleLink').defaultTo(0).notNullable().comment('Название кликабельное или нет')
       table.string('title').notNullable()
-      table.string('media').notNullable()
+      table.string('media', PARTNER_VIDEO_LINK_MAX_LENGTH).notNullable()
       table.boolean('mediaType').unsigned().notNullable().comment('0 - изображение, 1 - видео')
 
       /**

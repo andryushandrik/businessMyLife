@@ -1,5 +1,5 @@
-import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
 import Logger from '@ioc:Adonis/Core/Logger'
+import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
 import { PartnersFactory } from 'Database/factories'
 
 export default class extends BaseSeeder {

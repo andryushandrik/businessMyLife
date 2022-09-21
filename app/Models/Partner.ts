@@ -1,6 +1,9 @@
-import { DateTime } from 'luxon'
-import { BaseModel, column, beforeDelete } from '@ioc:Adonis/Lucid/Orm'
+// * Types
+import type { DateTime } from 'luxon'
+// * Types
+
 import Drive from '@ioc:Adonis/Core/Drive'
+import { BaseModel, column, beforeDelete } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Partner extends BaseModel {
   public static readonly columns = [
