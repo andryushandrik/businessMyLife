@@ -5,8 +5,8 @@
  * file.
  */
 
-import Env from "@ioc:Adonis/Core/Env";
-import { DatabaseConfig } from "@ioc:Adonis/Lucid/Database";
+import Env from '@ioc:Adonis/Core/Env'
+import { DatabaseConfig } from '@ioc:Adonis/Lucid/Database'
 
 const databaseConfig: DatabaseConfig = {
   /*
@@ -19,7 +19,7 @@ const databaseConfig: DatabaseConfig = {
   | file.
   |
   */
-  connection: Env.get("DB_CONNECTION"),
+  connection: Env.get('DB_CONNECTION'),
 
   connections: {
     /*
@@ -34,65 +34,45 @@ const databaseConfig: DatabaseConfig = {
     |
     */
     pg: {
-      client: "pg",
+      client: 'pg',
       debug: false,
       healthCheck: false,
       migrations: {
         naturalSort: true,
       },
       seeders: {
-        paths: ["./database/seeders/MainSeeder"],
+        paths: ['./database/seeders/MainSeeder'],
       },
       connection: {
-        host: Env.get("PG_HOST"),
-        port: Env.get("PG_PORT"),
-        user: Env.get("PG_USER"),
-        password: Env.get("PG_PASSWORD", ""),
-        database: Env.get("PG_DB_NAME"),
+        host: Env.get('PG_HOST'),
+        port: Env.get('PG_PORT'),
+        user: Env.get('PG_USER'),
+        password: Env.get('PG_PASSWORD', ''),
+        database: Env.get('PG_DB_NAME'),
       },
     },
   },
-};
+}
 
-export default databaseConfig;
+export default databaseConfig
 
 export const TABLES_NAMES = {
-  NEWS: "news",
-  FEEDBACKS: "feedbacks",
-  BANNERS: "banners",
-  PARTNERS: "partners",
+  PARTNERS: 'partners',
 
   /**
    * * User
    */
 
-  ROLES: "roles",
-  USERS_TYPES: "usersTypes",
-} as const;
+  ROLES: 'roles',
+  USERS_TYPES: 'usersTypes',
+} as const
 
 /**
- * News
- */
-export const NEWS_DESCRIPTION_MAX_LENGTH = 8192;
-export const NEWS_TITLE_MAX_LENGTH = 1024;
-export const NEWS_SLUG_MAX_LENGTH = 1024;
-export const NEWS_SUPTITLE_MAX_LENGTH = 1024;
-
-/**
- * FeedBacks
+ * * Partner
  */
 
-export const FEEDBACK_QUESTION_MAX_LENGTH = 8192;
+export const PARTNER_TITLE_MIN_LENGTH: number = 4
+export const PARTNER_TITLE_MAX_LENGTH: number = 255
 
-/**
- * Banners
- */
-
-export const BANNERS_DESCRIPTION_MAX_LENGTH = 2048;
-
-/**
- * Partners
- */
-
-export const PARTNER_IMAGE_MEDIA_TYPE = "0";
-export const PARTNER_VIDEO_MEDIA_TYPE = "1";
+export const PARTNER_VIDEO_LINK_MIN_LENGTH: number = 4
+export const PARTNER_VIDEO_LINK_MAX_LENGTH: number = 1024

@@ -1,103 +1,48 @@
-import { DateTime } from "luxon";
-import {
-  BaseModel,
-  column,
-  beforeSave,
-  beforeCreate,
-  beforeDelete,
-} from "@ioc:Adonis/Lucid/Orm";
-import { PARTNER_VIDEO_MEDIA_TYPE } from "Config/database";
-import Drive from "@ioc:Adonis/Core/Drive";
-import { IMG_PLACEHOLDER } from "Config/drive";
+import { DateTime } from 'luxon'
+import { BaseModel, column, beforeDelete } from '@ioc:Adonis/Lucid/Orm'
+import Drive from '@ioc:Adonis/Core/Drive'
 
 export default class Partner extends BaseModel {
+  public static readonly columns = [
+    'id',
+    'isTitleLink',
+    'title', 'media',
+    'mediaType',
+    'createdAt', 'updatedAt',
+  ] as const
+
+  /**
+   * * Columns
+   */
+
   @column({ isPrimary: true })
-  public id: number;
-
-  /**
-   * Not nullable columns
-   */
+  public id: number
 
   @column()
-  public title: string;
+  public isTitleLink: boolean
 
   @column()
-  public isTitleLink: boolean;
+  public title: string
 
   @column()
-  public media?: string;
+  public media: string
 
   @column()
-  public mediaType: number;
-
-  /**
-   * Nullable columns
-   */
-
-  @column()
-  public formattedVideoLink?: string | null;
-
-  /**
-   * Timestamps
-   */
+  public mediaType: boolean
 
   @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime;
+  public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt: DateTime;
+  public updatedAt: DateTime
 
   /**
-   * Hooks
+   * * Hooks
    */
-
-  @beforeCreate()
-  public static async getDefaultImage(item: Partner) {
-    if (!item.media) {
-      item.media = IMG_PLACEHOLDER;
-    }
-  }
-
-  @beforeSave()
-  public static formatMediaLink(item: Partner) {
-    if (!item.media) return;
-    if (
-      item.$dirty.mediaType === Number(PARTNER_VIDEO_MEDIA_TYPE) ||
-      item.mediaType === Number(PARTNER_VIDEO_MEDIA_TYPE)
-    ) {
-      const newMediaLink = this.formatIframeLink(item.media);
-      item.formattedVideoLink = newMediaLink;
-    }
-  }
 
   @beforeDelete()
   public static async deleteStoredImage(item: Partner) {
-    if (item.media) {
-      await Drive.delete(item.media);
-    }
-  }
-
-  /**
-   * Methods
-   */
-
-  private static formatIframeLink(originalLink: string) {
-    if (originalLink.includes("/embed/")) return originalLink;
-
-    const isYoutube: boolean = originalLink
-      .toLowerCase()
-      .includes("youtube.com");
-    const isRutube: boolean = originalLink.toLowerCase().includes("rutube.ru");
-
-    let newLink: string = "";
-
-    if (isYoutube) {
-      newLink = originalLink.replace("watch?v=", "embed/");
-    }
-
-    if (isRutube) {
-      newLink = originalLink.replace("video", "play/embed");
-    }
-    return newLink ?? originalLink;
+    if (item.media)
+      await Drive.delete(item.media)
   }
 }

@@ -1,0 +1,88 @@
+@layout('layouts/index')
+
+@set('title', 'Редактировать партнера')
+
+@section('body')
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">{{ title }}</h4>
+
+        <a href="{{ route('partners.index') }}" class="btn btn-primary btn-sm">Назад</a>
+      </div>
+      <div class="card-body">
+        <div class="basic-form">
+          @if(flashMessages.has('errors.database'))
+            <div class="invalid-feedback d-block">
+                {{ flashMessages.get('error')}}
+            </div>
+          @endif
+
+          <form action="{{ route('partners.update', { id: item.id }, { qs: { _method: 'PATCH' } }) }}" method="POST" enctype="multipart/form-data">
+
+            <div class="form-group">
+              <label class="mb-1"><strong>Название *</strong></label>
+              <input type="string" class="form-control" name="title" value="{{ item.title ?? '' }}">
+
+              @if(flashMessages.has('errors.title'))
+                <div class="invalid-feedback d-block">
+                  {{ flashMessages.get('errors.title')[0] }}
+                </div>
+              @endif
+            </div>
+
+            <div class="form-group">
+              <div class="custom-control custom-checkbox mb-3 checkbox-success">
+                <input type="checkbox" name="isTitleLink" class="custom-control-input" id="isTitleLink" {{ item.isTitleLink ? 'checked' : '' }}>
+                <label class="custom-control-label" for="isTitleLink">Кликабельная ссылка</label>
+
+                @if(flashMessages.has('errors.isTitleLink'))
+                  <div class="invalid-feedback d-block">
+                    {{ flashMessages.get('errors.isTitleLink')[0] }}
+                  </div>
+                @endif
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="mb-1">{{ item.mediaType ? 'Видео' : 'Изображение' }}</label>
+              <br>
+
+              @if(item.mediaType)
+                {{{ item.media }}}
+              @else
+                <img src="{{ getImage(item.media) }}" alt="">
+              @endif
+            </div>
+
+            <div class="form-group">
+              @if(item.mediaType)
+                <label class="mb-1"><strong>Embed ссылка на видео*</strong></label>
+                <input type="string" class="form-control" name="media" placeholder="Вставьте embed ссылку на видео (должно быть с iframe)" value="{{ flashMessages.get('media', item.media) ?? '' }}">
+              @else
+                <label class="mb-1"><strong>Изображение *</strong></label>
+                <input type="file" class="form-control" accept="image/png, image/jpeg, image/jpg" name="media" value="{{ flashMessages.get('media') ?? '' }}">
+              @endif
+
+              @if(flashMessages.has('errors.media'))
+                <div class="invalid-feedback d-block">
+                  {{ flashMessages.get('errors.media')[0] }}
+                </div>
+              @endif
+            </div>
+
+            <input type="hidden" name="mediaType" value="{{ item.mediaType }}">
+
+            {{ csrfField() }}
+
+            <div class="text-right">
+              <button type="submit" class="btn btn-primary btn-block">Создать</button>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+@endsection

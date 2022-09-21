@@ -1,0 +1,43 @@
+@layout('layouts/index')
+
+@set('title', `Партнер - ${item.title}`)
+
+@section('body')
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">{{ title }}</h4>
+
+        <a href="{{ route('partners.index') }}" class="btn btn-primary btn-sm">Назад</a>
+      </div>
+      <div class="card-body">
+        <div class="basic-form">
+
+          <div class="form-group">
+            <label class="mb-1">Название</label>
+            <input type="string" class="form-control" value="{{ item.title }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <div class="custom-control custom-checkbox mb-3 checkbox-success">
+              <input type="checkbox" name="isTitleLink" class="custom-control-input" id="isTitleLink" {{ item.isTitleLink ? 'checked' : '' }} disabled>
+              <label class="custom-control-label" for="isTitleLink">Кликабельная ссылка</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">{{ item.mediaType ? 'Видео' : 'Изображение' }}</label>
+            <br>
+
+            @if(item.mediaType)
+              {{{ item.media }}}
+            @else
+              <img src="{{ getImage(item.media) }}" alt="">
+            @endif
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+@endsection

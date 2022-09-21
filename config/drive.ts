@@ -5,14 +5,12 @@
  * file.
  */
 
-import Env from "@ioc:Adonis/Core/Env";
-import { driveConfig } from "@adonisjs/core/build/config";
-import Application from "@ioc:Adonis/Core/Application";
+import Env from '@ioc:Adonis/Core/Env'
+import { driveConfig } from '@adonisjs/core/build/config'
+import Application from '@ioc:Adonis/Core/Application'
 
-export const NEWS_FOLDER_PATH: string = "News";
-export const BANNERS_FOLDER_PATH: string = "Banners";
-export const PARTNERS_FOLDER_PATH: string = "Partners";
-export const IMG_PLACEHOLDER: string = "/uploads/placeholder.jpg";
+export const PARTNERS_FOLDER_PATH: string = 'Partners'
+export const IMG_PLACEHOLDER: string = 'placeholder.jpg'
 
 /*
 |--------------------------------------------------------------------------
@@ -33,7 +31,7 @@ export default driveConfig({
   | the `DRIVE_DISK` environment variable.
   |
   */
-  disk: Env.get("DRIVE_DISK"),
+  disk: Env.get('DRIVE_DISK'),
 
   disks: {
     /*
@@ -46,8 +44,8 @@ export default driveConfig({
     |
     */
     local: {
-      driver: "local",
-      visibility: "public",
+      driver: 'local',
+      visibility: 'public',
 
       /*
       |--------------------------------------------------------------------------
@@ -58,7 +56,7 @@ export default driveConfig({
       | files.
       |
       */
-      root: Application.tmpPath("uploads"),
+      root: Application.tmpPath('uploads'),
 
       /*
       |--------------------------------------------------------------------------
@@ -77,12 +75,12 @@ export default driveConfig({
       | Base path - Local driver only
       |--------------------------------------------------------------------------
       |
-      | Base path is always required when "serveFiles = true". Also make sure
-      | the `basePath` is unique across all the disks using "local" driver and
+      | Base path is always required when 'serveFiles = true'. Also make sure
+      | the `basePath` is unique across all the disks using 'local' driver and
       | you are not registering routes with this prefix.
       |
       */
-      basePath: "/uploads",
+      basePath: '/uploads',
     },
 
     /*
@@ -135,7 +133,7 @@ export default driveConfig({
       | Uniform ACL - Google cloud storage only
       |--------------------------------------------------------------------------
       |
-      | When using the Uniform ACL on the bucket, the "visibility" option is
+      | When using the Uniform ACL on the bucket, the 'visibility' option is
       | ignored. Since, the files ACL is managed by the google bucket policies
       | directly.
       |
@@ -151,4 +149,4 @@ export default driveConfig({
     //   usingUniformAcl: false,
     // },
   },
-});
+})

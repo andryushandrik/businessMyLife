@@ -1,179 +1,113 @@
-import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
-import PartnersService from "App/Services/PartnersService";
-import PartnerWithImageValidator from "./../../Validators/partnersValidators/PartnerWithImageValidator";
-import PartnerWithVideoValidator from "./../../Validators/partnersValidators/PartnerWithVideoValidator";
-import Partner from "./../../Models/Partner";
-import {
-  PARTNER_IMAGE_MEDIA_TYPE,
-  PARTNER_VIDEO_MEDIA_TYPE,
-} from "Config/database";
+import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import PartnerService from 'App/Services/PartnerService'
+import PartnerWithImageValidator from 'App/Validators/Partner/PartnerWithImageValidator'
+import PartnerWithVideoValidator from 'App/Validators/Partner/PartnerWithVideoValidator'
+import Partner from './../../Models/Partner'
+import { Err } from 'Contracts/response'
+import { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
+import { ResponseMessages } from 'Config/response'
 
 export default class PartnersController {
-  public async index({
-    view,
-    request,
-    response,
-    session,
-  }: HttpContextContract) {
-    const queryStringParams = request.qs();
-    const page = queryStringParams.page ? queryStringParams.page : 1;
-    try {
-      const partners = await PartnersService.paginatePartners({ page });
-      return view.render("./pages/partners/index", { items: partners });
-    } catch (error) {
-      session.flash({ error: error.message });
-      response.redirect().back();
-    }
-  }
-
-  public async showOne({
-    view,
-    params,
-    session,
-    response,
-  }: HttpContextContract) {
-    const id: number = params.id;
-    let partner: Partner;
+  public async index({ view, request, response, session, route }: HttpContextContract) {
+    const baseUrl: string = route!.pattern
+    const page: number = request.input('page', 1)
 
     try {
-      partner = await PartnersService.get(id);
-    } catch (error) {
-      session.flash({ error: error.message });
-      response.redirect("/partners");
-      return;
-    }
+      const partners: ModelPaginatorContract<Partner> = await PartnerService.paginate({ page, baseUrl })
 
-    return view.render("./pages/partners/show", { item: partner });
-  }
-
-  public async showCreate({
-    view,
-    request,
-    response,
-    session,
-  }: HttpContextContract) {
-    const mediaType = request.qs().mediaType ?? PARTNER_IMAGE_MEDIA_TYPE;
-
-    const supportedMediaTypes = ["0", "1"];
-    if (!mediaType || !supportedMediaTypes.includes(mediaType))
-      return response.redirect("/partners");
-    try {
-      return view.render("./pages/partners/create.edge", { mediaType });
-    } catch (error) {
-      session.flash({ error: error.message });
-      response.redirect().back();
+      return view.render('pages/partner/index', { partners })
+    } catch (err: Err | any) {
+      session.flash('error', err.message)
+      return response.redirect().back()
     }
   }
 
-  public async create({ request, response, session }: HttpContextContract) {
-    const mediaType: number = request.qs().mediaType ?? 0;
-    let payload:
-      | PartnerWithImageValidator["schema"]["props"]
-      | PartnerWithVideoValidator["schema"]["props"];
+  public async create({ view, request, response }: HttpContextContract) {
+    const mediaType: boolean | null = request.input('mediaType', null)
 
-    if (mediaType == 1) {
-      payload = await request.validate(PartnerWithVideoValidator);
+    if (mediaType === null)
+      return response.redirect().back()
 
-      try {
-        await PartnersService.createWithVideo({
-          ...payload,
-          mediaType: PARTNER_VIDEO_MEDIA_TYPE,
-        });
-        session.flash({ success: "Партнер успешно добавлен" });
-        response.redirect("/partners");
-      } catch (error) {
-        session.flash({ error: error.message });
-        response.redirect().back();
-      }
-    } else {
-      payload = await request.validate(PartnerWithImageValidator);
-
-      try {
-        await PartnersService.createWithImage({
-          ...payload,
-          mediaType: PARTNER_IMAGE_MEDIA_TYPE,
-        });
-        session.flash({ success: "Партнер успешно добавлен" });
-        response.redirect("/partners");
-      } catch (error) {
-        session.flash({ error: error.message });
-        response.redirect().back();
-      }
-    }
+    return view.render('pages/partner/create', { mediaType })
   }
 
-  public async showEdit({
-    request,
-    response,
-    view,
-    session,
-  }: HttpContextContract) {
-    const mediaType = request.qs().mediaType ?? PARTNER_IMAGE_MEDIA_TYPE;
-    const id = request.param("id");
+  public async store({ request, response, session }: HttpContextContract) {
+    const mediaType: boolean = request.input('mediaType') === 'true'
+    let payload: (PartnerWithImageValidator | PartnerWithVideoValidator)['schema']['props']
 
-    let partner: Partner;
+    if (mediaType)
+      payload = await request.validate(PartnerWithVideoValidator)
+    else
+      payload = await request.validate(PartnerWithImageValidator)
 
     try {
-      partner = await PartnersService.get(id);
-    } catch (error) {
-      session.flash({ error: error.message });
-      response.redirect("/partners");
-      return;
-    }
+      await PartnerService.create(payload)
 
-    return view.render("./pages/partners/edit", { item: partner, mediaType });
-  }
-
-  public async edit({ request, response, session }: HttpContextContract) {
-    const mediaType: number =
-      request.qs().mediaType ?? PARTNER_IMAGE_MEDIA_TYPE;
-    const id = request.param("id");
-
-    let payload:
-      | PartnerWithImageValidator["schema"]["props"]
-      | PartnerWithVideoValidator["schema"]["props"];
-
-    if (mediaType == 1) {
-      payload = await request.validate(PartnerWithVideoValidator);
-
-      try {
-        await PartnersService.editWithVideo(id, {
-          ...payload,
-          mediaType: PARTNER_VIDEO_MEDIA_TYPE,
-        });
-        session.flash({ success: "Партнер успешно отредактирован" });
-        return response.redirect("/partners");
-      } catch (error) {
-        session.flash({ error: error.message });
-        response.redirect().back();
-      }
-    } else {
-      payload = await request.validate(PartnerWithImageValidator);
-
-      try {
-        await PartnersService.editWithImage(id, {
-          ...payload,
-          mediaType: PARTNER_IMAGE_MEDIA_TYPE,
-        });
-        session.flash({ success: "Партнер успешно отредактирован" });
-        return response.redirect("/partners");
-      } catch (error) {
-        session.flash({ error: error.message });
-        response.redirect().back();
-      }
+      session.flash('success', ResponseMessages.SUCCESS)
+      return response.redirect().toRoute('partners.index')
+    } catch (err: Err | any) {
+      session.flash('error', err.message)
+      return response.redirect().back()
     }
   }
 
-  public async delete({ params, response, session }: HttpContextContract) {
-    const id: number = params.id;
+  public async show({ view, params, session, response }: HttpContextContract) {
+    const id: Partner['id'] = params.id
 
     try {
-      await PartnersService.delete(id);
-      session.flash({ success: "Баннер был успешно удален" });
-      response.redirect().back();
-    } catch (error) {
-      session.flash({ error: error.message });
-      response.redirect().back();
+      const item: Partner = await PartnerService.get(id)
+
+      return view.render('pages/partner/show', { item })
+    } catch (err: Err | any) {
+      session.flash('error', err.message)
+      return response.redirect().back()
+    }
+  }
+
+  public async edit({ params, response, view, session }: HttpContextContract) {
+    const id: Partner['id'] = params.id
+
+    try {
+      const item: Partner = await PartnerService.get(id)
+
+      return view.render('pages/partner/edit', { item })
+    } catch (err: Err | any) {
+      session.flash('error', err.message)
+      return response.redirect().back()
+    }
+  }
+
+  public async update({ request, response, session, params }: HttpContextContract) {
+    const id: Partner['id'] = params.id
+    const mediaType: boolean = request.input('mediaType') === 'true'
+    let payload: (PartnerWithImageValidator | PartnerWithVideoValidator)['schema']['props']
+
+    if (mediaType)
+      payload = await request.validate(PartnerWithVideoValidator)
+    else
+      payload = await request.validate(PartnerWithImageValidator)
+
+    try {
+      await PartnerService.update(id, payload)
+
+      session.flash('success', ResponseMessages.SUCCESS)
+      return response.redirect().toRoute('partners.index')
+    } catch (err: Err | any) {
+      session.flash('error', err.message)
+      return response.redirect().back()
+    }
+  }
+
+  public async destroy({ params, response, session }: HttpContextContract) {
+    const id: Partner['id'] = params.id
+
+    try {
+      await PartnerService.delete(id)
+      session.flash('success', ResponseMessages.SUCCESS)
+      return response.redirect().back()
+    } catch (err: Err | any) {
+      session.flash('error', err.message)
+      return response.redirect().back()
     }
   }
 }
