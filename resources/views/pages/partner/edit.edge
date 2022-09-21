@@ -22,7 +22,7 @@
 
             <div class="form-group">
               <label class="mb-1"><strong>Название *</strong></label>
-              <input type="string" class="form-control" name="title" value="{{ item.title ?? '' }}">
+              <input type="string" class="form-control" name="title" value="{{ flashMessages.get('title', item.title) ?? '' }}">
 
               @if(flashMessages.has('errors.title'))
                 <div class="invalid-feedback d-block">
@@ -33,7 +33,7 @@
 
             <div class="form-group">
               <div class="custom-control custom-checkbox mb-3 checkbox-success">
-                <input type="checkbox" name="isTitleLink" class="custom-control-input" id="isTitleLink" {{ item.isTitleLink ? 'checked' : '' }}>
+                <input type="checkbox" name="isTitleLink" class="custom-control-input" id="isTitleLink" {{ flashMessages.get('isTitleLink', item.isTitleLink) ? 'checked' : '' }}>
                 <label class="custom-control-label" for="isTitleLink">Кликабельная ссылка</label>
 
                 @if(flashMessages.has('errors.isTitleLink'))

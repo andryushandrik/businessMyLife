@@ -26,7 +26,7 @@
 
             <div class="form-group">
               <label class="mb-1"><strong>Название *</strong></label>
-              <input type="string" class="form-control" name="title" value="{{ item.title ?? '' }}">
+              <input type="string" class="form-control" name="title" value="{{ flashMessages.get('title', item.title) ?? '' }}">
 
               @if(flashMessages.has('errors.title'))
                 <div class="invalid-feedback d-block">
@@ -37,7 +37,7 @@
 
             <div class="form-group">
               <label class="mb-1"><strong>Описание *</strong></label>
-              <textarea class="form-control summernote" id="summernote" name="description">{{ item.description ?? '' }}</textarea>
+              <textarea class="form-control summernote" id="summernote" name="description">{{ flashMessages.get('description', item.description) ?? '' }}</textarea>
 
               @if(flashMessages.has('errors.description'))
                 <div class="invalid-feedback d-block">
