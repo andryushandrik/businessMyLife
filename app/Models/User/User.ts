@@ -6,6 +6,7 @@ import type { HasMany } from '@ioc:Adonis/Lucid/Orm'
 import type { UserExperienceTypes } from 'Config/user'
 // * Types
 
+import Offer from '../Offer/Offer'
 import UserImage from './UserImage'
 import Hash from '@ioc:Adonis/Core/Hash'
 import { GLOBAL_DATETIME_FORMAT } from 'Config/app'
@@ -152,6 +153,9 @@ export default class User extends BaseModel {
 
   @hasMany(() => UserImage)
   public images: HasMany<typeof UserImage>
+
+  @hasMany(() => Offer)
+  public offers: HasMany<typeof Offer>
 
   /**
    * * Hooks

@@ -31,6 +31,18 @@ Route.group(() => {
   Route.resource('/areas', 'Offer/AreasController').except(['show'])
   Route.resource('/subsections', 'Offer/SubsectionsController').except(['show'])
 
+  Route.group(() => {
+
+    Route.get('/', 'Offer/OffersController.paginate').as('paginate')
+
+    Route.get('/:id', 'Offer/OffersController.get').as('get')
+    Route.patch('/:id', 'Offer/OffersController.updateBlockDescription').as('updateBlockDescription')
+
+    Route.patch('/archive/:id', 'Offer/OffersController.archive').as('archive')
+    Route.delete('/archive/:id', 'Offer/OffersController.unarchive').as('unarchive')
+
+  }).prefix('offer').as('offer')
+
   /**
    * * User
    */
