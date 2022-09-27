@@ -4,11 +4,14 @@ import User from 'App/Models/User/User'
 import Partner from 'App/Models/Partner'
 import Area from 'App/Models/Offer/Area'
 import Feedback from 'App/Models/Feedback'
+import Offer from 'App/Models/Offer/Offer'
 import Factory from '@ioc:Adonis/Lucid/Factory'
 import UserImage from 'App/Models/User/UserImage'
 import Subsection from 'App/Models/Offer/Subsection'
+import OfferImage from 'App/Models/Offer/OfferImage'
 import { DateTime } from 'luxon'
 import { RoleNames, UserExperienceTypes, UserTypeNames } from 'Config/user'
+import { OfferCategories, OfferPaybackTimes, OfferProjectStages } from 'Config/offer'
 
 export const NewsFactory = Factory
   .define(News, ({faker}) => {
@@ -76,6 +79,53 @@ export const SubsectionFactory = Factory
   })
   .build()
 
+export const OfferFactory = Factory
+  .define(Offer, async ({ faker }) => {
+    const subsection: Subsection = await Subsection.query().random()
+
+    return {
+      isArchived: false,
+
+      title: faker.lorem.words(2),
+      description: faker.lorem.paragraph(),
+      city: faker.address.cityName(),
+      image: faker.image.business(),
+
+      category: faker.datatype.number({ min: OfferCategories.SEARCH_FOR_INVESTORS, max: OfferCategories.FRANCHISES }),
+      paybackTime: faker.datatype.number({ min: OfferPaybackTimes.BEFORE_THREE_MONTH, max: OfferPaybackTimes.AFTER_THREE_YEARS }),
+
+      cooperationTerms: faker.lorem.paragraph(),
+      businessPlan: faker.lorem.paragraph(),
+      benefits: faker.lorem.paragraph(),
+
+      about: faker.lorem.paragraph(),
+      aboutCompany: faker.lorem.paragraph(),
+
+      investments: faker.datatype.number(),
+      projectStage: faker.datatype.number({ min: OfferProjectStages.IDEA, max: OfferProjectStages.COMPLETE }),
+      dateOfCreation: DateTime.now(),
+
+      price: faker.datatype.number(),
+      pricePerMonth: faker.datatype.number(),
+
+      profit: faker.datatype.number(),
+      profitPerMonth: faker.datatype.number(),
+
+      branchCount: faker.datatype.number(),
+      soldBranchCount: faker.datatype.number(),
+
+      subsectionId: subsection.id,
+    }
+  })
+  .relation('images', () => OfferImageFactory)
+  .build()
+
+export const OfferImageFactory = Factory
+  .define(OfferImage, ({ faker }) => {
+    return { image: faker.image.business() }
+  })
+  .build()
+
 /**
  * * User
  */
@@ -109,6 +159,7 @@ export const UserFactory = Factory
     }
   })
   .relation('images', () => UserImageFactory)
+  .relation('offers', () => OfferFactory)
   .build()
 
 export const UserImageFactory = Factory

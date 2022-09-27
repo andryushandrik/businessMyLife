@@ -1,0 +1,217 @@
+@layout('layouts/index')
+
+@set('title', `Объявление - ${item.title}`)
+
+@section('styles')
+  <link href="/vendor/summernote/summernote.css" rel="stylesheet">
+@endsection
+
+@section('body')
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">Причина блокировки</h4>
+
+        <div class="d-flex">
+          @if(item.isArchived)
+            <form action="{{ route('offer.unarchive', { id: item.id }, { qs: { _method: 'DELETE' } }) }}" method="POST">
+              {{ csrfField() }}
+              <button type="submit" class="btn btn-primary btn-sm">Разархивировать</button>
+            </form>
+          @else
+            <form action="{{ route('offer.archive', { id: item.id }, { qs: { _method: 'PATCH' } }) }}" method="POST">
+              {{ csrfField() }}
+              <button type="submit" class="btn btn-danger btn-sm">Архивировать</button>
+            </form>
+          @endif
+
+          <a href="{{ route('offer.paginate') }}" class="btn btn-primary btn-sm ml-2">Назад</a>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="basic-form">
+
+          <form action="{{ route('offer.updateBlockDescription', { id: item.id }, { qs: { _method: 'PATCH' } }) }}" method="POST">
+            {{ csrfField() }}
+
+            <div class="form-group">
+              <label class="mb-1">Причина блокировки</label>
+              <textarea id="summernote" class="summernote" name="blockDescription">{{ flashMessages.get('blockDescription', item.blockDescription) ?? '' }}</textarea>
+
+              @if(flashMessages.has('errors.blockDescription'))
+                <div class="invalid-feedback d-block">
+                  {{ flashMessages.get('errors.blockDescription')[0] }}
+                </div>
+              @endif
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-sm">Подтвердить</button>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">{{ title }}</h4>
+      </div>
+
+      <div class="card-body">
+        <div class="basic-form">
+
+          <div class="form-group">
+            <label class="mb-1">Просмотров</label>
+            <input type="string" class="form-control" value="{{ item.viewsCount }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Архивирован</label>
+            <input type="string" class="form-control" value="{{ item.isArchivedForUser }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Слаг</label>
+            <input type="string" class="form-control" value="{{ item.slug }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Название</label>
+            <input type="string" class="form-control" value="{{ item.title }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1"><strong>Описание</strong></label>
+            <textarea class="form-control" class="form-control" disabled>{{ item.description }}</textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Город</label>
+            <input type="string" class="form-control" value="{{ item.city }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Категория</label>
+            <input type="string" class="form-control" value="{{ item.categoryForUser }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Срок окупаемости</label>
+            <input type="string" class="form-control" value="{{ item.paybackTimeForUser }}" disabled>
+          </div>
+
+          <div class="form-group mb-3">
+            <label class="mb-1">Обложка</label>
+            <br>
+            <img src="{{ getImage(item.image) }}" alt="">
+          </div>
+
+          <div class="form-group mb-3">
+            <label class="mb-1">Остальные изображения</label>
+            <br>
+
+            @each(imageItem in item.images)
+              <img src="{{ getImage(imageItem.image) }}" width="250" height="350" alt="">
+            @endeach
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1"><strong>Условия сотрудничества</strong></label>
+            <textarea class="form-control" disabled>{{ item.cooperationTerms ?? '' }}</textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1"><strong>Бизнес план</strong></label>
+            <textarea class="form-control" disabled>{{ item.businessPlan ?? '' }}</textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1"><strong>Преимущества</strong></label>
+            <textarea class="form-control" disabled>{{ item.benefits ?? '' }}</textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1"><strong>О себе</strong></label>
+            <textarea class="form-control" disabled>{{ item.about ?? '' }}</textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1"><strong>О компании</strong></label>
+            <textarea class="form-control" disabled>{{ item.aboutCompany ?? '' }}</textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Инвестиции</label>
+            <input type="string" class="form-control" value="{{ item.investments ?? '' }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Стадия проекта</label>
+            <input type="string" class="form-control" value="{{ item.projectStageForUser }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Дата создания бизнеса</label>
+            <input type="string" class="form-control" value="{{ item.dateOfCreation ?? '' }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Окупаемость в месяц</label>
+            <input type="string" class="form-control" value="{{ item.profitPerMonth ?? '' }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Окупаемость</label>
+            <input type="string" class="form-control" value="{{ item.profit ?? '' }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Количество филиалов</label>
+            <input type="string" class="form-control" value="{{ item.branchCount ?? '' }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Количество проданных филиалов</label>
+            <input type="string" class="form-control" value="{{ item.soldBranchCount ?? '' }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Цена</label>
+            <input type="string" class="form-control" value="{{ item.price ?? '' }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Цена в месяц</label>
+            <input type="string" class="form-control" value="{{ item.pricePerMonth ?? '' }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Дата создания Объявления</label>
+            <input type="string" class="form-control" value="{{ item.createdAtForUser }}" disabled>
+          </div>
+
+          <div class="form-group">
+            Пользователь
+            <br />
+            <a href="{{ route('user.get', { id: item.user.id }) }}" class="text-primary">{{ item.user.fullName }}</a>
+          </div>
+
+          <div class="form-group">
+            Подраздел
+            <br />
+            <a href="{{ route('subsections.edit', { id: item.subsection.id }) }}" class="text-primary">{{ item.subsection.name }}</a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+@endsection
+
+@section('scripts')
+  <script src="/vendor/summernote/js/summernote.min.js"></script>
+  <script src="/js/plugins-init/summernote-init.js"></script>
+@endsection

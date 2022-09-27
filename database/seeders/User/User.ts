@@ -52,7 +52,12 @@ export default class extends BaseSeeder {
         },
       ])
 
-      await UserFactory.with('images', 3).createMany(20)
+      await UserFactory
+        .with('images', 3)
+        .with('offers', 3, (offer) => {
+          offer.with('images', 3)
+        })
+        .createMany(20)
     } catch (err: any) {
       Logger.error(err)
     }

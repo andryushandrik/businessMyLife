@@ -69,6 +69,9 @@ export const TABLES_NAMES = {
   AREAS: 'areas',
   SUBSECTIONS: 'subsections',
 
+  OFFERS: 'offers',
+  OFFERS_IMAGES: 'offersImages',
+
   /**
    * * User
    */
@@ -125,6 +128,20 @@ export const BANNER_DESCRIPTION_MAX_LENGTH: number = 2048
 export const AREA_NAME_MAX_LENGTH: number = 255
 
 export const SUBSECTION_NAME_MAX_LENGTH: number = 255
+
+export const OFFER_DESCRIPTION_MIN_LENGTH: number = 4
+export const OFFER_DESCRIPTION_MAX_LENGTH: number = 8192
+export const OFFER_COOPERATION_TERMS_MIN_LENGTH: number = 4
+export const OFFER_COOPERATION_TERMS_MAX_LENGTH: number = 8192
+export const OFFER_BUSINESS_PLAN_MIN_LENGTH: number = 4
+export const OFFER_BUSINESS_PLAN_MAX_LENGTH: number = 8192
+export const OFFER_ABOUT_MIN_LENGTH: number = 4
+export const OFFER_ABOUT_MAX_LENGTH: number = 8192
+export const OFFER_ABOUT_COMPANY_MIN_LENGTH: number = 4
+export const OFFER_ABOUT_COMPANY_MAX_LENGTH: number = 8192
+export const OFFER_BENEFITS_MIN_LENGTH: number = 4
+export const OFFER_BENEFITS_MAX_LENGTH: number = 8192
+export const OFFER_BLOCK_DESCRIPTION_MAX_LENGTH: number = 1024
 
 /**
  * * User
