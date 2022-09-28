@@ -22,6 +22,15 @@ export function getBannerDescriptionRules(): Rule[] {
   ]
 }
 
+export function getBannerLinkRules(): Rule[] {
+  return [
+    rules.url({
+      protocols: ['http', 'https'],
+      requireProtocol: true
+    }),
+  ]
+}
+
 export function getBannerFileOptions() {
   return {
     size: '5mb',

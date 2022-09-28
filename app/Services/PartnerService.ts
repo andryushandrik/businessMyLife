@@ -9,6 +9,7 @@ import type { TransactionClientContract } from '@ioc:Adonis/Lucid/Database'
 // * Types
 
 import Partner from 'App/Models/Partner'
+import Drive from '@ioc:Adonis/Core/Drive'
 import Logger from '@ioc:Adonis/Core/Logger'
 import Database from '@ioc:Adonis/Lucid/Database'
 import { PARTNERS_FOLDER_PATH } from 'Config/drive'
@@ -101,6 +102,13 @@ export default class PartnerService {
     }
 
     if (!payload.mediaType) {
+      try {
+        await Drive.delete(item.media)
+      } catch (err: any) {
+        Logger.error(err)
+        throw { code: ResponseCodes.SERVER_ERROR, message: ResponseMessages.ERROR } as Err
+      }
+
       try {
         const filePath: string = await this.uploadImage(item.id, payload.media as MultipartFileContract)
         await item.merge({ media: filePath }).save()

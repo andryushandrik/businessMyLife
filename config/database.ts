@@ -121,6 +121,8 @@ export const BANNER_TITLE_MAX_LENGTH: number = 255
 export const BANNER_DESCRIPTION_MIN_LENGTH: number = 10
 export const BANNER_DESCRIPTION_MAX_LENGTH: number = 2048
 
+export const BANNER_LINK_MAX_LENGTH: number = 2048
+
 /**
  * * Offer
  */

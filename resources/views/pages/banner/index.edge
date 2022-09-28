@@ -36,7 +36,7 @@
                 <tr>
                   <td><strong>{{ item.id }}</strong></td>
                   <td>{{ item.title }}</td>
-                  <td>{{ item.description }}</td>
+                  <td>{{ excerpt(item.description, 20) }}</td>
                   <td><img src="{{ getImage(item.image) }}" alt="" class="banner_cover_img"/></td>
                   <td>
                     <div class="dropdown">

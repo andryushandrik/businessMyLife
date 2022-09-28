@@ -9,11 +9,12 @@ export default class Banner extends BaseModel {
   public static readonly columns = [
     'id',
     'title', 'description', 'image',
+    'link',
     'createdAt', 'updatedAt',
   ] as const
 
   /**
-   * * Not nullable columns
+   * * Columns
    */
 
   @column({ isPrimary: true })
@@ -27,6 +28,9 @@ export default class Banner extends BaseModel {
 
   @column()
   public image: string
+
+  @column()
+  public link?: string | null
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

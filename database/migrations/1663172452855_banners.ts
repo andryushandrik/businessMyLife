@@ -1,5 +1,5 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
-import { BANNER_DESCRIPTION_MAX_LENGTH, TABLES_NAMES } from 'Config/database'
+import { BANNER_DESCRIPTION_MAX_LENGTH, BANNER_LINK_MAX_LENGTH, TABLES_NAMES } from 'Config/database'
 
 export default class extends BaseSchema {
   protected tableName = TABLES_NAMES.BANNERS
@@ -15,6 +15,12 @@ export default class extends BaseSchema {
       table.string('image').notNullable()
       table.string('title').notNullable()
       table.string('description', BANNER_DESCRIPTION_MAX_LENGTH).notNullable()
+
+      /**
+       * * Nullable columns
+       */
+
+      table.string('link', BANNER_LINK_MAX_LENGTH).nullable()
 
       /**
        * * Timestamps
