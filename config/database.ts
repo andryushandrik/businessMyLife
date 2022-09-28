@@ -99,6 +99,13 @@ export const PARTNER_VIDEO_LINK_MAX_LENGTH: number = 1024
 export const FEEDBACK_QUESTION_MAX_LENGTH: number = 8192
 
 /**
+ * * Main page video
+ */
+
+export const MAIN_PAGE_VIDEO_TITLE_MAX_LENGTH: number = 255
+export const MAIN_PAGE_VIDEO_DESCRIPTION_MAX_LENGTH: number = 2048
+
+/**
  * * News
  */
 

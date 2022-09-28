@@ -96,4 +96,15 @@ Route.group(() => {
 
   }).prefix('feedback').as('feedback')
 
+  /**
+   * * Main page video
+   */
+
+  Route.group(() => {
+
+    Route.get('/', 'IndexController.mainPageVideo').as('index')
+    Route.post('/', 'IndexController.updateMainPageVideo').as('update')
+
+  }).prefix('mainPageVideo').as('mainPageVideo')
+
 }).middleware('CheckAdminPanelAccess')

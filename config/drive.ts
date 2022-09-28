@@ -150,20 +150,10 @@ export default driveConfig({
 
 export const IMG_PLACEHOLDER: string = 'placeholder.jpg'
 
-/**
- * * Partner
- */
-
 export const PARTNERS_FOLDER_PATH: string = 'Partners'
-
-/**
- * * News
- */
 
 export const NEWS_FOLDER_PATH: string = 'News'
 
-/**
- * * Banner
- */
-
 export const BANNER_FOLDER_PATH: string = 'Banners'
+
+export const MAIN_PAGE_VIDEO_FOLDER_PATH: string = 'MainPageVideo'

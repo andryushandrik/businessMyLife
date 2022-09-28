@@ -17,9 +17,9 @@
       <div class="card-body">
         <div class="basic-form">
           @if(flashMessages.has('errors.database'))
-              <div class="invalid-feedback d-block">
-                {{ flashMessages.get('error')}}
-              </div>
+            <div class="invalid-feedback d-block">
+              {{ flashMessages.get('error')}}
+            </div>
           @endif
 
           <form action="{{ route('news.store') }}" method="POST" enctype="multipart/form-data">

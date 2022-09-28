@@ -1,9 +1,8 @@
 @layout('layouts/index')
 
-@set('title', `Новость - ${item.title}`)
+@set('title', `Видео на главной странице`)
 
 @section('styles')
-  <link href="/css/news.css" rel="stylesheet">
   <link href="/vendor/summernote/summernote.css" rel="stylesheet">
 @endsection
 
@@ -12,18 +11,10 @@
     <div class="card">
       <div class="card-header">
         <h4 class="card-title">{{ title }}</h4>
-
-        <a href="{{ route('news.index') }}" class="btn btn-primary btn-sm">Назад</a>
       </div>
       <div class="card-body">
         <div class="basic-form">
-          @if(flashMessages.has('errors.database'))
-            <div class="invalid-feedback d-block">
-              {{ flashMessages.get('error')}}
-            </div>
-          @endif
-
-          <form action="{{ route('news.update', { id: item.id }, { qs: { _method: 'PATCH' } }) }}" method="POST" enctype="multipart/form-data">
+          <form action="{{ route('mainPageVideo.update') }}" method="POST" enctype="multipart/form-data">
 
             <div class="form-group">
               <label class="mb-1"><strong>Название *</strong></label>
@@ -47,41 +38,19 @@
               @endif
             </div>
 
-            <div class="form-group">
-              <label class="mb-1">Слаг</label>
-              <input type="string" class="form-control" name="slug" value="{{ flashMessages.get('slug', item.slug) ?? '' }}">
-
-              @if(flashMessages.has('errors.slug'))
-                <div class="invalid-feedback d-block">
-                  {{ flashMessages.get('errors.slug')[0] }}
-                </div>
-              @endif
-            </div>
-
-            <div class="form-group">
-              <label class="mb-1">Подзаголовок</label>
-              <input type="string" class="form-control" name="suptitle" value="{{ flashMessages.get('suptitle', item.suptitle) ?? '' }}">
-
-              @if(flashMessages.has('errors.suptitle'))
-                <div class="invalid-feedback d-block">
-                  {{ flashMessages.get('errors.suptitle')[0] }}
-                </div>
-              @endif
-            </div>
-
             <div class="form-group mb-3">
-              <label class="mb-1">Текущее изображение</label>
+              <label class="mb-1">Текущее видео</label>
               <br>
-              <img src="{{ getImage(item.image) }}" class="news_image" alt="">
+              <video src="{{ getImage(item.videoPath) }}" width="500" height="300" autoplay controls alt="">
             </div>
 
             <div class="form-group">
-              <label class="mb-1">Изображение</label>
-              <input type="file" class="form-control" accept="image/png, image/jpeg, image/jpg" name="image" value="{{ flashMessages.get('image') ?? '' }}">
+              <label class="mb-1">Видео</label>
+              <input type="file" class="form-control" name="video" value="{{ flashMessages.get('video') ?? '' }}">
 
-              @if(flashMessages.has('errors.image'))
+              @if(flashMessages.has('errors.video'))
                 <div class="invalid-feedback d-block">
-                  {{ flashMessages.get('errors.image')[0] }}
+                  {{ flashMessages.get('errors.video')[0] }}
                 </div>
               @endif
             </div>
