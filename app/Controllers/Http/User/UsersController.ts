@@ -25,6 +25,20 @@ export default class UsersController {
     }
   }
 
+  public async paginateAdminAndModerators({ view, session, request, route, response }: HttpContextContract) {
+    const baseUrl: string = route!.pattern
+    const page: number = request.input('page', 1)
+
+    try {
+      const adminsAndModerators: ModelPaginatorContract<User> = await UserService.paginateAdminsAndModerators({ page, baseUrl })
+
+      return view.render('pages/user/paginateAdminsAndModerators', { adminsAndModerators })
+    } catch (err: Err | any) {
+      session.flash('error', err.message)
+      return response.redirect().back()
+    }
+  }
+
   public async get({ view, session, params, response }: HttpContextContract) {
     const id: User['id'] = params.id
 

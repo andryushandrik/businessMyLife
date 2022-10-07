@@ -50,6 +50,7 @@ Route.group(() => {
   Route.group(() => {
 
     Route.get('/', 'User/UsersController.paginate').as('paginate')
+    Route.get('/adminsAndModerators', 'User/UsersController.paginateAdminAndModerators').as('paginateAdminsAndModerators')
 
     Route.group(() => {
 

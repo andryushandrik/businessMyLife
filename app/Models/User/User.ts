@@ -1,17 +1,18 @@
 // * Types
-import type Role from '../User/Role'
 import type UserType from './UserType'
 import type { DateTime } from 'luxon'
-import type { HasMany } from '@ioc:Adonis/Lucid/Orm'
 import type { UserExperienceTypes } from 'Config/user'
+import type { HasMany, ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 
+import Role from '../User/Role'
 import Offer from '../Offer/Offer'
 import UserImage from './UserImage'
 import Hash from '@ioc:Adonis/Core/Hash'
 import { GLOBAL_DATETIME_FORMAT } from 'Config/app'
-import { BaseModel, beforeSave, column, computed, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import { RoleNames } from 'Config/user'
 import { ROLE_NAMES, USER_EXPERIENCE_TYPES, USER_TYPE_NAMES } from 'Config/user'
+import { BaseModel, beforeSave, column, computed, hasMany, scope } from '@ioc:Adonis/Lucid/Orm'
 
 export default class User extends BaseModel {
   public static readonly columns = [
@@ -146,6 +147,16 @@ export default class User extends BaseModel {
   public get typeForUser(): string {
     return USER_TYPE_NAMES[this.typeId - 1]
   }
+
+  /**
+   * * Query scopes
+   */
+
+  public static getByRoleIds = scope((query: ModelQueryBuilderContract<typeof User>, roleTypes: RoleNames[]) => {
+    const roleTypesToRoleIds: Role['id'][] = roleTypes.map((item) => ++item)
+
+    query.whereIn('role_id', roleTypesToRoleIds)
+  })
 
   /**
    * * Relations

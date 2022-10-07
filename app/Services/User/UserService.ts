@@ -8,11 +8,26 @@ import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import User from 'App/Models/User/User'
 import Logger from '@ioc:Adonis/Core/Logger'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
+import { RoleNames } from 'Config/user'
 
 export default class UserService {
   public static async paginate(config: PaginateConfig<User>): Promise<ModelPaginatorContract<User>> {
     try {
       return await User.query().getViaPaginate(config)
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+    }
+  }
+
+  public static async paginateAdminsAndModerators(config: PaginateConfig<User>): Promise<ModelPaginatorContract<User>> {
+    const roleTypes: RoleNames[] = [RoleNames.ADMIN, RoleNames.MODERATOR]
+
+    try {
+      return await User
+        .query()
+        .withScopes((scopes) => scopes.getByRoleIds(roleTypes))
+        .getViaPaginate(config)
     } catch (err: any) {
       Logger.error(err)
       throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
