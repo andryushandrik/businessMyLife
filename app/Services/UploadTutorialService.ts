@@ -1,35 +1,34 @@
 // * Types
-import type PartnerWithVideoValidator from 'App/Validators/Partner/PartnerWithVideoValidator'
-import type PartnerWithImageValidator from 'App/Validators/Partner/PartnerWithImageValidator'
+import type UploadTutorialValidator from 'App/Validators/UploadTutorialValidator'
 import type { Err } from 'Contracts/response'
-import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import type { PaginateConfig, ServiceConfig } from 'Contracts/services'
 import type { MultipartFileContract } from '@ioc:Adonis/Core/BodyParser'
 import type { TransactionClientContract } from '@ioc:Adonis/Lucid/Database'
+import type { ModelAttributes, ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 
-import Partner from 'App/Models/Partner'
 import Drive from '@ioc:Adonis/Core/Drive'
 import Logger from '@ioc:Adonis/Core/Logger'
 import Database from '@ioc:Adonis/Lucid/Database'
-import { PARTNERS_FOLDER_PATH } from 'Config/drive'
+import UploadTutorial from 'App/Models/UploadTutorial'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
+import { UPLOAD_TUTORIAL_FOLDER_PATH } from 'Config/drive'
 
-export default class PartnerService {
-  public static async paginate(config: PaginateConfig<Partner>): Promise<ModelPaginatorContract<Partner>> {
+export default class UploadTutorialService {
+  public static async paginate(config: PaginateConfig<UploadTutorial>): Promise<ModelPaginatorContract<UploadTutorial>> {
     try {
-      return await Partner.query().getViaPaginate(config)
+      return await UploadTutorial.query().getViaPaginate(config)
     } catch (err: any) {
       Logger.error(err)
       throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
     }
   }
 
-  public static async get(id: Partner['id'], { trx }: ServiceConfig<Partner> = {}): Promise<Partner> {
-    let item: Partner | null
+  public static async get(id: UploadTutorial['id'], { trx }: ServiceConfig<UploadTutorial> = {}): Promise<UploadTutorial> {
+    let item: UploadTutorial | null
 
     try {
-      item = await Partner.find(id, { client: trx })
+      item = await UploadTutorial.find(id, { client: trx })
     } catch (err: any) {
       Logger.error(err)
       throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
@@ -41,18 +40,24 @@ export default class PartnerService {
     return item
   }
 
-  public static async create(payload: (PartnerWithImageValidator | PartnerWithVideoValidator)['schema']['props']): Promise<void> {
-    let item: Partner
-    let media: string = payload.media as string
+  public static async create(payload: UploadTutorialValidator['schema']['props']): Promise<void> {
+    let item: UploadTutorial
+    let media: string = payload.embed ?? 'tmp'
     let trx: TransactionClientContract | undefined = undefined
+    const tutorialPayload: Partial<ModelAttributes<UploadTutorial>> = {
+      media,
+      isVisible: Boolean(payload.isVisible),
+      isEmbed: true,
+      title: payload.title,
+    }
 
-    if (!payload.mediaType) {
+    if (payload.video) {
+      tutorialPayload.isEmbed = false
       trx = await Database.transaction()
-      media = 'tmp'
     }
 
     try {
-      item = await Partner.create({ ...payload, media }, { client: trx })
+      item = await UploadTutorial.create(tutorialPayload, { client: trx })
     } catch (err: any) {
       if (trx)
         trx.rollback()
@@ -61,9 +66,9 @@ export default class PartnerService {
       throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
     }
 
-    if (!payload.mediaType) {
+    if (payload.video) {
       try {
-        const filePath: string = await this.uploadImage(item.id, payload.media as MultipartFileContract)
+        const filePath: string = await this.uploadImage(item.id, payload.video)
         await item.merge({ media: filePath }).save()
 
         await trx!.commit()
@@ -75,24 +80,34 @@ export default class PartnerService {
     }
   }
 
-  public static async update(id: Partner['id'], payload: (PartnerWithImageValidator | PartnerWithVideoValidator)['schema']['props']): Promise<void> {
-    let item: Partner
-    let media: string = payload.media as string
+  public static async update(id: UploadTutorial['id'], payload: UploadTutorialValidator['schema']['props']): Promise<void> {
+    let item: UploadTutorial
+    let oldMedia: string
+    let media: string = payload.embed ?? 'tmp'
     let trx: TransactionClientContract | undefined = undefined
+    const tutorialPayload: Partial<ModelAttributes<UploadTutorial>> = {
+      media,
+      isVisible: Boolean(payload.isVisible),
+      isEmbed: true,
+      title: payload.title,
+    }
 
-    if (!payload.mediaType) {
+    if (payload.video) {
+      tutorialPayload.isEmbed = false
       trx = await Database.transaction()
-      media = 'tmp'
     }
 
     try {
       item = await this.get(id, { trx })
+      oldMedia = item.media
     } catch (err: Err | any) {
       throw err
     }
 
     try {
-      item = await item.merge({ ...payload, media }).save()
+      item = await item.merge(tutorialPayload).save()
+
+      await Drive.delete(oldMedia)
     } catch (err: any) {
       if (trx)
         trx.rollback()
@@ -101,16 +116,9 @@ export default class PartnerService {
       throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
     }
 
-    if (!payload.mediaType) {
+    if (payload.video) {
       try {
-        await Drive.delete(item.media)
-      } catch (err: any) {
-        Logger.error(err)
-        throw { code: ResponseCodes.SERVER_ERROR, message: ResponseMessages.ERROR } as Err
-      }
-
-      try {
-        const filePath: string = await this.uploadImage(item.id, payload.media as MultipartFileContract)
+        const filePath: string = await this.uploadImage(item.id, payload.video)
         await item.merge({ media: filePath }).save()
 
         await trx!.commit()
@@ -122,8 +130,8 @@ export default class PartnerService {
     }
   }
 
-  public static async delete(id: Partner['id']): Promise<void> {
-    let item: Partner
+  public static async delete(id: UploadTutorial['id']): Promise<void> {
+    let item: UploadTutorial
 
     try {
       item = await this.get(id)
@@ -143,12 +151,12 @@ export default class PartnerService {
    * * Private methods
    */
 
-  private static async uploadImage(id: Partner['id'], image: MultipartFileContract): Promise<string> {
-    const fileName: string = `${id}_${image.clientName}`
+  private static async uploadImage(id: UploadTutorial['id'], video: MultipartFileContract): Promise<string> {
+    const fileName: string = `${id}_${video.clientName}`
 
     try {
-      await image.moveToDisk(PARTNERS_FOLDER_PATH, { name: fileName })
-      return `${PARTNERS_FOLDER_PATH}/${fileName}`
+      await video.moveToDisk(UPLOAD_TUTORIAL_FOLDER_PATH, { name: fileName })
+      return `${UPLOAD_TUTORIAL_FOLDER_PATH}/${fileName}`
     } catch (err: any) {
       Logger.error(err)
       throw { code: ResponseCodes.SERVER_ERROR, message: ResponseMessages.ERROR } as Err

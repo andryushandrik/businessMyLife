@@ -9,6 +9,7 @@ import Factory from '@ioc:Adonis/Lucid/Factory'
 import UserImage from 'App/Models/User/UserImage'
 import Subsection from 'App/Models/Offer/Subsection'
 import OfferImage from 'App/Models/Offer/OfferImage'
+import UploadTutorial from 'App/Models/UploadTutorial'
 import { DateTime } from 'luxon'
 import { RoleNames, UserExperienceTypes, UserTypeNames } from 'Config/user'
 import { OfferCategories, OfferPaybackTimes, OfferProjectStages } from 'Config/offer'
@@ -47,6 +48,16 @@ export const BannerFactory = Factory
       image: faker.image.business(),
       title: faker.lorem.sentence(),
       description: faker.lorem.paragraph(3),
+    }
+  })
+  .build()
+
+export const UploadTutorialFactory = Factory
+  .define(UploadTutorial, ({ faker }) => {
+    return {
+      isEmbed: true,
+      media: faker.image.business(),
+      title: faker.lorem.sentence(),
     }
   })
   .build()

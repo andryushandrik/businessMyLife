@@ -41,7 +41,7 @@
                   <td>{{ item.title }}</td>
                   <td>{{ item.city }}</td>
                   <td>
-                    <img src="{{ getImage(item.image) }}" width="300" height="200" alt="">
+                    <img src="{{ getMedia(item.image) }}" width="300" height="200" alt="">
                   </td>
                   <td>
                     <a href="{{ route('user.get', { id: item.user.id }) }}" class="text-primary">{{ item.user.fullName }}</a>

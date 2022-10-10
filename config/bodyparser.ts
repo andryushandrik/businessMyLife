@@ -7,6 +7,8 @@
 
 import { BodyParserConfig } from '@ioc:Adonis/Core/BodyParser'
 
+export const MAX_LIMIT: number = 500
+
 const bodyParserConfig: BodyParserConfig = {
   /*
   |--------------------------------------------------------------------------
@@ -30,7 +32,7 @@ const bodyParserConfig: BodyParserConfig = {
   */
   json: {
     encoding: 'utf-8',
-    limit: '20mb',
+    limit: `${MAX_LIMIT}mb`,
     strict: true,
     types: [
       'application/json',
@@ -192,7 +194,7 @@ const bodyParserConfig: BodyParserConfig = {
     | and fields data.
     |
     */
-    limit: '500mb',
+    limit: `${MAX_LIMIT}mb`,
 
     /*
     |--------------------------------------------------------------------------

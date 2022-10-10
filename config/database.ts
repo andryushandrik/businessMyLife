@@ -61,6 +61,7 @@ export const TABLES_NAMES = {
   BANNERS: 'banners',
   PARTNERS: 'partners',
   FEEDBACKS: 'feedbacks',
+  UPLOAD_TUTORIALS: 'uploadTutorials',
 
   /**
    * * Offer
@@ -81,6 +82,16 @@ export const TABLES_NAMES = {
   USERS_TYPES: 'usersTypes',
   USERS_IMAGES: 'usersImages',
 } as const
+
+/**
+ * * Upload tutorial
+ */
+
+export const UPLOAD_TUTORIAL_TITLE_MIN_LENGTH: number = 4
+export const UPLOAD_TUTORIAL_TITLE_MAX_LENGTH: number = 255
+
+export const UPLOAD_TUTORIAL_VIDEO_LINK_MIN_LENGTH: number = 4
+export const UPLOAD_TUTORIAL_VIDEO_LINK_MAX_LENGTH: number = 1024
 
 /**
  * * Partner

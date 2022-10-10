@@ -1,0 +1,92 @@
+@layout('layouts/index')
+
+@set('title', 'Редактировать видео')
+
+@section('body')
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">{{ title }}</h4>
+
+        <a href="{{ route('upload_tutorials.index') }}" class="btn btn-primary btn-sm">Назад</a>
+      </div>
+      <div class="card-body">
+        <div class="basic-form">
+          @if(flashMessages.has('errors.database'))
+            <div class="invalid-feedback d-block">
+                {{ flashMessages.get('error')}}
+            </div>
+          @endif
+
+          <form action="{{ route('upload_tutorials.update', { id: item.id }, { qs: { _method: 'PATCH' } }) }}" method="POST" enctype="multipart/form-data">
+
+            <div class="form-group">
+              <label class="mb-1"><strong>Название *</strong></label>
+              <input type="string" class="form-control" name="title" value="{{ flashMessages.get('title', item.title) ?? '' }}">
+
+              @if(flashMessages.has('errors.title'))
+                <div class="invalid-feedback d-block">
+                  {{ flashMessages.get('errors.title')[0] }}
+                </div>
+              @endif
+            </div>
+
+            <div class="form-group">
+              <div class="custom-control custom-checkbox mb-3 checkbox-success">
+                <input type="checkbox" name="isVisible" class="custom-control-input" id="isVisible" {{ flashMessages.get('isVisible', item.isVisible) ? 'checked' : '' }}>
+                <label class="custom-control-label" for="isVisible">Видимость (Есть / нету)</label>
+
+                @if(flashMessages.has('errors.isVisible'))
+                  <div class="invalid-feedback d-block">
+                    {{ flashMessages.get('errors.isVisible')[0] }}
+                  </div>
+                @endif
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="mb-1">Видео</label>
+              <br>
+
+              @if(item.isEmbed)
+                {{{ item.media }}}
+              @else
+              <video src="{{ getMedia(item.media) }}" height="400" controls />
+              @endif
+            </div>
+
+            <div class="form-group">
+              <label class="mb-1">Embed ссылка на видео (Заполните либо это поле, либо загрузите свое видео)</label>
+              <input type="string" class="form-control" name="embed" placeholder="Вставьте embed ссылку на видео (должно быть с iframe)" value="{{ flashMessages.get('embed', item.isEmbed ? item.media : '') ?? '' }}">
+
+              @if(flashMessages.has('errors.embed'))
+                <div class="invalid-feedback d-block">
+                  {{ flashMessages.get('errors.embed')[0] }}
+                </div>
+              @endif
+            </div>
+
+            <div class="form-group">
+              <label class="mb-1">Видео</label>
+              <input type="file" class="form-control" name="video">
+
+              @if(flashMessages.has('errors.video'))
+                <div class="invalid-feedback d-block">
+                  {{ flashMessages.get('errors.video')[0] }}
+                </div>
+              @endif
+            </div>
+
+            {{ csrfField() }}
+
+            <div class="text-right">
+              <button type="submit" class="btn btn-primary btn-block">Редактировать</button>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+@endsection

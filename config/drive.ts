@@ -150,6 +150,8 @@ export default driveConfig({
 
 export const IMG_PLACEHOLDER: string = 'placeholder.jpg'
 
+export const UPLOAD_TUTORIAL_FOLDER_PATH: string = 'Upload-tutorials'
+
 export const PARTNERS_FOLDER_PATH: string = 'Partners'
 
 export const NEWS_FOLDER_PATH: string = 'News'

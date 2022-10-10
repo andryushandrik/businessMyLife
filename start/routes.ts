@@ -24,6 +24,8 @@ Route.group(() => {
 
   Route.resource('/partners', 'PartnersController')
 
+  Route.resource('/uploadTutorials', 'UploadTutorialsController')
+
   /**
    * * Offer
    */

@@ -51,7 +51,7 @@
               @if(item.mediaType)
                 {{{ item.media }}}
               @else
-                <img src="{{ getImage(item.media) }}" alt="">
+                <img src="{{ getMedia(item.media) }}" alt="">
               @endif
             </div>
 
@@ -76,7 +76,7 @@
             {{ csrfField() }}
 
             <div class="text-right">
-              <button type="submit" class="btn btn-primary btn-block">Создать</button>
+              <button type="submit" class="btn btn-primary btn-block">Редактировать</button>
             </div>
 
           </form>
