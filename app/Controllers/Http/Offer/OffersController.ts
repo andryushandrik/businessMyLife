@@ -24,6 +24,20 @@ export default class OffersController {
     }
   }
 
+  public async paginatePaidOffers({ request, response, route, view, session }: HttpContextContract) {
+    const baseUrl: string = route!.pattern
+    const page: number = request.input('page', 1)
+
+    try {
+      const offers: ModelPaginatorContract<Offer> = await OfferService.paginatePaidOffers({ page, baseUrl, relations: ['user', 'subsection'] })
+
+      return view.render('pages/offer/paginate', { offers })
+    } catch (err: Err | any) {
+      session.flash('error', err.message)
+      return response.redirect().back()
+    }
+  }
+
   public async get({ view, params, response, session }: HttpContextContract) {
     const id: Offer['id'] = params.id
 

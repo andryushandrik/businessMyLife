@@ -13,7 +13,7 @@ import { OFFER_CATEGORIES, OFFER_PAYBACK_TIMES, OFFER_PROJECT_STAGES } from 'Con
 import {
   BaseModel, beforeDelete, beforeSave,
   belongsTo, column, computed,
-  hasMany
+  hasMany, scope,
 } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Offer extends BaseModel {
@@ -172,6 +172,18 @@ export default class Offer extends BaseModel {
 
   @hasMany(() => OfferImage)
   public images: HasMany<typeof OfferImage>
+
+  /**
+   * * Query scopes
+   */
+
+  public static getByArchived = scope((query, isArchived: boolean) => [
+    query.where('isArchived', isArchived)
+  ])
+
+  public static getByUserId = scope((query, userId: User['id']) => [
+    query.where('user_id', userId)
+  ])
 
   /**
    * * Hooks

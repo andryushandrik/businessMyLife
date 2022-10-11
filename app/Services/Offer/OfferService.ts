@@ -27,6 +27,25 @@ export default class OfferService {
     }
   }
 
+  public static async paginatePaidOffers(config: PaginateConfig<Offer>): Promise<ModelPaginatorContract<Offer>> {
+    let query: ModelQueryBuilderContract<typeof Offer> = Offer
+      .query()
+      .withScopes((scopes) => scopes.getByArchived(false))
+
+    if (config.relations) {
+      for (const item of config.relations) {
+        query = query.preload(item)
+      }
+    }
+
+    try {
+      return await query.getViaPaginate(config)
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+    }
+  }
+
   public static async get(id: Offer['id'], { relations }: ServiceConfig<Offer> = {}): Promise<Offer> {
     let item: Offer | null
 

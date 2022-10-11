@@ -37,6 +37,8 @@ Route.group(() => {
 
     Route.get('/', 'Offer/OffersController.paginate').as('paginate')
 
+    Route.get('/paid', 'Offer/OffersController.paginatePaidOffers').as('paginatePaidOffers')
+
     Route.get('/:id', 'Offer/OffersController.get').as('get')
     Route.patch('/:id', 'Offer/OffersController.updateBlockDescription').as('updateBlockDescription')
 

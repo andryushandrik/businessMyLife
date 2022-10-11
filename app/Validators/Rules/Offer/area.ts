@@ -6,13 +6,20 @@ import type { Rule } from '@ioc:Adonis/Core/Validator'
 import { rules } from '@ioc:Adonis/Core/Validator'
 import { AREA_NAME_MAX_LENGTH, TABLES_NAMES } from 'Config/database'
 
-export function getAreaIdRules(): Rule[] {
-  return [ rules.unsigned() ]
+const TABLE: string = TABLES_NAMES.AREAS
+
+export function getAreaIdRules(withExistsRule: boolean = false): Rule[] {
+  const areaRules: Rule[] = [ rules.unsigned() ]
+
+  if (withExistsRule)
+    areaRules.push(rules.exists({ table: TABLE, column: 'id' }))
+
+  return areaRules
 }
 
 export function getAreaNameRules(id: Area['id'] | null = null): Rule[] {
   return [
     rules.maxLength(AREA_NAME_MAX_LENGTH),
-    rules.unique({ table: TABLES_NAMES.AREAS, column: 'name', whereNot: { id } }),
+    rules.unique({ table: TABLE, column: 'name', whereNot: { id } }),
   ]
 }
