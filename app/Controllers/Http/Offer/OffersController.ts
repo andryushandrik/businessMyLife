@@ -1,4 +1,5 @@
 // * Types
+import type User from 'App/Models/User/User'
 import type Offer from 'App/Models/Offer/Offer'
 import type { Err } from 'Contracts/response'
 import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
@@ -7,6 +8,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 import OfferService from 'App/Services/Offer/OfferService'
 import OfferBlockDescriptionValidator from 'App/Validators/Offer/OfferBlockDescriptionValidator'
+import { SESSION_AUTH_KEY } from 'Config/session'
 import { ResponseMessages } from 'Config/response'
 
 export default class OffersController {
@@ -30,6 +32,21 @@ export default class OffersController {
 
     try {
       const offers: ModelPaginatorContract<Offer> = await OfferService.paginatePaidOffers({ page, baseUrl, relations: ['user', 'subsection'] })
+
+      return view.render('pages/offer/paginate', { offers })
+    } catch (err: Err | any) {
+      session.flash('error', err.message)
+      return response.redirect().back()
+    }
+  }
+
+  public async paginateAdminOffers({ request, response, route, view, session }: HttpContextContract) {
+    const baseUrl: string = route!.pattern
+    const page: number = request.input('page', 1)
+    const currentUserId: User['id'] = (session.get(SESSION_AUTH_KEY) as User).id
+
+    try {
+      const offers: ModelPaginatorContract<Offer> = await OfferService.paginateUserOffers(currentUserId, { page, baseUrl, relations: ['user', 'subsection'] })
 
       return view.render('pages/offer/paginate', { offers })
     } catch (err: Err | any) {

@@ -1,4 +1,5 @@
 // * Types
+import type User from 'App/Models/User/User'
 import type OfferBlockDescriptionValidator from 'App/Validators/Offer/OfferBlockDescriptionValidator'
 import type { Err } from 'Contracts/response'
 import type { PaginateConfig, ServiceConfig } from 'Contracts/services'
@@ -31,6 +32,25 @@ export default class OfferService {
     let query: ModelQueryBuilderContract<typeof Offer> = Offer
       .query()
       .withScopes((scopes) => scopes.getByArchived(false))
+
+    if (config.relations) {
+      for (const item of config.relations) {
+        query = query.preload(item)
+      }
+    }
+
+    try {
+      return await query.getViaPaginate(config)
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+    }
+  }
+
+  public static async paginateUserOffers(userId: User['id'], config: PaginateConfig<Offer>): Promise<ModelPaginatorContract<Offer>> {
+    let query: ModelQueryBuilderContract<typeof Offer> = Offer
+      .query()
+      .withScopes((scopes) => scopes.getByUserId(userId))
 
     if (config.relations) {
       for (const item of config.relations) {

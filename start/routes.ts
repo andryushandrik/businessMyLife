@@ -39,6 +39,8 @@ Route.group(() => {
 
     Route.get('/paid', 'Offer/OffersController.paginatePaidOffers').as('paginatePaidOffers')
 
+    Route.get('/admin', 'Offer/OffersController.paginateAdminOffers').as('paginateAdminOffers')
+
     Route.get('/:id', 'Offer/OffersController.get').as('get')
     Route.patch('/:id', 'Offer/OffersController.updateBlockDescription').as('updateBlockDescription')
 
