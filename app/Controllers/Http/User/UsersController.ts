@@ -1,24 +1,44 @@
 // * Types
 import type User from 'App/Models/User/User'
 import type { Err } from 'Contracts/response'
+import type { PaginateConfig } from 'Contracts/services'
 import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 // * Types
 
 import UserService from 'App/Services/User/UserService'
 import BlockUntilValidator from 'App/Validators/BlockUntilValidator'
-import { RoleNames } from 'Config/user'
+import UserFilterValidator from 'App/Validators/UserFilterValidator'
 import { ResponseMessages } from 'Config/response'
+import { RoleNames, ROLE_NAMES, USER_TYPE_NAMES } from 'Config/user'
 
 export default class UsersController {
   public async paginate({ view, session, request, route, response }: HttpContextContract) {
-    const baseUrl: string = route!.pattern
-    const page: number = request.input('page', 1)
+    let payload: UserFilterValidator['schema']['props'] | undefined = undefined
+    const titleFromController: string = 'Все пользователи'
+    const isFiltered: boolean = request.input('isFiltered', false)
+    const config: PaginateConfig<User> = {
+      baseUrl: route!.pattern,
+      page: request.input('page', 1),
+    }
+
+    if (isFiltered) {
+      payload = await request.validate(UserFilterValidator)
+
+      config.orderBy = payload.orderBy
+      config.orderByColumn = payload.orderByColumn
+    }
 
     try {
-      const users: ModelPaginatorContract<User> = await UserService.paginate({ page, baseUrl })
+      const users: ModelPaginatorContract<User> = await UserService.paginate(config, payload)
 
-      return view.render('pages/user/paginate', { users })
+      return view.render('pages/user/paginate', {
+        users,
+        payload,
+        titleFromController,
+        roles: ROLE_NAMES,
+        usersTypes: USER_TYPE_NAMES,
+      })
     } catch (err: Err | any) {
       session.flash('error', err.message)
       return response.redirect().back()
@@ -26,13 +46,31 @@ export default class UsersController {
   }
 
   public async paginateAdminAndModerators({ view, session, request, route, response }: HttpContextContract) {
-    const baseUrl: string = route!.pattern
-    const page: number = request.input('page', 1)
+    let payload: UserFilterValidator['schema']['props'] | undefined = undefined
+    const titleFromController: string = 'Администраторы и модераторы'
+    const isFiltered: boolean = request.input('isFiltered', false)
+    const config: PaginateConfig<User> = {
+      baseUrl: route!.pattern,
+      page: request.input('page', 1),
+    }
+
+    if (isFiltered) {
+      payload = await request.validate(UserFilterValidator)
+
+      config.orderBy = payload.orderBy
+      config.orderByColumn = payload.orderByColumn
+    }
 
     try {
-      const adminsAndModerators: ModelPaginatorContract<User> = await UserService.paginateAdminsAndModerators({ page, baseUrl })
+      const users: ModelPaginatorContract<User> = await UserService.paginateAdminsAndModerators(config, payload)
 
-      return view.render('pages/user/paginateAdminsAndModerators', { adminsAndModerators })
+      return view.render('pages/user/paginate', {
+        users,
+        payload,
+        titleFromController,
+        roles: ROLE_NAMES,
+        usersTypes: USER_TYPE_NAMES,
+      })
     } catch (err: Err | any) {
       session.flash('error', err.message)
       return response.redirect().back()

@@ -1,33 +1,42 @@
 // * Types
 import type BlockUntilValidator from 'App/Validators/BlockUntilValidator'
+import type UserFilterValidator from 'App/Validators/UserFilterValidator'
 import type { Err } from 'Contracts/response'
 import type { PaginateConfig, ServiceConfig } from 'Contracts/services'
-import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
+import type { ModelPaginatorContract, ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 
 import User from 'App/Models/User/User'
 import Logger from '@ioc:Adonis/Core/Logger'
-import { ResponseCodes, ResponseMessages } from 'Config/response'
 import { RoleNames } from 'Config/user'
+import { ResponseCodes, ResponseMessages } from 'Config/response'
 
 export default class UserService {
-  public static async paginate(config: PaginateConfig<User>): Promise<ModelPaginatorContract<User>> {
+  public static async paginate(config: PaginateConfig<User>, filter?: UserFilterValidator['schema']['props']): Promise<ModelPaginatorContract<User>> {
+    let query: ModelQueryBuilderContract<typeof User> = User.query()
+
+    if (filter)
+      query = this.filter(query, filter)
+
     try {
-      return await User.query().getViaPaginate(config)
+      return await query.getViaPaginate(config)
     } catch (err: any) {
       Logger.error(err)
       throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
     }
   }
 
-  public static async paginateAdminsAndModerators(config: PaginateConfig<User>): Promise<ModelPaginatorContract<User>> {
+  public static async paginateAdminsAndModerators(config: PaginateConfig<User>, filter?: UserFilterValidator['schema']['props']): Promise<ModelPaginatorContract<User>> {
     const roleTypes: RoleNames[] = [RoleNames.ADMIN, RoleNames.MODERATOR]
+    let query: ModelQueryBuilderContract<typeof User> = User
+      .query()
+      .withScopes((scopes) => scopes.getByRoleIds(roleTypes))
+
+    if (filter)
+      query = this.filter(query, filter)
 
     try {
-      return await User
-        .query()
-        .withScopes((scopes) => scopes.getByRoleIds(roleTypes))
-        .getViaPaginate(config)
+      return await query.getViaPaginate(config)
     } catch (err: any) {
       Logger.error(err)
       throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
@@ -98,5 +107,37 @@ export default class UserService {
       Logger.error(err)
       throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
     }
+  }
+
+  /**
+   * * Private methods
+   */
+
+  private static filter(query: ModelQueryBuilderContract<typeof User>, payload: UserFilterValidator['schema']['props']): ModelQueryBuilderContract<typeof User> {
+    for (const key in payload) {
+      if (payload[key]) {
+
+        switch (key) {
+          // Skip this api's keys
+          case 'page':
+          case 'limit':
+          case 'orderBy':
+          case 'orderByColumn':
+            break
+          // Skip this api's keys
+
+          case 'query':
+            query = query.withScopes((scopes) => scopes.search(payload[key]!))
+
+            break
+
+          default:
+            break
+        }
+
+      }
+    }
+
+    return query
   }
 }

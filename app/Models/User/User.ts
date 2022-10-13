@@ -9,8 +9,8 @@ import Role from '../User/Role'
 import Offer from '../Offer/Offer'
 import UserImage from './UserImage'
 import Hash from '@ioc:Adonis/Core/Hash'
-import { GLOBAL_DATETIME_FORMAT } from 'Config/app'
 import { RoleNames } from 'Config/user'
+import { GLOBAL_DATETIME_FORMAT } from 'Config/app'
 import { ROLE_NAMES, USER_EXPERIENCE_TYPES, USER_TYPE_NAMES } from 'Config/user'
 import { BaseModel, beforeSave, column, computed, hasMany, scope } from '@ioc:Adonis/Lucid/Orm'
 
@@ -156,6 +156,26 @@ export default class User extends BaseModel {
     const roleTypesToRoleIds: Role['id'][] = roleTypes.map((item) => ++item)
 
     query.whereIn('role_id', roleTypesToRoleIds)
+  })
+
+  public static search = scope((query, searchQuery: string) => {
+    const parts: string[] = searchQuery.split(' ')
+
+    if (parts.length == 1) {
+      query.where((query) => {
+        query
+          .where('firstName', 'ILIKE', `%${parts[0]}%`)
+          .orWhere('firstName', 'ILIKE', `%${parts[1]}%`)
+          .orWhere('lastName', 'ILIKE', `%${parts[0]}%`)
+          .orWhere('lastName', 'ILIKE', `%${parts[1]}%`)
+          .orWhere('patronymic', 'ILIKE', `%${parts[0]}%`)
+          .orWhere('patronymic', 'ILIKE', `%${parts[1]}%`)
+      })
+    } else {
+      query
+        .where('firstName', 'ILIKE', `%${parts[0]}%`)
+        .andWhere('lastName', 'ILIKE', `%${parts[1]}%`)
+    }
   })
 
   /**
