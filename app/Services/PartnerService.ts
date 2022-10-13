@@ -1,11 +1,12 @@
 // * Types
+import type PartnerFilterValidator from 'App/Validators/Partner/PartnerFilterValidator'
 import type PartnerWithVideoValidator from 'App/Validators/Partner/PartnerWithVideoValidator'
 import type PartnerWithImageValidator from 'App/Validators/Partner/PartnerWithImageValidator'
 import type { Err } from 'Contracts/response'
-import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import type { PaginateConfig, ServiceConfig } from 'Contracts/services'
 import type { MultipartFileContract } from '@ioc:Adonis/Core/BodyParser'
 import type { TransactionClientContract } from '@ioc:Adonis/Lucid/Database'
+import type { ModelPaginatorContract, ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 
 import Partner from 'App/Models/Partner'
@@ -16,9 +17,14 @@ import { PARTNERS_FOLDER_PATH } from 'Config/drive'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 
 export default class PartnerService {
-  public static async paginate(config: PaginateConfig<Partner>): Promise<ModelPaginatorContract<Partner>> {
+  public static async paginate(config: PaginateConfig<Partner>, filter?: PartnerFilterValidator['schema']['props']): Promise<ModelPaginatorContract<Partner>> {
+    let query: ModelQueryBuilderContract<typeof Partner> = Partner.query()
+
+    if (filter)
+      query = this.filter(query, filter)
+
     try {
-      return await Partner.query().getViaPaginate(config)
+      return await query.getViaPaginate(config)
     } catch (err: any) {
       Logger.error(err)
       throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
@@ -153,5 +159,33 @@ export default class PartnerService {
       Logger.error(err)
       throw { code: ResponseCodes.SERVER_ERROR, message: ResponseMessages.ERROR } as Err
     }
+  }
+
+  private static filter(query: ModelQueryBuilderContract<typeof Partner>, payload: PartnerFilterValidator['schema']['props']): ModelQueryBuilderContract<typeof Partner> {
+    for (const key in payload) {
+      if (payload[key]) {
+
+        switch (key) {
+          // Skip this api's keys
+          case 'page':
+          case 'limit':
+          case 'orderBy':
+          case 'orderByColumn':
+            break
+          // Skip this api's keys
+
+          case 'query':
+            query = query.withScopes((scopes) => scopes.search(payload[key]!))
+
+            break
+
+          default:
+            break
+        }
+
+      }
+    }
+
+    return query
   }
 }

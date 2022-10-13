@@ -3,7 +3,7 @@ import type { DateTime } from 'luxon'
 // * Types
 
 import Drive from '@ioc:Adonis/Core/Drive'
-import { BaseModel, column, beforeDelete } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, beforeDelete, scope } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Partner extends BaseModel {
   public static readonly columns = [
@@ -38,6 +38,14 @@ export default class Partner extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  /**
+   * * Query scopes
+   */
+
+  public static search = scope((query, searchQuery: string) => {
+    query.where('title', 'ILIKE', `%${searchQuery}%`)
+  })
 
   /**
    * * Hooks

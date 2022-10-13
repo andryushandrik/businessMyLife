@@ -1,24 +1,40 @@
 // * Types
 import type Partner from 'App/Models/Partner'
 import type { Err } from 'Contracts/response'
+import type { PaginateConfig } from 'Contracts/services'
 import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 // * Types
 
 import PartnerService from 'App/Services/PartnerService'
+import PartnerFilterValidator from 'App/Validators/Partner/PartnerFilterValidator'
 import PartnerWithImageValidator from 'App/Validators/Partner/PartnerWithImageValidator'
 import PartnerWithVideoValidator from 'App/Validators/Partner/PartnerWithVideoValidator'
 import { ResponseMessages } from 'Config/response'
 
 export default class PartnersController {
   public async index({ view, request, response, session, route }: HttpContextContract) {
-    const baseUrl: string = route!.pattern
-    const page: number = request.input('page', 1)
+    let payload: PartnerFilterValidator['schema']['props'] | undefined = undefined
+    const isFiltered: boolean = request.input('isFiltered', false)
+    const config: PaginateConfig<Partner> = {
+      baseUrl: route!.pattern,
+      page: request.input('page', 1),
+    }
+
+    if (isFiltered) {
+      payload = await request.validate(PartnerFilterValidator)
+
+      config.orderBy = payload.orderBy
+      config.orderByColumn = payload.orderByColumn
+    }
 
     try {
-      const partners: ModelPaginatorContract<Partner> = await PartnerService.paginate({ page, baseUrl })
+      const partners: ModelPaginatorContract<Partner> = await PartnerService.paginate(config, payload)
 
-      return view.render('pages/partner/index', { partners })
+      return view.render('pages/partner/index', {
+        payload,
+        partners,
+      })
     } catch (err: Err | any) {
       session.flash('error', err.message)
       return response.redirect().back()
