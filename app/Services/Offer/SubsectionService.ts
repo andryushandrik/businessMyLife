@@ -1,4 +1,5 @@
 // * Types
+import type Area from 'App/Models/Offer/Area'
 import type SubsectionValidator from 'App/Validators/Offer/SubsectionValidator'
 import type { Err } from 'Contracts/response'
 import type { PaginateConfig } from 'Contracts/services'
@@ -41,6 +42,21 @@ export default class SubsectionService {
       throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.ERROR } as Err
 
     return item
+  }
+
+  public static async getSubsectionsIdsByAreaId(areaId: Area['id']): Promise<Subsection['id'][]> {
+    try {
+      const subsections: { id: Subsection['id'] }[] = await Subsection
+        .query()
+        .select('id')
+        .withScopes((scopes) => scopes.getByAreaId(areaId))
+        .pojo()
+
+      return subsections.map((item) => item.id)
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+    }
   }
 
   public static async create(payload: SubsectionValidator['schema']['props']): Promise<Subsection> {

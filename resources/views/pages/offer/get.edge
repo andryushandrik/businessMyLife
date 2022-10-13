@@ -25,6 +25,18 @@
             </form>
           @endif
 
+          @if(item.isBanned)
+            <form action="{{ route('offer.unban', { id: item.id }, { qs: { _method: 'DELETE' } }) }}" class="ml-2" method="POST">
+              {{ csrfField() }}
+              <button type="submit" class="btn btn-primary btn-sm">Разбанить</button>
+            </form>
+          @else
+            <form action="{{ route('offer.ban', { id: item.id }, { qs: { _method: 'PATCH' } }) }}" class="ml-2" method="POST">
+              {{ csrfField() }}
+              <button type="submit" class="btn btn-danger btn-sm">Забанить</button>
+            </form>
+          @endif
+
           <a href="{{ route('offer.paginate') }}" class="btn btn-primary btn-sm ml-2">Назад</a>
         </div>
       </div>

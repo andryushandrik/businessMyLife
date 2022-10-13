@@ -18,7 +18,7 @@ import {
 
 export default class Offer extends BaseModel {
   public static readonly columns = [
-    'id', 'isArchived?', 'viewsCount',
+    'id', 'isBanned', 'isArchived', 'viewsCount',
     'slug', 'title', 'description', 'city', 'image',
     'category', 'paybackTime',
     'cooperationTerms', 'businessPlan', 'benefits',
@@ -40,7 +40,13 @@ export default class Offer extends BaseModel {
   public id: number
 
   @column()
+  public isBanned: boolean
+
+  @column()
   public isArchived: boolean
+
+  @column()
+  public viewsCount: number
 
   @column()
   public slug: string
@@ -59,9 +65,6 @@ export default class Offer extends BaseModel {
 
   @column()
   public paybackTime: number
-
-  @column()
-  public viewsCount: number
 
   @column()
   public image?: string
@@ -132,12 +135,30 @@ export default class Offer extends BaseModel {
   public updatedAt: DateTime
 
   /**
+   * * Relations
+   */
+
+  @belongsTo(() => User)
+  public user: BelongsTo<typeof User>
+
+  @belongsTo(() => Subsection)
+  public subsection: BelongsTo<typeof Subsection>
+
+  @hasMany(() => OfferImage)
+  public images: HasMany<typeof OfferImage>
+
+  /**
    * * Computed properties
    */
 
   @computed()
   public get isArchivedForUser(): string {
     return this.isArchived ? 'Да' : 'Нет'
+  }
+
+  @computed()
+  public get isBannedForUser(): string {
+    return this.isBanned ? 'Да' : 'Нет'
   }
 
   @computed()
@@ -161,19 +182,6 @@ export default class Offer extends BaseModel {
   }
 
   /**
-   * * Relations
-   */
-
-  @belongsTo(() => User)
-  public user: BelongsTo<typeof User>
-
-  @belongsTo(() => Subsection)
-  public subsection: BelongsTo<typeof Subsection>
-
-  @hasMany(() => OfferImage)
-  public images: HasMany<typeof OfferImage>
-
-  /**
    * * Query scopes
    */
 
@@ -184,6 +192,14 @@ export default class Offer extends BaseModel {
   public static getByUserId = scope((query, userId: User['id']) => [
     query.where('user_id', userId)
   ])
+
+  public static getBySubsectionsIds = scope((query, subsectionsIds: Subsection['id'][]) => {
+    query.whereIn('subsection_id', subsectionsIds)
+  })
+
+  public static search = scope((query, searchQuery: string) => {
+    query.where('title', 'ILIKE', `%${searchQuery}%`)
+  })
 
   /**
    * * Hooks

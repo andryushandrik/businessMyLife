@@ -5,7 +5,7 @@ import type { BelongsTo } from '@ioc:Adonis/Lucid/Orm'
 
 import Area from './Area'
 import { GLOBAL_DATETIME_FORMAT } from 'Config/app'
-import { BaseModel, belongsTo, column, computed } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, belongsTo, column, computed, scope } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Subsection extends BaseModel {
   public static readonly columns = [
@@ -43,6 +43,13 @@ export default class Subsection extends BaseModel {
   public updatedAt: DateTime
 
   /**
+   * * Relations
+   */
+
+  @belongsTo(() => Area)
+  public area: BelongsTo<typeof Area>
+
+  /**
    * * Computed properties
    */
 
@@ -52,9 +59,10 @@ export default class Subsection extends BaseModel {
   }
 
   /**
-   * * Relations
+   * * Query scopes
    */
 
-  @belongsTo(() => Area)
-  public area: BelongsTo<typeof Area>
+  public static getByAreaId = scope((query, areaId: Area['id']) => {
+    query.where('area_id', areaId)
+  })
 }

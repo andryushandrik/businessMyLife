@@ -1,54 +1,80 @@
 // * Types
 import type User from 'App/Models/User/User'
+import type Area from 'App/Models/Offer/Area'
 import type Offer from 'App/Models/Offer/Offer'
 import type { Err } from 'Contracts/response'
+import type { PaginateConfig } from 'Contracts/services'
 import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 // * Types
 
+import AreaService from 'App/Services/Offer/AreaService'
 import OfferService from 'App/Services/Offer/OfferService'
+import OfferFilterValidator from 'App/Validators/Offer/OfferFilterValidator'
 import OfferBlockDescriptionValidator from 'App/Validators/Offer/OfferBlockDescriptionValidator'
 import { SESSION_AUTH_KEY } from 'Config/session'
 import { ResponseMessages } from 'Config/response'
 
 export default class OffersController {
   public async paginate({ request, response, route, view, session }: HttpContextContract) {
-    const baseUrl: string = route!.pattern
-    const page: number = request.input('page', 1)
+    let payload: OfferFilterValidator['schema']['props'] | undefined = undefined
+    const isFiltered: boolean = request.input('isFiltered', false)
+    const config: PaginateConfig<Offer> = {
+      baseUrl: route!.pattern,
+      relations: ['user', 'subsection'],
+      page: request.input('page', 1),
+    }
+
+    if (isFiltered) {
+      payload = await request.validate(OfferFilterValidator)
+
+      config.orderBy = payload.orderBy
+      config.orderByColumn = payload.orderByColumn
+    }
 
     try {
-      const offers: ModelPaginatorContract<Offer> = await OfferService.paginate({ page, baseUrl, relations: ['user', 'subsection'] })
+      const areas: Area[] = await AreaService.getAll()
+      const offers: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload)
 
-      return view.render('pages/offer/paginate', { offers })
+      return view.render('pages/offer/paginate', {
+        areas,
+        offers,
+        payload,
+      })
     } catch (err: Err | any) {
       session.flash('error', err.message)
       return response.redirect().back()
     }
   }
 
-  public async paginatePaidOffers({ request, response, route, view, session }: HttpContextContract) {
-    const baseUrl: string = route!.pattern
-    const page: number = request.input('page', 1)
-
-    try {
-      const offers: ModelPaginatorContract<Offer> = await OfferService.paginatePaidOffers({ page, baseUrl, relations: ['user', 'subsection'] })
-
-      return view.render('pages/offer/paginate', { offers })
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-      return response.redirect().back()
-    }
-  }
-
-  public async paginateAdminOffers({ request, response, route, view, session }: HttpContextContract) {
-    const baseUrl: string = route!.pattern
-    const page: number = request.input('page', 1)
+  public async paginateCurrentUserOffers({ request, response, route, view, session }: HttpContextContract) {
+    let payload: OfferFilterValidator['schema']['props'] | undefined = undefined
+    const titleFromController: string = 'Мои объявления'
+    const isFiltered: boolean = request.input('isFiltered', false)
     const currentUserId: User['id'] = (session.get(SESSION_AUTH_KEY) as User).id
+    const config: PaginateConfig<Offer> = {
+      baseUrl: route!.pattern,
+      relations: ['user', 'subsection'],
+      page: request.input('page', 1),
+    }
+
+    if (isFiltered) {
+      payload = await request.validate(OfferFilterValidator)
+
+      config.orderBy = payload.orderBy
+      config.orderByColumn = payload.orderByColumn
+    }
 
     try {
-      const offers: ModelPaginatorContract<Offer> = await OfferService.paginateUserOffers(currentUserId, { page, baseUrl, relations: ['user', 'subsection'] })
+      const areas: Area[] = await AreaService.getAll()
+      const offers: ModelPaginatorContract<Offer> = await OfferService.paginateUserOffers(currentUserId, config, payload)
 
-      return view.render('pages/offer/paginate', { offers })
+      return view.render('pages/offer/paginate', {
+        areas,
+        offers,
+        payload,
+        titleFromController,
+      })
     } catch (err: Err | any) {
       session.flash('error', err.message)
       return response.redirect().back()
@@ -83,6 +109,10 @@ export default class OffersController {
     return response.redirect().back()
   }
 
+  /**
+   * * Archive
+   */
+
   public async archive({ params, response, session }: HttpContextContract) {
     const id: Offer['id'] = params.id
 
@@ -102,6 +132,38 @@ export default class OffersController {
 
     try {
       await OfferService.archiveAction(id, false)
+
+      session.flash('success', ResponseMessages.SUCCESS)
+    } catch (err: Err | any) {
+      session.flash('error', err.message)
+    }
+
+    return response.redirect().back()
+  }
+
+  /**
+   * * Ban
+   */
+
+  public async ban({ params, response, session }: HttpContextContract) {
+    const id: Offer['id'] = params.id
+
+    try {
+      await OfferService.banAction(id, true)
+
+      session.flash('success', ResponseMessages.SUCCESS)
+    } catch (err: Err | any) {
+      session.flash('error', err.message)
+    }
+
+    return response.redirect().back()
+  }
+
+  public async unban({ params, response, session }: HttpContextContract) {
+    const id: Offer['id'] = params.id
+
+    try {
+      await OfferService.banAction(id, false)
 
       session.flash('success', ResponseMessages.SUCCESS)
     } catch (err: Err | any) {

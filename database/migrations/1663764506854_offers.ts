@@ -16,7 +16,9 @@ export default class extends BaseSchema {
        * * Not nullable columns
        */
 
+      table.boolean('isBanned').defaultTo(0).notNullable()
       table.boolean('isArchived').defaultTo(1).notNullable()
+      table.integer('viewsCount').unsigned().defaultTo(0).notNullable()
 
       table.string('slug').unique().notNullable()
       table.string('title').notNullable()
@@ -38,7 +40,6 @@ export default class extends BaseSchema {
         3 - от 1 года до 3 лет
         4 - от 3 лет
       `)
-      table.integer('viewsCount').unsigned().defaultTo(0).notNullable()
 
       /**
        * * Nullable columns

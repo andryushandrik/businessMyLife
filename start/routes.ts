@@ -37,15 +37,16 @@ Route.group(() => {
 
     Route.get('/', 'Offer/OffersController.paginate').as('paginate')
 
-    Route.get('/paid', 'Offer/OffersController.paginatePaidOffers').as('paginatePaidOffers')
-
-    Route.get('/admin', 'Offer/OffersController.paginateAdminOffers').as('paginateAdminOffers')
+    Route.get('/currentUser', 'Offer/OffersController.paginateCurrentUserOffers').as('paginateCurrentUserOffers')
 
     Route.get('/:id', 'Offer/OffersController.get').as('get')
     Route.patch('/:id', 'Offer/OffersController.updateBlockDescription').as('updateBlockDescription')
 
     Route.patch('/archive/:id', 'Offer/OffersController.archive').as('archive')
     Route.delete('/archive/:id', 'Offer/OffersController.unarchive').as('unarchive')
+
+    Route.patch('/ban/:id', 'Offer/OffersController.ban').as('ban')
+    Route.delete('/ban/:id', 'Offer/OffersController.unban').as('unban')
 
   }).prefix('offer').as('offer')
 
