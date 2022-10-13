@@ -1,10 +1,11 @@
 // * Types
-import type UploadTutorialValidator from 'App/Validators/UploadTutorialValidator'
+import type UploadTutorialValidator from 'App/Validators/UploadTutorial/UploadTutorialValidator'
+import type UploadTutorialFilterValidator from 'App/Validators/UploadTutorial/UploadTutorialFilterValidator'
 import type { Err } from 'Contracts/response'
 import type { PaginateConfig, ServiceConfig } from 'Contracts/services'
 import type { MultipartFileContract } from '@ioc:Adonis/Core/BodyParser'
 import type { TransactionClientContract } from '@ioc:Adonis/Lucid/Database'
-import type { ModelAttributes, ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
+import type { ModelAttributes, ModelPaginatorContract, ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 
 import Drive from '@ioc:Adonis/Core/Drive'
@@ -15,9 +16,14 @@ import { ResponseCodes, ResponseMessages } from 'Config/response'
 import { UPLOAD_TUTORIAL_FOLDER_PATH } from 'Config/drive'
 
 export default class UploadTutorialService {
-  public static async paginate(config: PaginateConfig<UploadTutorial>): Promise<ModelPaginatorContract<UploadTutorial>> {
+  public static async paginate(config: PaginateConfig<UploadTutorial>, filter?: UploadTutorialFilterValidator['schema']['props']): Promise<ModelPaginatorContract<UploadTutorial>> {
+    let query: ModelQueryBuilderContract<typeof UploadTutorial> = UploadTutorial.query()
+
+    if (filter)
+      query = this.filter(query, filter)
+
     try {
-      return await UploadTutorial.query().getViaPaginate(config)
+      return await query.getViaPaginate(config)
     } catch (err: any) {
       Logger.error(err)
       throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
@@ -161,5 +167,33 @@ export default class UploadTutorialService {
       Logger.error(err)
       throw { code: ResponseCodes.SERVER_ERROR, message: ResponseMessages.ERROR } as Err
     }
+  }
+
+  private static filter(query: ModelQueryBuilderContract<typeof UploadTutorial>, payload: UploadTutorialFilterValidator['schema']['props']): ModelQueryBuilderContract<typeof UploadTutorial> {
+    for (const key in payload) {
+      if (payload[key]) {
+
+        switch (key) {
+          // Skip this api's keys
+          case 'page':
+          case 'limit':
+          case 'orderBy':
+          case 'orderByColumn':
+            break
+          // Skip this api's keys
+
+          case 'query':
+            query = query.withScopes((scopes) => scopes.search(payload[key]!))
+
+            break
+
+          default:
+            break
+        }
+
+      }
+    }
+
+    return query
   }
 }

@@ -3,7 +3,7 @@ import type { DateTime } from 'luxon'
 // * Types
 
 import Drive from '@ioc:Adonis/Core/Drive'
-import { BaseModel, beforeDelete, column, computed } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, beforeDelete, column, computed, scope } from '@ioc:Adonis/Lucid/Orm'
 
 export default class UploadTutorial extends BaseModel {
   public static readonly columns = [
@@ -45,6 +45,14 @@ export default class UploadTutorial extends BaseModel {
   public get isVisibleForUser(): string {
     return this.isVisible ? 'Отображается' : 'Не отображается'
   }
+
+  /**
+   * * Query scopes
+   */
+
+  public static search = scope((query, searchQuery: string) => {
+    query.where('title', 'ILIKE', `%${searchQuery}%`)
+  })
 
   /**
    * * Hooks

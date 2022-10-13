@@ -3,53 +3,16 @@
 @set('title', titleFromController ?? 'Все пользователи')
 
 @section('body')
-  <div class="col-lg-12">
-    <div class="card">
-      <div class="card-body">
-
-        <form class="basic-form">
-
-          <div class="form-group">
-            <div class="d-flex">
-              <input type="text" class="form-control" name="query" placeholder="Поиск" value="{{ payload?.query ?? '' }}">
-
-              <input type="hidden" name="isFiltered" value="true">
-              <input type="hidden" name="page" value="1">
-
-              <button type="submit" class="btn btn-primary ml-3">Найти</button>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="col-6">
-              <div class="dropdown bootstrap-select form-control form-control-lg dropup">
-                <select class="form-control form-control-lg" name="orderByColumn" tabindex="-98">
-                  <option value="id">Сортировка колонки</option>
-                  <option value="id" {{ payload?.orderByColumn == 'id' ? 'selected' : '' }}>id</option>
-                  <option value="typeId" {{ payload?.orderByColumn == 'typeId' ? 'selected' : '' }}>Тип профиля</option>
-                  <option value="city" {{ payload?.orderByColumn == 'city' ? 'selected' : '' }}>Город</option>
-                  {{--  <option value="city">Кол-во жалоб</option>  --}}
-                  <option value="blockedUntil" {{ payload?.orderByColumn == 'blockedUntil' ? 'selected' : '' }}>Бан</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="col-6">
-              <div class="dropdown bootstrap-select form-control form-control-lg dropup">
-                <select class="form-control form-control-lg" name="orderBy" tabindex="-98">
-                  <option value="asc">Порядок</option>
-                  <option value="asc" {{ payload?.orderBy == 'asc' ? 'selected' : '' }}>Сверху вниз</option>
-                  <option value="desc" {{ payload?.orderBy == 'desc' ? 'selected' : '' }}>Снизу вверх</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-        </form>
-
-      </div>
-    </div>
-  </div>
+  @!component('components/filter', {
+    payload,
+    columns: [
+      { key: 'id', value: 'ID' },
+      { key: 'typeId', value: 'Тип профиля' },
+      { key: 'city', value: 'Город' },
+      // { key: 'city', value: 'Кол-во жалоб' },
+      { key: 'blockedUntil', value: 'Бан' },
+    ],
+  })
 
   <div class="col-lg-12">
     <div class="card">

@@ -1,23 +1,39 @@
 // * Types
 import type UploadTutorial from 'App/Models/UploadTutorial'
 import type { Err } from 'Contracts/response'
+import type { PaginateConfig } from 'Contracts/services'
 import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 // * Types
 
 import UploadTutorialService from 'App/Services/UploadTutorialService'
-import UploadTutorialValidator from 'App/Validators/UploadTutorialValidator'
+import UploadTutorialValidator from 'App/Validators/UploadTutorial/UploadTutorialValidator'
+import UploadTutorialFilterValidator from 'App/Validators/UploadTutorial/UploadTutorialFilterValidator'
 import { ResponseMessages } from 'Config/response'
 
 export default class UploadTutorialsController {
   public async index({ request, response, route, view, session }: HttpContextContract) {
-    const baseUrl: string = route!.pattern
-    const page: number = request.input('page', 1)
+    let payload: UploadTutorialFilterValidator['schema']['props'] | undefined = undefined
+    const isFiltered: boolean = request.input('isFiltered', false)
+    const config: PaginateConfig<UploadTutorial> = {
+      baseUrl: route!.pattern,
+      page: request.input('page', 1),
+    }
+
+    if (isFiltered) {
+      payload = await request.validate(UploadTutorialFilterValidator)
+
+      config.orderBy = payload.orderBy
+      config.orderByColumn = payload.orderByColumn
+    }
 
     try {
-      const tutorials: ModelPaginatorContract<UploadTutorial> = await UploadTutorialService.paginate({ page, baseUrl })
+      const tutorials: ModelPaginatorContract<UploadTutorial> = await UploadTutorialService.paginate(config, payload)
 
-      return view.render('pages/uploadTutorials/index', { tutorials })
+      return view.render('pages/uploadTutorials/index', {
+        payload,
+        tutorials,
+      })
     } catch (err: Err | any) {
       session.flash('error', err.message)
       return response.redirect().back()
