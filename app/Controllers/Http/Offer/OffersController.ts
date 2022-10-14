@@ -83,7 +83,6 @@ export default class OffersController {
 
   public async paginateNotVerifiedOffers({ request, response, route, view, session }: HttpContextContract) {
     let payload: OfferFilterValidator['schema']['props'] | undefined = undefined
-    const titleFromController: string = 'Модерация'
     const isFiltered: boolean = request.input('isFiltered', false)
     const config: PaginateConfig<Offer> = {
       baseUrl: route!.pattern,
@@ -106,7 +105,8 @@ export default class OffersController {
         areas,
         offers,
         payload,
-        titleFromController,
+        isModeratePage: true,
+        titleFromController: 'Модерация',
       })
     } catch (err: Err | any) {
       session.flash('error', err.message)
@@ -209,6 +209,18 @@ export default class OffersController {
   /**
    * * Verify
    */
+
+  public async verifyAll({ response, session }: HttpContextContract) {
+    try {
+      await OfferService.verifyAll()
+
+      session.flash('success', ResponseMessages.SUCCESS)
+    } catch (err: Err | any) {
+      session.flash('error', err.message)
+    }
+
+    return response.redirect().back()
+  }
 
   public async verify({ params, response, session }: HttpContextContract) {
     const id: Offer['id'] = params.id

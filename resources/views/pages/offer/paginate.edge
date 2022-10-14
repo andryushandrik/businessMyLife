@@ -30,6 +30,13 @@
     <div class="card">
       <div class="card-header">
         <h4 class="card-title">{{ title }}</h4>
+
+        @if (isModeratePage)
+          <form action="{{ route('offer.notVerified.verifyAll', {}, { qs: { _method: 'PATCH' } }) }}" method="POST">
+            {{ csrfField() }}
+            <button type="submit" class="btn btn-primary btn-sm">Верифицировать все</button>
+          </form>
+        @endif
       </div>
 
       <div class="card-body">
@@ -48,6 +55,7 @@
                 <th><strong>Обложка</strong></th>
                 <th><strong>Пользователь</strong></th>
                 <th><strong>Подраздел</strong></th>
+                <th><strong>Дней до архивации</strong></th>
                 <th><strong>Дата создания</strong></th>
 
                 <th><strong>Действия</strong></th>
@@ -72,6 +80,7 @@
                   <td>
                     <a href="{{ route('subsections.edit', { id: item.subsection.id }) }}" class="text-primary">{{ item.subsection.name }}</a>
                   </td>
+                  <td>{{ item.archiveExpire }}</td>
                   <td>{{ item.createdAtForUser }}</td>
 
                   <td>

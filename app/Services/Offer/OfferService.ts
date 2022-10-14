@@ -203,6 +203,15 @@ export default class OfferService {
     }
   }
 
+  public static async verifyAll(): Promise<void> {
+    try {
+      await Offer.query().update({ isVerified: true })
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+    }
+  }
+
   /**
    * * Private methods
    */

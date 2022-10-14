@@ -1,5 +1,4 @@
 // * Types
-import type { DateTime } from 'luxon'
 import type { BelongsTo, HasMany } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 
@@ -7,6 +6,7 @@ import User from '../User/User'
 import Subsection from './Subsection'
 import OfferImage from './OfferImage'
 import Drive from '@ioc:Adonis/Core/Drive'
+import { DateTime } from 'luxon'
 import { GLOBAL_DATETIME_FORMAT } from 'Config/app'
 import { formatStringForCyrillic } from 'Helpers/index'
 import { OFFER_CATEGORIES, OFFER_PAYBACK_TIMES, OFFER_PROJECT_STAGES } from 'Config/offer'
@@ -187,6 +187,15 @@ export default class Offer extends BaseModel {
   @computed()
   public get createdAtForUser(): string {
     return this.createdAt.setLocale('ru-RU').toFormat(GLOBAL_DATETIME_FORMAT)
+  }
+
+  @computed()
+  public get archiveExpire(): string {
+    const expireDate: DateTime = this.updatedAt.plus({ months: 1 })
+    const archiveExpireInDays: number = expireDate.diff(DateTime.now(), 'days').days
+    const archiveExpireInDaysWithoutFraction: number = Math.floor(archiveExpireInDays)
+
+    return `${archiveExpireInDaysWithoutFraction} дней`
   }
 
   /**

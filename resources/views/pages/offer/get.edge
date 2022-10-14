@@ -26,12 +26,12 @@
           @endif
 
           @if(item.isVerified)
-            <form action="{{ route('offer.unverify', { id: item.id }, { qs: { _method: 'DELETE' } }) }}" class="ml-2" method="POST">
+            <form action="{{ route('offer.notVerified.unverify', { id: item.id }, { qs: { _method: 'DELETE' } }) }}" class="ml-2" method="POST">
               {{ csrfField() }}
               <button type="submit" class="btn btn-primary btn-sm">Анверифицировать</button>
             </form>
           @else
-            <form action="{{ route('offer.verify', { id: item.id }, { qs: { _method: 'PATCH' } }) }}" class="ml-2" method="POST">
+            <form action="{{ route('offer.notVerified.verify', { id: item.id }, { qs: { _method: 'PATCH' } }) }}" class="ml-2" method="POST">
               {{ csrfField() }}
               <button type="submit" class="btn btn-danger btn-sm">Верифицировать</button>
             </form>
