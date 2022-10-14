@@ -18,7 +18,7 @@ import {
 
 export default class Offer extends BaseModel {
   public static readonly columns = [
-    'id', 'isBanned', 'isArchived', 'viewsCount',
+    'id', 'isBanned', 'isArchived', 'isVerified', 'viewsCount',
     'slug', 'title', 'description', 'city', 'image',
     'category', 'paybackTime',
     'cooperationTerms', 'businessPlan', 'benefits',
@@ -44,6 +44,9 @@ export default class Offer extends BaseModel {
 
   @column()
   public isArchived: boolean
+
+  @column()
+  public isVerified: boolean
 
   @column()
   public viewsCount: number
@@ -162,6 +165,11 @@ export default class Offer extends BaseModel {
   }
 
   @computed()
+  public get isVerifiedForUser(): string {
+    return this.isVerified ? 'Да' : 'Нет'
+  }
+
+  @computed()
   public get categoryForUser(): string {
     return OFFER_CATEGORIES[this.category]
   }
@@ -185,8 +193,12 @@ export default class Offer extends BaseModel {
    * * Query scopes
    */
 
-  public static getByArchived = scope((query, isArchived: boolean) => [
+  public static getByArchived = scope((query, isArchived: Offer['isArchived']) => [
     query.where('isArchived', isArchived)
+  ])
+
+  public static getByVerified = scope((query, isVerified: Offer['isVerified']) => [
+    query.where('isVerified', isVerified)
   ])
 
   public static getByUserId = scope((query, userId: User['id']) => [

@@ -18,6 +18,7 @@ export default class extends BaseSchema {
 
       table.boolean('isBanned').defaultTo(0).notNullable()
       table.boolean('isArchived').defaultTo(1).notNullable()
+      table.boolean('isVerified').defaultTo(0).notNullable()
       table.integer('viewsCount').unsigned().defaultTo(0).notNullable()
 
       table.string('slug').unique().notNullable()

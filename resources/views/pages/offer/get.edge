@@ -25,6 +25,18 @@
             </form>
           @endif
 
+          @if(item.isVerified)
+            <form action="{{ route('offer.unverify', { id: item.id }, { qs: { _method: 'DELETE' } }) }}" class="ml-2" method="POST">
+              {{ csrfField() }}
+              <button type="submit" class="btn btn-primary btn-sm">Анверифицировать</button>
+            </form>
+          @else
+            <form action="{{ route('offer.verify', { id: item.id }, { qs: { _method: 'PATCH' } }) }}" class="ml-2" method="POST">
+              {{ csrfField() }}
+              <button type="submit" class="btn btn-danger btn-sm">Верифицировать</button>
+            </form>
+          @endif
+
           @if(item.isBanned)
             <form action="{{ route('offer.unban', { id: item.id }, { qs: { _method: 'DELETE' } }) }}" class="ml-2" method="POST">
               {{ csrfField() }}
@@ -83,6 +95,16 @@
           <div class="form-group">
             <label class="mb-1">Архивирован</label>
             <input type="string" class="form-control" value="{{ item.isArchivedForUser }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Забанен</label>
+            <input type="string" class="form-control" value="{{ item.isBannedForUser }}" disabled>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">Верифицирован</label>
+            <input type="string" class="form-control" value="{{ item.isVerifiedForUser }}" disabled>
           </div>
 
           <div class="form-group">

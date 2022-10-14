@@ -81,6 +81,39 @@ export default class OffersController {
     }
   }
 
+  public async paginateNotVerifiedOffers({ request, response, route, view, session }: HttpContextContract) {
+    let payload: OfferFilterValidator['schema']['props'] | undefined = undefined
+    const titleFromController: string = 'Модерация'
+    const isFiltered: boolean = request.input('isFiltered', false)
+    const config: PaginateConfig<Offer> = {
+      baseUrl: route!.pattern,
+      relations: ['user', 'subsection'],
+      page: request.input('page', 1),
+    }
+
+    if (isFiltered) {
+      payload = await request.validate(OfferFilterValidator)
+
+      config.orderBy = payload.orderBy
+      config.orderByColumn = payload.orderByColumn
+    }
+
+    try {
+      const areas: Area[] = await AreaService.getAll()
+      const offers: ModelPaginatorContract<Offer> = await OfferService.paginateNotVerifiedOffers(config, payload)
+
+      return view.render('pages/offer/paginate', {
+        areas,
+        offers,
+        payload,
+        titleFromController,
+      })
+    } catch (err: Err | any) {
+      session.flash('error', err.message)
+      return response.redirect().back()
+    }
+  }
+
   public async get({ view, params, response, session }: HttpContextContract) {
     const id: Offer['id'] = params.id
 
@@ -117,7 +150,7 @@ export default class OffersController {
     const id: Offer['id'] = params.id
 
     try {
-      await OfferService.archiveAction(id, true)
+      await OfferService.actions(id, 'archive', true)
 
       session.flash('success', ResponseMessages.SUCCESS)
     } catch (err: Err | any) {
@@ -131,7 +164,7 @@ export default class OffersController {
     const id: Offer['id'] = params.id
 
     try {
-      await OfferService.archiveAction(id, false)
+      await OfferService.actions(id, 'archive', false)
 
       session.flash('success', ResponseMessages.SUCCESS)
     } catch (err: Err | any) {
@@ -149,7 +182,7 @@ export default class OffersController {
     const id: Offer['id'] = params.id
 
     try {
-      await OfferService.banAction(id, true)
+      await OfferService.actions(id, 'ban', true)
 
       session.flash('success', ResponseMessages.SUCCESS)
     } catch (err: Err | any) {
@@ -163,7 +196,39 @@ export default class OffersController {
     const id: Offer['id'] = params.id
 
     try {
-      await OfferService.banAction(id, false)
+      await OfferService.actions(id, 'ban', false)
+
+      session.flash('success', ResponseMessages.SUCCESS)
+    } catch (err: Err | any) {
+      session.flash('error', err.message)
+    }
+
+    return response.redirect().back()
+  }
+
+  /**
+   * * Verify
+   */
+
+  public async verify({ params, response, session }: HttpContextContract) {
+    const id: Offer['id'] = params.id
+
+    try {
+      await OfferService.actions(id, 'verify', true)
+
+      session.flash('success', ResponseMessages.SUCCESS)
+    } catch (err: Err | any) {
+      session.flash('error', err.message)
+    }
+
+    return response.redirect().back()
+  }
+
+  public async unverify({ params, response, session }: HttpContextContract) {
+    const id: Offer['id'] = params.id
+
+    try {
+      await OfferService.actions(id, 'verify', false)
 
       session.flash('success', ResponseMessages.SUCCESS)
     } catch (err: Err | any) {

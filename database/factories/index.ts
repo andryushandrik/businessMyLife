@@ -95,6 +95,7 @@ export const OfferFactory = Factory
     const subsection: Subsection = await Subsection.query().random()
 
     return {
+      isVerified: true,
       isArchived: false,
 
       title: faker.lorem.words(2),

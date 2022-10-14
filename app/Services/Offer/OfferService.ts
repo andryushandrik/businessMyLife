@@ -5,7 +5,7 @@ import type OfferFilterValidator from 'App/Validators/Offer/OfferFilterValidator
 import type OfferBlockDescriptionValidator from 'App/Validators/Offer/OfferBlockDescriptionValidator'
 import type { Err } from 'Contracts/response'
 import type { PaginateConfig, ServiceConfig } from 'Contracts/services'
-import type { ModelPaginatorContract, ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
+import type { ModelAttributes, ModelPaginatorContract, ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 
 import Offer from 'App/Models/Offer/Offer'
@@ -19,7 +19,9 @@ type FilterDependencies = {
 
 export default class OfferService {
   public static async paginate(config: PaginateConfig<Offer>, filter?: OfferFilterValidator['schema']['props']): Promise<ModelPaginatorContract<Offer>> {
-    let query: ModelQueryBuilderContract<typeof Offer> = Offer.query()
+    let query: ModelQueryBuilderContract<typeof Offer> = Offer
+      .query()
+      .withScopes((scopes) => scopes.getByVerified(true))
 
     if (config.relations) {
       for (const item of config.relations) {
@@ -54,7 +56,43 @@ export default class OfferService {
   public static async paginateUserOffers(userId: User['id'], config: PaginateConfig<Offer>, filter?: OfferFilterValidator['schema']['props']): Promise<ModelPaginatorContract<Offer>> {
     let query: ModelQueryBuilderContract<typeof Offer> = Offer
       .query()
+      .withScopes((scopes) => scopes.getByVerified(true))
       .withScopes((scopes) => scopes.getByUserId(userId))
+
+    if (config.relations) {
+      for (const item of config.relations) {
+        query = query.preload(item)
+      }
+    }
+
+    if (filter) {
+      let dependencies: FilterDependencies | undefined = undefined
+
+      if (filter.areaId) {
+        try {
+          const subsectionsIds: Subsection['id'][] = await SubsectionService.getSubsectionsIdsByAreaId(filter.areaId)
+
+          dependencies = { subsectionsIds }
+        } catch (err: Err | any) {
+          throw err
+        }
+      }
+
+      query = this.filter(query, filter, dependencies)
+    }
+
+    try {
+      return await query.getViaPaginate(config)
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+    }
+  }
+
+  public static async paginateNotVerifiedOffers(config: PaginateConfig<Offer>, filter?: OfferFilterValidator['schema']['props']): Promise<ModelPaginatorContract<Offer>> {
+    let query: ModelQueryBuilderContract<typeof Offer> = Offer
+      .query()
+      .withScopes((scopes) => scopes.getByVerified(false))
 
     if (config.relations) {
       for (const item of config.relations) {
@@ -130,8 +168,26 @@ export default class OfferService {
     }
   }
 
-  public static async archiveAction(id: Offer['id'], isArchived: Offer['isArchived']): Promise<void> {
+  public static async actions(id: Offer['id'], actionType: 'archive' | 'ban' | 'verify', actionValue: boolean): Promise<void> {
     let item: Offer
+    const offerData: Partial<ModelAttributes<Offer>> = {}
+
+    switch (actionType) {
+      case 'archive':
+        offerData.isArchived = actionValue
+        break
+
+      case 'ban':
+        offerData.isBanned = actionValue
+        break
+
+      case 'verify':
+        offerData.isVerified = actionValue
+        break
+
+      default:
+        break
+    }
 
     try {
       item = await this.get(id)
@@ -140,24 +196,7 @@ export default class OfferService {
     }
 
     try {
-      await item.merge({ isArchived }).save()
-    } catch (err: any) {
-      Logger.error(err)
-      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
-    }
-  }
-
-  public static async banAction(id: Offer['id'], isBanned: Offer['isBanned']): Promise<void> {
-    let item: Offer
-
-    try {
-      item = await this.get(id)
-    } catch (err: Err | any) {
-      throw err
-    }
-
-    try {
-      await item.merge({ isBanned }).save()
+      await item.merge(offerData).save()
     } catch (err: any) {
       Logger.error(err)
       throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err

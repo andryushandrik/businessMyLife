@@ -39,6 +39,10 @@ Route.group(() => {
 
     Route.get('/currentUser', 'Offer/OffersController.paginateCurrentUserOffers').as('paginateCurrentUserOffers')
 
+    Route.get('/notVerified', 'Offer/OffersController.paginateNotVerifiedOffers').as('paginateNotVerifiedOffers')
+    Route.patch('/verify/:id', 'Offer/OffersController.verify').as('verify')
+    Route.delete('/verify/:id', 'Offer/OffersController.unverify').as('unverify')
+
     Route.get('/:id', 'Offer/OffersController.get').as('get')
     Route.patch('/:id', 'Offer/OffersController.updateBlockDescription').as('updateBlockDescription')
 
