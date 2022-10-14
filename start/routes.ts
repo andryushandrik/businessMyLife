@@ -21,6 +21,7 @@ Route.group(() => {
   Route.resource('/news', 'NewsController')
 
   Route.resource('/banners', 'BannersController')
+  Route.post('/updateBannersDelay', 'BannersController.updateBannersDelay').as('banners.updateBannersDelay')
 
   Route.resource('/partners', 'PartnersController')
 

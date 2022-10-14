@@ -46,7 +46,8 @@ export default redisConfig({
 })
 
 // Don't change orders below
-export const REDIS_KEYS = ['mainPageVideo'] as const
+export const REDIS_KEYS = ['mainPageVideo', 'banner'] as const
 export enum RedisKeys {
   MAIN_PAGE_VIDEO = 0,
+  BANNER = 1,
 }

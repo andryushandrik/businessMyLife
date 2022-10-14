@@ -6,7 +6,8 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 // * Types
 
 import BannerService from 'App/Services/BannerService'
-import BannerValidator from 'App/Validators/BannerValidator'
+import BannerValidator from 'App/Validators/Banner/BannerValidator'
+import BannerDelayValidator from 'App/Validators/Banner/BannerDelayValidator'
 import { ResponseMessages } from 'Config/response'
 
 export default class BannersController {
@@ -15,9 +16,10 @@ export default class BannersController {
     const page: number = request.input('page', 1)
 
     try {
+      const delay: number | undefined = await BannerService.getBannersDelay()
       const banners: ModelPaginatorContract<Banner> = await BannerService.paginate({ page, baseUrl })
 
-      return await view.render('pages/banner/index', { banners })
+      return await view.render('pages/banner/index', { banners, delay })
     } catch (err: Err | any) {
       session.flash('error', err.message)
       return response.redirect().back()
@@ -75,6 +77,20 @@ export default class BannersController {
 
       session.flash('success', ResponseMessages.SUCCESS)
       return response.redirect().toRoute('banners.index')
+    } catch (err: Err | any) {
+      session.flash('error', err.message)
+      return response.redirect().back()
+    }
+  }
+
+  public async updateBannersDelay({ request, response, session }: HttpContextContract) {
+    const payload = await request.validate(BannerDelayValidator)
+
+    try {
+      await BannerService.updateBannersDelay(payload)
+
+      session.flash('success', ResponseMessages.SUCCESS)
+      return response.redirect().back()
     } catch (err: Err | any) {
       session.flash('error', err.message)
       return response.redirect().back()

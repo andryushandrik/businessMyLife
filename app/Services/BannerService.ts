@@ -1,5 +1,6 @@
 // * Types
-import type BannerValidator from 'App/Validators/BannerValidator'
+import type BannerValidator from 'App/Validators/Banner/BannerValidator'
+import type BannerDelayValidator from 'App/Validators/Banner/BannerDelayValidator'
 import type { Err } from 'Contracts/response'
 import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import type { PaginateConfig, ServiceConfig } from 'Contracts/services'
@@ -8,9 +9,11 @@ import type { TransactionClientContract } from '@ioc:Adonis/Lucid/Database'
 // * Types
 
 import Banner from 'App/Models/Banner'
+import RedisService from './RedisService'
 import Drive from '@ioc:Adonis/Core/Drive'
 import Logger from '@ioc:Adonis/Core/Logger'
 import Database from '@ioc:Adonis/Lucid/Database'
+import { RedisKeys } from 'Config/redis'
 import { BANNER_FOLDER_PATH } from '../../config/drive'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 
@@ -38,6 +41,18 @@ export default class BannerService{
       throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.ERROR } as Err
 
     return item
+  }
+
+  public static async getBannersDelay(): Promise<number | undefined> {
+    let delay: number | undefined = undefined
+
+    try {
+      const delayFromRedis: string = await RedisService.get(RedisKeys.BANNER, 'delay')
+
+      delay = Number(delayFromRedis)
+    } catch (err: Err | any) {}
+
+    return delay
   }
 
   public static async create(payload: BannerValidator['schema']['props']): Promise<void> {
@@ -105,6 +120,14 @@ export default class BannerService{
     }
 
     await trx.commit()
+  }
+
+  public static async updateBannersDelay({ delay }: BannerDelayValidator['schema']['props']): Promise<void> {
+    try {
+      await RedisService.set(RedisKeys.BANNER, 'delay', delay)
+    } catch (err: Err | any) {
+      throw err
+    }
   }
 
   public static async delete(id: Banner['id']): Promise<void> {
