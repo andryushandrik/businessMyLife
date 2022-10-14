@@ -1,7 +1,8 @@
 // * Types
+import type FeedbackFilterValidator from 'App/Validators/FeedbackFilterValidator'
 import type { Err } from 'Contracts/response'
 import type { PaginationConfig } from 'Contracts/database'
-import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
+import type { ModelPaginatorContract, ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 
 import Feedback from 'App/Models/Feedback'
@@ -9,15 +10,11 @@ import Logger from '@ioc:Adonis/Core/Logger'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 
 export default class FeedbackService {
-  public static async paginate(config: PaginationConfig, orderByIsCompleted?: 'asc' | 'desc'): Promise<ModelPaginatorContract<Feedback>> {
+  public static async paginate(config: PaginationConfig, filter?: FeedbackFilterValidator['schema']['props']): Promise<ModelPaginatorContract<Feedback>> {
     let query = Feedback.query()
 
-    if (orderByIsCompleted) {
-      query = query.orderBy([
-        { column: 'isCompleted', order: orderByIsCompleted },
-        { column: 'id', order: 'asc' },
-      ])
-    }
+    if (filter)
+      query = this.filter(query, filter)
 
     try {
       return await query.getViaPaginate(config)
@@ -75,5 +72,37 @@ export default class FeedbackService {
       Logger.error(err)
       throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
     }
+  }
+
+  /**
+   * * Private methods
+   */
+
+  private static filter(query: ModelQueryBuilderContract<typeof Feedback>, payload: FeedbackFilterValidator['schema']['props']): ModelQueryBuilderContract<typeof Feedback> {
+    for (const key in payload) {
+      if (payload[key]) {
+
+        switch (key) {
+          // Skip this api's keys
+          case 'page':
+          case 'limit':
+          case 'orderBy':
+          case 'orderByColumn':
+            break
+          // Skip this api's keys
+
+          case 'query':
+            query = query.withScopes((scopes) => scopes.search(payload[key]!))
+
+            break
+
+          default:
+            break
+        }
+
+      }
+    }
+
+    return query
   }
 }

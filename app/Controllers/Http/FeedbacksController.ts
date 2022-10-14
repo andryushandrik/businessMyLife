@@ -1,22 +1,38 @@
 // * Types
 import type Feedback from 'App/Models/Feedback'
 import type { Err } from 'Contracts/response'
+import type { PaginateConfig } from 'Contracts/services'
 import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 // * Types
 
 import FeedbackService from 'App/Services/FeedbackService'
+import FeedbackFilterValidator from 'App/Validators/FeedbackFilterValidator'
 import { ResponseMessages } from 'Config/response'
 
 export default class FeedbacksController{
   public async paginate({ view, response, request, session, route }: HttpContextContract) {
-    const baseUrl: string = route!.pattern
-    const page: number = request.input('page', 1)
+    let payload: FeedbackFilterValidator['schema']['props'] | undefined = undefined
+    const isFiltered: boolean = request.input('isFiltered', false)
+    const config: PaginateConfig<Feedback> = {
+      baseUrl: route!.pattern,
+      page: request.input('page', 1),
+    }
+
+    if (isFiltered) {
+      payload = await request.validate(FeedbackFilterValidator)
+
+      config.orderBy = payload.orderBy
+      config.orderByColumn = payload.orderByColumn
+    }
 
     try {
-      const feedbacks: ModelPaginatorContract<Feedback> = await FeedbackService.paginate({ page, baseUrl }, 'asc')
+      const feedbacks: ModelPaginatorContract<Feedback> = await FeedbackService.paginate(config, payload)
 
-      return view.render('pages/feedback/paginate', { feedbacks })
+      return view.render('pages/feedback/paginate', {
+        payload,
+        feedbacks,
+      })
     } catch (err: Err | any) {
       session.flash('error', err.message)
       return response.redirect().back()

@@ -2,7 +2,7 @@
 import type { DateTime } from 'luxon'
 // * Types
 
-import { BaseModel, column, computed } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, computed, scope } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Feedback extends BaseModel {
   public static readonly columns = [
@@ -45,4 +45,12 @@ export default class Feedback extends BaseModel {
   public get isCompletedForUser(): string {
     return this.isCompleted ? 'Да' : 'Нет'
   }
+
+  /**
+   * * Query scopes
+   */
+
+  public static search = scope((query, searchQuery: string) => {
+    query.where('name', 'ILIKE', `%${searchQuery}%`)
+  })
 }
