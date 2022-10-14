@@ -46,6 +46,19 @@
             </div>
 
             <div class="form-group">
+              <div class="custom-control custom-checkbox mb-3 checkbox-success">
+                <input type="checkbox" name="isTitleLink" class="custom-control-input" id="isTitleLink">
+                <label class="custom-control-label" for="isTitleLink">Название ссылкой</label>
+
+                @if(flashMessages.has('errors.isTitleLink'))
+                  <div class="invalid-feedback d-block">
+                    {{ flashMessages.get('errors.isTitleLink')[0] }}
+                  </div>
+                @endif
+              </div>
+            </div>
+
+            <div class="form-group">
               <label class="mb-1">Embed ссылка на видео (Заполните либо это поле, либо загрузите свое видео)</label>
               <input type="string" class="form-control" name="embed" placeholder="Вставьте embed ссылку на видео (должно быть с iframe)" value="{{ flashMessages.get('embed') ?? '' }}">
 

@@ -7,7 +7,7 @@ import { BaseModel, beforeDelete, column, computed, scope } from '@ioc:Adonis/Lu
 
 export default class UploadTutorial extends BaseModel {
   public static readonly columns = [
-    'id', 'isVisible', 'isEmbed',
+    'id', 'isVisible', 'isEmbed', 'isTitleLink',
     'title', 'media',
     'createdAt', 'updatedAt',
   ] as const
@@ -24,6 +24,9 @@ export default class UploadTutorial extends BaseModel {
 
   @column()
   public isEmbed: boolean
+
+  @column()
+  public isTitleLink: boolean
 
   @column()
   public title: string

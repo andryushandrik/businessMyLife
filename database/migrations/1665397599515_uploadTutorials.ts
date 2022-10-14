@@ -17,6 +17,7 @@ export default class extends BaseSchema {
         0 - upload video
         1 - embed video from youtube or other projects
       `)
+      table.boolean('isTitleLink').defaultTo(0).notNullable()
 
       table.string('title').notNullable()
       table.string('media').notNullable()

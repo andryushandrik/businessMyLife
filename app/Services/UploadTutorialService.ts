@@ -12,8 +12,8 @@ import Drive from '@ioc:Adonis/Core/Drive'
 import Logger from '@ioc:Adonis/Core/Logger'
 import Database from '@ioc:Adonis/Lucid/Database'
 import UploadTutorial from 'App/Models/UploadTutorial'
-import { ResponseCodes, ResponseMessages } from 'Config/response'
 import { UPLOAD_TUTORIAL_FOLDER_PATH } from 'Config/drive'
+import { ResponseCodes, ResponseMessages } from 'Config/response'
 
 export default class UploadTutorialService {
   public static async paginate(config: PaginateConfig<UploadTutorial>, filter?: UploadTutorialFilterValidator['schema']['props']): Promise<ModelPaginatorContract<UploadTutorial>> {
@@ -53,6 +53,7 @@ export default class UploadTutorialService {
     const tutorialPayload: Partial<ModelAttributes<UploadTutorial>> = {
       media,
       isVisible: Boolean(payload.isVisible),
+      isTitleLink: Boolean(payload.isTitleLink),
       isEmbed: true,
       title: payload.title,
     }
@@ -94,6 +95,7 @@ export default class UploadTutorialService {
     const tutorialPayload: Partial<ModelAttributes<UploadTutorial>> = {
       media,
       isVisible: Boolean(payload.isVisible),
+      isTitleLink: Boolean(payload.isTitleLink),
       isEmbed: true,
       title: payload.title,
     }

@@ -8,19 +8,55 @@
         </a>
         <ul aria-expanded="false">
           <li><a href="{{ route('home') }}">Главная</a></li>
-          <li><a href="{{ route('banners.index') }}">Баннеры на главной</a></li>
-          <li><a href="{{ route('mainPageVideo.index') }}">Видео на главной</a></li>
           <li><a href="{{ route('user.paginateAdminsAndModerators') }}">Администраторы и модераторы</a></li>
-          <li><a href="{{ route('upload_tutorials.index') }}">Как загрузить объявления</a></li>
-          <li><a href="{{ route('partners.index') }}">Партнеры</a></li>
-          <li><a href="{{ route('offer.paginate') }}">Объявления</a></li>
-          <li><a href="{{ route('offer.paginateCurrentUserOffers') }}">Мои объявления</a></li>
           <li><a href="{{ route('feedback.paginate') }}">Форма обратной связи</a></li>
           <li><a href="{{ route('user.paginate') }}">Пользователи</a></li>
-          <li><a href="{{ route('offer.paginateNotVerifiedOffers') }}">Модерация</a></li>
-          <li><a href="{{ route('subsections.index') }}">Подразделы</a></li>
-          <li><a href="{{ route('areas.index') }}">Сферы</a></li>
           <li><a href="{{ route('news.index') }}">Статьи</a></li>
+        </ul>
+      </li>
+
+      <li>
+        <a class="has-arrow ai-icon" href="javascript: void()" aria-expanded="false">
+          <i class="flaticon-381-home"></i>
+          <span class="nav-text">Главная страница</span>
+        </a>
+        <ul aria-expanded="false">
+          <li><a href="{{ route('banners.index') }}">Баннеры на главной</a></li>
+          <li><a href="{{ route('mainPageVideo.index') }}">Видео на главной</a></li>
+        </ul>
+      </li>
+
+      <li>
+        <a class="has-arrow ai-icon" href="javascript: void()" aria-expanded="false">
+          <i class="flaticon-381-upload-1"></i>
+          <span class="nav-text">Загрузка объявления и партнеры</span>
+        </a>
+        <ul aria-expanded="false">
+          <li><a href="{{ route('upload_tutorials.index') }}">Как загрузить объявления</a></li>
+          <li><a href="{{ route('partners.index') }}">Партнеры</a></li>
+        </ul>
+      </li>
+
+      <li>
+        <a class="has-arrow ai-icon" href="javascript: void()" aria-expanded="false">
+          <i class="flaticon-381-book"></i>
+          <span class="nav-text">Объявления</span>
+        </a>
+        <ul aria-expanded="false">
+          <li><a href="{{ route('offer.paginateNotVerifiedOffers') }}">Модерация</a></li>
+          <li><a href="{{ route('offer.paginate') }}">Объявления</a></li>
+          <li><a href="{{ route('offer.paginateCurrentUserOffers') }}">Мои объявления</a></li>
+        </ul>
+      </li>
+
+      <li>
+        <a class="has-arrow ai-icon" href="javascript: void()" aria-expanded="false">
+          <i class="flaticon-381-settings-1"></i>
+          <span class="nav-text">Настройка разделов</span>
+        </a>
+        <ul aria-expanded="false">
+          <li><a href="{{ route('areas.index') }}">Сферы</a></li>
+          <li><a href="{{ route('subsections.index') }}">Подразделы</a></li>
         </ul>
       </li>
     </ul>
