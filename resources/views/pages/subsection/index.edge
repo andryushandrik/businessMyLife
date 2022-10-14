@@ -3,6 +3,14 @@
 @set('title', 'Подразделы')
 
 @section('body')
+  @!component('components/filter', {
+    payload,
+    columns: [
+      { key: 'id', value: 'ID' },
+      { key: 'name', value: 'Имя' },
+    ],
+  })
+
   <div class="col-lg-12">
     <div class="card">
       <div class="card-header">

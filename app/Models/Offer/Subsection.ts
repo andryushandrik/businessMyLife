@@ -65,4 +65,8 @@ export default class Subsection extends BaseModel {
   public static getByAreaId = scope((query, areaId: Area['id']) => {
     query.where('area_id', areaId)
   })
+
+  public static search = scope((query, searchQuery: string) => {
+    query.where('name', 'ILIKE', `%${searchQuery}%`)
+  })
 }

@@ -1,6 +1,7 @@
 // * Types
 import type Area from 'App/Models/Offer/Area'
 import type SubsectionValidator from 'App/Validators/Offer/SubsectionValidator'
+import type SubsectionFilterValidator from 'App/Validators/Offer/SubsectionFilterValidator'
 import type { Err } from 'Contracts/response'
 import type { PaginateConfig } from 'Contracts/services'
 import type { ModelPaginatorContract, ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
@@ -11,7 +12,7 @@ import Subsection from 'App/Models/Offer/Subsection'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 
 export default class SubsectionService {
-  public static async paginate(config: PaginateConfig<Subsection>): Promise<ModelPaginatorContract<Subsection>> {
+  public static async paginate(config: PaginateConfig<Subsection>, filter?: SubsectionFilterValidator['schema']['props']): Promise<ModelPaginatorContract<Subsection>> {
     let query: ModelQueryBuilderContract<typeof Subsection> = Subsection.query()
 
     if (config.relations) {
@@ -19,6 +20,9 @@ export default class SubsectionService {
         query = query.preload(item)
       }
     }
+
+    if (filter)
+      query = this.filter(query, filter)
 
     try {
       return await query.getViaPaginate(config)
@@ -100,5 +104,37 @@ export default class SubsectionService {
       Logger.error(err)
       throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
     }
+  }
+
+  /**
+   * * Private methods
+   */
+
+  private static filter(query: ModelQueryBuilderContract<typeof Subsection>, payload: SubsectionFilterValidator['schema']['props']): ModelQueryBuilderContract<typeof Subsection> {
+    for (const key in payload) {
+      if (payload[key]) {
+
+        switch (key) {
+          // Skip this api's keys
+          case 'page':
+          case 'limit':
+          case 'orderBy':
+          case 'orderByColumn':
+            break
+          // Skip this api's keys
+
+          case 'query':
+            query = query.withScopes((scopes) => scopes.search(payload[key]!))
+
+            break
+
+          default:
+            break
+        }
+
+      }
+    }
+
+    return query
   }
 }

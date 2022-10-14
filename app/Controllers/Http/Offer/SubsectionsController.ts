@@ -2,6 +2,7 @@
 import type Area from 'App/Models/Offer/Area'
 import type Subsection from 'App/Models/Offer/Subsection'
 import type { Err } from 'Contracts/response'
+import type { PaginateConfig } from 'Contracts/services'
 import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 // * Types
@@ -9,21 +10,33 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import AreaService from 'App/Services/Offer/AreaService'
 import SubsectionService from 'App/Services/Offer/SubsectionService'
 import SubsectionValidator from 'App/Validators/Offer/SubsectionValidator'
+import SubsectionFilterValidator from 'App/Validators/Offer/SubsectionFilterValidator'
 import { ResponseMessages } from 'Config/response'
 
 export default class SubsectionsController {
   public async index({ request, response, route, view, session }: HttpContextContract) {
-    const baseUrl: string = route!.pattern
-    const page: number = request.input('page', 1)
+    let payload: SubsectionFilterValidator['schema']['props'] | undefined = undefined
+    const isFiltered: boolean = request.input('isFiltered', false)
+    const config: PaginateConfig<Subsection> = {
+      baseUrl: route!.pattern,
+      page: request.input('page', 1),
+      relations: ['area'],
+    }
+
+    if (isFiltered) {
+      payload = await request.validate(SubsectionFilterValidator)
+
+      config.orderBy = payload.orderBy
+      config.orderByColumn = payload.orderByColumn
+    }
 
     try {
-      const subsections: ModelPaginatorContract<Subsection> = await SubsectionService.paginate({
-        page,
-        baseUrl,
-        relations: ['area'],
-      })
+      const subsections: ModelPaginatorContract<Subsection> = await SubsectionService.paginate(config, payload)
 
-      return view.render('pages/subsection/index', { subsections })
+      return view.render('pages/subsection/index', {
+        payload,
+        subsections,
+      })
     } catch (err: Err | any) {
       session.flash('error', err.message)
       return response.redirect().back()
