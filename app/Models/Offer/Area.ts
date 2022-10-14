@@ -5,7 +5,7 @@ import type { HasMany } from '@ioc:Adonis/Lucid/Orm'
 
 import Subsection from './Subsection'
 import { GLOBAL_DATETIME_FORMAT } from 'Config/app'
-import { BaseModel, column, computed, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, computed, hasMany, scope } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Area extends BaseModel {
   public static readonly columns = [
@@ -31,6 +31,13 @@ export default class Area extends BaseModel {
   public updatedAt: DateTime
 
   /**
+   * * Relations
+   */
+
+  @hasMany(() => Subsection)
+  public subsections: HasMany<typeof Subsection>
+
+  /**
    * * Computed properties
    */
 
@@ -40,9 +47,10 @@ export default class Area extends BaseModel {
   }
 
   /**
-   * * Relations
+   * * Query scopes
    */
 
-  @hasMany(() => Subsection)
-  public subsections: HasMany<typeof Subsection>
+   public static search = scope((query, searchQuery: string) => {
+    query.where('name', 'ILIKE', `%${searchQuery}%`)
+  })
 }
