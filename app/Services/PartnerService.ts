@@ -145,6 +145,23 @@ export default class PartnerService {
     }
   }
 
+  public static async visibleAction(id: Partner['id'], isVisible: Partner['isVisible']): Promise<void> {
+    let item: Partner
+
+    try {
+      item = await this.get(id)
+    } catch (err: Err | any) {
+      throw err
+    }
+
+    try {
+      await item.merge({ isVisible }).save()
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+    }
+  }
+
   /**
    * * Private methods
    */

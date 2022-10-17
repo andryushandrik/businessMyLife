@@ -8,7 +8,21 @@
       <div class="card-header">
         <h4 class="card-title">{{ title }}</h4>
 
-        <a href="{{ route('partners.index') }}" class="btn btn-primary btn-sm">Назад</a>
+        <div class="d-flex">
+          @if(item.isVisible)
+            <form action="{{ route('partner.invisible', { id: item.id }, { qs: { _method: 'DELETE' } }) }}" class="ml-2" method="POST">
+              {{ csrfField() }}
+              <button type="submit" class="btn btn-primary btn-sm">Виден</button>
+            </form>
+          @else
+            <form action="{{ route('partner.visible', { id: item.id }, { qs: { _method: 'PATCH' } }) }}" class="ml-2" method="POST">
+              {{ csrfField() }}
+              <button type="submit" class="btn btn-danger btn-sm">Не виден</button>
+            </form>
+          @endif
+
+          <a href="{{ route('partners.index') }}" class="btn btn-primary ml-2 btn-sm">Назад</a>
+        </div>
       </div>
       <div class="card-body">
         <div class="basic-form">

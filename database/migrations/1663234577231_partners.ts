@@ -12,7 +12,9 @@ export default class extends BaseSchema {
        * * Not nullable columns
        */
 
+      table.boolean('isVisible').defaultTo(1).notNullable()
       table.boolean('isTitleLink').defaultTo(0).notNullable().comment('Название кликабельное или нет')
+
       table.string('title').notNullable()
       table.string('media', PARTNER_VIDEO_LINK_MAX_LENGTH).notNullable()
       table.boolean('mediaType').unsigned().notNullable().comment('0 - изображение, 1 - видео')

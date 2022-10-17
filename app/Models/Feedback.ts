@@ -2,6 +2,7 @@
 import type { DateTime } from 'luxon'
 // * Types
 
+import { GLOBAL_DATETIME_FORMAT } from 'Config/app'
 import { BaseModel, column, computed, scope } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Feedback extends BaseModel {
@@ -44,6 +45,11 @@ export default class Feedback extends BaseModel {
   @computed()
   public get isCompletedForUser(): string {
     return this.isCompleted ? 'Да' : 'Нет'
+  }
+
+  @computed()
+  public get createdAtForUser(): string {
+    return this.createdAt.setLocale('ru-RU').toFormat(GLOBAL_DATETIME_FORMAT)
   }
 
   /**

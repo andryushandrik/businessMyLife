@@ -27,6 +27,7 @@
               <tr>
                 <th class="width80"><strong>#</strong></th>
 
+                <th><strong>Видимость</strong></th>
                 <th><strong>Название</strong></th>
                 <th><strong>Медиа</strong></th>
 
@@ -38,6 +39,8 @@
               @each(item in partners)
               <tr>
                 <td><strong>{{ item.id }}</strong></td>
+
+                <td><strong>{{ item.isVisibleForUser }}</strong></td>
 
                 @if (item.isTitleLink)
                   <td><a href="{{ route('partners.show', { id: item.id }) }}" class="text-primary">{{ item.title }}</a></td>

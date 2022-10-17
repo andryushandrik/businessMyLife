@@ -129,4 +129,36 @@ export default class PartnersController {
       return response.redirect().back()
     }
   }
+
+  /**
+   * * Visible
+   */
+
+  public async visible({ params, response, session }: HttpContextContract) {
+    const id: Partner['id'] = params.id
+
+    try {
+      await PartnerService.visibleAction(id, true)
+
+      session.flash('success', ResponseMessages.SUCCESS)
+    } catch (err: Err | any) {
+      session.flash('error', err.message)
+    }
+
+    return response.redirect().back()
+  }
+
+  public async invisible({ params, response, session }: HttpContextContract) {
+    const id: Partner['id'] = params.id
+
+    try {
+      await PartnerService.visibleAction(id, false)
+
+      session.flash('success', ResponseMessages.SUCCESS)
+    } catch (err: Err | any) {
+      session.flash('error', err.message)
+    }
+
+    return response.redirect().back()
+  }
 }

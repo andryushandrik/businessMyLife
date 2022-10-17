@@ -35,6 +35,7 @@
                 <th><strong>Город</strong></th>
                 <th><strong>Кол-во жалоб</strong></th>
                 <th><strong>Бан</strong></th>
+                <th><strong>Дата регистрации</strong></th>
 
                 <th><strong>Действия</strong></th>
               </tr>
@@ -51,6 +52,7 @@
                   <td>{{ item.city }}</td>
                   <td>Появится, когда появятся жалобы</td>
                   <td>{{ item.blockedUntilForUser }}</td>
+                  <td>{{ item.createdAtForUser }}</td>
 
                   <td>
                     <div class="dropdown">

@@ -21,9 +21,11 @@ Route.group(() => {
   Route.resource('/news', 'NewsController')
 
   Route.resource('/banners', 'BannersController')
-  Route.post('/updateBannersDelay', 'BannersController.updateBannersDelay').as('banners.updateBannersDelay')
+  Route.post('/banners/updateBannersDelay', 'BannersController.updateBannersDelay').as('banners.updateBannersDelay')
 
   Route.resource('/partners', 'PartnersController')
+  Route.patch('/partners/visible/:id', 'PartnersController.visible').as('partner.visible')
+  Route.delete('/partners/visible/:id', 'PartnersController.invisible').as('partner.invisible')
 
   Route.resource('/uploadTutorials', 'UploadTutorialsController')
 

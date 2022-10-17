@@ -41,6 +41,7 @@
                 <th><strong>Email</strong></th>
                 <th><strong>Вопрос</strong></th>
                 <th><strong>Обработанный</strong></th>
+                <th><strong>Дата обращения</strong></th>
 
                 <th><strong>Действия</strong></th>
               </tr>
@@ -58,6 +59,7 @@
                   <td>{{ item.email }}</td>
                   <td>{{ truncate(item.question, 100) }}</td>
                   <td>{{ item.isCompletedForUser }}</td>
+                  <td>{{ item.createdAtForUser }}</td>
                   <td>
                     <div class="dropdown">
                       <button type="button" class="btn btn-success light sharp" data-toggle="dropdown"

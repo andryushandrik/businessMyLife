@@ -3,12 +3,11 @@ import type { DateTime } from 'luxon'
 // * Types
 
 import Drive from '@ioc:Adonis/Core/Drive'
-import { BaseModel, column, beforeDelete, scope } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, beforeDelete, scope, computed } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Partner extends BaseModel {
   public static readonly columns = [
-    'id',
-    'isTitleLink',
+    'id', 'isVisible', 'isTitleLink',
     'title', 'media',
     'mediaType',
     'createdAt', 'updatedAt',
@@ -20,6 +19,9 @@ export default class Partner extends BaseModel {
 
   @column({ isPrimary: true })
   public id: number
+
+  @column()
+  public isVisible: boolean
 
   @column()
   public isTitleLink: boolean
@@ -38,6 +40,15 @@ export default class Partner extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  /**
+   * * Computed properties
+   */
+
+  @computed()
+  public get isVisibleForUser(): string {
+    return this.isVisible ? 'Виден' : 'Не виден'
+  }
 
   /**
    * * Query scopes
