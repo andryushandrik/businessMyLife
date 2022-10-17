@@ -1,14 +1,18 @@
 // * Types
+import type ReportType from 'App/Models/ReportType'
 import type { CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 // * Types
 
-import ApiValidator from '../ApiValidator'
-import { schema } from '@ioc:Adonis/Core/Validator'
+import IndexValidator from '../IndexValidator'
+import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import { REPORT_TYPE_NAME_MAX_LENGTH, REPORT_TYPE_NAME_MIN_LENGTH, TABLES_NAMES } from 'Config/database'
 
-export default class PromoCodeFilterValidator extends ApiValidator {
+export default class ReportTypeValidator extends IndexValidator {
+  private readonly currentReportTypeId: ReportType['id'] | null = this.ctx.params.id
+
   constructor(protected ctx: HttpContextContract) {
-    super(ctx)
+    super()
   }
 
   /**
@@ -31,13 +35,22 @@ export default class PromoCodeFilterValidator extends ApiValidator {
    *    ```
    */
   public schema = schema.create({
-    ...this.fields,
+    name: schema.string({ trim: true }, [
+      rules.minLength(REPORT_TYPE_NAME_MIN_LENGTH),
+      rules.maxLength(REPORT_TYPE_NAME_MAX_LENGTH),
+      rules.unique({
+        table: TABLES_NAMES.REPORT_TYPES,
+        column: 'name',
+        whereNot: { id: this.currentReportTypeId },
+      }),
+    ]),
 
     /**
      * * Optional fields
      */
 
-    query: schema.string.optional({ trim: true }),
+    isForUsers: schema.boolean.optional(),
+    isForOffers: schema.boolean.optional(),
   })
 
   /**

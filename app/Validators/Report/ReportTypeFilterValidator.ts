@@ -6,7 +6,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import ApiValidator from '../ApiValidator'
 import { schema } from '@ioc:Adonis/Core/Validator'
 
-export default class PromoCodeFilterValidator extends ApiValidator {
+export default class ReportTypeFilterValidator extends ApiValidator {
   constructor(protected ctx: HttpContextContract) {
     super(ctx)
   }

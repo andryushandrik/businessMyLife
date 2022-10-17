@@ -6,6 +6,7 @@ import Area from 'App/Models/Offer/Area'
 import Feedback from 'App/Models/Feedback'
 import Offer from 'App/Models/Offer/Offer'
 import PromoCode from 'App/Models/PromoCode'
+import ReportType from 'App/Models/ReportType'
 import Factory from '@ioc:Adonis/Lucid/Factory'
 import UserImage from 'App/Models/User/UserImage'
 import Subsection from 'App/Models/Offer/Subsection'
@@ -80,6 +81,16 @@ export const PromoCodesFactory = Factory
       name: faker.lorem.word(),
       code: faker.helpers.unique(faker.finance.bic),
       discountPrice: faker.datatype.number(),
+    }
+  })
+  .build()
+
+export const ReportTypesFactory = Factory
+  .define(ReportType, ({ faker }) => {
+    return {
+      isForUsers: faker.datatype.boolean(),
+      isForOffers: faker.datatype.boolean(),
+      name: faker.helpers.unique(faker.lorem.word),
     }
   })
   .build()

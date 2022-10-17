@@ -31,6 +31,8 @@ Route.group(() => {
 
   Route.resource('/promoCodes', 'PromoCodesController').except(['show'])
 
+  Route.resource('/reportTypes', 'ReportTypesController').except(['show'])
+
   /**
    * * Offer
    */

@@ -1,0 +1,66 @@
+@layout('layouts/index')
+
+@set('title', 'Создать новый промокод')
+
+@section('body')
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">{{ title }}</h4>
+
+        <a href="{{ route('report_types.index') }}" class="btn btn-primary btn-sm">Назад</a>
+      </div>
+      <div class="card-body">
+        <div class="basic-form">
+
+          <form action="{{ route('report_types.store') }}" method="POST">
+
+            <div class="form-group">
+              <label class="mb-1"><strong>Название *</strong></label>
+              <input type="string" class="form-control" name="name" value="{{ flashMessages.get('name') ?? '' }}">
+
+              @if(flashMessages.has('errors.name'))
+                <div class="invalid-feedback d-block">
+                  {{ flashMessages.get('errors.name')[0] }}
+                </div>
+              @endif
+            </div>
+
+            <div class="form-group">
+              <div class="custom-control custom-checkbox mb-3 checkbox-success">
+                <input type="checkbox" name="isForUsers" class="custom-control-input" id="isForUsers">
+                <label class="custom-control-label" for="isForUsers">Для пользователей</label>
+
+                @if(flashMessages.has('errors.isForUsers'))
+                  <div class="invalid-feedback d-block">
+                    {{ flashMessages.get('errors.isForUsers')[0] }}
+                  </div>
+                @endif
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="custom-control custom-checkbox mb-3 checkbox-success">
+                <input type="checkbox" name="isForOffers" class="custom-control-input" id="isForOffers">
+                <label class="custom-control-label" for="isForOffers">Для объявлений</label>
+
+                @if(flashMessages.has('errors.isForOffers'))
+                  <div class="invalid-feedback d-block">
+                    {{ flashMessages.get('errors.isForOffers')[0] }}
+                  </div>
+                @endif
+              </div>
+            </div>
+
+            {{ csrfField() }}
+
+            <div class="text-right">
+              <button type="submit" class="btn btn-primary btn-block">Создать</button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+@endsection

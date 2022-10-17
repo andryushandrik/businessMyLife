@@ -19,6 +19,7 @@ export default class extends BaseSeeder {
     await this.runSeeder(await import('../Partner'))
     await this.runSeeder(await import('../Feedback'))
     await this.runSeeder(await import('../PromoCode'))
+    await this.runSeeder(await import('../ReportType'))
     await this.runSeeder(await import('../UploadTutorial'))
 
     /**

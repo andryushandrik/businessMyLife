@@ -1,6 +1,6 @@
 @layout('layouts/index')
 
-@set('title', 'Промокоды')
+@set('title', 'Типы жалоб')
 
 @section('body')
   @!component('components/filter', {
@@ -8,7 +8,8 @@
     columns: [
       { key: 'id', value: 'ID' },
       { key: 'name', value: 'Название' },
-      { key: 'discountPrice', value: 'Скидка' },
+      { key: 'isForUsers', value: 'Для пользователей' },
+      { key: 'isForOffers', value: 'Для объявлений' },
     ],
   })
 
@@ -17,7 +18,7 @@
       <div class="card-header">
         <h4 class="card-title">{{ title }}</h4>
 
-        <a href="{{ route('promo_codes.create') }}" class="btn btn-primary btn-sm">Создать</a>
+        <a href="{{ route('report_types.create') }}" class="btn btn-primary btn-sm">Создать</a>
       </div>
 
       <div class="card-body">
@@ -29,20 +30,20 @@
                 <th class="width80"><strong>#</strong></th>
 
                 <th><strong>Название</strong></th>
-                <th><strong>Код</strong></th>
-                <th><strong>Скидка</strong></th>
+                <th><strong>Для пользователей</strong></th>
+                <th><strong>Для объявлений</strong></th>
 
                 <th><strong>Действия</strong></th>
               </tr>
             </thead>
             <tbody>
 
-              @each(item in promoCodes)
+              @each(item in reportTypes)
                 <tr>
                   <td><strong>{{ item.id }}</strong></td>
                   <td>{{ item.name }}</td>
-                  <td>{{ item.code }}</td>
-                  <td>{{ item.discountPrice }}</td>
+                  <td>{{ item.isForUsersForUser }}</td>
+                  <td>{{ item.isForOffersForUser }}</td>
 
                   <td>
                     <div class="dropdown">
@@ -59,9 +60,9 @@
                       </button>
                       <div class="dropdown-menu" style="">
                         <a class="dropdown-item"
-                          href="{{ route('promo_codes.edit', { id: item.id }, {qs: { mediaType: item.mediaType}}) }}">Редактировать</a>
+                          href="{{ route('report_types.edit', { id: item.id }, {qs: { mediaType: item.mediaType}}) }}">Редактировать</a>
 
-                        <form action="{{ route('promo_codes.destroy', { id: item.id }, { qs: { _method: 'DELETE' } }) }}" method="POST">
+                        <form action="{{ route('report_types.destroy', { id: item.id }, { qs: { _method: 'DELETE' } }) }}" method="POST">
                           <button type="submit" class="dropdown-item">Удалить</button>
 
                           {{ csrfField() }}
@@ -81,5 +82,5 @@
 
   </div>
 
-  @!component('components/pagination', { obj: promoCodes })
+  @!component('components/pagination', { obj: reportTypes })
 @endsection
