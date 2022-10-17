@@ -1,0 +1,62 @@
+@layout('layouts/index')
+
+@set('title', `Редактировать промокод - ${item.name}`)
+
+@section('body')
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">{{ title }}</h4>
+
+        <a href="{{ route('promo_codes.index') }}" class="btn btn-primary btn-sm">Назад</a>
+      </div>
+      <div class="card-body">
+        <div class="basic-form">
+          <form action="{{ route('promo_codes.update', { id: item.id }, { qs: { _method: 'PATCH' } }) }}" method="POST">
+
+            <div class="form-group">
+              <label class="mb-1"><strong>Название *</strong></label>
+              <input type="string" class="form-control" name="name" value="{{ flashMessages.get('name', item.name) ?? '' }}">
+
+              @if(flashMessages.has('errors.name'))
+                <div class="invalid-feedback d-block">
+                  {{ flashMessages.get('errors.name')[0] }}
+                </div>
+              @endif
+            </div>
+
+            <div class="form-group">
+              <label class="mb-1"><strong>Код *</strong></label>
+              <input type="string" class="form-control" name="code" value="{{ flashMessages.get('code', item.code) ?? '' }}">
+
+              @if(flashMessages.has('errors.code'))
+                <div class="invalid-feedback d-block">
+                  {{ flashMessages.get('errors.code')[0] }}
+                </div>
+              @endif
+            </div>
+
+            <div class="form-group">
+              <label class="mb-1"><strong>Скидка (в рублях) *</strong></label>
+              <input type="string" class="form-control" name="discountPrice" value="{{ flashMessages.get('discountPrice', item.discountPrice) ?? '' }}">
+
+              @if(flashMessages.has('errors.discountPrice'))
+                <div class="invalid-feedback d-block">
+                  {{ flashMessages.get('errors.discountPrice')[0] }}
+                </div>
+              @endif
+            </div>
+
+            {{ csrfField() }}
+
+            <div class="text-right">
+              <button type="submit" class="btn btn-primary btn-block">Редактировать</button>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+@endsection

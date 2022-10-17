@@ -30,7 +30,7 @@ export default class UploadTutorialsController {
     try {
       const tutorials: ModelPaginatorContract<UploadTutorial> = await UploadTutorialService.paginate(config, payload)
 
-      return view.render('pages/uploadTutorials/index', {
+      return view.render('pages/uploadTutorial/index', {
         payload,
         tutorials,
       })
@@ -41,7 +41,7 @@ export default class UploadTutorialsController {
   }
 
   public async create({ view }: HttpContextContract) {
-    return view.render('pages/uploadTutorials/create')
+    return view.render('pages/uploadTutorial/create')
   }
 
   public async store({ request, session, response }: HttpContextContract) {
@@ -64,7 +64,7 @@ export default class UploadTutorialsController {
     try {
       const item: UploadTutorial = await UploadTutorialService.get(id)
 
-      return view.render('pages/uploadTutorials/show', { item })
+      return view.render('pages/uploadTutorial/show', { item })
     } catch (err: Err | any) {
       session.flash('error', err.message)
       return response.redirect().back()
@@ -77,7 +77,7 @@ export default class UploadTutorialsController {
     try {
       const item: UploadTutorial = await UploadTutorialService.get(id)
 
-      return view.render('pages/uploadTutorials/edit', { item })
+      return view.render('pages/uploadTutorial/edit', { item })
     } catch (err: Err | any) {
       session.flash('error', err.message)
       return response.redirect().back()

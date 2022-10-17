@@ -27,6 +27,8 @@ Route.group(() => {
 
   Route.resource('/uploadTutorials', 'UploadTutorialsController')
 
+  Route.resource('/promoCodes', 'PromoCodesController').except(['show'])
+
   /**
    * * Offer
    */

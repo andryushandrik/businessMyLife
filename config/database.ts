@@ -61,6 +61,7 @@ export const TABLES_NAMES = {
   BANNERS: 'banners',
   PARTNERS: 'partners',
   FEEDBACKS: 'feedbacks',
+  PROMO_CODES: 'promoCodes',
   UPLOAD_TUTORIALS: 'uploadTutorials',
 
   /**
@@ -82,6 +83,16 @@ export const TABLES_NAMES = {
   USERS_TYPES: 'usersTypes',
   USERS_IMAGES: 'usersImages',
 } as const
+
+/**
+ * * Promo code
+ */
+
+export const PROMO_CODE_NAME_MIN_LENGTH: number = 4
+export const PROMO_CODE_NAME_MAX_LENGTH: number = 255
+
+export const PROMO_CODE_CODE_MIN_LENGTH: number = 4
+export const PROMO_CODE_CODE_MAX_LENGTH: number = 255
 
 /**
  * * Upload tutorial

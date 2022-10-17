@@ -1,0 +1,85 @@
+@layout('layouts/index')
+
+@set('title', 'Промокоды')
+
+@section('body')
+  @!component('components/filter', {
+    payload,
+    columns: [
+      { key: 'id', value: 'ID' },
+      { key: 'name', value: 'Название' },
+      { key: 'discountPrice', value: 'Скидка' },
+    ],
+  })
+
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">{{ title }}</h4>
+
+        <a href="{{ route('promo_codes.create') }}" class="btn btn-primary btn-sm">Создать</a>
+      </div>
+
+      <div class="card-body">
+        <div class="table-responsive">
+
+          <table class="table table-responsive-md">
+            <thead>
+              <tr>
+                <th class="width80"><strong>#</strong></th>
+
+                <th><strong>Название</strong></th>
+                <th><strong>Код</strong></th>
+                <th><strong>Скидка</strong></th>
+
+                <th><strong>Действия</strong></th>
+              </tr>
+            </thead>
+            <tbody>
+
+              @each(item in promoCodes)
+              <tr>
+                <td><strong>{{ item.id }}</strong></td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.code }}</td>
+                <td>{{ item.discountPrice }}</td>
+
+                <td>
+                  <div class="dropdown">
+                    <button type="button" class="btn btn-success light sharp" data-toggle="dropdown"
+                      aria-expanded="false">
+                      <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1">
+                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                          <rect x="0" y="0" width="24" height="24"></rect>
+                          <circle fill="#000000" cx="5" cy="12" r="2"></circle>
+                          <circle fill="#000000" cx="12" cy="12" r="2"></circle>
+                          <circle fill="#000000" cx="19" cy="12" r="2"></circle>
+                        </g>
+                      </svg>
+                    </button>
+                    <div class="dropdown-menu" style="">
+                      <a class="dropdown-item"
+                        href="{{ route('promo_codes.edit', { id: item.id }, {qs: { mediaType: item.mediaType}}) }}">Редактировать</a>
+
+                      <form action="{{ route('promo_codes.destroy', { id: item.id }, { qs: { _method: 'DELETE' } }) }}" method="POST">
+                        <button type="submit" class="dropdown-item">Удалить</button>
+
+                        {{ csrfField() }}
+                      </form>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              @endeach
+
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  @!component('components/pagination', { obj: promoCodes })
+@endsection

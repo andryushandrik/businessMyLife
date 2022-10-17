@@ -5,6 +5,7 @@ import Partner from 'App/Models/Partner'
 import Area from 'App/Models/Offer/Area'
 import Feedback from 'App/Models/Feedback'
 import Offer from 'App/Models/Offer/Offer'
+import PromoCode from 'App/Models/PromoCode'
 import Factory from '@ioc:Adonis/Lucid/Factory'
 import UserImage from 'App/Models/User/UserImage'
 import Subsection from 'App/Models/Offer/Subsection'
@@ -69,6 +70,16 @@ export const PartnersFactory = Factory
       title: faker.lorem.sentence(),
       media: faker.image.abstract(),
       mediaType: faker.datatype.boolean(),
+    }
+  })
+  .build()
+
+export const PromoCodesFactory = Factory
+  .define(PromoCode, ({ faker }) => {
+    return {
+      name: faker.lorem.word(),
+      code: faker.helpers.unique(faker.finance.bic),
+      discountPrice: faker.datatype.number(),
     }
   })
   .build()
