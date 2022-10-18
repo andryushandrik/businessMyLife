@@ -15,8 +15,20 @@
   })
     <div class="col-6">
       <div class="dropdown bootstrap-select form-control form-control-lg dropup">
-        <select class="form-control form-control-lg" name="areaId" tabindex="-98">
+        <select class="form-control form-control-lg" name="category" tabindex="-98">
           <option value="">Категория</option>
+
+          @each((item, index) in categories)
+            <option value="{{ index }}" {{ payload?.category == index ? 'selected' : '' }}>{{ item }}</option>
+          @endeach
+        </select>
+      </div>
+    </div>
+
+    <div class="col-6">
+      <div class="dropdown bootstrap-select form-control form-control-lg dropup">
+        <select class="form-control form-control-lg" name="areaId" tabindex="-98">
+          <option value="">Сфера</option>
 
           @each(item in areas)
             <option value="{{ item.id }}" {{ payload?.areaId == item.id ? 'selected' : '' }}>{{ item.name }}</option>

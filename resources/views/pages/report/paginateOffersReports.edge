@@ -1,0 +1,89 @@
+@layout('layouts/index')
+
+@set('title', 'Жалобы на объявления')
+
+@section('body')
+  @component('components/filter', {
+    payload,
+    columns: [
+      { key: 'id', value: 'ID' },
+      { key: 'offer_id', value: 'ID объявления' },
+      { key: 'user_id', value: 'ID пользователя' },
+    ],
+  })
+    <div class="col-6">
+      <div class="dropdown bootstrap-select form-control form-control-lg dropup">
+        <select class="form-control form-control-lg" name="category" tabindex="-98">
+          <option value="">Категория</option>
+
+          @each((item, index) in categories)
+            <option value="{{ index }}" {{ payload?.category == index ? 'selected' : '' }}>{{ item }}</option>
+          @endeach
+        </select>
+      </div>
+    </div>
+
+    <div class="col-6">
+      <div class="dropdown bootstrap-select form-control form-control-lg dropup">
+        <select class="form-control form-control-lg" name="areaId" tabindex="-98">
+          <option value="">Сфера</option>
+
+          @each(item in areas)
+            <option value="{{ item.id }}" {{ payload?.areaId == item.id ? 'selected' : '' }}>{{ item.name }}</option>
+          @endeach
+        </select>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <input type="text" class="form-control" name="offerQuery" placeholder="Поиск по объявлениям" value="{{ payload?.offerQuery ?? '' }}">
+    </div>
+  @end
+
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">{{ title }}</h4>
+      </div>
+
+      <div class="card-body">
+        <div class="table-responsive">
+
+          <table class="table table-responsive-md">
+            <thead>
+              <tr>
+                <th class="width80"><strong>#</strong></th>
+
+                <th><strong>Категория</strong></th>
+                <th><strong>Название объявления</strong></th>
+                <th><strong>Описание</strong></th>
+                <th><strong>Пользователь</strong></th>
+              </tr>
+            </thead>
+            <tbody>
+
+              @each(item in reports)
+                <tr>
+                  <td><strong>{{ item.id }}</strong></td>
+                  <td>{{ categories[item.offer.category] }}</td>
+                  <td>
+                    <a href="{{ route('offer.get', { id: item.offer.id }) }}" class="text-primary">{{ item.offer.title }}</a>
+                  </td>
+                  <td>{{ item.description ?? '' }}</td>
+                  <td>
+                    <a href="{{ route('user.get', { id: item.user.id }) }}" class="text-primary">{{ item.user.fullName }}</a>
+                  </td>
+                </tr>
+              @endeach
+
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  @!component('components/pagination', { obj: reports })
+@endsection

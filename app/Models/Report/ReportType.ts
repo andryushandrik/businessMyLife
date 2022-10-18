@@ -1,5 +1,5 @@
 // * Types
-import { DateTime } from 'luxon'
+import type { DateTime } from 'luxon'
 // * Types
 
 import { BaseModel, column, computed, scope } from '@ioc:Adonis/Lucid/Orm'

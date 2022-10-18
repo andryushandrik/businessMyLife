@@ -12,6 +12,7 @@ import AreaService from 'App/Services/Offer/AreaService'
 import OfferService from 'App/Services/Offer/OfferService'
 import OfferFilterValidator from 'App/Validators/Offer/OfferFilterValidator'
 import OfferBlockDescriptionValidator from 'App/Validators/Offer/OfferBlockDescriptionValidator'
+import { OFFER_CATEGORIES } from 'Config/offer'
 import { SESSION_AUTH_KEY } from 'Config/session'
 import { ResponseMessages } from 'Config/response'
 
@@ -40,6 +41,7 @@ export default class OffersController {
         areas,
         offers,
         payload,
+        categories: OFFER_CATEGORIES,
       })
     } catch (err: Err | any) {
       session.flash('error', err.message)
@@ -74,6 +76,7 @@ export default class OffersController {
         offers,
         payload,
         titleFromController,
+        categories: OFFER_CATEGORIES,
       })
     } catch (err: Err | any) {
       session.flash('error', err.message)
@@ -106,6 +109,7 @@ export default class OffersController {
         offers,
         payload,
         isModeratePage: true,
+        categories: OFFER_CATEGORIES,
         titleFromController: 'Модерация',
       })
     } catch (err: Err | any) {

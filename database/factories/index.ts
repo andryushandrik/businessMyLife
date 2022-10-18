@@ -6,11 +6,12 @@ import Area from 'App/Models/Offer/Area'
 import Feedback from 'App/Models/Feedback'
 import Offer from 'App/Models/Offer/Offer'
 import PromoCode from 'App/Models/PromoCode'
-import ReportType from 'App/Models/ReportType'
+import Report from 'App/Models/Report/Report'
 import Factory from '@ioc:Adonis/Lucid/Factory'
 import UserImage from 'App/Models/User/UserImage'
 import Subsection from 'App/Models/Offer/Subsection'
 import OfferImage from 'App/Models/Offer/OfferImage'
+import ReportType from 'App/Models/Report/ReportType'
 import UploadTutorial from 'App/Models/UploadTutorial'
 import { DateTime } from 'luxon'
 import { RoleNames, UserExperienceTypes, UserTypeNames } from 'Config/user'
@@ -85,6 +86,21 @@ export const PromoCodesFactory = Factory
   })
   .build()
 
+/**
+ * * Report
+ */
+
+export const ReportFactory = Factory
+  .define(Report, async ({ faker }) => {
+    return {
+      description: faker.lorem.paragraph(),
+
+      userId: (await User.query().random().first())!.id,
+      reportTypeId: (await ReportType.query().random().first())!.id,
+    }
+  })
+  .build()
+
 export const ReportTypesFactory = Factory
   .define(ReportType, ({ faker }) => {
     return {
@@ -114,7 +130,7 @@ export const SubsectionFactory = Factory
 
 export const OfferFactory = Factory
   .define(Offer, async ({ faker }) => {
-    const subsection: Subsection = await Subsection.query().random()
+    const subsection: Subsection = (await Subsection.query().random().first())!
 
     return {
       isVerified: true,
@@ -152,6 +168,7 @@ export const OfferFactory = Factory
     }
   })
   .relation('images', () => OfferImageFactory)
+  .relation('reports', () => ReportFactory)
   .build()
 
 export const OfferImageFactory = Factory
@@ -193,6 +210,7 @@ export const UserFactory = Factory
     }
   })
   .relation('images', () => UserImageFactory)
+  .relation('reportsTo', () => ReportFactory)
   .relation('offers', () => OfferFactory)
   .build()
 

@@ -5,10 +5,8 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 import ApiValidator from '../ApiValidator'
 import { schema } from '@ioc:Adonis/Core/Validator'
-import { getAreaIdRules } from '../Rules/Offer/area'
-import { getOfferCategoryRules } from '../Rules/Offer/offer'
 
-export default class OfferFilterValidator extends ApiValidator {
+export default class UserReportFilterValidator extends ApiValidator {
   constructor(protected ctx: HttpContextContract) {
     super(ctx)
   }
@@ -39,8 +37,6 @@ export default class OfferFilterValidator extends ApiValidator {
      * * Optional fields
      */
 
-    areaId: schema.number.optional(getAreaIdRules()),
-    category: schema.number.optional(getOfferCategoryRules()),
     query: schema.string.optional({ trim: true }),
   })
 

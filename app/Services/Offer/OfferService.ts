@@ -11,6 +11,7 @@ import type { ModelAttributes, ModelPaginatorContract, ModelQueryBuilderContract
 import Offer from 'App/Models/Offer/Offer'
 import Logger from '@ioc:Adonis/Core/Logger'
 import SubsectionService from './SubsectionService'
+import { OfferCategories } from 'Config/offer'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 
 type FilterDependencies = {
@@ -151,6 +152,48 @@ export default class OfferService {
     return item
   }
 
+  public static async getOffersIdsBySubSectionIds(subsectionsIds: Subsection['id'][]): Promise<Offer['id'][]> {
+    try {
+      const offers: { id: Offer['id'] }[] = await Offer
+        .query()
+        .select('id')
+        .withScopes((scopes) => scopes.getBySubsectionsIds(subsectionsIds))
+
+      return offers.map((item) => item.id)
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+    }
+  }
+
+  public static async getOffersIdsByCategory(category: OfferCategories): Promise<Offer['id'][]> {
+    try {
+      const offers: { id: Offer['id'] }[] = await Offer
+        .query()
+        .select('id')
+        .withScopes((scopes) => scopes.getByCategories([category]))
+
+      return offers.map((item) => item.id)
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+    }
+  }
+
+  public static async getOffersIdsByQuery(query: string): Promise<Offer['id'][]> {
+    try {
+      const offers: { id: Offer['id'] }[] = await Offer
+        .query()
+        .select('id')
+        .withScopes((scopes) => scopes.search(query))
+
+      return offers.map((item) => item.id)
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+    }
+  }
+
   public static async updateBlockDescription(id: Offer['id'], payload: OfferBlockDescriptionValidator['schema']['props']): Promise<void> {
     let item: Offer
 
@@ -231,6 +274,11 @@ export default class OfferService {
 
           case 'query':
             query = query.withScopes((scopes) => scopes.search(payload[key]!))
+
+            break
+
+          case 'category':
+            query = query.withScopes((scopes) => scopes.getByCategories([payload[key]!]))
 
             break
 

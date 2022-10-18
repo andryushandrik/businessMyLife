@@ -1,0 +1,59 @@
+@layout('layouts/index')
+
+@set('title', 'Жалобы на пользователей')
+
+@section('body')
+  @!component('components/filter', {
+    payload,
+    columns: [
+      { key: 'id', value: 'ID' },
+      { key: 'user_id', value: 'ID от кого' },
+      { key: 'to_id', value: 'ID кому' },
+    ],
+  })
+
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">{{ title }}</h4>
+      </div>
+
+      <div class="card-body">
+        <div class="table-responsive">
+
+          <table class="table table-responsive-md">
+            <thead>
+              <tr>
+                <th class="width80"><strong>#</strong></th>
+
+                <th><strong>Кто</strong></th>
+                <th><strong>Описание</strong></th>
+                <th><strong>Кому</strong></th>
+              </tr>
+            </thead>
+            <tbody>
+
+              @each(item in reports)
+                <tr>
+                  <td><strong>{{ item.id }}</strong></td>
+                  <td>
+                    <a href="{{ route('user.get', { id: item.user.id }) }}" class="text-primary">{{ item.user.fullName }}</a>
+                  </td>
+                  <td>{{ item.description ?? '' }}</td>
+                  <td>
+                    <a href="{{ route('user.get', { id: item.userTo.id }) }}" class="text-primary">{{ item.userTo.fullName }}</a>
+                  </td>
+                </tr>
+              @endeach
+
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  @!component('components/pagination', { obj: reports })
+@endsection

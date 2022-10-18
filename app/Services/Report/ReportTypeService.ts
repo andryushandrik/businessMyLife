@@ -7,7 +7,7 @@ import type { ModelAttributes, ModelPaginatorContract, ModelQueryBuilderContract
 // * Types
 
 import Logger from '@ioc:Adonis/Core/Logger'
-import ReportType from 'App/Models/ReportType'
+import ReportType from 'App/Models/Report/ReportType'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 
 export default class ReportTypeService {

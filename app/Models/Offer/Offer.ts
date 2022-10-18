@@ -3,13 +3,17 @@ import type { BelongsTo, HasMany } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 
 import User from '../User/User'
+import Report from '../Report/Report'
 import Subsection from './Subsection'
 import OfferImage from './OfferImage'
 import Drive from '@ioc:Adonis/Core/Drive'
 import { DateTime } from 'luxon'
 import { GLOBAL_DATETIME_FORMAT } from 'Config/app'
 import { formatStringForCyrillic } from 'Helpers/index'
-import { OFFER_CATEGORIES, OFFER_PAYBACK_TIMES, OFFER_PROJECT_STAGES } from 'Config/offer'
+import {
+  OfferCategories, OFFER_CATEGORIES,
+  OFFER_PAYBACK_TIMES, OFFER_PROJECT_STAGES
+} from 'Config/offer'
 import {
   BaseModel, beforeDelete, beforeSave,
   belongsTo, column, computed,
@@ -150,6 +154,9 @@ export default class Offer extends BaseModel {
   @hasMany(() => OfferImage)
   public images: HasMany<typeof OfferImage>
 
+  @hasMany(() => Report)
+  public reports: HasMany<typeof Report>
+
   /**
    * * Computed properties
    */
@@ -204,6 +211,10 @@ export default class Offer extends BaseModel {
 
   public static getByArchived = scope((query, isArchived: Offer['isArchived']) => [
     query.where('isArchived', isArchived)
+  ])
+
+  public static getByCategories = scope((query, categories: OfferCategories[]) => [
+    query.whereIn('category', categories)
   ])
 
   public static getByVerified = scope((query, isVerified: Offer['isVerified']) => [

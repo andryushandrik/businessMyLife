@@ -75,6 +75,20 @@ export default class UserService {
     return item
   }
 
+  public static async getUsersIdsByQuery(query: string): Promise<User['id'][]> {
+    try {
+      const users: { id: User['id'] }[] = await User
+        .query()
+        .select('id')
+        .withScopes((scopes) => scopes.search(query))
+
+      return users.map((item) => item.id)
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+    }
+  }
+
   public static async delete(id: User['id']): Promise<void> {
     let item: User
 

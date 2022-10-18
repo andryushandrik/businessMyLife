@@ -63,6 +63,12 @@ export const TABLES_NAMES = {
   FEEDBACKS: 'feedbacks',
   PROMO_CODES: 'promoCodes',
   UPLOAD_TUTORIALS: 'uploadTutorials',
+
+  /**
+   * * Report
+   */
+
+  REPORTS: 'reports',
   REPORT_TYPES: 'reportTypes',
 
   /**
@@ -88,6 +94,8 @@ export const TABLES_NAMES = {
 /**
  * * Report
  */
+
+export const REPORT_DESCRIPTION_LENGTH: number = 3000
 
 export const REPORT_TYPE_NAME_MIN_LENGTH: number = 2
 export const REPORT_TYPE_NAME_MAX_LENGTH: number = 255

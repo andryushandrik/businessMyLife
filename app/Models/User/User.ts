@@ -8,6 +8,7 @@ import type { HasMany, ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
 import Role from '../User/Role'
 import Offer from '../Offer/Offer'
 import UserImage from './UserImage'
+import Report from '../Report/Report'
 import Hash from '@ioc:Adonis/Core/Hash'
 import { RoleNames } from 'Config/user'
 import { GLOBAL_DATETIME_FORMAT } from 'Config/app'
@@ -107,6 +108,19 @@ export default class User extends BaseModel {
   public blockedUntil?: DateTime
 
   /**
+   * * Relations
+   */
+
+  @hasMany(() => UserImage)
+  public images: HasMany<typeof UserImage>
+
+  @hasMany(() => Offer)
+  public offers: HasMany<typeof Offer>
+
+  @hasMany(() => Report, { foreignKey: 'toId' })
+  public reportsTo: HasMany<typeof Report>
+
+  /**
    * * Computed properties
    */
 
@@ -177,16 +191,6 @@ export default class User extends BaseModel {
         .andWhere('lastName', 'ILIKE', `%${parts[1]}%`)
     }
   })
-
-  /**
-   * * Relations
-   */
-
-  @hasMany(() => UserImage)
-  public images: HasMany<typeof UserImage>
-
-  @hasMany(() => Offer)
-  public offers: HasMany<typeof Offer>
 
   /**
    * * Hooks

@@ -1,5 +1,5 @@
 // * Types
-import type ReportType from 'App/Models/ReportType'
+import type ReportType from 'App/Models/Report/ReportType'
 import type { CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 // * Types

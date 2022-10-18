@@ -28,6 +28,6 @@ export default class extends BaseSeeder {
 
     await this.runSeeder(await import('../User/Role'))
     await this.runSeeder(await import('../User/UserType'))
-    await this.runSeeder(await import('../User/User')) // Created offers
+    await this.runSeeder(await import('../User/User')) // Created offers, users reports and offers reports
   }
 }

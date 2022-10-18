@@ -31,7 +31,20 @@ Route.group(() => {
 
   Route.resource('/promoCodes', 'PromoCodesController').except(['show'])
 
-  Route.resource('/reportTypes', 'ReportTypesController').except(['show'])
+  /**
+   * * Report
+   */
+
+  Route.group(() => {
+
+    Route.resource('/types', 'Report/ReportTypesController').except(['show'])
+
+    Route.get('/offers', 'Report/ReportsController.paginateOffersReports').as('paginateOffersReports')
+    Route.get('/users', 'Report/ReportsController.paginateUsersReports').as('paginateUsersReports')
+
+  }).prefix('report').as('report')
+
+  Route.resource('/reportTypes', 'Report/ReportTypesController').except(['show'])
 
   /**
    * * Offer

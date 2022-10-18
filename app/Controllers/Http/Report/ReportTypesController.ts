@@ -1,12 +1,12 @@
 // * Types
-import type ReportType from 'App/Models/ReportType'
+import type ReportType from 'App/Models/Report/ReportType'
 import type { Err } from 'Contracts/response'
 import type { PaginateConfig } from 'Contracts/services'
 import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 // * Types
 
-import ReportTypeService from 'App/Services/ReportTypeService'
+import ReportTypeService from 'App/Services/Report/ReportTypeService'
 import ReportTypeValidator from 'App/Validators/Report/ReportTypeValidator'
 import ReportTypeFilterValidator from 'App/Validators/Report/ReportTypeFilterValidator'
 import { ResponseMessages } from 'Config/response'
