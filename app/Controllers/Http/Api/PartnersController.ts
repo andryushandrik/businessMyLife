@@ -16,12 +16,12 @@ export default class PartnersController {
     let payload: ApiValidator['schema']['props']
 
     try {
-        payload = await request.validate(ApiValidator)
-    } catch (error: Err | any) {
+      payload = await request.validate(ApiValidator)
+    } catch (err: Err | any) {
       throw new ExceptionService({
         code: ResponseCodes.VALIDATION_ERROR,
         message: ResponseMessages.VALIDATION_ERROR,
-        body: error.messages,
+        body: err.messages,
       })
     }
 
@@ -29,8 +29,8 @@ export default class PartnersController {
       const partners: ModelPaginatorContract<Partner> = await PartnerService.paginate(payload)
 
       return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, partners))
-    } catch (error: Err | any) {
-      throw new ExceptionService(error)
+    } catch (err: Err | any) {
+      throw new ExceptionService(err)
     }
   }
 }

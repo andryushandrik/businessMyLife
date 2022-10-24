@@ -36,7 +36,8 @@
       "@adonisjs/shield",
       "@japa/preset-adonis/build/adonis-typings",
       "@adonisjs/lucid",
-      "@adonisjs/redis"
+      "@adonisjs/redis",
+      "adonis5-swagger"
     ]
   }
 }

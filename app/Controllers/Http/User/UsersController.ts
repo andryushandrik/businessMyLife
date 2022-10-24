@@ -20,6 +20,8 @@ export default class UsersController {
     const config: PaginateConfig<User> = {
       baseUrl: route!.pattern,
       page: request.input('page', 1),
+
+      aggregates: ['reports'],
     }
 
     if (isFiltered) {

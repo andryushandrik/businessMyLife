@@ -11,6 +11,7 @@
       { key: 'isBanned', value: 'Забанен' },
       { key: 'title', value: 'Название' },
       { key: 'city', value: 'Город' },
+      { key: 'reportsCount', value: 'Кол-во жалоб' },
     ],
   })
     <div class="col-6">
@@ -67,6 +68,7 @@
                 <th><strong>Обложка</strong></th>
                 <th><strong>Пользователь</strong></th>
                 <th><strong>Подраздел</strong></th>
+                <th><strong>Кол-во жалоб</strong></th>
                 <th><strong>Дней до архивации</strong></th>
                 <th><strong>Дата создания</strong></th>
 
@@ -92,6 +94,7 @@
                   <td>
                     <a href="{{ route('subsections.edit', { id: item.subsection.id }) }}" class="text-primary">{{ item.subsection.name }}</a>
                   </td>
+                  <td>{{ item.reportsCount }}</td>
                   <td>{{ item.archiveExpire }}</td>
                   <td>{{ item.createdAtForUser }}</td>
 

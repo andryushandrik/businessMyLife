@@ -10,6 +10,7 @@ export type PaginateConfig<M extends LucidRow> = {
   orderBy?: 'asc' | 'desc',
   orderByColumn?: string,
   relations?: ExtractModelRelations<M>[],
+  aggregates?: ExtractModelRelations<M>[],
 }
 
 export type ServiceConfig<M extends LucidRow> = {

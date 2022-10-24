@@ -142,6 +142,13 @@ export default class Offer extends BaseModel {
   public updatedAt: DateTime
 
   /**
+   * * Aggregates columns
+   */
+
+  @column({ columnName: 'reports_count' })
+  public reportsCount?: number
+
+  /**
    * * Relations
    */
 

@@ -30,6 +30,12 @@ export default class OfferService {
       }
     }
 
+    if (config.aggregates) {
+      for (const item of config.aggregates) {
+        query = query.withCount(item)
+      }
+    }
+
     if (filter) {
       let dependencies: FilterDependencies | undefined = undefined
 

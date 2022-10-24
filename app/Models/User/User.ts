@@ -108,6 +108,13 @@ export default class User extends BaseModel {
   public blockedUntil?: DateTime
 
   /**
+   * * Aggregates columns
+   */
+
+  @column({ columnName: 'reports_count' })
+  public reportsCount?: number
+
+  /**
    * * Relations
    */
 
@@ -116,6 +123,9 @@ export default class User extends BaseModel {
 
   @hasMany(() => Offer)
   public offers: HasMany<typeof Offer>
+
+  @hasMany(() => Report)
+  public reports: HasMany<typeof Report>
 
   @hasMany(() => Report, { foreignKey: 'toId' })
   public reportsTo: HasMany<typeof Report>

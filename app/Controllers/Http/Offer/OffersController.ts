@@ -22,8 +22,10 @@ export default class OffersController {
     const isFiltered: boolean = request.input('isFiltered', false)
     const config: PaginateConfig<Offer> = {
       baseUrl: route!.pattern,
-      relations: ['user', 'subsection'],
       page: request.input('page', 1),
+
+      aggregates: ['reports'],
+      relations: ['user', 'subsection'],
     }
 
     if (isFiltered) {

@@ -20,7 +20,7 @@ export default class Partner extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
-  @column()
+  @column({ serializeAs: null })
   public isVisible: boolean
 
   @column()
@@ -45,7 +45,7 @@ export default class Partner extends BaseModel {
    * * Computed properties
    */
 
-  @computed()
+  @computed({ serializeAs: null })
   public get isVisibleForUser(): string {
     return this.isVisible ? 'Виден' : 'Не виден'
   }

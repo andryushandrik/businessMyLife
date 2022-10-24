@@ -1,0 +1,57 @@
+/api/partner:
+  get:
+    tags:
+      - Partner
+    summary: Paginate all partners
+    parameters:
+      - $ref: '#/components/parameters/Page'
+
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/OrderBy'
+      - $ref: '#/components/parameters/OrderByColumn'
+    responses:
+      200:
+        allOf:
+          - $ref: '#/components/responses/Success'
+          - content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    body:
+                      allOf:
+                        - $ref: '#/components/schemas/Pagination'
+                        - type: object
+                          properties:
+                            data:
+                              type: array
+                              items:
+                                $ref: "#/components/schemas/Partner"
+      400:
+        allOf:
+          - $ref: '#/components/responses/Error'
+          - description: Client error
+      500:
+        allOf:
+          - $ref: '#/components/responses/Error'
+          - description: Server error
+
+components:
+  schemas:
+    Partner:
+      type: object
+      properties:
+        id:
+          type: integer
+        isTitleLink:
+          type: boolean
+        title:
+          type: string
+        media:
+          type: string
+        mediaType:
+          type: boolean
+        createdAt:
+          type: string
+        updatedAt:
+          type: string

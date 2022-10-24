@@ -15,6 +15,12 @@ export default class UserService {
   public static async paginate(config: PaginateConfig<User>, filter?: UserFilterValidator['schema']['props']): Promise<ModelPaginatorContract<User>> {
     let query: ModelQueryBuilderContract<typeof User> = User.query()
 
+    if (config.aggregates) {
+      for (const item of config.aggregates) {
+        await query.withCount(item)
+      }
+    }
+
     if (filter)
       query = this.filter(query, filter)
 

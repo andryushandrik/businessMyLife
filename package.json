@@ -25,6 +25,7 @@
     "@adonisjs/session": "^6.4.0",
     "@adonisjs/shield": "^7.1.0",
     "@adonisjs/view": "^6.2.0",
+    "adonis5-swagger": "^1.4.1",
     "cyrillic-to-translit-js": "^3.2.1",
     "luxon": "^3.0.3",
     "ms": "^2.1.3",

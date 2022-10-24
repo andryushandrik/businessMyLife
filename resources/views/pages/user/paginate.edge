@@ -9,7 +9,7 @@
       { key: 'id', value: 'ID' },
       { key: 'typeId', value: 'Тип профиля' },
       { key: 'city', value: 'Город' },
-      // { key: 'city', value: 'Кол-во жалоб' },
+      { key: 'reportsCount', value: 'Кол-во жалоб' },
       { key: 'blockedUntil', value: 'Бан' },
     ],
   })
@@ -50,7 +50,7 @@
                   <td>{{ item.fullName }}</td>
                   <td>{{ item.email }}</td>
                   <td>{{ item.city }}</td>
-                  <td>Появится, когда появятся жалобы</td>
+                  <td>{{ item.reportsCount }}</td>
                   <td>{{ item.blockedUntilForUser }}</td>
                   <td>{{ item.createdAtForUser }}</td>
 
