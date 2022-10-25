@@ -18,6 +18,7 @@ export enum ResponseMessages {
    */
 
   USER_NOT_FOUND = 'Пользователь не найден!',
+  CODE_VERIFICATION_NOT_FOUND = 'Код верификации не найден!',
   VALIDATION_ERROR = 'Заполните пожалуйста все поля правильно!',
   TOKEN_ERROR = 'Токен верификации пользователя не найден или просрочен!',
   MISS_AUTH_HEADERS = 'Не найдены необходимые заголовки для авторизации!',

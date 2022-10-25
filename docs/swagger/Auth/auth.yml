@@ -1,0 +1,59 @@
+/api/auth/login:
+  post:
+    tags:
+      - Auth
+    summary: Login
+    parameters:
+      - $ref: '#/components/parameters/UserAgent'
+      - $ref: '#/components/parameters/UserFingerprint'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email: { $ref: '#/components/schemas/Email' }
+              password: { $ref: '#/components/schemas/Password' }
+
+/api/auth/refreshToken:
+  get:
+    tags:
+      - Auth
+    summary: Refresh access token
+    parameters:
+      - $ref: '#/components/parameters/UserAgent'
+      - $ref: '#/components/parameters/UserFingerprint'
+
+/api/auth/logout:
+  delete:
+    tags:
+      - Auth
+    summary: Logout
+    parameters:
+      - $ref: '#/components/parameters/UserAgent'
+      - $ref: '#/components/parameters/UserFingerprint'
+
+components:
+  schemas:
+    VerifyCode:
+      type: integer
+      required: true
+      minimum: 111111
+      maximum: 999999
+      description: Only 6-digit code with only numbers
+
+  parameters:
+    UserAgent:
+      in: header
+      required: true
+      name: User-Agent
+      schema: { type: string }
+
+    UserFingerprint:
+      in: header
+      required: true
+      name: User-Fingerprint
+      schema:
+        type: string
+        format: uuid

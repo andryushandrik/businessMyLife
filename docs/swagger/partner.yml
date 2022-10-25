@@ -41,17 +41,14 @@ components:
     Partner:
       type: object
       properties:
-        id:
-          type: integer
-        isTitleLink:
-          type: boolean
-        title:
-          type: string
-        media:
-          type: string
-        mediaType:
-          type: boolean
+        id: { type: integer }
+        isTitleLink: { type: boolean }
+        title: { type: string }
+        media: { type: string }
+        mediaType: { type: boolean }
         createdAt:
           type: string
+          format: date-time
         updatedAt:
           type: string
+          format: date-time

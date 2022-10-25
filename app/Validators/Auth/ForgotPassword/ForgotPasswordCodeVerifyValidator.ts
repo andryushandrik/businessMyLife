@@ -3,11 +3,12 @@ import type { CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 // * Types
 
-import IndexValidator from './IndexValidator'
+import IndexValidator from '../../IndexValidator'
 import { schema } from '@ioc:Adonis/Core/Validator'
-import { getUserEmailRules, getUserPasswordRules } from './Rules/user'
+import { getVerifyCodeRules } from 'App/Validators/Rules/auth'
+import { getUserEmailRules } from 'App/Validators/Rules/User/user'
 
-export default class LoginValidator extends IndexValidator {
+export default class ForgotPasswordCodePasswordVerifyValidator extends IndexValidator {
   constructor(protected ctx: HttpContextContract) {
     super()
   }
@@ -32,8 +33,8 @@ export default class LoginValidator extends IndexValidator {
    *    ```
    */
   public schema = schema.create({
-    email: schema.string({ trim: true }, getUserEmailRules()),
-    password: schema.string({ trim: true }, getUserPasswordRules()),
+    verifyCode: schema.number(getVerifyCodeRules()),
+    email: schema.string({ trim: true }, getUserEmailRules('exists')),
   })
 
   /**

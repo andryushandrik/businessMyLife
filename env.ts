@@ -42,4 +42,23 @@ export default Env.rules({
   REDIS_HOST: Env.schema.string({ format: 'host' }),
   REDIS_PORT: Env.schema.number(),
   REDIS_PASSWORD: Env.schema.string.optional(),
+
+  /**
+   * * Auth
+   */
+
+  USER_VERIFY_TOKEN_EXPIRE: Env.schema.string(),
+  ACCESS_TOKEN_KEY: Env.schema.string(),
+  ACCESS_TOKEN_EXPIRE: Env.schema.string(),
+  REFRESH_TOKEN_KEY: Env.schema.string(),
+  REFRESH_TOKEN_EXPIRE: Env.schema.string(),
+
+  /**
+   * * Mailer
+   */
+
+  SMTP_HOST: Env.schema.string({ format: 'host' }),
+  SMTP_PORT: Env.schema.number(),
+  SMTP_USERNAME: Env.schema.string(),
+  SMTP_PASSWORD: Env.schema.string(),
 })

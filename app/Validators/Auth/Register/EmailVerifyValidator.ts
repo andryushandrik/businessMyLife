@@ -1,13 +1,12 @@
 // * Types
-import type { CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 // * Types
 
-import IndexValidator from './IndexValidator'
-import { schema } from '@ioc:Adonis/Core/Validator'
-import { getUserBlockedUntilRules } from './Rules/User/user'
+import IndexValidator from '../../IndexValidator'
+import { getUserEmailRules } from '../../Rules/User/user'
+import { schema, CustomMessages } from '@ioc:Adonis/Core/Validator'
 
-export default class BlockUntilValidator extends IndexValidator {
+export default class EmailVerifyValidator extends IndexValidator {
   constructor(protected ctx: HttpContextContract) {
     super()
   }
@@ -32,7 +31,7 @@ export default class BlockUntilValidator extends IndexValidator {
    *    ```
    */
   public schema = schema.create({
-    blockedUntil: schema.date({ format: 'dd MMMM, yyyy' }, getUserBlockedUntilRules()),
+    email: schema.string({ trim: true }, getUserEmailRules('unique')),
   })
 
   /**
@@ -46,8 +45,5 @@ export default class BlockUntilValidator extends IndexValidator {
    * }
    *
    */
-  public messages: CustomMessages = {
-    ...this.messages,
-    'blockedUntil.after': 'Дата должна быть выше сегодняшней!'
-  }
+  public messages: CustomMessages = this.messages
 }

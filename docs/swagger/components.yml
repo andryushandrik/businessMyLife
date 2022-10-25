@@ -49,8 +49,7 @@ components:
       in: query
       name: orderByColumn
       required: false
-      schema:
-        type: string
+      schema: { type: string }
 
   responses:
     Success:

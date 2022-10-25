@@ -5,7 +5,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 // * Types
 
 import AuthService from 'App/Services/AuthService'
-import LoginValidator from 'App/Validators/LoginValidator'
+import LoginValidator from 'App/Validators/Auth/LoginValidator'
 import { SESSION_AUTH_KEY } from 'Config/session'
 
 export default class AuthController {

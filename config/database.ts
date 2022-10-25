@@ -5,8 +5,11 @@
  * file.
  */
 
+// * Types
+import type { DatabaseConfig } from '@ioc:Adonis/Lucid/Database'
+// * Types
+
 import Env from '@ioc:Adonis/Core/Env'
-import { DatabaseConfig } from '@ioc:Adonis/Lucid/Database'
 
 const databaseConfig: DatabaseConfig = {
   /*
@@ -87,6 +90,7 @@ export const TABLES_NAMES = {
 
   USERS: 'users',
   ROLES: 'roles',
+  SESSIONS: 'sessions',
   USERS_TYPES: 'usersTypes',
   USERS_IMAGES: 'usersImages',
 } as const
@@ -196,3 +200,15 @@ export const OFFER_BLOCK_DESCRIPTION_MAX_LENGTH: number = 1024
 
 export const USER_PASSWORD_MIN_LENGTH: number = 8
 export const USER_PASSWORD_MAX_LENGTH: number = 50
+
+export const USER_COMPANY_NAME_MIN_LENGTH: number = 1
+export const USER_COMPANY_NAME_MAX_LENGTH: number = 255
+
+export const USER_FIRST_NAME_MIN_LENGTH: number = 2
+export const USER_FIRST_NAME_MAX_LENGTH: number = 255
+
+export const USER_LAST_NAME_MIN_LENGTH: number = 2
+export const USER_LAST_NAME_MAX_LENGTH: number = 255
+
+export const USER_PATRONYMIC_MIN_LENGTH: number = 2
+export const USER_PATRONYMIC_MAX_LENGTH: number = 255

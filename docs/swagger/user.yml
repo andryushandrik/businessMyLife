@@ -1,0 +1,49 @@
+components:
+  schemas:
+    Email:
+      type: string
+      format: email
+      required: true
+      description: Only lowercase
+
+    Password:
+      type: string
+      minLength: 8
+      maxLength: 50
+      required: true
+      format: password
+      description: Should be with one uppercase letter and one number
+
+    FirstName:
+      type: string
+      minLength: 2
+      maxLength: 255
+      required: true
+      description: Min 2, max 255
+
+    LastName:
+      type: string
+      minLength: 2
+      maxLength: 255
+      required: true
+      description: Min 2, max 255
+
+    Patronymic:
+      type: string
+      minLength: 2
+      maxLength: 255
+      required: true
+      description: Min 2, max 255
+
+    TypeId:
+      type: integer
+      minimum: 1
+      required: true
+      description: User type id (Individual entrepreneur, LLC etc.)
+
+    CompanyName:
+      type: string
+      minLength: 2
+      maxLength: 255
+      required: false
+      description: Only for individual entrepreneur and LLC

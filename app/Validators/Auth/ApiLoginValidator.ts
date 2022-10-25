@@ -3,11 +3,11 @@ import type { CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 // * Types
 
-import IndexValidator from './IndexValidator'
+import IndexValidator from '../IndexValidator'
 import { schema } from '@ioc:Adonis/Core/Validator'
-import { getUserBlockedUntilRules } from './Rules/User/user'
+import { getUserEmailRules, getUserPasswordRules } from '../Rules/User/user'
 
-export default class BlockUntilValidator extends IndexValidator {
+export default class ApiLoginValidator extends IndexValidator {
   constructor(protected ctx: HttpContextContract) {
     super()
   }
@@ -32,12 +32,13 @@ export default class BlockUntilValidator extends IndexValidator {
    *    ```
    */
   public schema = schema.create({
-    blockedUntil: schema.date({ format: 'dd MMMM, yyyy' }, getUserBlockedUntilRules()),
+    email: schema.string({ trim: true }, getUserEmailRules()),
+    password: schema.string({ trim: true }, getUserPasswordRules()),
   })
 
   /**
-   * Custom messages for validation failures. You can make use of dot notation `(.)`
-   * for targeting nested fields and array expressions `(*)` for targeting all
+   * Custom messages for validation failures. You can make use of dot notation (.)
+   * for targeting nested fields and array expressions (*) for targeting all
    * children of an array. For example:
    *
    * {
@@ -46,8 +47,5 @@ export default class BlockUntilValidator extends IndexValidator {
    * }
    *
    */
-  public messages: CustomMessages = {
-    ...this.messages,
-    'blockedUntil.after': 'Дата должна быть выше сегодняшней!'
-  }
+  public messages: CustomMessages = this.messages
 }

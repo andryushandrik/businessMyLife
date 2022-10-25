@@ -1,6 +1,7 @@
 // * Types
 import type BlockUntilValidator from 'App/Validators/BlockUntilValidator'
 import type UserFilterValidator from 'App/Validators/UserFilterValidator'
+import type RegisterValidator from 'App/Validators/Auth/Register/RegisterValidator'
 import type { Err } from 'Contracts/response'
 import type { PaginateConfig, ServiceConfig } from 'Contracts/services'
 import type { ModelPaginatorContract, ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
@@ -92,6 +93,24 @@ export default class UserService {
     } catch (err: any) {
       Logger.error(err)
       throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+    }
+  }
+
+  public static async create(payload: RegisterValidator['schema']['props']): Promise<User> {
+    let item: User
+    const roleId: User['roleId'] = RoleNames.USER + 1
+
+    try {
+      item = await User.create({ ...payload, roleId })
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+    }
+
+    try {
+      return await this.get(item.id)
+    } catch (err: Err | any) {
+      throw err
     }
   }
 

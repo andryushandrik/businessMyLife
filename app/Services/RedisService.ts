@@ -8,6 +8,12 @@ import Logger from '@ioc:Adonis/Core/Logger'
 import { RedisKeys, REDIS_KEYS } from 'Config/redis'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 
+// Expiration in ms js
+type Config = {
+  safety?: boolean,
+  expiration?: string,
+}
+
 export default class RedisService {
   public static async get(keyType: RedisKeys, key: string): Promise<string> {
     let item: string | null
@@ -28,10 +34,10 @@ export default class RedisService {
   /**
    * @param expiration - In ms js
    */
-  public static async set(keyType: RedisKeys, key: string, value: any, expiration?: string): Promise<void> {
+  public static async set(keyType: RedisKeys, key: string, value: any, config: Config): Promise<void> {
     try {
-      if (expiration)
-        await Redis.set(this.getKey(keyType, key), value, 'PX', ms(expiration))
+      if (config.expiration)
+        await Redis.set(this.getKey(keyType, key), value, 'PX', ms(config.expiration))
       else
         await Redis.set(this.getKey(keyType, key), value)
     } catch (err: any) {

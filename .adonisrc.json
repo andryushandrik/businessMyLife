@@ -5,7 +5,8 @@
     "@adonisjs/core/build/commands/index.js",
     "@adonisjs/repl/build/commands",
     "@adonisjs/lucid/build/commands",
-    "adonis5-swagger/build/commands"
+    "adonis5-swagger/build/commands",
+    "@adonisjs/mail/build/commands"
   ],
   "exceptionHandlerNamespace": "App/Exceptions/Handler",
   "aliases": {
@@ -30,7 +31,8 @@
     "@adonisjs/shield",
     "@adonisjs/lucid",
     "@adonisjs/redis",
-    "adonis5-swagger"
+    "adonis5-swagger",
+    "@adonisjs/mail"
   ],
   "metaFiles": [
     {

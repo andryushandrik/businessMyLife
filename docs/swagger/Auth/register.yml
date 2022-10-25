@@ -1,0 +1,63 @@
+/api/auth/register:
+  post:
+    tags:
+      - Auth
+      - Register
+    summary: Register with full user data
+    description: Use this endpoint after email verify endpoint
+    parameters:
+      - $ref: '#/components/parameters/UserAgent'
+      - $ref: '#/components/parameters/UserFingerprint'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              verifyCode: { $ref: '#/components/schemas/VerifyCode' }
+
+              email: { $ref: '#/components/schemas/Email' }
+              password: { $ref: '#/components/schemas/Password' }
+              passwordConfirm: { $ref: '#/components/schemas/Password' }
+
+              firstName: { $ref: '#/components/schemas/FirstName' }
+              lastName: { $ref: '#/components/schemas/LastName' }
+              patronymic: { $ref: '#/components/schemas/Patronymic' }
+
+              typeId: { $ref: '#/components/schemas/TypeId' }
+
+              companyName: { $ref: '#/components/schemas/CompanyName' }
+
+/api/auth/register/emailVerify:
+  post:
+    tags:
+      - Auth
+      - Register
+    summary: Send code to user email
+    description: Use this endpoint before register endpoint
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email: { $ref: '#/components/schemas/Email' }
+
+/api/auth/register/codeVerify:
+  post:
+    tags:
+      - Auth
+      - Register
+    summary: Verify code (not required)
+    description: Use this endpoint just for check correct code before send register data
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email: { $ref: '#/components/schemas/Email' }
+              verifyCode: { $ref: '#/components/schemas/VerifyCode' }
