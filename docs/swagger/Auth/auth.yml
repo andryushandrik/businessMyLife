@@ -13,8 +13,22 @@
           schema:
             type: object
             properties:
-              email: { $ref: '#/components/schemas/Email' }
-              password: { $ref: '#/components/schemas/Password' }
+              email: { $ref: '#/components/schemas/UserEmail' }
+              password: { $ref: '#/components/schemas/UserPassword' }
+    responses:
+      200:
+        allOf:
+          - $ref: '#/components/responses/Success'
+          - content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    body: { $ref: '#/components/schemas/LoginSchema' }
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
 
 /api/auth/refreshToken:
   get:
@@ -24,6 +38,20 @@
     parameters:
       - $ref: '#/components/parameters/UserAgent'
       - $ref: '#/components/parameters/UserFingerprint'
+    responses:
+      200:
+        allOf:
+          - $ref: '#/components/responses/Success'
+          - content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    body: { $ref: '#/components/schemas/LoginSchema' }
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
 
 /api/auth/logout:
   delete:
@@ -33,15 +61,65 @@
     parameters:
       - $ref: '#/components/parameters/UserAgent'
       - $ref: '#/components/parameters/UserFingerprint'
+    responses:
+      200:
+        $ref: '#/components/responses/Success'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
 
 components:
   schemas:
+    LoginSchema:
+      type: object
+      properties:
+        user:
+          type: object
+          properties:
+            id: { $ref: '#/components/schemas/UserId' }
+            isShowEmail: { $ref: '#/components/schemas/UserIsShowEmail' }
+            isShowPhone: { $ref: '#/components/schemas/UserIsShowPhone' }
+            firstName: { $ref: '#/components/schemas/UserFirstName' }
+            lastName: { $ref: '#/components/schemas/UserLastName' }
+            patronymic: { $ref: '#/components/schemas/UserPatronymic' }
+            email: { $ref: '#/components/schemas/UserEmail' }
+            taxpayerIdentificationNumber: { $ref: '#/components/schemas/UserTIN' }
+            mainStateRegistrationNumber: { $ref: '#/components/schemas/UserMSRN' }
+            legalAddress: { $ref: '#/components/schemas/UserLegalAddress' }
+            placeOfWork: { $ref: '#/components/schemas/UserPlaceOfWork' }
+            companyName: { $ref: '#/components/schemas/UserCompanyName' }
+            experienceType: { $ref: '#/components/schemas/UserExperienceType' }
+            birthday: { $ref: '#/components/schemas/UserBirthday' }
+            city: { $ref: '#/components/schemas/UserCity' }
+            phone: { $ref: '#/components/schemas/UserPhone' }
+            avatar: { $ref: '#/components/schemas/UserAvatar' }
+            hobby: { $ref: '#/components/schemas/UserHobby' }
+            roleId: { $ref: '#/components/schemas/UserRoleId' }
+            typeId: { $ref: '#/components/schemas/UserTypeId' }
+            createdAt: { $ref: '#/components/schemas/UserCreatedAt' }
+            updatedAt: { $ref: '#/components/schemas/UserUpdatedAt' }
+            blockedUntil: { $ref: '#/components/schemas/UserBlockedUntil' }
+            fullName: { $ref: '#/components/schemas/UserFullName' }
+            createdAtForUser: { $ref: '#/components/schemas/UserCreatedAtForUser' }
+            blockedUntilForUser: { $ref: '#/components/schemas/UserBlockedUntilForUser' }
+            experienceTypeForUser: { $ref: '#/components/schemas/UserExperienceTypeForUser' }
+            birthdayForUser: { $ref: '#/components/schemas/UserBirthdayForUser' }
+            roleForUser: { $ref: '#/components/schemas/UserRoleForUser' }
+            typeForUser: { $ref: '#/components/schemas/UserTypeForUser' }
+        token: { $ref: '#/components/schemas/Token' }
+
     VerifyCode:
       type: integer
       required: true
       minimum: 111111
       maximum: 999999
       description: Only 6-digit code with only numbers
+
+    Token:
+      type: string
+      format: uuid
+      description: Access token
 
   parameters:
     UserAgent:

@@ -28,6 +28,20 @@
               typeId: { $ref: '#/components/schemas/TypeId' }
 
               companyName: { $ref: '#/components/schemas/CompanyName' }
+    responses:
+      200:
+        allOf:
+          - $ref: '#/components/responses/Success'
+          - content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    body: { $ref: '#/components/schemas/LoginSchema' }
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
 
 /api/auth/register/emailVerify:
   post:
@@ -44,6 +58,13 @@
             type: object
             properties:
               email: { $ref: '#/components/schemas/Email' }
+    responses:
+      200:
+        $ref: '#/components/responses/Success'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
 
 /api/auth/register/codeVerify:
   post:
@@ -61,3 +82,10 @@
             properties:
               email: { $ref: '#/components/schemas/Email' }
               verifyCode: { $ref: '#/components/schemas/VerifyCode' }
+    responses:
+      200:
+        $ref: '#/components/responses/Success'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'

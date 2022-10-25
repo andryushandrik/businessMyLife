@@ -28,27 +28,39 @@
                               items:
                                 $ref: "#/components/schemas/Partner"
       400:
-        allOf:
-          - $ref: '#/components/responses/Error'
-          - description: Client error
+        $ref: '#/components/responses/ClientError'
       500:
-        allOf:
-          - $ref: '#/components/responses/Error'
-          - description: Server error
+        $ref: '#/components/responses/ServerError'
 
 components:
   schemas:
     Partner:
       type: object
       properties:
-        id: { type: integer }
-        isTitleLink: { type: boolean }
-        title: { type: string }
-        media: { type: string }
-        mediaType: { type: boolean }
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
+        id: { $ref: '#/components/schemas/Id' }
+        isTitleLink: { $ref: '#/components/schemas/IsTitleLink' }
+        title: { $ref: '#/components/schemas/Title' }
+        media: { $ref: '#/components/schemas/Media' }
+        mediaType: { $ref: '#/components/schemas/MediaType' }
+        createdAt: { $ref: '#/components/schemas/CreatedAt' }
+        updatedAt: { $ref: '#/components/schemas/UpdatedAt' }
+
+    Id:
+      type: integer
+      minimum: 1
+
+    IsTitleLink: { type: boolean }
+
+    Title: { type: string }
+
+    Media: { type: string }
+
+    MediaType: { type: boolean }
+
+    CreatedAt:
+      type: string
+      format: date-time
+
+    UpdatedAt:
+      type: string
+      format: date-time

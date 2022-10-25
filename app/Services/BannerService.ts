@@ -124,7 +124,7 @@ export default class BannerService{
 
   public static async updateBannersDelay({ delay }: BannerDelayValidator['schema']['props']): Promise<void> {
     try {
-      await RedisService.set(RedisKeys.BANNER, 'delay', delay)
+      await RedisService.set(RedisKeys.BANNER, 'delay', delay, {})
     } catch (err: Err | any) {
       throw err
     }

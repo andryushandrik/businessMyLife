@@ -2,6 +2,8 @@ import Route from '@ioc:Adonis/Core/Route'
 
 Route.group(() => {
 
+  Route.get('/projectData', 'Api/IndexController.getProjectData')
+
   Route.get('/partner', 'Api/PartnersController.paginate')
 
   /**

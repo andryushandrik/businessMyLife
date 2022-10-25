@@ -1,12 +1,45 @@
 components:
   schemas:
-    Email:
+    UserId:
+      type: integer
+      minimum: 1
+
+    UserIsShowEmail:
+      type: boolean
+      required: false
+
+    UserIsShowPhone:
+      type: boolean
+      required: false
+
+    UserFirstName:
+      type: string
+      minLength: 2
+      maxLength: 255
+      required: true
+      description: Min 2, max 255
+
+    UserLastName:
+      type: string
+      minLength: 2
+      maxLength: 255
+      required: true
+      description: Min 2, max 255
+
+    UserPatronymic:
+      type: string
+      minLength: 2
+      maxLength: 255
+      required: true
+      description: Min 2, max 255
+
+    UserEmail:
       type: string
       format: email
       required: true
       description: Only lowercase
 
-    Password:
+    UserPassword:
       type: string
       minLength: 8
       maxLength: 50
@@ -14,36 +47,107 @@ components:
       format: password
       description: Should be with one uppercase letter and one number
 
-    FirstName:
-      type: string
-      minLength: 2
-      maxLength: 255
-      required: true
-      description: Min 2, max 255
-
-    LastName:
-      type: string
-      minLength: 2
-      maxLength: 255
-      required: true
-      description: Min 2, max 255
-
-    Patronymic:
-      type: string
-      minLength: 2
-      maxLength: 255
-      required: true
-      description: Min 2, max 255
-
-    TypeId:
+    UserTIN:
       type: integer
-      minimum: 1
-      required: true
-      description: User type id (Individual entrepreneur, LLC etc.)
+      nullable: true
+      required: false
+      description: Tax id
 
-    CompanyName:
+    UserMSRN:
+      type: integer
+      nullable: true
+      required: false
+      description: Main state registration number
+
+    UserLegalAddress:
+      type: string
+      nullable: true
+      required: false
+
+    UserPlaceOfWord:
+      type: string
+      nullable: true
+      required: false
+
+    UserCompanyName:
       type: string
       minLength: 2
       maxLength: 255
       required: false
       description: Only for individual entrepreneur and LLC
+
+    UserExperienceType:
+      type: integer
+      minimum: 0
+      maximum: 4
+      nullable: true
+      required: false
+
+    UserBirthday:
+      type: string
+      format: date
+      nullable: true
+      required: false
+
+    UserCity:
+      type: string
+      nullable: true
+      required: false
+
+    UserPhone:
+      type: string
+      format: phone
+      nullable: true
+      required: false
+
+    UserAvatar:
+      type: string
+      nullable: true
+      required: false
+
+    UserHobby:
+      type: string
+      nullable: true
+      required: false
+
+    UserTypeId:
+      type: integer
+      minimum: 1
+      required: true
+      description: User type id (Individual entrepreneur, LLC etc.)
+
+    UserRoleId:
+      type: integer
+      minimum: 1
+
+    UserCreatedAt:
+      type: string
+      format: date-time
+
+    UserUpdatedAt:
+      type: string
+      format: date-time
+
+    UserBlockedUntil:
+      type: string
+      format: date-time
+
+    # * Computed properties
+
+    UserFullName:
+      type: string
+      description: First name + last name + patronymic
+
+    UserCreatedAtForUser: { type: string }
+
+    UserUpdatedAtForUser: { type: string }
+
+    UserBlockedUntilForUser: { type: string }
+
+    UserExperienceTypeForUser: { type: string }
+
+    UserBirthdayForUser: { type: string }
+
+    UserRoleForUser: { type: string }
+
+    UserTypeForUser: { type: string }

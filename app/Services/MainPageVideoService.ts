@@ -60,9 +60,9 @@ export default class MainPageVideoService {
     }
 
     try {
-      await RedisService.set(RedisKeys.MAIN_PAGE_VIDEO, 'title', payload.title)
-      await RedisService.set(RedisKeys.MAIN_PAGE_VIDEO, 'description', payload.description)
-      await RedisService.set(RedisKeys.MAIN_PAGE_VIDEO, 'videoPath', videoPath)
+      await RedisService.set(RedisKeys.MAIN_PAGE_VIDEO, 'title', payload.title, {})
+      await RedisService.set(RedisKeys.MAIN_PAGE_VIDEO, 'description', payload.description, {})
+      await RedisService.set(RedisKeys.MAIN_PAGE_VIDEO, 'videoPath', videoPath, {})
     } catch (err: Err | any) {
       throw err
     }

@@ -1,0 +1,21 @@
+/api/projectData:
+  get:
+    summary: Banners delay, main page video etc.
+    responses:
+      200:
+        allOf:
+          - $ref: '#/components/responses/Success'
+          - content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    body:
+                      type: object
+                      properties:
+                        title: { type: string }
+                        description: { type: string }
+                        videoPath: { type: string }
+                        bannersDelay:
+                          type: number
+                          nullable: true

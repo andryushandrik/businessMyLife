@@ -65,7 +65,8 @@ components:
                 type: string
                 enum: ['SUCCESS']
 
-    Error:
+    ClientError:
+      description: Client error
       content:
         application/json:
           schema:
@@ -75,7 +76,23 @@ components:
               status: { type: integer }
               code:
                 type: string
-                enum: ['CLIENT_ERROR', 'DATABASE_ERROR', 'SERVER_ERROR', 'MAILER_ERROR', 'TOKEN_EXPIRED', 'VALIDATION_ERROR']
+                enum: ['CLIENT_ERROR', 'MAILER_ERROR', 'TOKEN_EXPIRED', 'VALIDATION_ERROR']
+              body:
+                type: object
+                nullable: true
+
+    ServerError:
+      description: Client error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message: { type: string }
+              status: { type: integer }
+              code:
+                type: string
+                enum: ['DATABASE_ERROR', 'SERVER_ERROR', 'MAILER_ERROR']
               body:
                 type: object
                 nullable: true
