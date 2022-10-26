@@ -40,7 +40,7 @@
     parameters:
       - in: path
         name: slug
-        schema: { type: string }
+        schema: { $ref: '#/components/schemas/Slug' }
         required: true
     responses:
       200:

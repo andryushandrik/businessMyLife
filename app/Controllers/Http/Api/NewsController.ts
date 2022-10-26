@@ -1,5 +1,6 @@
 // * Types
 import type News from 'App/Models/News'
+import type { Err } from 'Contracts/response'
 import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 // * Types
@@ -40,7 +41,7 @@ export default class NewsController {
       let item: News = await NewsService.get(slug)
 
       return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, item))
-    } catch (err: Error | any) {
+    } catch (err: Err | any) {
       throw new ExceptionService(err)
     }
   }

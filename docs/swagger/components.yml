@@ -12,6 +12,7 @@ components:
     Image:
       type: string
       format: binary
+      nullable: true
       required: false
 
     CreatedAt:

@@ -54,4 +54,17 @@ Route.group(() => {
 
   }).prefix('news')
 
+  /**
+   * * User
+   */
+
+  Route.group(() => {
+
+    Route.get('/:id', 'Api/UsersController.get').where('id', {
+      match: /^[0-9]+$/,
+      cast: (id) => Number(id),
+    })
+
+  }).prefix('user')
+
 }).prefix('api')
