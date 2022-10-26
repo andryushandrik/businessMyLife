@@ -67,4 +67,14 @@ Route.group(() => {
 
   }).prefix('user')
 
+  /**
+   * * Offer
+   */
+
+  Route.group(() => {
+
+    Route.get('/user/:userId', 'Api/OffersController.paginateUserOffers')
+
+  }).prefix('offer')
+
 }).prefix('api')

@@ -67,7 +67,7 @@ components:
         slug: { $ref: '#/components/schemas/Slug' }
         title: { $ref: '#/components/schemas/NewsTitle' }
         description: { $ref: '#/components/schemas/NewsDescription' }
-        viewsCount: { $ref: '#/components/schemas/NewsViewsCount' }
+        viewsCount: { $ref: '#/components/schemas/ViewsCount' }
         suptitle: { $ref: '#/components/schemas/NewsSuptitle' }
         image: { $ref: '#/components/schemas/Image' }
         readingTimeFrom: { $ref: '#/components/schemas/NewsReadingTimeFrom' }
@@ -90,8 +90,6 @@ components:
       maxLength: 8192
       required: true
       description: Min 4, max 8192
-
-    NewsViewsCount: { type: integer }
 
     NewsSuptitle:
       type: string

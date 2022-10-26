@@ -14,6 +14,12 @@ import SubsectionService from './SubsectionService'
 import { OfferCategories } from 'Config/offer'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 
+type OfferConfig = PaginateConfig<Offer> & {
+  preloadArea?: boolean,
+  withoutBanned?: boolean,
+  withoutArchived?: boolean,
+}
+
 type FilterDependencies = {
   subsectionsIds: Subsection['id'][],
 }
@@ -60,11 +66,23 @@ export default class OfferService {
     }
   }
 
-  public static async paginateUserOffers(userId: User['id'], config: PaginateConfig<Offer>, filter?: OfferFilterValidator['schema']['props']): Promise<ModelPaginatorContract<Offer>> {
+  public static async paginateUserOffers(userId: User['id'], config: OfferConfig, filter?: OfferFilterValidator['schema']['props']): Promise<ModelPaginatorContract<Offer>> {
     let query: ModelQueryBuilderContract<typeof Offer> = Offer
       .query()
       .withScopes((scopes) => scopes.getByVerified(true))
       .withScopes((scopes) => scopes.getByUserId(userId))
+
+    if (config.withoutBanned)
+      query = query.withScopes((scopes) => scopes.getByBanned(false))
+
+    if (config.withoutArchived)
+      query = query.withScopes((scopes) => scopes.getByArchived(false))
+
+    if (config.preloadArea) {
+      query = query.preload('subsection', (subsection) => {
+        subsection.preload('area')
+      })
+    }
 
     if (config.relations) {
       for (const item of config.relations) {

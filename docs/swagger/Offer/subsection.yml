@@ -1,0 +1,20 @@
+components:
+  schemas:
+    Subsection:
+      type: object
+      properties:
+        id: { $ref: '#/components/schemas/Id' }
+        name: { $ref: '#/components/schemas/SubsectionName' }
+        createdAt: { $ref: '#/components/schemas/CreatedAt' }
+        updatedAt: { $ref: '#/components/schemas/UpdatedAt' }
+        area:
+          allOf:
+            - nullable: true
+              required: false
+            - $ref: '#/components/schemas/Area'
+
+    # * Columns
+
+    SubsectionName:
+      type: string
+      required: true

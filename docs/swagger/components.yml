@@ -9,6 +9,8 @@ components:
       type: string
       required: false
 
+    ViewsCount: { type: integer }
+
     Image:
       type: string
       format: binary
@@ -19,6 +21,8 @@ components:
       type: string
       required: true
       format: date-time
+
+    CreatedAtForUser: { type: string }
 
     UpdatedAt:
       type: string

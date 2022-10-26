@@ -1,0 +1,280 @@
+/api/offer/user/{userId}:
+  get:
+    tags:
+      - Offer
+    summary: Get user's offers
+    parameters:
+      - in: path
+        name: userId
+        schema: { $ref: '#/components/schemas/Id' }
+        required: true
+
+      # * Query parameters
+
+      - $ref: '#/components/parameters/Page'
+
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/OrderBy'
+      - $ref: '#/components/parameters/OrderByColumn'
+    responses:
+      200:
+        allOf:
+          - $ref: '#/components/responses/Success'
+          - content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    body:
+                      allOf:
+                        - $ref: '#/components/schemas/Pagination'
+                        - type: object
+                          properties:
+                            data:
+                              type: array
+                              items:
+                                $ref: '#/components/schemas/Offer'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
+
+components:
+  schemas:
+    Offer:
+      type: object
+      properties:
+        id: { $ref: '#/components/schemas/Id' }
+        isVerified: { $ref: '#/components/schemas/OfferIsVerified' }
+        viewsCount: { $ref: '#/components/schemas/ViewsCount' }
+
+        slug: { $ref: '#/components/schemas/Slug' }
+        title: { $ref: '#/components/schemas/OfferTitle' }
+        description: { $ref: '#/components/schemas/OfferDescription' }
+        city: { $ref: '#/components/schemas/OfferCity' }
+        category: { $ref: '#/components/schemas/OfferCategory' }
+        paybackTime: { $ref: '#/components/schemas/OfferPaybackTime' }
+        image: { $ref: '#/components/schemas/Image' }
+
+        cooperationTerms: { $ref: '#/components/schemas/OfferCooperationTerms' }
+        businessPlan: { $ref: '#/components/schemas/OfferBusinessPlan' }
+        benefits: { $ref: '#/components/schemas/OfferBenefits' }
+        about: { $ref: '#/components/schemas/OfferAbout' }
+        aboutCompany: { $ref: '#/components/schemas/OfferAboutCompany' }
+        investments: { $ref: '#/components/schemas/OfferInvestments' }
+        projectStage: { $ref: '#/components/schemas/OfferProjectStage' }
+        dateOfCreation: { $ref: '#/components/schemas/OfferDateOfCreation' }
+        price: { $ref: '#/components/schemas/OfferPrice' }
+        pricePerMonth: { $ref: '#/components/schemas/OfferPricePerMonth' }
+        profitPerMonth: { $ref: '#/components/schemas/OfferProfitPerMonth' }
+        profit: { $ref: '#/components/schemas/OfferProfit' }
+        branchCount: { $ref: '#/components/schemas/OfferBranchCount' }
+        soldBranchCount: { $ref: '#/components/schemas/OfferSoldBranchCount' }
+
+        blockDescription: { $ref: '#/components/schemas/OfferBlockDescription' }
+
+        userId: { $ref: '#/components/schemas/Id' }
+        subsectionId: { $ref: '#/components/schemas/Id' }
+
+        createdAt: { $ref: '#/components/schemas/CreatedAt' }
+        updatedAt: { $ref: '#/components/schemas/UpdatedAt' }
+
+        subsection:
+          allOf:
+            - nullable: true
+              required: false
+            - $ref: '#/components/schemas/Subsection'
+
+        isArchivedForUser: { $ref: '#/components/schemas/OfferIsArchivedForUser' }
+        isBannedForUser: { $ref: '#/components/schemas/OfferIsBannedForUser' }
+        isVerifiedForUser: { $ref: '#/components/schemas/OfferIsVerifiedForUser' }
+        categoryForUser: { $ref: '#/components/schemas/OfferCategoryForUser' }
+        paybackTimeForUser: { $ref: '#/components/schemas/OfferPaybackTimeForUser' }
+        projectStageForUser: { $ref: '#/components/schemas/OfferProjectStageForUser' }
+        createdAtForUser: { $ref: '#/components/schemas/CreatedAtForUser' }
+        archiveExpire: { $ref: '#/components/schemas/OfferArchiveExpire' }
+
+    # * Columns
+
+    OfferIsVerified:
+      type: boolean
+      required: false
+
+    OfferTitle:
+      type: string
+      minLength: 2
+      maxLength: 255
+      required: true
+      description: Min 2, max 255
+
+    OfferDescription:
+      type: string
+      minLength: 4
+      maxLength: 8192
+      required: true
+      description: Min 4, max 8192
+
+    OfferCity:
+      type: string
+      required: true
+
+    OfferCategory:
+      type: integer
+      minimum: 0
+      maximum: 4
+      required: true
+      description: |-
+        0 - поиск инвесторов
+        1 - предложения инвесторов
+        2 - поиск бизнес партнеров
+        3 - продажа готового бизнеса
+        4 - франшизы
+
+    OfferPaybackTime:
+      type: integer
+      minimum: 0
+      maximum: 4
+      required: true
+      description: |-
+        Срок окупаемости
+        0 - до 3 месяцев
+        1 - от 3 до 6 месяцев
+        2 - от 6 месяцев до 1 года
+        3 - от 1 года до 3 лет
+        4 - от 3 лет
+
+    OfferCooperationTerms:
+      type: string
+      required: false
+      nullable: true
+      minLength: 4
+      maxLength: 8192
+      description: Условия сотрудничества, у продажи готового бизнеса это поле условия продажи
+
+    OfferBusinessPlan:
+      type: string
+      required: false
+      nullable: true
+      minLength: 4
+      maxLength: 8192
+      description: Бизнес план (все кроме предложения инвесторов)
+
+    OfferBenefits:
+      type: string
+      required: false
+      nullable: true
+      minLength: 4
+      maxLength: 8192
+      description: Есть только у франшиз
+
+    OfferAbout:
+      type: string
+      required: false
+      nullable: true
+      minLength: 4
+      maxLength: 8192
+      description: О себе (поиск инвесторов, предложения инвесторов, поиск бизнес партнера)
+
+    OfferAboutCompany:
+      type: string
+      required: false
+      nullable: true
+      minLength: 4
+      maxLength: 8192
+      description: Есть только у франшиз
+
+    OfferInvestments:
+      type: integer
+      required: false
+      nullable: true
+      description: Инвестиции (есть во всех категориях кроме готового бизнеса)
+
+    OfferProjectStage:
+      type: integer
+      required: false
+      nullable: true
+      minimum: 0
+      maximum: 2
+      description: |-
+        Стадия проекта (присутствует у всех кроме предложений инвесторов и франшиз)
+        0 - Идея
+        1 - В стадии создания
+        2 - Готовый бизнес
+
+    OfferDateOfCreation:
+      type: string
+      required: false
+      nullable: true
+      format: date
+      description: Есть только у франшиз
+
+    OfferPrice:
+      type: integer
+      required: false
+      nullable: true
+      description: Есть только у продажи готового бизнеса и франшизы
+
+    OfferPricePerMonth:
+      type: integer
+      required: false
+      nullable: true
+      description: Есть только у франшизы
+
+    OfferProfit:
+      type: integer
+      required: false
+      nullable: true
+
+    OfferProfitPerMonth:
+      type: integer
+      required: false
+      nullable: true
+      description: Есть только у продажи готового бизнеса и франшизы
+
+    OfferBranchCount:
+      type: integer
+      required: false
+      nullable: true
+      description: Есть только у продажи готового бизнеса и франшизы
+
+    OfferSoldBranchCount:
+      type: integer
+      required: false
+      nullable: true
+      description: Есть только у франшиз
+
+    OfferBlockDescription:
+      type: string
+      required: false
+      nullable: true
+      description: Причина блокировки
+
+    # * Computed properties
+
+    OfferIsArchivedForUser:
+      type: string
+      description: Type in string
+
+    OfferIsBannedForUser:
+      type: string
+      description: Type in string
+
+    OfferIsVerifiedForUser:
+      type: string
+      description: Type in string
+
+    OfferCategoryForUser:
+      type: string
+      description: Type in string
+
+    OfferPaybackTimeForUser:
+      type: string
+      description: Type in string
+
+    OfferProjectStageForUser:
+      type: string
+      description: Type in string
+
+    OfferArchiveExpire:
+      type: string
+      description: Expire time to add in archive

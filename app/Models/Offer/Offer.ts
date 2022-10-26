@@ -43,13 +43,13 @@ export default class Offer extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
-  @column()
+  @column({ serializeAs: null })
   public isBanned: boolean
 
   @column()
   public isArchived: boolean
 
-  @column()
+  @column({ serializeAs: null })
   public isVerified: boolean
 
   @column()
@@ -226,6 +226,10 @@ export default class Offer extends BaseModel {
 
   public static getByVerified = scope((query, isVerified: Offer['isVerified']) => [
     query.where('isVerified', isVerified)
+  ])
+
+  public static getByBanned = scope((query, isBanned: Offer['isBanned']) => [
+    query.where('isBanned', isBanned)
   ])
 
   public static getByUserId = scope((query, userId: User['id']) => [

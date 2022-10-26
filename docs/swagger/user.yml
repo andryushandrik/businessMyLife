@@ -53,7 +53,7 @@ components:
         updatedAt: { $ref: '#/components/schemas/UpdatedAt' }
         blockedUntil: { $ref: '#/components/schemas/UserBlockedUntil' }
         fullName: { $ref: '#/components/schemas/UserFullName' }
-        createdAtForUser: { $ref: '#/components/schemas/UserCreatedAtForUser' }
+        createdAtForUser: { $ref: '#/components/schemas/CreatedAtForUser' }
         blockedUntilForUser: { $ref: '#/components/schemas/UserBlockedUntilForUser' }
         experienceTypeForUser: { $ref: '#/components/schemas/UserExperienceTypeForUser' }
         birthdayForUser: { $ref: '#/components/schemas/UserBirthdayForUser' }
@@ -183,16 +183,20 @@ components:
       type: string
       description: First name + last name + patronymic
 
-    UserCreatedAtForUser: { type: string }
-
     UserUpdatedAtForUser: { type: string }
 
     UserBlockedUntilForUser: { type: string }
 
-    UserExperienceTypeForUser: { type: string }
+    UserExperienceTypeForUser:
+      type: string
+      description: Type in string
 
     UserBirthdayForUser: { type: string }
 
-    UserRoleForUser: { type: string }
+    UserRoleForUser:
+      type: string
+      description: Type in string
 
-    UserTypeForUser: { type: string }
+    UserTypeForUser:
+      type: string
+      description: Type in string
