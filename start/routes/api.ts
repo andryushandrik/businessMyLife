@@ -8,6 +8,8 @@ Route.group(() => {
 
   Route.get('/banner', 'Api/IndexController.getAllBanners')
 
+  Route.get('/uploadTutorial', 'Api/IndexController.paginateUploadTutorials')
+
   Route.post('/feedback', 'Api/IndexController.createFeedback')
 
   /**

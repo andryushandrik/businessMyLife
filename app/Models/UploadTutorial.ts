@@ -19,7 +19,7 @@ export default class UploadTutorial extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
-  @column()
+  @column({ serializeAs: null })
   public isVisible: boolean
 
   @column()
