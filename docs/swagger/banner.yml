@@ -1,0 +1,55 @@
+/api/banner:
+  get:
+    summary: Get all banners
+    responses:
+      200:
+        allOf:
+          - $ref: '#/components/responses/Success'
+          - content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    body:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Banner'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
+
+components:
+  schemas:
+    Banner:
+      type: object
+      properties:
+        id: { $ref: '#/components/schemas/Id' }
+        title: { $ref: '#/components/schemas/BannerTitle' }
+        description: { $ref: '#/components/schemas/BannerDescription' }
+        image: { $ref: '#/components/schemas/Image' }
+        link: { $ref: '#/components/schemas/BannerLink' }
+        createdAt: { $ref: '#/components/schemas/CreatedAt' }
+        updatedAt: { $ref: '#/components/schemas/UpdatedAt' }
+
+    # * Columns
+
+    BannerTitle:
+      type: string
+      minLength: 2
+      maxLength: 255
+      required: true
+      description: Min 2, max 255
+
+    BannerDescription:
+      type: string
+      minLength: 10
+      maxLength: 2048
+      required: true
+      description: Min 10, max 2048
+
+    BannerLink:
+      type: string
+      format: uri
+      nullable: true
+      required: false

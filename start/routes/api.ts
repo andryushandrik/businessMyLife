@@ -6,6 +6,8 @@ Route.group(() => {
 
   Route.get('/partner', 'Api/PartnersController.paginate')
 
+  Route.get('/banner', 'Api/IndexController.getAllBanners')
+
   Route.post('/feedback', 'Api/IndexController.createFeedback')
 
   /**

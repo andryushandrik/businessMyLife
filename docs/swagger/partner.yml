@@ -26,7 +26,7 @@
                             data:
                               type: array
                               items:
-                                $ref: "#/components/schemas/Partner"
+                                $ref: '#/components/schemas/Partner'
       400:
         $ref: '#/components/responses/ClientError'
       500:

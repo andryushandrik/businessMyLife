@@ -1,4 +1,5 @@
 // * Types
+import type Banner from 'App/Models/Banner'
 import type { Err } from 'Contracts/response'
 import type { MainPageVideo } from 'Contracts/mainPageVideo'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
@@ -40,6 +41,16 @@ export default class IndexController {
       await FeedbackService.create(payload)
 
       return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS))
+    } catch (err: Err | any) {
+      throw new ExceptionService(err)
+    }
+  }
+
+  public async getAllBanners({ response }: HttpContextContract) {
+    try {
+      const banners: Banner[] = await BannerService.getAll()
+
+      return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, banners))
     } catch (err: Err | any) {
       throw new ExceptionService(err)
     }

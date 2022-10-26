@@ -43,6 +43,15 @@ export default class BannerService{
     return item
   }
 
+  public static async getAll(): Promise<Banner[]> {
+    try {
+      return await Banner.all()
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+    }
+  }
+
   public static async getBannersDelay(): Promise<number | undefined> {
     let delay: number | undefined = undefined
 
