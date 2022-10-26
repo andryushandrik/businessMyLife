@@ -1,0 +1,34 @@
+/api/feedback:
+  post:
+    summary: Add new feedback
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Feedback'
+    responses:
+      200:
+        $ref: '#/components/responses/Success'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
+
+components:
+  schemas:
+    Feedback:
+      type: object
+      properties:
+        name: { $ref: '#/components/schemas/UserFirstName' }
+        email: { $ref: '#/components/schemas/UserEmail' }
+        question: { $ref: '#/components/schemas/FeedbackQuestion' }
+
+    # * Columns
+
+    FeedbackQuestion:
+      type: string
+      minLength: 5
+      maxLength: 8192
+      required: true
+      description: Min 5, max 8192

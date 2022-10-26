@@ -1,5 +1,6 @@
 // * Types
-import type FeedbackFilterValidator from 'App/Validators/FeedbackFilterValidator'
+import type FeedbackValidator from 'App/Validators/Feedback/FeedbackValidator'
+import type FeedbackFilterValidator from 'App/Validators/Feedback/FeedbackFilterValidator'
 import type { Err } from 'Contracts/response'
 import type { PaginationConfig } from 'Contracts/database'
 import type { ModelPaginatorContract, ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
@@ -38,6 +39,15 @@ export default class FeedbackService {
       throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.ERROR } as Err
 
     return item
+  }
+
+  public static async create(payload: FeedbackValidator['schema']['props']): Promise<void> {
+    try {
+      await Feedback.create(payload)
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+    }
   }
 
   public static async delete(id: Feedback['id']): Promise<void> {

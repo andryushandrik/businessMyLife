@@ -7,7 +7,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 // * Types
 
 import FeedbackService from 'App/Services/FeedbackService'
-import FeedbackFilterValidator from 'App/Validators/FeedbackFilterValidator'
+import FeedbackFilterValidator from 'App/Validators/Feedback/FeedbackFilterValidator'
 import { ResponseMessages } from 'Config/response'
 
 export default class FeedbacksController{

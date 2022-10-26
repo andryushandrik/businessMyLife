@@ -3,12 +3,14 @@ import type { CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 // * Types
 
-import ApiValidator from './ApiValidator'
-import { schema } from '@ioc:Adonis/Core/Validator'
+import IndexValidator from '../IndexValidator'
+import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import { getUserEmailRules, getUserFirstNameRules } from '../Rules/User/user'
+import { FEEDBACK_QUESTION_MAX_LENGTH, FEEDBACK_QUESTION_MIN_LENGTH } from 'Config/database'
 
-export default class FeedbackFilterValidator extends ApiValidator {
+export default class FeedbackValidator extends IndexValidator {
   constructor(protected ctx: HttpContextContract) {
-    super(ctx)
+    super()
   }
 
   /**
@@ -31,13 +33,12 @@ export default class FeedbackFilterValidator extends ApiValidator {
    *    ```
    */
   public schema = schema.create({
-    ...this.fields,
-
-    /**
-     * * Optional fields
-     */
-
-    query: schema.string.optional({ trim: true }),
+    name: schema.string({ trim: true }, getUserFirstNameRules()),
+    email: schema.string({ trim: true }, getUserEmailRules()),
+    question: schema.string({ trim: true }, [
+      rules.minLength(FEEDBACK_QUESTION_MIN_LENGTH),
+      rules.maxLength(FEEDBACK_QUESTION_MAX_LENGTH),
+    ]),
   })
 
   /**

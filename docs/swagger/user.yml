@@ -64,7 +64,7 @@ components:
       nullable: true
       required: false
 
-    UserPlaceOfWord:
+    UserPlaceOfWork:
       type: string
       nullable: true
       required: false

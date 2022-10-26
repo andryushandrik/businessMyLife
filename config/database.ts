@@ -138,6 +138,7 @@ export const PARTNER_VIDEO_LINK_MAX_LENGTH: number = 1024
  * * Feedback
  */
 
+export const FEEDBACK_QUESTION_MIN_LENGTH: number = 5
 export const FEEDBACK_QUESTION_MAX_LENGTH: number = 8192
 
 /**

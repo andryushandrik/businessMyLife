@@ -6,6 +6,8 @@ Route.group(() => {
 
   Route.get('/partner', 'Api/PartnersController.paginate')
 
+  Route.post('/feedback', 'Api/IndexController.createFeedback')
+
   /**
    * * Auth
    */
