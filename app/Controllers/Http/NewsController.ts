@@ -43,7 +43,7 @@ export default class NewsController {
   }
 
   public async show({view, response, session, params}: HttpContextContract){
-    const id: News['id'] = params.id
+    const id: News['id'] = Number(params.id)
 
     try {
       const item: News = await NewsService.get(id)
@@ -56,7 +56,7 @@ export default class NewsController {
   }
 
   public async edit({ view, response, params, session }: HttpContextContract) {
-    const id: News['id'] = params.id
+    const id: News['id'] = Number(params.id)
 
     try {
       const item: News = await NewsService.get(id)
@@ -69,7 +69,7 @@ export default class NewsController {
   }
 
   public async update({ request, response, session, params }: HttpContextContract) {
-    const id: News['id'] = params.id
+    const id: News['id'] = Number(params.id)
     const payload = await request.validate(NewsValidator)
 
     try {
@@ -84,7 +84,7 @@ export default class NewsController {
   }
 
   public async destroy({ response, session, params }: HttpContextContract) {
-    const id: News['id'] = params.id
+    const id: News['id'] = Number(params.id)
 
     try {
       await NewsService.delete(id)

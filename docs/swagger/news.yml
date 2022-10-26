@@ -1,0 +1,109 @@
+/api/news:
+  get:
+    tags:
+      - News
+    summary: Paginate news
+    parameters:
+      - $ref: '#/components/parameters/Page'
+
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/OrderBy'
+      - $ref: '#/components/parameters/OrderByColumn'
+    responses:
+      200:
+        allOf:
+          - $ref: '#/components/responses/Success'
+          - content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    body:
+                      allOf:
+                        - $ref: '#/components/schemas/Pagination'
+                        - type: object
+                          properties:
+                            data:
+                              type: array
+                              items:
+                                $ref: "#/components/schemas/News"
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
+
+/api/news/{slug}:
+  get:
+    tags:
+      - News
+    summary: Get one news
+    parameters:
+      - in: path
+        name: slug
+        schema: { type: string }
+        required: true
+    responses:
+      200:
+        allOf:
+          - $ref: '#/components/responses/Success'
+          - content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    body:
+                      $ref: '#/components/schemas/News'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
+
+components:
+  schemas:
+    News:
+      type: object
+      properties:
+        id: { $ref: '#/components/schemas/Id' }
+        slug: { $ref: '#/components/schemas/Slug' }
+        title: { $ref: '#/components/schemas/NewsTitle' }
+        description: { $ref: '#/components/schemas/NewsDescription' }
+        viewsCount: { $ref: '#/components/schemas/NewsViewsCount' }
+        suptitle: { $ref: '#/components/schemas/NewsSuptitle' }
+        image: { $ref: '#/components/schemas/Image' }
+        readingTimeFrom: { $ref: '#/components/schemas/NewsReadingTimeFrom' }
+        readingTimeTo: { $ref: '#/components/schemas/NewsReadingTimeTo' }
+        createdAt: { $ref: '#/components/schemas/CreatedAt' }
+        updatedAt: { $ref: '#/components/schemas/UpdatedAt' }
+
+    # * Columns
+
+    NewsTitle:
+      type: string
+      minLength: 2
+      maxLength: 255
+      required: true
+      description: Min 2, max 255
+
+    NewsDescription:
+      type: string
+      minLength: 4
+      maxLength: 8192
+      required: true
+      description: Min 4, max 8192
+
+    NewsViewsCount: { type: integer }
+
+    NewsSuptitle:
+      type: string
+      minLength: 2
+      maxLength: 255
+      required: false
+      description: Min 2, max 255
+
+    NewsReadingTimeFrom:
+      type: integer
+      required: false
+
+    NewsReadingTimeTo:
+      type: integer
+      required: false

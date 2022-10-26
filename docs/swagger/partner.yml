@@ -40,27 +40,13 @@ components:
         id: { $ref: '#/components/schemas/Id' }
         isTitleLink: { $ref: '#/components/schemas/IsTitleLink' }
         title: { $ref: '#/components/schemas/Title' }
-        media: { $ref: '#/components/schemas/Media' }
+        media: { $ref: '#/components/schemas/Image' }
         mediaType: { $ref: '#/components/schemas/MediaType' }
         createdAt: { $ref: '#/components/schemas/CreatedAt' }
         updatedAt: { $ref: '#/components/schemas/UpdatedAt' }
-
-    Id:
-      type: integer
-      minimum: 1
 
     IsTitleLink: { type: boolean }
 
     Title: { type: string }
 
-    Media: { type: string }
-
     MediaType: { type: boolean }
-
-    CreatedAt:
-      type: string
-      format: date-time
-
-    UpdatedAt:
-      type: string
-      format: date-time

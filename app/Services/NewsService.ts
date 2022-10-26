@@ -23,11 +23,16 @@ export default class NewsService {
     }
   }
 
-  public static async get(id: News['id'], { trx }: ServiceConfig<News> = {}): Promise<News> {
+  public static async get(id: News['id'], config?: ServiceConfig<News>): Promise<News>
+  public static async get(slug: News['slug'], config?: ServiceConfig<News>): Promise<News>
+  public static async get(idOrSlug: News['id'] | News['slug'], { trx }: ServiceConfig<News> = {}): Promise<News> {
     let item: News | null
 
     try {
-      item =  await News.find(id, { client: trx })
+      if (typeof idOrSlug === 'number')
+        item =  await News.find(idOrSlug, { client: trx })
+      else
+        item =  await News.findBy('slug', idOrSlug, { client: trx })
     } catch (err: any) {
       Logger.error(err)
       throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err

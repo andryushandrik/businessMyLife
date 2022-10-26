@@ -77,7 +77,7 @@ components:
         user:
           type: object
           properties:
-            id: { $ref: '#/components/schemas/UserId' }
+            id: { $ref: '#/components/schemas/Id' }
             isShowEmail: { $ref: '#/components/schemas/UserIsShowEmail' }
             isShowPhone: { $ref: '#/components/schemas/UserIsShowPhone' }
             firstName: { $ref: '#/components/schemas/UserFirstName' }
@@ -97,8 +97,8 @@ components:
             hobby: { $ref: '#/components/schemas/UserHobby' }
             roleId: { $ref: '#/components/schemas/UserRoleId' }
             typeId: { $ref: '#/components/schemas/UserTypeId' }
-            createdAt: { $ref: '#/components/schemas/UserCreatedAt' }
-            updatedAt: { $ref: '#/components/schemas/UserUpdatedAt' }
+            createdAt: { $ref: '#/components/schemas/CreatedAt' }
+            updatedAt: { $ref: '#/components/schemas/UpdatedAt' }
             blockedUntil: { $ref: '#/components/schemas/UserBlockedUntil' }
             fullName: { $ref: '#/components/schemas/UserFullName' }
             createdAtForUser: { $ref: '#/components/schemas/UserCreatedAtForUser' }

@@ -120,14 +120,6 @@ components:
       type: integer
       minimum: 1
 
-    UserCreatedAt:
-      type: string
-      format: date-time
-
-    UserUpdatedAt:
-      type: string
-      format: date-time
-
     UserBlockedUntil:
       type: string
       format: date-time
