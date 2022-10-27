@@ -3,6 +3,7 @@ import type User from 'App/Models/User/User'
 import type { Rule } from '@ioc:Adonis/Core/Validator'
 // * Types
 
+import { UserTypeNames } from 'Config/user'
 import { rules } from '@ioc:Adonis/Core/Validator'
 import {
   TABLES_NAMES, USER_COMPANY_NAME_MAX_LENGTH, USER_COMPANY_NAME_MIN_LENGTH,
@@ -40,10 +41,11 @@ export function getUserPasswordRules(isWithConfirm: boolean = false): Rule[] {
   return rulesArr
 }
 
-export function getUserCompanyNameRules(): Rule[] {
+export function getUserCompanyNameRules(typeFieldName: string): Rule[] {
   return [
     rules.minLength(USER_COMPANY_NAME_MIN_LENGTH),
     rules.maxLength(USER_COMPANY_NAME_MAX_LENGTH),
+    rules.requiredWhen(typeFieldName, 'in', [`${UserTypeNames.INDIVIDUAL_ENTREPRENEUR}`, `${UserTypeNames.LIMITED_LIABILITY_COMPANY}`]),
   ]
 }
 
@@ -65,5 +67,12 @@ export function getUserPatronymicRules(): Rule[] {
   return [
     rules.minLength(USER_PATRONYMIC_MIN_LENGTH),
     rules.maxLength(USER_PATRONYMIC_MAX_LENGTH),
+  ]
+}
+
+export function getUserTypeRules(): Rule[] {
+  return [
+    rules.unsigned(),
+    rules.range(UserTypeNames.PHYSICAL_PERSON, UserTypeNames.LIMITED_LIABILITY_COMPANY),
   ]
 }

@@ -188,6 +188,8 @@ export const UserFactory = Factory
       lastName: faker.name.lastName(),
       patronymic: faker.name.middleName(),
 
+      type: faker.datatype.number({ min: UserTypeNames.PHYSICAL_PERSON, max: UserTypeNames.LIMITED_LIABILITY_COMPANY }),
+
       email: faker.internet.email(),
       password: '1234Test',
 
@@ -206,7 +208,6 @@ export const UserFactory = Factory
       taxpayerIdentificationNumber: faker.datatype.number(),
 
       roleId: RoleNames.USER + 1,
-      typeId: faker.datatype.number({ min: UserTypeNames.PHYSICAL_PERSON + 1, max: UserTypeNames.LIMITED_LIABILITY_COMPANY + 1 }),
     }
   })
   .relation('images', () => UserImageFactory)

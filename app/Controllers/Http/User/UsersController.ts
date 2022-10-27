@@ -8,7 +8,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 import UserService from 'App/Services/User/UserService'
 import BlockUntilValidator from 'App/Validators/BlockUntilValidator'
-import UserFilterValidator from 'App/Validators/UserFilterValidator'
+import UserFilterValidator from 'App/Validators/User/UserFilterValidator'
 import { ResponseMessages } from 'Config/response'
 import { RoleNames, ROLE_NAMES, USER_TYPE_NAMES } from 'Config/user'
 

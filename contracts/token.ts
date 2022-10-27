@@ -16,5 +16,5 @@ export type UserTokenPayload = {
   id: User['id'],
   email: User['email'],
   roleId: User['roleId'],
-  typeId: User['typeId'],
+  type: User['type'],
 }

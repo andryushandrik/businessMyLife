@@ -144,13 +144,12 @@ export default class AuthService {
     const userPayload: Partial<ModelAttributes<User>> = {
       firstName: payload.firstName,
       lastName: payload.lastName,
-      patronymic: payload.patronymic,
       companyName: payload.companyName,
 
       email: payload.email,
       password: payload.password,
 
-      typeId: payload.typeId,
+      type: payload.type,
     }
 
     try {
@@ -206,7 +205,7 @@ export default class AuthService {
       id: user.id,
       email: user.email,
       roleId: user.roleId,
-      typeId: user.typeId,
+      type: user.type,
     }
 
     return {

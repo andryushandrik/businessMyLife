@@ -1,5 +1,4 @@
 // * Types
-import type UserType from './UserType'
 import type { DateTime } from 'luxon'
 import type { UserExperienceTypes } from 'Config/user'
 import type { HasMany, ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
@@ -10,20 +9,21 @@ import Offer from '../Offer/Offer'
 import UserImage from './UserImage'
 import Report from '../Report/Report'
 import Hash from '@ioc:Adonis/Core/Hash'
-import { RoleNames } from 'Config/user'
 import { GLOBAL_DATETIME_FORMAT } from 'Config/app'
+import { RoleNames, UserTypeNames } from 'Config/user'
 import { ROLE_NAMES, USER_EXPERIENCE_TYPES, USER_TYPE_NAMES } from 'Config/user'
 import { BaseModel, beforeSave, column, computed, hasMany, scope } from '@ioc:Adonis/Lucid/Orm'
 
 export default class User extends BaseModel {
   public static readonly columns = [
     'id', 'isShowEmail', 'isShowPhone',
+    'type',
     'firstName', 'lastName', 'patronymic',
     'email', 'password',
     'taxpayerIdentificationNumber', 'mainStateRegistrationNumber',
     'legalAddress', 'placeOfWork', 'companyName', 'experienceType',
     'birthday', 'city', 'phone', 'avatar', 'hobby',
-    'roleId', 'typeId',
+    'roleId',
     'createdAt', 'updatedAt', 'blockedUntil',
   ] as const
 
@@ -37,19 +37,22 @@ export default class User extends BaseModel {
   public isShowPhone: boolean
 
   @column()
+  public type: UserTypeNames
+
+  @column()
   public firstName: string
 
   @column()
   public lastName: string
 
   @column()
-  public patronymic: string
-
-  @column()
   public email: string
 
   @column({ serializeAs: null })
   public password: string
+
+  @column()
+  public patronymic?: string
 
   @column()
   public taxpayerIdentificationNumber?: number
@@ -90,9 +93,6 @@ export default class User extends BaseModel {
 
   @column({ columnName: 'role_id' })
   public roleId: Role['id']
-
-  @column({ columnName: 'type_id' })
-  public typeId: UserType['id']
 
   /**
    * * Timestamps
@@ -169,7 +169,7 @@ export default class User extends BaseModel {
 
   @computed()
   public get typeForUser(): string {
-    return USER_TYPE_NAMES[this.typeId - 1]
+    return USER_TYPE_NAMES[this.type]
   }
 
   /**

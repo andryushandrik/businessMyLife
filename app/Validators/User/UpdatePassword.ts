@@ -1,17 +1,13 @@
 // * Types
+import type { CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 // * Types
 
-import IndexValidator from '../../IndexValidator'
-import { getVerifyCodeRules } from '../../Rules/auth'
-import { getUserTypeRules } from 'App/Validators/Rules/User/user'
-import { schema, CustomMessages } from '@ioc:Adonis/Core/Validator'
-import {
-  getUserCompanyNameRules, getUserEmailRules, getUserFirstNameRules,
-  getUserLastNameRules, getUserPasswordRules,
-} from '../../Rules/User/user'
+import IndexValidator from '../IndexValidator'
+import { schema } from '@ioc:Adonis/Core/Validator'
+import { getUserPasswordRules } from '../Rules/User/user'
 
-export default class RegisterValidator extends IndexValidator {
+export default class UpdatePasswordValidator extends IndexValidator {
   constructor(protected ctx: HttpContextContract) {
     super()
   }
@@ -36,21 +32,8 @@ export default class RegisterValidator extends IndexValidator {
    *    ```
    */
   public schema = schema.create({
-    verifyCode: schema.number(getVerifyCodeRules()),
-
-    firstName: schema.string({ trim: true }, getUserFirstNameRules()),
-    lastName: schema.string({ trim: true }, getUserLastNameRules()),
-
+    oldPassword: schema.string({ trim: true }, getUserPasswordRules()),
     password: schema.string({ trim: true }, getUserPasswordRules(true)),
-    email: schema.string({ trim: true }, getUserEmailRules('unique')),
-
-    type: schema.number(getUserTypeRules()),
-
-    /**
-     * * Optional fields
-     */
-
-    companyName: schema.string.optional({ trim: true }, getUserCompanyNameRules('type')),
   })
 
   /**

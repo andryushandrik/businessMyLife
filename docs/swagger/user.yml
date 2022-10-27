@@ -88,7 +88,8 @@ components:
       type: string
       minLength: 2
       maxLength: 255
-      required: true
+      required: false
+      nullable: true
       description: Min 2, max 255
 
     UserEmail:
@@ -163,11 +164,15 @@ components:
       nullable: true
       required: false
 
-    UserTypeId:
+    UserType:
       type: integer
       minimum: 1
+      maximum: 2
       required: true
-      description: User type id (Individual entrepreneur, LLC etc.)
+      description: |-
+        0 - физ лицо
+        1 - ип
+        2 - ООО
 
     UserRoleId:
       type: integer

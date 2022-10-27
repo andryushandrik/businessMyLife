@@ -24,4 +24,21 @@ export default class MailerService {
       throw { code: ResponseCodes.MAILER_ERROR, message: ResponseMessages.ERROR } as Err
     }
   }
+
+  public static async sendUpdateEmailCode(to: string, code: number): Promise<void> {
+    const from: string = mailConfig.mailers.smtp.auth.user
+
+    try{
+      await Mail.send((message) => {
+        message
+          .to(to)
+          .from(from)
+          .subject(`${code} - ваш код подтверждения`)
+          .htmlView('emails/updateEmail', { code })
+      })
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.MAILER_ERROR, message: ResponseMessages.ERROR } as Err
+    }
+  }
 }

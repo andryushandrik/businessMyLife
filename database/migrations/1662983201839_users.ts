@@ -15,9 +15,14 @@ export default class extends BaseSchema {
       table.boolean('isShowEmail').defaultTo(1).notNullable().comment('Show email in profile page or not')
       table.boolean('isShowPhone').defaultTo(1).notNullable().comment('Show phone in profile page or not')
 
+      table.integer('type').unsigned().notNullable().comment(`
+        0 - физ лицо
+        1 - ип
+        2 - ооо
+      `)
+
       table.string('firstName').notNullable()
       table.string('lastName').notNullable()
-      table.string('patronymic').notNullable()
 
       table.string('email').notNullable()
       table.string('password').notNullable()
@@ -26,8 +31,15 @@ export default class extends BaseSchema {
        * * Nullable columns
        */
 
-      table.integer('taxpayerIdentificationNumber').unique().nullable().comment('ИНН')
-      table.integer('mainStateRegistrationNumber').unique().nullable().comment('ОГРН или ОГРНИП у ИП')
+      table.string('patronymic').nullable()
+      table.date('birthday').nullable()
+      table.string('city').nullable()
+      table.string('phone').nullable()
+      table.string('avatar').nullable()
+      table.string('hobby').nullable()
+
+      table.integer('taxpayerIdentificationNumber').unique().unsigned().nullable().comment('ИНН')
+      table.integer('mainStateRegistrationNumber').unique().unsigned().nullable().comment('ОГРН или ОГРНИП у ИП')
 
       table.string('legalAddress').nullable()
       table.string('placeOfWork').nullable().comment('Отображается в профиле')
@@ -40,12 +52,6 @@ export default class extends BaseSchema {
         4 - от 3 лет
       `)
 
-      table.date('birthday').nullable()
-      table.string('city').nullable()
-      table.string('phone').nullable()
-      table.string('avatar').nullable()
-      table.string('hobby').nullable()
-
       /**
        * * Foreign keys
        */
@@ -55,13 +61,6 @@ export default class extends BaseSchema {
         .unsigned()
         .notNullable()
         .references(`${TABLES_NAMES.ROLES}.id`)
-        .onDelete('CASCADE')
-
-      table
-        .integer('type_id')
-        .unsigned()
-        .notNullable()
-        .references(`${TABLES_NAMES.USERS_TYPES}.id`)
         .onDelete('CASCADE')
 
       /**

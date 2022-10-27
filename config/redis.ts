@@ -46,10 +46,11 @@ export default redisConfig({
 })
 
 // Don't change orders below
-export const REDIS_KEYS = ['mainPageVideo', 'banner', 'emailVerify', 'forgotPasswordUserVerify'] as const
+export const REDIS_KEYS = ['mainPageVideo', 'banner', 'emailVerify', 'forgotPasswordUserVerify', 'updateEmailVerify'] as const
 export enum RedisKeys {
   MAIN_PAGE_VIDEO = 0,
   BANNER = 1,
   EMAIL_VERIFY = 2,
   FORGOT_PASSWORD_USER_VERIFY = 3,
+  UPDATE_EMAIL_VERIFY = 4,
 }

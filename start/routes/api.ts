@@ -65,6 +65,23 @@ Route.group(() => {
       cast: (id) => Number(id),
     })
 
+    Route.patch('/updatePassword/:id', 'Api/UsersController.updatePassword').where('id', {
+      match: /^[0-9]+$/,
+      cast: (id) => Number(id),
+    }).middleware('CheckAccessToken')
+
+    Route.group(() => {
+
+      Route.patch('/:id', 'Api/UsersController.updateEmail').middleware('CheckAccessToken')
+      Route.post('/emailVerify', 'Api/UsersController.emailVerify')
+
+    }).prefix('updateEmail')
+
+    Route.patch('/:id', 'Api/UsersController.update').where('id', {
+      match: /^[0-9]+$/,
+      cast: (id) => Number(id),
+    }).middleware('CheckAccessToken')
+
   }).prefix('user')
 
   /**

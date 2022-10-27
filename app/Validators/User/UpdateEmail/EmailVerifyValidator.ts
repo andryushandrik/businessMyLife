@@ -3,12 +3,13 @@ import type { CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 // * Types
 
-import ApiValidator from './ApiValidator'
+import IndexValidator from '../../IndexValidator'
 import { schema } from '@ioc:Adonis/Core/Validator'
+import { getUserEmailRules } from '../../Rules/User/user'
 
-export default class UserFilterValidator extends ApiValidator {
+export default class EmailVerifyValidator extends IndexValidator {
   constructor(protected ctx: HttpContextContract) {
-    super(ctx)
+    super()
   }
 
   /**
@@ -31,13 +32,7 @@ export default class UserFilterValidator extends ApiValidator {
    *    ```
    */
   public schema = schema.create({
-    ...this.fields,
-
-    /**
-     * * Optional fields
-     */
-
-    query: schema.string.optional({ trim: true }),
+    email: schema.string({ trim: true }, getUserEmailRules('unique')),
   })
 
   /**

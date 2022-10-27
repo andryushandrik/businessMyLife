@@ -7,7 +7,7 @@
     payload,
     columns: [
       { key: 'id', value: 'ID' },
-      { key: 'typeId', value: 'Тип профиля' },
+      { key: 'type', value: 'Тип профиля' },
       { key: 'city', value: 'Город' },
       { key: 'reportsCount', value: 'Кол-во жалоб' },
       { key: 'blockedUntil', value: 'Бан' },
@@ -46,7 +46,7 @@
                 <tr>
                   <td><strong>{{ item.id }}</strong></td>
                   <td>{{ roles[item.roleId - 1] }}</td>
-                  <td>{{ usersTypes[item.typeId - 1] }}</td>
+                  <td>{{ usersTypes[item.type] }}</td>
                   <td>{{ item.fullName }}</td>
                   <td>{{ item.email }}</td>
                   <td>{{ item.city }}</td>

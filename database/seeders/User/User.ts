@@ -15,6 +15,8 @@ export default class extends BaseSeeder {
           lastName: 'Admin',
           patronymic: 'Admin',
 
+          type: UserTypeNames.PHYSICAL_PERSON,
+
           email: 'admin@mail.ru',
           password: '1234Admin',
 
@@ -28,12 +30,13 @@ export default class extends BaseSeeder {
           hobby: 'Programming',
 
           roleId: RoleNames.ADMIN + 1,
-          typeId: UserTypeNames.PHYSICAL_PERSON + 1,
         },
         {
           firstName: 'Moderator',
           lastName: 'Moderator',
           patronymic: 'Moderator',
+
+          type: UserTypeNames.PHYSICAL_PERSON,
 
           email: 'moderator@mail.ru',
           password: '1234Moderator',
@@ -48,7 +51,6 @@ export default class extends BaseSeeder {
           hobby: 'Programming',
 
           roleId: RoleNames.MODERATOR + 1,
-          typeId: UserTypeNames.PHYSICAL_PERSON + 1,
         },
       ])
 
