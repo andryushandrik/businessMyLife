@@ -4,11 +4,11 @@ Route.group(() => {
 
   Route.get('/projectData', 'Api/IndexController.getProjectData')
 
-  Route.get('/partner', 'Api/PartnersController.paginate')
+  Route.get('/partner', 'Api/PartnersController.paginate').middleware('CheckAccessToken')
 
   Route.get('/banner', 'Api/IndexController.getAllBanners')
 
-  Route.get('/uploadTutorial', 'Api/IndexController.paginateUploadTutorials')
+  Route.get('/uploadTutorial', 'Api/IndexController.paginateUploadTutorials').middleware('CheckAccessToken')
 
   Route.post('/feedback', 'Api/IndexController.createFeedback')
 

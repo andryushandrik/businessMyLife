@@ -7,6 +7,7 @@ export enum ResponseCodes {
   TOKEN_EXPIRED = 'TOKEN_EXPIRED',
   DATABASE_ERROR = 'DATABASE_ERROR',
   VALIDATION_ERROR = 'VALIDATION_ERROR',
+  VERIFY_CODE_EXISTS = 'VERIFY_CODE_EXISTS',
 }
 
 export enum ResponseMessages {
