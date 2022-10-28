@@ -48,6 +48,20 @@ export default class SubsectionService {
     return item
   }
 
+  public static async getAll(areaId?: Area['id']): Promise<Subsection[]> {
+    let query: ModelQueryBuilderContract<typeof Subsection> = Subsection.query()
+
+    if (areaId)
+      query = query.withScopes((scopes) => scopes.getByAreaId(areaId))
+
+    try {
+      return await query
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+    }
+  }
+
   public static async getSubsectionsIdsByAreaId(areaId: Area['id']): Promise<Subsection['id'][]> {
     try {
       const subsections: { id: Subsection['id'] }[] = await Subsection

@@ -4,9 +4,10 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 // * Types
 
 import ApiValidator from '../ApiValidator'
-import { schema } from '@ioc:Adonis/Core/Validator'
 import { getAreaIdRules } from '../Rules/Offer/area'
+import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import { getOfferCategoryRules } from '../Rules/Offer/offer'
+import { OfferPaybackTimes, OfferProjectStages } from 'Config/offer'
 
 export default class OfferFilterValidator extends ApiValidator {
   constructor(protected ctx: HttpContextContract) {
@@ -39,9 +40,21 @@ export default class OfferFilterValidator extends ApiValidator {
      * * Optional fields
      */
 
+    city: schema.string.optional({ trim: true }),
+    query: schema.string.optional({ trim: true }),
     areaId: schema.number.optional(getAreaIdRules()),
     category: schema.number.optional(getOfferCategoryRules()),
-    query: schema.string.optional({ trim: true }),
+    subsectionId: schema.number.optional([ rules.unsigned() ]),
+    investmentsTo: schema.number.optional([ rules.unsigned() ]),
+    investmentsFrom: schema.number.optional([ rules.unsigned() ]),
+    projectStage: schema.number.optional([
+      rules.unsigned(),
+      rules.range(OfferProjectStages.IDEA, OfferProjectStages.COMPLETE),
+    ]),
+    paybackTime: schema.number.optional([
+      rules.unsigned(),
+      rules.range(OfferPaybackTimes.BEFORE_THREE_MONTH, OfferPaybackTimes.AFTER_THREE_YEARS),
+    ]),
   })
 
   /**

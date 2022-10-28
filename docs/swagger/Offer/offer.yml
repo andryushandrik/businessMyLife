@@ -1,3 +1,79 @@
+/api/offer:
+  get:
+    tags:
+      - Offer
+    summary: Paginate offers
+    parameters:
+      - $ref: '#/components/parameters/Page'
+
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/OrderBy'
+      - $ref: '#/components/parameters/OrderByColumn'
+
+      - $ref: '#/components/parameters/Query'
+      - in: query
+        name: city
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferCity'
+      - in: query
+        name: areaId
+        required: false
+        schema:
+          $ref: '#/components/schemas/Id'
+      - in: query
+        name: category
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferCategory'
+      - in: query
+        name: subsectionId
+        required: false
+        schema:
+          $ref: '#/components/schemas/Id'
+      - in: query
+        name: investmentsFrom
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferInvestments'
+      - in: query
+        name: investmentsTo
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferInvestments'
+      - in: query
+        name: projectStage
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferProjectStage'
+      - in: query
+        name: projectTime
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferPaybackTime'
+    responses:
+      200:
+        allOf:
+          - $ref: '#/components/responses/Success'
+          - content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    body:
+                      allOf:
+                        - $ref: '#/components/schemas/Pagination'
+                        - type: object
+                          properties:
+                            data:
+                              type: array
+                              items:
+                                $ref: '#/components/schemas/Offer'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
+
 /api/offer/user/{userId}:
   get:
     tags:

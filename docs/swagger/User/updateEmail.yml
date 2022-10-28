@@ -1,0 +1,55 @@
+/api/user/updateEmail/{id}:
+  patch:
+    tags:
+      - User
+      - Update email
+    summary: Update email last step
+    description: Use this endpoint after email verify endpoint
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: id
+        schema: { $ref: '#/components/schemas/Id' }
+        required: true
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              verifyCode: { $ref: '#/components/schemas/VerifyCode' }
+
+              email: { $ref: '#/components/schemas/UserEmail' }
+              newEmail: { $ref: '#/components/schemas/UserEmail' }
+    responses:
+      200:
+        $ref: '#/components/responses/Success'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
+
+/api/user/updateEmail/emailVerify:
+  post:
+    tags:
+      - User
+      - Update email
+    summary: Send code to user email
+    description: Use this endpoint before update email endpoint
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email: { $ref: '#/components/schemas/UserEmail' }
+    responses:
+      200:
+        $ref: '#/components/responses/Success'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'

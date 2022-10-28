@@ -80,6 +80,12 @@ components:
       required: false
       schema: { type: string }
 
+    Query:
+      in: query
+      name: query
+      required: false
+      schema: { type: string }
+
   responses:
     Success:
       description: Success

@@ -1,3 +1,32 @@
+/api/offer/subsection/{areaId?}:
+  get:
+    tags:
+      - Offer
+      - Subsection
+    summary: Get all subsections
+    parameters:
+      - in: path
+        name: areaId
+        schema: { $ref: '#/components/schemas/Id' }
+        required: false
+    responses:
+      200:
+        allOf:
+          - $ref: '#/components/responses/Success'
+          - content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    body:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Subsection'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
+
 components:
   schemas:
     Subsection:

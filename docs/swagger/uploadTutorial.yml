@@ -1,6 +1,8 @@
 /api/uploadTutorial:
   get:
     summary: Paginate upload tutorials
+    security:
+      - bearerAuth: []
     parameters:
       - $ref: '#/components/parameters/Page'
 

@@ -70,6 +70,12 @@
         $ref: '#/components/responses/ServerError'
 
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
   schemas:
     LoginSchema:
       type: object

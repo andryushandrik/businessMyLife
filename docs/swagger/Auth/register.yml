@@ -17,7 +17,7 @@
             properties:
               verifyCode: { $ref: '#/components/schemas/VerifyCode' }
 
-              email: { $ref: '#/components/schemas/Email' }
+              email: { $ref: '#/components/schemas/UserEmail' }
               password: { $ref: '#/components/schemas/Password' }
               passwordConfirm: { $ref: '#/components/schemas/Password' }
 
@@ -57,7 +57,7 @@
           schema:
             type: object
             properties:
-              email: { $ref: '#/components/schemas/Email' }
+              email: { $ref: '#/components/schemas/UserEmail' }
     responses:
       200:
         $ref: '#/components/responses/Success'
@@ -80,7 +80,7 @@
           schema:
             type: object
             properties:
-              email: { $ref: '#/components/schemas/Email' }
+              email: { $ref: '#/components/schemas/UserEmail' }
               verifyCode: { $ref: '#/components/schemas/VerifyCode' }
     responses:
       200:

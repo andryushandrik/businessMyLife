@@ -306,9 +306,39 @@ export default class OfferService {
 
             break
 
+          case 'investmentsFrom':
+            query = query.withScopes((scopes) => scopes.getByInvestmentsFrom(payload[key]!))
+
+            break
+
+          case 'investmentsTo':
+            query = query.withScopes((scopes) => scopes.getByInvestmentsTo(payload[key]!))
+
+            break
+
+          case 'projectStage':
+            query = query.withScopes((scopes) => scopes.getByProjectStages([payload[key]!]))
+
+            break
+
+          case 'paybackTime':
+            query = query.withScopes((scopes) => scopes.getByPaybackTimes([payload[key]!]))
+
+            break
+
+          case 'city':
+            query = query.withScopes((scopes) => scopes.getByCity(payload[key]!))
+
+            break
+
           case 'areaId':
             if (dependencies?.subsectionsIds)
               query = query.withScopes((scopes) => scopes.getBySubsectionsIds(dependencies.subsectionsIds))
+
+            break
+
+          case 'subsectionId':
+            query = query.withScopes((scopes) => scopes.getBySubsectionsIds([payload[key]!]))
 
             break
 

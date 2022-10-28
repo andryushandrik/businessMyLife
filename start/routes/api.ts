@@ -60,11 +60,6 @@ Route.group(() => {
 
   Route.group(() => {
 
-    Route.get('/:id', 'Api/UsersController.get').where('id', {
-      match: /^[0-9]+$/,
-      cast: (id) => Number(id),
-    })
-
     Route.patch('/updatePassword/:id', 'Api/UsersController.updatePassword').where('id', {
       match: /^[0-9]+$/,
       cast: (id) => Number(id),
@@ -76,6 +71,11 @@ Route.group(() => {
       Route.post('/emailVerify', 'Api/UsersController.emailVerify')
 
     }).prefix('updateEmail')
+
+    Route.get('/:id', 'Api/UsersController.get').where('id', {
+      match: /^[0-9]+$/,
+      cast: (id) => Number(id),
+    })
 
     Route.patch('/:id', 'Api/UsersController.update').where('id', {
       match: /^[0-9]+$/,
@@ -90,7 +90,13 @@ Route.group(() => {
 
   Route.group(() => {
 
+    Route.get('/', 'Api/OffersController.paginate')
+
     Route.get('/user/:userId', 'Api/OffersController.paginateUserOffers')
+
+    Route.get('/area', 'Api/OffersController.getAllAreas')
+
+    Route.get('/subsection/:areaId?', 'Api/OffersController.getAllSubsections')
 
   }).prefix('offer')
 

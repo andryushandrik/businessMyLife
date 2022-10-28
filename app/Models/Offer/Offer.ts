@@ -11,8 +11,8 @@ import { DateTime } from 'luxon'
 import { GLOBAL_DATETIME_FORMAT } from 'Config/app'
 import { formatStringForCyrillic } from 'Helpers/index'
 import {
-  OfferCategories, OFFER_CATEGORIES,
-  OFFER_PAYBACK_TIMES, OFFER_PROJECT_STAGES
+  OfferCategories, OfferPaybackTimes, OfferProjectStages,
+  OFFER_CATEGORIES, OFFER_PAYBACK_TIMES, OFFER_PROJECT_STAGES,
 } from 'Config/offer'
 import {
   BaseModel, beforeDelete, beforeSave,
@@ -209,7 +209,7 @@ export default class Offer extends BaseModel {
     const archiveExpireInDays: number = expireDate.diff(DateTime.now(), 'days').days
     const archiveExpireInDaysWithoutFraction: number = Math.floor(archiveExpireInDays)
 
-    return `${archiveExpireInDaysWithoutFraction} дней`
+    return `Осталось ${archiveExpireInDaysWithoutFraction} дней - до ${expireDate.setLocale('ru-RU').toFormat('dd MMMM')}`
   }
 
   /**
@@ -224,12 +224,32 @@ export default class Offer extends BaseModel {
     query.whereIn('category', categories)
   ])
 
+  public static getByProjectStages = scope((query, projectStages: OfferProjectStages[]) => [
+    query.whereIn('projectStage', projectStages)
+  ])
+
+  public static getByPaybackTimes = scope((query, paybackTime: OfferPaybackTimes[]) => [
+    query.whereIn('paybackTime', paybackTime)
+  ])
+
+  public static getByCity = scope((query, city: Offer['city']) => [
+    query.where('city', 'ILIKE', `${city}%`)
+  ])
+
   public static getByVerified = scope((query, isVerified: Offer['isVerified']) => [
     query.where('isVerified', isVerified)
   ])
 
   public static getByBanned = scope((query, isBanned: Offer['isBanned']) => [
     query.where('isBanned', isBanned)
+  ])
+
+  public static getByInvestmentsFrom = scope((query, from: number) => [
+    query.where('investments', '>=', from)
+  ])
+
+  public static getByInvestmentsTo = scope((query, to: number) => [
+    query.where('investments', '<=', to)
   ])
 
   public static getByUserId = scope((query, userId: User['id']) => [

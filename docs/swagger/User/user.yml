@@ -23,6 +23,86 @@
         $ref: '#/components/responses/ClientError'
       500:
         $ref: '#/components/responses/ServerError'
+  patch:
+    tags:
+      - User
+    summary: Update user data
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: id
+        schema: { $ref: '#/components/schemas/Id' }
+        required: true
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isShowEmail: { $ref: '#/components/schemas/UserIsShowEmail' }
+              isShowPhone: { $ref: '#/components/schemas/UserIsShowPhone' }
+              type: { $ref: '#/components/schemas/UserType' }
+
+              firstName: { $ref: '#/components/schemas/UserFirstName' }
+              lastName: { $ref: '#/components/schemas/UserLastName' }
+              patronymic: { $ref: '#/components/schemas/UserPatronymic' }
+
+              city: { $ref: '#/components/schemas/UserCity' }
+              phone: { $ref: '#/components/schemas/UserPhone' }
+              avatar: { $ref: '#/components/schemas/Image' }
+
+              taxpayerIdentificationNumber: { $ref: '#/components/schemas/UserTIN' }
+              mainStateRegistrationNumber: { $ref: '#/components/schemas/UserMSRN' }
+              legalAddress: { $ref: '#/components/schemas/UserLegalAddress' }
+              companyName: { $ref: '#/components/schemas/UserCompanyName' }
+              birthday: { $ref: '#/components/schemas/UserBirthday' }
+    responses:
+      200:
+        allOf:
+          - $ref: '#/components/responses/Success'
+          - content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    body:
+                      $ref: '#/components/schemas/User'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
+
+/api/user/updatePassword/{id}:
+  patch:
+    tags:
+      - User
+    summary: Update user password
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: id
+        schema: { $ref: '#/components/schemas/Id' }
+        required: true
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              oldPassword: { $ref: '#/components/schemas/UserPassword' }
+              password: { $ref: '#/components/schemas/UserPassword' }
+              passwordConfirm: { $ref: '#/components/schemas/UserPassword' }
+    responses:
+      200:
+        $ref: '#/components/responses/Success'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
 
 components:
   schemas:
@@ -32,25 +112,31 @@ components:
         id: { $ref: '#/components/schemas/Id' }
         isShowEmail: { $ref: '#/components/schemas/UserIsShowEmail' }
         isShowPhone: { $ref: '#/components/schemas/UserIsShowPhone' }
+        type: { $ref: '#/components/schemas/UserType' }
+
         firstName: { $ref: '#/components/schemas/UserFirstName' }
         lastName: { $ref: '#/components/schemas/UserLastName' }
         patronymic: { $ref: '#/components/schemas/UserPatronymic' }
+
         email: { $ref: '#/components/schemas/UserEmail' }
+        birthday: { $ref: '#/components/schemas/UserBirthday' }
+        city: { $ref: '#/components/schemas/UserCity' }
+        phone: { $ref: '#/components/schemas/UserPhone' }
+        avatar: { $ref: '#/components/schemas/Image' }
+        hobby: { $ref: '#/components/schemas/UserHobby' }
+
         taxpayerIdentificationNumber: { $ref: '#/components/schemas/UserTIN' }
         mainStateRegistrationNumber: { $ref: '#/components/schemas/UserMSRN' }
         legalAddress: { $ref: '#/components/schemas/UserLegalAddress' }
         placeOfWork: { $ref: '#/components/schemas/UserPlaceOfWork' }
         companyName: { $ref: '#/components/schemas/UserCompanyName' }
         experienceType: { $ref: '#/components/schemas/UserExperienceType' }
-        birthday: { $ref: '#/components/schemas/UserBirthday' }
-        city: { $ref: '#/components/schemas/UserCity' }
-        phone: { $ref: '#/components/schemas/UserPhone' }
-        avatar: { $ref: '#/components/schemas/Image' }
-        hobby: { $ref: '#/components/schemas/UserHobby' }
+
         roleId: { $ref: '#/components/schemas/UserRoleId' }
-        typeId: { $ref: '#/components/schemas/UserTypeId' }
+
         createdAt: { $ref: '#/components/schemas/CreatedAt' }
         updatedAt: { $ref: '#/components/schemas/UpdatedAt' }
+
         blockedUntil: { $ref: '#/components/schemas/UserBlockedUntil' }
         fullName: { $ref: '#/components/schemas/UserFullName' }
         createdAtForUser: { $ref: '#/components/schemas/CreatedAtForUser' }
@@ -166,7 +252,7 @@ components:
 
     UserType:
       type: integer
-      minimum: 1
+      minimum: 0
       maximum: 2
       required: true
       description: |-

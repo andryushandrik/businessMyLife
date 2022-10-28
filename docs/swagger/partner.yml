@@ -1,8 +1,8 @@
 /api/partner:
   get:
-    tags:
-      - Partner
     summary: Paginate all partners
+    security:
+      - bearerAuth: []
     parameters:
       - $ref: '#/components/parameters/Page'
 
