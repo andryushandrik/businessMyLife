@@ -3,6 +3,7 @@ import type User from 'App/Models/User/User'
 import type Area from 'App/Models/Offer/Area'
 import type Offer from 'App/Models/Offer/Offer'
 import type Subsection from 'App/Models/Offer/Subsection'
+import type OfferImage from 'App/Models/Offer/OfferImage'
 import type { Err } from 'Contracts/response'
 import type { PaginateConfig } from 'Contracts/services'
 import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
@@ -14,7 +15,9 @@ import AreaService from 'App/Services/Offer/AreaService'
 import OfferService from 'App/Services/Offer/OfferService'
 import ResponseService from 'App/Services/ResponseService'
 import ExceptionService from 'App/Services/ExceptionService'
+import OfferValidator from 'App/Validators/Offer/OfferValidator'
 import SubsectionService from 'App/Services/Offer/SubsectionService'
+import OfferImageService from 'App/Services/Offer/OfferImageService'
 import OfferFilterValidator from 'App/Validators/Offer/OfferFilterValidator'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 
@@ -70,6 +73,87 @@ export default class OffersController {
       })
 
       return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, offers))
+    } catch (err: Err | any) {
+      throw new ExceptionService(err)
+    }
+  }
+
+  public async get({ response, params }: HttpContextContract) {
+    const id: Offer['id'] = params.id
+
+    try {
+      const item: Offer = await OfferService.get(id, { relations: ['user', 'images'] })
+
+      return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, item))
+    } catch (err: Err | any) {
+      throw new ExceptionService(err)
+    }
+  }
+
+  public async create({ request, response }: HttpContextContract) {
+    let payload: OfferValidator['schema']['props']
+
+    try {
+      payload = await request.validate(OfferValidator)
+    } catch (err: Err | any) {
+      throw new ExceptionService({
+        code: ResponseCodes.VALIDATION_ERROR,
+        message: ResponseMessages.VALIDATION_ERROR,
+        body: err.messages,
+      })
+    }
+
+    try {
+      await OfferService.create(payload)
+
+      return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS))
+    } catch (err: Err | any) {
+      throw new ExceptionService(err)
+    }
+  }
+
+  public async update({ request, response, params }: HttpContextContract) {
+    const id: Offer['id'] = params.id
+    let payload: OfferValidator['schema']['props']
+
+    try {
+      payload = await request.validate(OfferValidator)
+    } catch (err: Err | any) {
+      throw new ExceptionService({
+        code: ResponseCodes.VALIDATION_ERROR,
+        message: ResponseMessages.VALIDATION_ERROR,
+        body: err.messages,
+      })
+    }
+
+    try {
+      await OfferService.update(id, payload)
+
+      return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS))
+    } catch (err: Err | any) {
+      throw new ExceptionService(err)
+    }
+  }
+
+  public async delete({ response, params }: HttpContextContract) {
+    const id: Offer['id'] = params.id
+
+    try {
+      await OfferService.delete(id)
+
+      return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS))
+    } catch (err: Err | any) {
+      throw new ExceptionService(err)
+    }
+  }
+
+  public async deleteImage({ response, params }: HttpContextContract) {
+    const id: OfferImage['id'] = params.offerImageId
+
+    try {
+      await OfferImageService.delete(id)
+
+      return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS))
     } catch (err: Err | any) {
       throw new ExceptionService(err)
     }

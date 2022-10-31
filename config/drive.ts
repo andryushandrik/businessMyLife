@@ -160,4 +160,6 @@ export const BANNER_FOLDER_PATH: string = 'Banners'
 
 export const USER_FOLDER_PATH: string = 'Users'
 
+export const OFFER_FOLDER_PATH: string = 'Offers'
+
 export const MAIN_PAGE_VIDEO_FOLDER_PATH: string = 'MainPageVideo'

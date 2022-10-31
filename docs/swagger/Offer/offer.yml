@@ -73,6 +73,162 @@
         $ref: '#/components/responses/ClientError'
       500:
         $ref: '#/components/responses/ServerError'
+  post:
+    tags:
+      - Offer
+    summary: Create offer
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title: { $ref: '#/components/schemas/OfferTitle' }
+              description: { $ref: '#/components/schemas/OfferDescription' }
+              city: { $ref: '#/components/schemas/OfferCity' }
+
+              category: { $ref: '#/components/schemas/OfferCategory' }
+
+              userId: { $ref: '#/components/schemas/Id' }
+              subsectionId: { $ref: '#/components/schemas/Id' }
+
+              image: { $ref: '#/components/schemas/Image' }
+              images:
+                type: array
+                items: { $ref: '#/components/schemas/Image' }
+
+              cooperationTerms: { $ref: '#/components/schemas/OfferCooperationTerms' }
+              businessPlan: { $ref: '#/components/schemas/OfferBusinessPlan' }
+              benefits: { $ref: '#/components/schemas/OfferBenefits' }
+
+              about: { $ref: '#/components/schemas/OfferAbout' }
+              aboutCompany: { $ref: '#/components/schemas/OfferAboutCompany' }
+
+              paybackTime: { $ref: '#/components/schemas/OfferPaybackTime' }
+              projectStage: { $ref: '#/components/schemas/OfferProjectStage' }
+
+              investments: { $ref: '#/components/schemas/OfferInvestments' }
+              dateOfCreation: { $ref: '#/components/schemas/OfferDateOfCreation' }
+
+              price: { $ref: '#/components/schemas/OfferPrice' }
+              pricePerMonth: { $ref: '#/components/schemas/OfferPricePerMonth' }
+
+              profitPerMonth: { $ref: '#/components/schemas/OfferProfitPerMonth' }
+              profit: { $ref: '#/components/schemas/OfferProfit' }
+
+              branchCount: { $ref: '#/components/schemas/OfferBranchCount' }
+              soldBranchCount: { $ref: '#/components/schemas/OfferSoldBranchCount' }
+    responses:
+      200:
+        $ref: '#/components/responses/Success'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
+
+/api/offer/{id}:
+  get:
+    tags:
+      - Offer
+    summary: Get offer
+    parameters:
+      - in: path
+        name: id
+        schema: { $ref: '#/components/schemas/Id' }
+        required: true
+    responses:
+      200:
+        allOf:
+          - $ref: '#/components/responses/Success'
+          - content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    body: { $ref: '#/components/schemas/Offer' }
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
+  patch:
+    tags:
+      - Offer
+    summary: Update offer
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: id
+        schema: { $ref: '#/components/schemas/Id' }
+        required: true
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title: { $ref: '#/components/schemas/OfferTitle' }
+              description: { $ref: '#/components/schemas/OfferDescription' }
+              city: { $ref: '#/components/schemas/OfferCity' }
+
+              category: { $ref: '#/components/schemas/OfferCategory' }
+
+              userId: { $ref: '#/components/schemas/Id' }
+              subsectionId: { $ref: '#/components/schemas/Id' }
+
+              image: { $ref: '#/components/schemas/Image' }
+              images:
+                type: array
+                items: { $ref: '#/components/schemas/Image' }
+
+              cooperationTerms: { $ref: '#/components/schemas/OfferCooperationTerms' }
+              businessPlan: { $ref: '#/components/schemas/OfferBusinessPlan' }
+              benefits: { $ref: '#/components/schemas/OfferBenefits' }
+
+              about: { $ref: '#/components/schemas/OfferAbout' }
+              aboutCompany: { $ref: '#/components/schemas/OfferAboutCompany' }
+
+              paybackTime: { $ref: '#/components/schemas/OfferPaybackTime' }
+              projectStage: { $ref: '#/components/schemas/OfferProjectStage' }
+
+              investments: { $ref: '#/components/schemas/OfferInvestments' }
+              dateOfCreation: { $ref: '#/components/schemas/OfferDateOfCreation' }
+
+              price: { $ref: '#/components/schemas/OfferPrice' }
+              pricePerMonth: { $ref: '#/components/schemas/OfferPricePerMonth' }
+
+              profitPerMonth: { $ref: '#/components/schemas/OfferProfitPerMonth' }
+              profit: { $ref: '#/components/schemas/OfferProfit' }
+
+              branchCount: { $ref: '#/components/schemas/OfferBranchCount' }
+              soldBranchCount: { $ref: '#/components/schemas/OfferSoldBranchCount' }
+    responses:
+      200:
+        $ref: '#/components/responses/Success'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
+  delete:
+    tags:
+      - Offer
+    summary: Delete offer
+    parameters:
+      - in: path
+        name: id
+        schema: { $ref: '#/components/schemas/Id' }
+        required: true
+    responses:
+      200:
+        $ref: '#/components/responses/Success'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
 
 /api/offer/user/{userId}:
   get:
@@ -115,6 +271,26 @@
       500:
         $ref: '#/components/responses/ServerError'
 
+/api/offer/deleteImage/{offerImageId}:
+  delete:
+    tags:
+      - Offer
+    summary: Delete offer's image
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: offerImageId
+        schema: { $ref: '#/components/schemas/Id' }
+        required: true
+    responses:
+      200:
+        $ref: '#/components/responses/Success'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
+
 components:
   schemas:
     Offer:
@@ -128,22 +304,30 @@ components:
         title: { $ref: '#/components/schemas/OfferTitle' }
         description: { $ref: '#/components/schemas/OfferDescription' }
         city: { $ref: '#/components/schemas/OfferCity' }
+
         category: { $ref: '#/components/schemas/OfferCategory' }
-        paybackTime: { $ref: '#/components/schemas/OfferPaybackTime' }
+
         image: { $ref: '#/components/schemas/Image' }
 
         cooperationTerms: { $ref: '#/components/schemas/OfferCooperationTerms' }
         businessPlan: { $ref: '#/components/schemas/OfferBusinessPlan' }
         benefits: { $ref: '#/components/schemas/OfferBenefits' }
+
         about: { $ref: '#/components/schemas/OfferAbout' }
         aboutCompany: { $ref: '#/components/schemas/OfferAboutCompany' }
-        investments: { $ref: '#/components/schemas/OfferInvestments' }
+
+        paybackTime: { $ref: '#/components/schemas/OfferPaybackTime' }
         projectStage: { $ref: '#/components/schemas/OfferProjectStage' }
+
+        investments: { $ref: '#/components/schemas/OfferInvestments' }
         dateOfCreation: { $ref: '#/components/schemas/OfferDateOfCreation' }
+
         price: { $ref: '#/components/schemas/OfferPrice' }
         pricePerMonth: { $ref: '#/components/schemas/OfferPricePerMonth' }
+
         profitPerMonth: { $ref: '#/components/schemas/OfferProfitPerMonth' }
         profit: { $ref: '#/components/schemas/OfferProfit' }
+
         branchCount: { $ref: '#/components/schemas/OfferBranchCount' }
         soldBranchCount: { $ref: '#/components/schemas/OfferSoldBranchCount' }
 
@@ -210,7 +394,8 @@ components:
       type: integer
       minimum: 0
       maximum: 4
-      required: true
+      required: false
+      nullable: true
       description: |-
         Срок окупаемости <br>
         0 - до 3 месяцев <br>

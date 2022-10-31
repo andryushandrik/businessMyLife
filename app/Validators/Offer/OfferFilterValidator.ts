@@ -6,8 +6,8 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import ApiValidator from '../ApiValidator'
 import { getAreaIdRules } from '../Rules/Offer/area'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
-import { getOfferCategoryRules } from '../Rules/Offer/offer'
-import { OfferPaybackTimes, OfferProjectStages } from 'Config/offer'
+import { getSubsectionIdRules } from '../Rules/Offer/subsection'
+import { getOfferCategoryRules, getOfferPaybackTimeRules, getOfferProjectStageRules } from '../Rules/Offer/offer'
 
 export default class OfferFilterValidator extends ApiValidator {
   constructor(protected ctx: HttpContextContract) {
@@ -35,6 +35,7 @@ export default class OfferFilterValidator extends ApiValidator {
    */
   public schema = schema.create({
     ...this.fields,
+    random: schema.boolean.optional(),
 
     /**
      * * Optional fields
@@ -44,17 +45,11 @@ export default class OfferFilterValidator extends ApiValidator {
     query: schema.string.optional({ trim: true }),
     areaId: schema.number.optional(getAreaIdRules()),
     category: schema.number.optional(getOfferCategoryRules()),
-    subsectionId: schema.number.optional([ rules.unsigned() ]),
+    subsectionId: schema.number.optional(getSubsectionIdRules()),
     investmentsTo: schema.number.optional([ rules.unsigned() ]),
     investmentsFrom: schema.number.optional([ rules.unsigned() ]),
-    projectStage: schema.number.optional([
-      rules.unsigned(),
-      rules.range(OfferProjectStages.IDEA, OfferProjectStages.COMPLETE),
-    ]),
-    paybackTime: schema.number.optional([
-      rules.unsigned(),
-      rules.range(OfferPaybackTimes.BEFORE_THREE_MONTH, OfferPaybackTimes.AFTER_THREE_YEARS),
-    ]),
+    paybackTime: schema.number.optional(getOfferPaybackTimeRules()),
+    projectStage: schema.number.optional(getOfferProjectStageRules()),
   })
 
   /**

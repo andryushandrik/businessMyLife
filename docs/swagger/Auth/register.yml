@@ -18,16 +18,16 @@
               verifyCode: { $ref: '#/components/schemas/VerifyCode' }
 
               email: { $ref: '#/components/schemas/UserEmail' }
-              password: { $ref: '#/components/schemas/Password' }
-              passwordConfirm: { $ref: '#/components/schemas/Password' }
+              password: { $ref: '#/components/schemas/UserPassword' }
+              passwordConfirm: { $ref: '#/components/schemas/UserPassword' }
 
-              firstName: { $ref: '#/components/schemas/FirstName' }
-              lastName: { $ref: '#/components/schemas/LastName' }
-              patronymic: { $ref: '#/components/schemas/Patronymic' }
+              firstName: { $ref: '#/components/schemas/UserFirstName' }
+              lastName: { $ref: '#/components/schemas/UserLastName' }
+              patronymic: { $ref: '#/components/schemas/UserPatronymic' }
 
-              typeId: { $ref: '#/components/schemas/TypeId' }
+              type: { $ref: '#/components/schemas/UserType' }
 
-              companyName: { $ref: '#/components/schemas/CompanyName' }
+              companyName: { $ref: '#/components/schemas/UserCompanyName' }
     responses:
       200:
         allOf:

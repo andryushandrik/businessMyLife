@@ -12,6 +12,13 @@ import {
   USER_PATRONYMIC_MAX_LENGTH, USER_PATRONYMIC_MIN_LENGTH,
 } from 'Config/database'
 
+export function getUserIdRules(table: string = TABLES_NAMES.USERS): Rule[] {
+  return [
+    rules.unsigned(),
+    rules.exists({ table, column: 'id' })
+  ]
+}
+
 export function getUserBlockedUntilRules(): Rule[] {
   return [ rules.after('today') ]
 }

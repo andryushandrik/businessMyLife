@@ -71,9 +71,6 @@ export default class Offer extends BaseModel {
   public category: number
 
   @column()
-  public paybackTime: number
-
-  @column()
   public image?: string
 
   @column()
@@ -92,10 +89,13 @@ export default class Offer extends BaseModel {
   public aboutCompany?: string
 
   @column()
-  public investments?: number
+  public paybackTime?: number
 
   @column()
   public projectStage?: number
+
+  @column()
+  public investments?: number
 
   @column.date()
   public dateOfCreation?: DateTime
@@ -190,12 +190,18 @@ export default class Offer extends BaseModel {
 
   @computed()
   public get paybackTimeForUser(): string {
-    return OFFER_PAYBACK_TIMES[this.paybackTime]
+    if (this.paybackTime !== undefined)
+      return OFFER_PAYBACK_TIMES[this.paybackTime]
+
+    return ''
   }
 
   @computed()
   public get projectStageForUser(): string {
-    return this.projectStage ? OFFER_PROJECT_STAGES[this.projectStage] : ''
+    if (this.projectStage !== undefined)
+      return OFFER_PROJECT_STAGES[this.projectStage]
+
+    return ''
   }
 
   @computed()
@@ -270,11 +276,13 @@ export default class Offer extends BaseModel {
 
   @beforeSave()
   public static formatSlug(item: Offer) {
+    const today: number = DateTime.now().day
+
     if (item.$dirty.slug)
       item.slug = formatStringForCyrillic(item.slug, 'snakeCase', '_')
 
     if (!item.slug)
-      item.slug = formatStringForCyrillic(item.title, 'snakeCase', '_')
+      item.slug = formatStringForCyrillic(`${item.title}_${today}`, 'snakeCase', '_')
   }
 
   @beforeDelete()

@@ -33,14 +33,6 @@ export default class extends BaseSchema {
         3 - продажа готового бизнеса
         4 - франшизы
       `)
-      table.integer('paybackTime').unsigned().notNullable().comment(`
-        Срок окупаемости
-        0 - до 3 месяцев
-        1 - от 3 до 6 месяцев
-        2 - от 6 месяцев до 1 года
-        3 - от 1 года до 3 лет
-        4 - от 3 лет
-      `)
 
       /**
        * * Nullable columns
@@ -55,13 +47,22 @@ export default class extends BaseSchema {
       table.string('about', OFFER_ABOUT_MAX_LENGTH).nullable().comment('О себе (поиск инвесторов, предложения инвесторов, поиск бизнес партнера)')
       table.string('aboutCompany', OFFER_ABOUT_COMPANY_MAX_LENGTH).nullable().comment('Есть только у франшиз')
 
-      table.integer('investments').unsigned().nullable().comment('Инвестиции (есть во всех категориях кроме готового бизнеса)')
+      table.integer('paybackTime').unsigned().nullable().comment(`
+        Срок окупаемости
+        0 - до 3 месяцев
+        1 - от 3 до 6 месяцев
+        2 - от 6 месяцев до 1 года
+        3 - от 1 года до 3 лет
+        4 - от 3 лет
+      `)
       table.integer('projectStage').unsigned().nullable().comment(`
         Стадия проекта (присутствует у всех кроме предложений инвесторов и франшиз)
         0 - Идея
         1 - В стадии создания
         2 - Готовый бизнес
       `)
+
+      table.integer('investments').unsigned().nullable().comment('Инвестиции (есть во всех категориях кроме готового бизнеса)')
       table.date('dateOfCreation').nullable().comment('Есть только у франшиз')
 
       table.integer('price').unsigned().nullable().comment('Есть только у продажи готового бизнеса и франшизы')

@@ -90,13 +90,20 @@ Route.group(() => {
 
   Route.group(() => {
 
-    Route.get('/', 'Api/OffersController.paginate')
-
     Route.get('/user/:userId', 'Api/OffersController.paginateUserOffers')
 
     Route.get('/area', 'Api/OffersController.getAllAreas')
 
     Route.get('/subsection/:areaId?', 'Api/OffersController.getAllSubsections')
+
+    Route.delete('/deleteImage/:offerImageId', 'Api/OffersController.deleteImage').middleware('CheckAccessToken')
+
+    Route.get('/', 'Api/OffersController.paginate')
+
+    Route.post('/', 'Api/OffersController.create').middleware('CheckAccessToken')
+    Route.patch('/:id', 'Api/OffersController.update').middleware('CheckAccessToken')
+    Route.get('/:id', 'Api/OffersController.get')
+    Route.delete('/:id', 'Api/OffersController.delete')
 
   }).prefix('offer')
 

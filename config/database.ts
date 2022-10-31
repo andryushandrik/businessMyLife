@@ -180,6 +180,8 @@ export const AREA_NAME_MAX_LENGTH: number = 255
 
 export const SUBSECTION_NAME_MAX_LENGTH: number = 255
 
+export const OFFER_TITLE_MIN_LENGTH: number = 2
+export const OFFER_TITLE_MAX_LENGTH: number = 255
 export const OFFER_DESCRIPTION_MIN_LENGTH: number = 4
 export const OFFER_DESCRIPTION_MAX_LENGTH: number = 8192
 export const OFFER_COOPERATION_TERMS_MIN_LENGTH: number = 4

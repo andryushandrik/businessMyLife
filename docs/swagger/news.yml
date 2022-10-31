@@ -51,8 +51,7 @@
                 schema:
                   type: object
                   properties:
-                    body:
-                      $ref: '#/components/schemas/News'
+                    body: { $ref: '#/components/schemas/News' }
       400:
         $ref: '#/components/responses/ClientError'
       500:
