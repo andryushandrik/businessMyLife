@@ -74,7 +74,7 @@
       500:
         $ref: '#/components/responses/ServerError'
 
-/api/user/updatePassword/{id}:
+/api/user/updatePassword/{currentUserId}:
   patch:
     tags:
       - User
@@ -83,7 +83,7 @@
       - bearerAuth: []
     parameters:
       - in: path
-        name: id
+        name: currentUserId
         schema: { $ref: '#/components/schemas/Id' }
         required: true
     requestBody:

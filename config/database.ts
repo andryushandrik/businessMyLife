@@ -90,6 +90,7 @@ export const TABLES_NAMES = {
 
   USERS: 'users',
   ROLES: 'roles',
+  FRIENDS: 'friends',
   SESSIONS: 'sessions',
   USERS_IMAGES: 'usersImages',
 } as const

@@ -99,7 +99,10 @@ export default class AuthService {
     try {
       await RedisService.set(redisKey, email, code, { expiration: authConfig.userVerifyExpire, safety: true })
 
-      await MailerService.sendRegisterVerificationCode(email, code)
+      if (isForForgotPassword)
+        await MailerService.sendForgotPasswordVerificationCode(email, code)
+      else
+        await MailerService.sendRegisterVerificationCode(email, code)
     } catch (err: Err | any) {
       throw err
     }

@@ -1,4 +1,4 @@
-/api/user/updateEmail/{id}:
+/api/user/updateEmail/{currentUserId}:
   patch:
     tags:
       - User
@@ -9,7 +9,7 @@
       - bearerAuth: []
     parameters:
       - in: path
-        name: id
+        name: currentUserId
         schema: { $ref: '#/components/schemas/Id' }
         required: true
     requestBody:

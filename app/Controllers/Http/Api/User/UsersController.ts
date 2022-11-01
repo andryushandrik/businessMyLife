@@ -50,7 +50,7 @@ export default class UsersController {
   }
 
   public async updatePassword({ request, response, params }: HttpContextContract) {
-    const id: User['id'] = params.id
+    const currentUserId: User['id'] = params.currentUserId
     let payload: UpdatePasswordValidator['schema']['props']
 
     try {
@@ -64,7 +64,7 @@ export default class UsersController {
     }
 
     try {
-      await UserService.updatePassword(id, payload)
+      await UserService.updatePassword(currentUserId, payload)
 
       return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS))
     } catch (err: Err | any) {
@@ -77,7 +77,7 @@ export default class UsersController {
    */
 
   public async updateEmail({ request, response, params }: HttpContextContract) {
-    const id: User['id'] = params.id
+    const currentUserId: User['id'] = params.currentUserId
     let payload: UpdateEmailValidator['schema']['props']
 
     try {
@@ -91,7 +91,7 @@ export default class UsersController {
     }
 
     try {
-      await UserService.updateEmail(id, payload)
+      await UserService.updateEmail(currentUserId, payload)
 
       return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS))
     } catch (err: Err | any) {

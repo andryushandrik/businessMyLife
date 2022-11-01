@@ -1,0 +1,134 @@
+/api/user/friend:
+  post:
+    tags:
+      - User
+      - Friend
+    summary: Create request to friends or submit request to friends
+    description: If you need to submit request, vice versa from id and to id!
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              fromId: { $ref: '#/components/schemas/Id' }
+              toId: { $ref: '#/components/schemas/Id' }
+    responses:
+      200:
+        $ref: '#/components/responses/Success'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
+  delete:
+    tags:
+      - User
+      - Friend
+    summary: Decline request to friends or delete friend
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              fromId: { $ref: '#/components/schemas/Id' }
+              toId: { $ref: '#/components/schemas/Id' }
+    responses:
+      200:
+        $ref: '#/components/responses/Success'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
+
+/api/user/friend/requests/{currentUserId}:
+  get:
+    tags:
+      - User
+      - Friend
+    summary: Paginate requests
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: currentUserId
+        schema: { $ref: '#/components/schemas/Id' }
+        required: true
+
+      # * Query parameters
+
+      - $ref: '#/components/parameters/Page'
+
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/OrderBy'
+      - $ref: '#/components/parameters/OrderByColumn'
+    responses:
+      200:
+        allOf:
+          - $ref: '#/components/responses/Success'
+          - content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    body:
+                      allOf:
+                        - $ref: '#/components/schemas/Pagination'
+                        - type: object
+                          properties:
+                            data:
+                              type: array
+                              items:
+                                $ref: '#/components/schemas/User'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
+
+/api/user/friend/friends/{id}:
+  get:
+    tags:
+      - User
+      - Friend
+    summary: Paginate friends
+    parameters:
+      - in: path
+        name: id
+        schema: { $ref: '#/components/schemas/Id' }
+        required: true
+
+      # * Query parameters
+
+      - $ref: '#/components/parameters/Page'
+
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/OrderBy'
+      - $ref: '#/components/parameters/OrderByColumn'
+    responses:
+      200:
+        allOf:
+          - $ref: '#/components/responses/Success'
+          - content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    body:
+                      allOf:
+                        - $ref: '#/components/schemas/Pagination'
+                        - type: object
+                          properties:
+                            data:
+                              type: array
+                              items:
+                                $ref: '#/components/schemas/User'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'

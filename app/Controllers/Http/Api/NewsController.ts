@@ -29,7 +29,7 @@ export default class NewsController {
       const news: ModelPaginatorContract<News> = await NewsService.paginate(payload)
 
       return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, news))
-    } catch (err: Error | any) {
+    } catch (err: Err | any) {
       throw new ExceptionService(err)
     }
   }

@@ -1,5 +1,7 @@
 import cyrillicToTranslit from 'cyrillic-to-translit-js'
+import { TABLES_NAMES } from 'Config/database'
 import { string as helperString } from '@ioc:Adonis/Core/Helpers'
+import { LucidModel, ManyToMany, ManyToManyRelationOptions } from '@ioc:Adonis/Lucid/Orm'
 
 export function formatStringForCyrillic(val: string, style: 'camelCase' | 'snakeCase', replacement?: string): string {
   val = cyrillicToTranslit().transform(val, replacement)
@@ -16,4 +18,18 @@ export function getRandom(min: number, max: number): number {
 
 export function getToken(header: string): string {
   return header.split(' ')[1]
+}
+
+export function getModelsManyToManyRelationsOptions<M extends LucidModel>(table?: keyof typeof TABLES_NAMES, foreignKey?: string, relatedForeignKey?: string): ManyToManyRelationOptions<ManyToMany<M>> {
+  const pivotTable: string | undefined = table ? TABLES_NAMES[table] : undefined
+
+  return {
+    pivotTable,
+    pivotForeignKey: foreignKey,
+    pivotRelatedForeignKey: relatedForeignKey,
+    pivotTimestamps: {
+      createdAt: 'createdAt',
+      updatedAt: 'updatedAt',
+    },
+  }
 }

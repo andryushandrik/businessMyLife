@@ -1,7 +1,7 @@
 // * Types
 import type { DateTime } from 'luxon'
 import type { UserExperienceTypes } from 'Config/user'
-import type { HasMany, ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
+import type { HasMany, ManyToMany, ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 
 import Role from '../User/Role'
@@ -11,8 +11,9 @@ import Report from '../Report/Report'
 import Hash from '@ioc:Adonis/Core/Hash'
 import { GLOBAL_DATETIME_FORMAT } from 'Config/app'
 import { RoleNames, UserTypeNames } from 'Config/user'
+import { getModelsManyToManyRelationsOptions } from 'Helpers/index'
 import { ROLE_NAMES, USER_EXPERIENCE_TYPES, USER_TYPE_NAMES } from 'Config/user'
-import { BaseModel, beforeSave, column, computed, hasMany, scope } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, beforeSave, column, computed, hasMany, scope, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 
 export default class User extends BaseModel {
   public static readonly columns = [
@@ -129,6 +130,22 @@ export default class User extends BaseModel {
 
   @hasMany(() => Report, { foreignKey: 'toId' })
   public reportsTo: HasMany<typeof Report>
+
+  @manyToMany(() => User, {
+    ...getModelsManyToManyRelationsOptions('FRIENDS', 'to_id', 'from_id'),
+    onQuery(query) {
+      query.where('isRequest', false)
+    },
+  })
+  public friends: ManyToMany<typeof User>
+
+  @manyToMany(() => User, {
+    ...getModelsManyToManyRelationsOptions('FRIENDS', 'to_id', 'from_id'),
+    onQuery(query) {
+      query.where('isRequest', true)
+    },
+  })
+  public requests: ManyToMany<typeof User>
 
   /**
    * * Computed properties
