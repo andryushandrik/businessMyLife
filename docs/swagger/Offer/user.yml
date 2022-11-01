@@ -1,0 +1,127 @@
+/api/offer/user/archived/{userId}:
+  get:
+    tags:
+      - Offer
+      - User's offers
+    summary: Get user's archived offers
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: userId
+        schema: { $ref: '#/components/schemas/Id' }
+        required: true
+
+      # * Query parameters
+
+      - $ref: '#/components/parameters/Page'
+
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/OrderBy'
+      - $ref: '#/components/parameters/OrderByColumn'
+    responses:
+      200:
+        allOf:
+          - $ref: '#/components/responses/Success'
+          - content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    body:
+                      allOf:
+                        - $ref: '#/components/schemas/Pagination'
+                        - type: object
+                          properties:
+                            data:
+                              type: array
+                              items:
+                                $ref: '#/components/schemas/Offer'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
+
+/api/offer/user/notArchived/{userId}:
+  get:
+    tags:
+      - Offer
+      - User's offers
+    summary: Get user's not archived offers
+    parameters:
+      - in: path
+        name: userId
+        schema: { $ref: '#/components/schemas/Id' }
+        required: true
+
+      # * Query parameters
+
+      - $ref: '#/components/parameters/Page'
+
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/OrderBy'
+      - $ref: '#/components/parameters/OrderByColumn'
+    responses:
+      200:
+        allOf:
+          - $ref: '#/components/responses/Success'
+          - content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    body:
+                      allOf:
+                        - $ref: '#/components/schemas/Pagination'
+                        - type: object
+                          properties:
+                            data:
+                              type: array
+                              items:
+                                $ref: '#/components/schemas/Offer'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
+
+/api/offer/user/archive/{id}:
+  get:
+    tags:
+      - Offer
+      - User's offers
+    summary: Archive user's offer
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: id
+        schema: { $ref: '#/components/schemas/Id' }
+        required: true
+    responses:
+      200:
+        $ref: '#/components/responses/Success'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
+
+/api/offer/user/unarchive/{id}:
+  get:
+    tags:
+      - Offer
+      - User's offers
+    summary: Unarchive user's offer
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: id
+        schema: { $ref: '#/components/schemas/Id' }
+        required: true
+    responses:
+      200:
+        $ref: '#/components/responses/Success'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'

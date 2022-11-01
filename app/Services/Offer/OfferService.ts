@@ -1,13 +1,12 @@
 // * Types
-import type User from 'App/Models/User/User'
 import type Subsection from 'App/Models/Offer/Subsection'
 import type OfferValidator from 'App/Validators/Offer/OfferValidator'
 import type OfferFilterValidator from 'App/Validators/Offer/OfferFilterValidator'
 import type OfferBlockDescriptionValidator from 'App/Validators/Offer/OfferBlockDescriptionValidator'
 import type { Err } from 'Contracts/response'
-import type { PaginateConfig, ServiceConfig } from 'Contracts/services'
 import type { MultipartFileContract } from '@ioc:Adonis/Core/BodyParser'
 import type { TransactionClientContract } from '@ioc:Adonis/Lucid/Database'
+import type { OfferServicePaginateConfig, ServiceConfig } from 'Contracts/services'
 import type { ModelAttributes, ModelPaginatorContract, ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 
@@ -21,72 +20,25 @@ import { OfferCategories } from 'Config/offer'
 import { OFFER_FOLDER_PATH } from 'Config/drive'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 
-type OfferConfig = PaginateConfig<Offer> & {
-  preloadArea?: boolean,
-  withoutBanned?: boolean,
-  withoutArchived?: boolean,
-}
-
 type FilterDependencies = {
   subsectionsIds: Subsection['id'][],
 }
 
 export default class OfferService {
-  public static async paginate(config: PaginateConfig<Offer>, filter?: OfferFilterValidator['schema']['props']): Promise<ModelPaginatorContract<Offer>> {
-    let query: ModelQueryBuilderContract<typeof Offer> = Offer
-      .query()
-      .withScopes((scopes) => scopes.getByVerified(true))
+  public static async paginate(config: OfferServicePaginateConfig, filter?: OfferFilterValidator['schema']['props']): Promise<ModelPaginatorContract<Offer>> {
+    let query: ModelQueryBuilderContract<typeof Offer> = Offer.query()
 
-    if (config.relations) {
-      for (const item of config.relations) {
-        query = query.preload(item)
-      }
-    }
+    if (config.isArchived !== undefined)
+      query = query.withScopes((scopes) => scopes.getByArchived(config.isArchived!))
 
-    if (config.aggregates) {
-      for (const item of config.aggregates) {
-        query = query.withCount(item)
-      }
-    }
+    if (config.isVerified !== undefined)
+      query = query.withScopes((scopes) => scopes.getByVerified(config.isVerified!))
 
-    if (filter) {
-      let dependencies: FilterDependencies | undefined = undefined
+    if (config.isBanned !== undefined)
+      query = query.withScopes((scopes) => scopes.getByBanned(config.isBanned!))
 
-      if (filter.areaId) {
-        try {
-          const subsectionsIds: Subsection['id'][] = await SubsectionService.getSubsectionsIdsByAreaId(filter.areaId)
-
-          dependencies = { subsectionsIds }
-        } catch (err: Err | any) {
-          throw err
-        }
-      }
-
-      if (filter.random)
-        query = query.random()
-
-      query = this.filter(query, filter, dependencies)
-    }
-
-    try {
-      return await query.getViaPaginate(config)
-    } catch (err: any) {
-      Logger.error(err)
-      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
-    }
-  }
-
-  public static async paginateUserOffers(userId: User['id'], config: OfferConfig, filter?: OfferFilterValidator['schema']['props']): Promise<ModelPaginatorContract<Offer>> {
-    let query: ModelQueryBuilderContract<typeof Offer> = Offer
-      .query()
-      .withScopes((scopes) => scopes.getByVerified(true))
-      .withScopes((scopes) => scopes.getByUserId(userId))
-
-    if (config.withoutBanned)
-      query = query.withScopes((scopes) => scopes.getByBanned(false))
-
-    if (config.withoutArchived)
-      query = query.withScopes((scopes) => scopes.getByArchived(false))
+    if (config.userId !== undefined)
+      query = query.withScopes((scopes) => scopes.getByUserId(config.userId!))
 
     if (config.preloadArea) {
       query = query.preload('subsection', (subsection) => {
@@ -100,38 +52,9 @@ export default class OfferService {
       }
     }
 
-    if (filter) {
-      let dependencies: FilterDependencies | undefined = undefined
-
-      if (filter.areaId) {
-        try {
-          const subsectionsIds: Subsection['id'][] = await SubsectionService.getSubsectionsIdsByAreaId(filter.areaId)
-
-          dependencies = { subsectionsIds }
-        } catch (err: Err | any) {
-          throw err
-        }
-      }
-
-      query = this.filter(query, filter, dependencies)
-    }
-
-    try {
-      return await query.getViaPaginate(config)
-    } catch (err: any) {
-      Logger.error(err)
-      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
-    }
-  }
-
-  public static async paginateNotVerifiedOffers(config: PaginateConfig<Offer>, filter?: OfferFilterValidator['schema']['props']): Promise<ModelPaginatorContract<Offer>> {
-    let query: ModelQueryBuilderContract<typeof Offer> = Offer
-      .query()
-      .withScopes((scopes) => scopes.getByVerified(false))
-
-    if (config.relations) {
-      for (const item of config.relations) {
-        query = query.preload(item)
+    if (config.aggregates) {
+      for (const item of config.aggregates) {
+        query = query.withCount(item)
       }
     }
 
@@ -428,6 +351,11 @@ export default class OfferService {
           case 'orderByColumn':
             break
           // Skip this api's keys
+
+          case 'random':
+            query = query.random()
+
+            break
 
           case 'query':
             query = query.withScopes((scopes) => scopes.search(payload[key]!))

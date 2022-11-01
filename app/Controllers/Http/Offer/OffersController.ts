@@ -3,8 +3,8 @@ import type User from 'App/Models/User/User'
 import type Area from 'App/Models/Offer/Area'
 import type Offer from 'App/Models/Offer/Offer'
 import type { Err } from 'Contracts/response'
-import type { PaginateConfig } from 'Contracts/services'
 import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
+import type { OfferServicePaginateConfig } from 'Contracts/services'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 // * Types
 
@@ -20,12 +20,14 @@ export default class OffersController {
   public async paginate({ request, response, route, view, session }: HttpContextContract) {
     let payload: OfferFilterValidator['schema']['props'] | undefined = undefined
     const isFiltered: boolean = request.input('isFiltered', false)
-    const config: PaginateConfig<Offer> = {
+    const config: OfferServicePaginateConfig = {
       baseUrl: route!.pattern,
       page: request.input('page', 1),
 
       aggregates: ['reports'],
       relations: ['user', 'subsection'],
+
+      isVerified: true,
     }
 
     if (isFiltered) {
@@ -56,10 +58,13 @@ export default class OffersController {
     const titleFromController: string = 'Мои объявления'
     const isFiltered: boolean = request.input('isFiltered', false)
     const currentUserId: User['id'] = (session.get(SESSION_AUTH_KEY) as User).id
-    const config: PaginateConfig<Offer> = {
+    const config: OfferServicePaginateConfig = {
       baseUrl: route!.pattern,
-      relations: ['user', 'subsection'],
       page: request.input('page', 1),
+
+      userId: currentUserId,
+
+      relations: ['user', 'subsection'],
     }
 
     if (isFiltered) {
@@ -71,7 +76,7 @@ export default class OffersController {
 
     try {
       const areas: Area[] = await AreaService.getAll()
-      const offers: ModelPaginatorContract<Offer> = await OfferService.paginateUserOffers(currentUserId, config, payload)
+      const offers: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload)
 
       return view.render('pages/offer/paginate', {
         areas,
@@ -89,10 +94,13 @@ export default class OffersController {
   public async paginateNotVerifiedOffers({ request, response, route, view, session }: HttpContextContract) {
     let payload: OfferFilterValidator['schema']['props'] | undefined = undefined
     const isFiltered: boolean = request.input('isFiltered', false)
-    const config: PaginateConfig<Offer> = {
+    const config: OfferServicePaginateConfig = {
       baseUrl: route!.pattern,
-      relations: ['user', 'subsection'],
       page: request.input('page', 1),
+
+      isVerified: false,
+
+      relations: ['user', 'subsection'],
     }
 
     if (isFiltered) {
@@ -104,7 +112,7 @@ export default class OffersController {
 
     try {
       const areas: Area[] = await AreaService.getAll()
-      const offers: ModelPaginatorContract<Offer> = await OfferService.paginateNotVerifiedOffers(config, payload)
+      const offers: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload)
 
       return view.render('pages/offer/paginate', {
         areas,

@@ -12,6 +12,10 @@
 
       - $ref: '#/components/parameters/Query'
       - in: query
+        name: random
+        required: false
+        schema: { type: boolean }
+      - in: query
         name: city
         required: false
         schema:
@@ -230,47 +234,6 @@
       500:
         $ref: '#/components/responses/ServerError'
 
-/api/offer/user/{userId}:
-  get:
-    tags:
-      - Offer
-    summary: Get user's offers
-    parameters:
-      - in: path
-        name: userId
-        schema: { $ref: '#/components/schemas/Id' }
-        required: true
-
-      # * Query parameters
-
-      - $ref: '#/components/parameters/Page'
-
-      - $ref: '#/components/parameters/Limit'
-      - $ref: '#/components/parameters/OrderBy'
-      - $ref: '#/components/parameters/OrderByColumn'
-    responses:
-      200:
-        allOf:
-          - $ref: '#/components/responses/Success'
-          - content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    body:
-                      allOf:
-                        - $ref: '#/components/schemas/Pagination'
-                        - type: object
-                          properties:
-                            data:
-                              type: array
-                              items:
-                                $ref: '#/components/schemas/Offer'
-      400:
-        $ref: '#/components/responses/ClientError'
-      500:
-        $ref: '#/components/responses/ServerError'
-
 /api/offer/deleteImage/{offerImageId}:
   delete:
     tags:
@@ -297,7 +260,7 @@ components:
       type: object
       properties:
         id: { $ref: '#/components/schemas/Id' }
-        isVerified: { $ref: '#/components/schemas/OfferIsVerified' }
+        isArchived: { $ref: '#/components/schemas/OfferIsArchived' }
         viewsCount: { $ref: '#/components/schemas/ViewsCount' }
 
         slug: { $ref: '#/components/schemas/Slug' }
@@ -346,8 +309,6 @@ components:
             - $ref: '#/components/schemas/Subsection'
 
         isArchivedForUser: { $ref: '#/components/schemas/OfferIsArchivedForUser' }
-        isBannedForUser: { $ref: '#/components/schemas/OfferIsBannedForUser' }
-        isVerifiedForUser: { $ref: '#/components/schemas/OfferIsVerifiedForUser' }
         categoryForUser: { $ref: '#/components/schemas/OfferCategoryForUser' }
         paybackTimeForUser: { $ref: '#/components/schemas/OfferPaybackTimeForUser' }
         projectStageForUser: { $ref: '#/components/schemas/OfferProjectStageForUser' }
@@ -356,7 +317,7 @@ components:
 
     # * Columns
 
-    OfferIsVerified:
+    OfferIsArchived:
       type: boolean
       required: false
 
@@ -513,14 +474,6 @@ components:
     # * Computed properties
 
     OfferIsArchivedForUser:
-      type: string
-      description: Type in string
-
-    OfferIsBannedForUser:
-      type: string
-      description: Type in string
-
-    OfferIsVerifiedForUser:
       type: string
       description: Type in string
 

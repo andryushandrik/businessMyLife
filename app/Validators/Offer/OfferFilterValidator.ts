@@ -35,11 +35,12 @@ export default class OfferFilterValidator extends ApiValidator {
    */
   public schema = schema.create({
     ...this.fields,
-    random: schema.boolean.optional(),
 
     /**
      * * Optional fields
      */
+
+    random: schema.boolean.optional(),
 
     city: schema.string.optional({ trim: true }),
     query: schema.string.optional({ trim: true }),

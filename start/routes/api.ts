@@ -90,13 +90,21 @@ Route.group(() => {
 
   Route.group(() => {
 
-    Route.get('/user/:userId', 'Api/OffersController.paginateUserOffers')
-
     Route.get('/area', 'Api/OffersController.getAllAreas')
 
     Route.get('/subsection/:areaId?', 'Api/OffersController.getAllSubsections')
 
     Route.delete('/deleteImage/:offerImageId', 'Api/OffersController.deleteImage').middleware('CheckAccessToken')
+
+    Route.group(() => {
+
+      Route.get('/archived/:userId', 'Api/OffersController.paginateUserArchivedOffers').middleware('CheckAccessToken')
+      Route.get('/notArchived/:userId', 'Api/OffersController.paginateUserNotArchivedOffers')
+
+      Route.patch('/archive/:id', 'Api/OffersController.archive').middleware('CheckAccessToken')
+      Route.patch('/unarchive/:id', 'Api/OffersController.unarchive').middleware('CheckAccessToken')
+
+    }).prefix('user')
 
     Route.get('/', 'Api/OffersController.paginate')
 
