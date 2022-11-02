@@ -1,5 +1,6 @@
 // * Types
-import type { BelongsTo, HasMany } from '@ioc:Adonis/Lucid/Orm'
+import type { Err } from 'Contracts/response'
+import type { BelongsTo, HasMany, ModelObject } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 
 import User from '../User/User'
@@ -7,9 +8,13 @@ import Report from '../Report/Report'
 import Subsection from './Subsection'
 import OfferImage from './OfferImage'
 import Drive from '@ioc:Adonis/Core/Drive'
+import Logger from '@ioc:Adonis/Core/Logger'
+import Database from '@ioc:Adonis/Lucid/Database'
 import { DateTime } from 'luxon'
+import { TABLES_NAMES } from 'Config/database'
 import { GLOBAL_DATETIME_FORMAT } from 'Config/app'
 import { formatStringForCyrillic } from 'Helpers/index'
+import { ResponseCodes, ResponseMessages } from 'Config/response'
 import {
   OfferCategories, OfferPaybackTimes, OfferProjectStages,
   OFFER_CATEGORIES, OFFER_PAYBACK_TIMES, OFFER_PROJECT_STAGES,
@@ -289,5 +294,28 @@ export default class Offer extends BaseModel {
   public static async deleteStoredImage(item: Offer) {
     if (item.image)
       await Drive.delete(item.image)
+  }
+
+  /**
+   * * Other
+   */
+
+  public async getForUser(currentUserId: User['id']): Promise<ModelObject> {
+    const item: ModelObject = { ...this.serialize() }
+
+    try {
+      const isFavorite = await Database
+        .from(TABLES_NAMES.FAVORITE_OFFERS)
+        .where('user_id', currentUserId)
+        .andWhere('offer_id', item.id)
+        .first()
+
+      item.isFavorite = Boolean(isFavorite)
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+    }
+
+    return item
   }
 }

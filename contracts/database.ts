@@ -1,4 +1,5 @@
 // * Types
+import type { ModelObject } from '@ioc:Adonis/Lucid/Orm'
 import type { SimplePaginatorContract } from '@ioc:Adonis/Lucid/Database'
 // * Types
 
@@ -18,4 +19,9 @@ export type PaginationConfig = {
   limit?: number,
   orderByColumn?: string,
   orderBy?: 'asc' | 'desc',
+}
+
+export type JSONPaginate = {
+  meta: any,
+  data: ModelObject[]
 }

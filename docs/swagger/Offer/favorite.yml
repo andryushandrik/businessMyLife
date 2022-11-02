@@ -1,0 +1,91 @@
+/api/offer/user/favorites/{userId}:
+  get:
+    tags:
+      - Offer
+      - Favorite
+    summary: Paginate user's favorite offers
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: userId
+        schema: { $ref: '#/components/schemas/Id' }
+        required: true
+
+      # * Query parameters
+
+      - $ref: '#/components/parameters/Page'
+
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/OrderBy'
+      - $ref: '#/components/parameters/OrderByColumn'
+    responses:
+      200:
+        allOf:
+          - $ref: '#/components/responses/Success'
+          - content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    body:
+                      allOf:
+                        - $ref: '#/components/schemas/Pagination'
+                        - type: object
+                          properties:
+                            data:
+                              type: array
+                              items:
+                                $ref: '#/components/schemas/Offer'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
+
+/api/offer/user/favorites:
+  post:
+    tags:
+      - Offer
+      - Favorite
+    summary: Create new favorite offer
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              userId: { $ref: '#/components/schemas/Id' }
+              offerId: { $ref: '#/components/schemas/Id' }
+    responses:
+      200:
+        $ref: '#/components/responses/Success'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
+  delete:
+    tags:
+      - Offer
+      - Favorite
+    summary: Delete favorite offer
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              userId: { $ref: '#/components/schemas/Id' }
+              offerId: { $ref: '#/components/schemas/Id' }
+    responses:
+      200:
+        $ref: '#/components/responses/Success'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'

@@ -1,9 +1,10 @@
-/api/offer/user/archived/{userId}:
+/api/offer/user/archive/archived/{userId}:
   get:
     tags:
       - Offer
+      - Archive
       - User's offers
-    summary: Get user's archived offers
+    summary: Paginate user's archived offers
     security:
       - bearerAuth: []
     parameters:
@@ -42,12 +43,13 @@
       500:
         $ref: '#/components/responses/ServerError'
 
-/api/offer/user/notArchived/{userId}:
+/api/offer/user/archive/notArchived/{userId}:
   get:
     tags:
       - Offer
+      - Archive
       - User's offers
-    summary: Get user's not archived offers
+    summary: Paginate user's not archived offers
     parameters:
       - in: path
         name: userId
@@ -85,10 +87,10 @@
         $ref: '#/components/responses/ServerError'
 
 /api/offer/user/archive/{id}:
-  get:
+  patch:
     tags:
       - Offer
-      - User's offers
+      - Archive
     summary: Archive user's offer
     security:
       - bearerAuth: []
@@ -104,12 +106,10 @@
         $ref: '#/components/responses/ClientError'
       500:
         $ref: '#/components/responses/ServerError'
-
-/api/offer/user/unarchive/{id}:
-  get:
+  delete:
     tags:
       - Offer
-      - User's offers
+      - Archive
     summary: Unarchive user's offer
     security:
       - bearerAuth: []

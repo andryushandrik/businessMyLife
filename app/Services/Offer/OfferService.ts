@@ -1,18 +1,24 @@
 // * Types
+import type User from 'App/Models/User/User'
 import type Subsection from 'App/Models/Offer/Subsection'
 import type OfferValidator from 'App/Validators/Offer/OfferValidator'
 import type OfferFilterValidator from 'App/Validators/Offer/OfferFilterValidator'
+import type OfferFavoriteValidator from 'App/Validators/Offer/OfferFavoriteValidator'
 import type OfferBlockDescriptionValidator from 'App/Validators/Offer/OfferBlockDescriptionValidator'
 import type { Err } from 'Contracts/response'
 import type { MultipartFileContract } from '@ioc:Adonis/Core/BodyParser'
 import type { TransactionClientContract } from '@ioc:Adonis/Lucid/Database'
 import type { OfferServicePaginateConfig, ServiceConfig } from 'Contracts/services'
-import type { ModelAttributes, ModelPaginatorContract, ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
+import type {
+  ManyToManyQueryBuilderContract, ModelAttributes,
+  ModelObject, ModelPaginatorContract, ModelQueryBuilderContract
+} from '@ioc:Adonis/Lucid/Orm'
 // * Types
 
 import Offer from 'App/Models/Offer/Offer'
 import Drive from '@ioc:Adonis/Core/Drive'
 import Logger from '@ioc:Adonis/Core/Logger'
+import UserService from '../User/UserService'
 import Database from '@ioc:Adonis/Lucid/Database'
 import SubsectionService from './SubsectionService'
 import OfferImageService from './OfferImageService'
@@ -26,7 +32,16 @@ type FilterDependencies = {
 
 export default class OfferService {
   public static async paginate(config: OfferServicePaginateConfig, filter?: OfferFilterValidator['schema']['props']): Promise<ModelPaginatorContract<Offer>> {
-    let query: ModelQueryBuilderContract<typeof Offer> = Offer.query()
+    let query: ModelQueryBuilderContract<typeof Offer, ModelObject> | ManyToManyQueryBuilderContract<typeof Offer, ModelObject> = Offer.query()
+
+    if (config.userIdForFavorites) {
+      try {
+        const user: User = await UserService.get(config.userIdForFavorites)
+        query = user.related('favoriteOffers').query()
+      } catch (err: Err | any) {
+        throw err
+      }
+    }
 
     if (config.isArchived !== undefined)
       query = query.withScopes((scopes) => scopes.getByArchived(config.isArchived!))
@@ -74,7 +89,7 @@ export default class OfferService {
       query = this.filter(query, filter, dependencies)
     }
 
-    try {
+    try { // @ts-ignore
       return await query.getViaPaginate(config)
     } catch (err: any) {
       Logger.error(err)
@@ -291,6 +306,19 @@ export default class OfferService {
     }
   }
 
+  public static async verifyAll(): Promise<void> {
+    try {
+      await Offer.query().update({ isVerified: true })
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+    }
+  }
+
+  /**
+   * * Actions
+   */
+
   public static async actions(id: Offer['id'], actionType: 'archive' | 'ban' | 'verify', actionValue: boolean): Promise<void> {
     let item: Offer
     const offerData: Partial<ModelAttributes<Offer>> = {}
@@ -326,9 +354,17 @@ export default class OfferService {
     }
   }
 
-  public static async verifyAll(): Promise<void> {
+  public static async favoriteAction(payload: OfferFavoriteValidator['schema']['props'], action: 'attach' | 'detach'): Promise<void> {
+    let user: User
+
     try {
-      await Offer.query().update({ isVerified: true })
+      user = await UserService.get(payload.userId)
+    } catch (err: Err | any) {
+      throw err
+    }
+
+    try {
+      await user.related('favoriteOffers')[action]([payload.offerId])
     } catch (err: any) {
       Logger.error(err)
       throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
@@ -339,7 +375,7 @@ export default class OfferService {
    * * Private methods
    */
 
-  private static filter(query: ModelQueryBuilderContract<typeof Offer>, payload: OfferFilterValidator['schema']['props'], dependencies?: FilterDependencies): ModelQueryBuilderContract<typeof Offer> {
+  private static filter(query: ModelQueryBuilderContract<typeof Offer, ModelObject> | ManyToManyQueryBuilderContract<typeof Offer, ModelObject>, payload: OfferFilterValidator['schema']['props'], dependencies?: FilterDependencies): ModelQueryBuilderContract<typeof Offer> | ManyToManyQueryBuilderContract<typeof Offer, ModelObject> {
     for (const key in payload) {
       if (payload[key]) {
 
@@ -410,6 +446,7 @@ export default class OfferService {
       }
     }
 
+    // @ts-ignore
     return query
   }
 

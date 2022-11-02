@@ -131,6 +131,9 @@ export default class User extends BaseModel {
   @hasMany(() => Report, { foreignKey: 'toId' })
   public reportsTo: HasMany<typeof Report>
 
+  @manyToMany(() => Offer, getModelsManyToManyRelationsOptions('FAVORITE_OFFERS'))
+  public favoriteOffers: ManyToMany<typeof Offer>
+
   @manyToMany(() => User, {
     ...getModelsManyToManyRelationsOptions('FRIENDS', 'to_id', 'from_id'),
     onQuery(query) {

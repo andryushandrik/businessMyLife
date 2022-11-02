@@ -1,3 +1,43 @@
+/api/user:
+  get:
+    tags:
+      - User
+    summary: Paginate users
+    security:
+      - bearerAuth: []
+    parameters:
+      - $ref: '#/components/parameters/Page'
+
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/OrderBy'
+      - $ref: '#/components/parameters/OrderByColumn'
+
+      # * Query parameters
+
+      - $ref: '#/components/parameters/Query'
+    responses:
+      200:
+        allOf:
+          - $ref: '#/components/responses/Success'
+          - content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    body:
+                      allOf:
+                        - $ref: '#/components/schemas/Pagination'
+                        - type: object
+                          properties:
+                            data:
+                              type: array
+                              items:
+                                $ref: '#/components/schemas/User'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
+
 /api/user/{id}:
   get:
     tags:

@@ -5,12 +5,12 @@ import type Offer from 'App/Models/Offer/Offer'
 import type Subsection from 'App/Models/Offer/Subsection'
 import type OfferImage from 'App/Models/Offer/OfferImage'
 import type { Err } from 'Contracts/response'
-import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
+import type { JSONPaginate } from 'Contracts/database'
 import type { OfferServicePaginateConfig } from 'Contracts/services'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import type { ModelObject, ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 
-import ApiValidator from 'App/Validators/ApiValidator'
 import AreaService from 'App/Services/Offer/AreaService'
 import OfferService from 'App/Services/Offer/OfferService'
 import ResponseService from 'App/Services/ResponseService'
@@ -22,8 +22,9 @@ import OfferFilterValidator from 'App/Validators/Offer/OfferFilterValidator'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 
 export default class OffersController {
-  public async paginate({ request, response }: HttpContextContract) {
+  public async paginate({ request, response, params }: HttpContextContract) {
     let payload: OfferFilterValidator['schema']['props']
+    const currentUserId: User['id'] | undefined = params.currentUserId
 
     try {
       payload = await request.validate(OfferFilterValidator)
@@ -46,65 +47,12 @@ export default class OffersController {
         isVerified: true,
         isArchived: false,
       }
-      const offers: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload)
+      let offers: ModelPaginatorContract<Offer> | JSONPaginate = await OfferService.paginate(config, payload)
 
-      return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, offers))
-    } catch (err: Err | any) {
-      throw new ExceptionService(err)
-    }
-  }
-
-  public async paginateUserNotArchivedOffers({ request, response, params }: HttpContextContract) {
-    const userId: User['id'] = params.userId
-    let payload: ApiValidator['schema']['props']
-
-    try {
-      payload = await request.validate(ApiValidator)
-    } catch (err: Err | any) {
-      throw new ExceptionService({
-        code: ResponseCodes.VALIDATION_ERROR,
-        message: ResponseMessages.VALIDATION_ERROR,
-        body: err.messages,
-      })
-    }
-
-    try {
-      const offers: ModelPaginatorContract<Offer> = await OfferService.paginate( {
-        ...payload,
-        preloadArea: true,
-
-        userId,
-        isArchived: false,
-      })
-
-      return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, offers))
-    } catch (err: Err | any) {
-      throw new ExceptionService(err)
-    }
-  }
-
-  public async paginateUserArchivedOffers({ request, response, params }: HttpContextContract) {
-    const userId: User['id'] = params.userId
-    let payload: ApiValidator['schema']['props']
-
-    try {
-      payload = await request.validate(ApiValidator)
-    } catch (err: Err | any) {
-      throw new ExceptionService({
-        code: ResponseCodes.VALIDATION_ERROR,
-        message: ResponseMessages.VALIDATION_ERROR,
-        body: err.messages,
-      })
-    }
-
-    try {
-      const offers: ModelPaginatorContract<Offer> = await OfferService.paginate({
-        ...payload,
-        preloadArea: true,
-
-        userId,
-        isArchived: true,
-      })
+      if (currentUserId) {
+        offers = offers.toJSON()
+        offers.data = await Promise.all(offers.data.map(async (item: Offer) => await item.getForUser(currentUserId)))
+      }
 
       return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, offers))
     } catch (err: Err | any) {
@@ -114,9 +62,13 @@ export default class OffersController {
 
   public async get({ response, params }: HttpContextContract) {
     const id: Offer['id'] = params.id
+    const currentUserId: User['id'] | undefined = params.currentUserId
 
     try {
-      const item: Offer = await OfferService.get(id, { relations: ['user', 'images'] })
+      let item: Offer | ModelObject = await OfferService.get(id, { relations: ['user', 'images'] })
+
+      if (currentUserId)
+        item = await item.getForUser(currentUserId)
 
       return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, item))
     } catch (err: Err | any) {
@@ -208,34 +160,6 @@ export default class OffersController {
 
     try {
       await OfferImageService.delete(id)
-
-      return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS))
-    } catch (err: Err | any) {
-      throw new ExceptionService(err)
-    }
-  }
-
-  /**
-   * * Archive
-   */
-
-  public async archive({ response, params }: HttpContextContract) {
-    const id: Offer['id'] = params.id
-
-    try {
-      await OfferService.actions(id, 'archive', true)
-
-      return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS))
-    } catch (err: Err | any) {
-      throw new ExceptionService(err)
-    }
-  }
-
-  public async unarchive({ response, params }: HttpContextContract) {
-    const id: Offer['id'] = params.id
-
-    try {
-      await OfferService.actions(id, 'archive', false)
 
       return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS))
     } catch (err: Err | any) {

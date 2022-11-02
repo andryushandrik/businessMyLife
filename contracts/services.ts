@@ -1,4 +1,5 @@
 // * Types
+import type User from 'App/Models/User/User'
 import type Offer from 'App/Models/Offer/Offer'
 import type { TransactionClientContract } from '@ioc:Adonis/Lucid/Database'
 import type { ExtractModelRelations, LucidRow } from '@ioc:Adonis/Lucid/Orm'
@@ -29,4 +30,5 @@ export type OfferServicePaginateConfig = PaginateConfig<Offer> & {
   userId?: Offer['userId'],
 
   preloadArea?: boolean,
+  userIdForFavorites?: User['id'],
 }

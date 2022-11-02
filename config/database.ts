@@ -83,6 +83,7 @@ export const TABLES_NAMES = {
 
   OFFERS: 'offers',
   OFFERS_IMAGES: 'offersImages',
+  FAVORITE_OFFERS: 'favoriteOffers',
 
   /**
    * * User

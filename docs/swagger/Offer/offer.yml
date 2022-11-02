@@ -1,14 +1,24 @@
-/api/offer:
+/api/offer/paginate:
   get:
     tags:
       - Offer
     summary: Paginate offers
+    description: Add current user id to path, for get offer's favorite status
     parameters:
+      - in: path
+        name: currentUserId
+        schema: { $ref: '#/components/schemas/Id' }
+        required: false
+
+      # * Pagination parameters
+
       - $ref: '#/components/parameters/Page'
 
       - $ref: '#/components/parameters/Limit'
       - $ref: '#/components/parameters/OrderBy'
       - $ref: '#/components/parameters/OrderByColumn'
+
+      # * Query parameters
 
       - $ref: '#/components/parameters/Query'
       - in: query
@@ -77,6 +87,8 @@
         $ref: '#/components/responses/ClientError'
       500:
         $ref: '#/components/responses/ServerError'
+
+/api/offer/:
   post:
     tags:
       - Offer
@@ -138,11 +150,16 @@
     tags:
       - Offer
     summary: Get offer
+    description: Add current user id to path, for get offer's favorite status
     parameters:
       - in: path
         name: id
         schema: { $ref: '#/components/schemas/Id' }
         required: true
+      - in: path
+        name: currentUserId
+        schema: { $ref: '#/components/schemas/Id' }
+        required: false
     responses:
       200:
         allOf:
