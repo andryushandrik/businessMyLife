@@ -208,4 +208,21 @@ Route.group(() => {
 
   }).prefix('offer')
 
+  /**
+   * * Report
+   */
+
+  Route.group(() => {
+
+    Route.group(() => {
+
+      Route.get('/user', 'Api/ReportsController.getAllUserTypes')
+      Route.get('/offer', 'Api/ReportsController.getAllOfferTypes')
+
+    }).prefix('type')
+
+    Route.post('/', 'Api/ReportsController.create')
+
+  }).prefix('report').middleware('CheckAccessToken')
+
 }).prefix('api')

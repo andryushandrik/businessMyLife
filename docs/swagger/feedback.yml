@@ -1,6 +1,6 @@
 /api/feedback:
   post:
-    summary: Add new feedback
+    summary: Create new feedback
     requestBody:
       required: true
       content:

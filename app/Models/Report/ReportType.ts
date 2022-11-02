@@ -18,10 +18,10 @@ export default class ReportType extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
-  @column()
+  @column({ serializeAs: null })
   public isForUsers: boolean
 
-  @column()
+  @column({ serializeAs: null })
   public isForOffers: boolean
 
   @column()
@@ -50,6 +50,14 @@ export default class ReportType extends BaseModel {
   /**
    * * Query scopes
    */
+
+  public static getByForUsers = scope((query) => {
+    query.where('isForUsers', true)
+  })
+
+  public static getByForOffers = scope((query) => {
+    query.where('isForOffers', true)
+  })
 
   public static search = scope((query, searchQuery: string) => {
     query.where('name', 'ILIKE', `%${searchQuery}%`)

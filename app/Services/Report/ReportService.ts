@@ -2,6 +2,7 @@
 import type User from 'App/Models/User/User'
 import type Offer from 'App/Models/Offer/Offer'
 import type Subsection from 'App/Models/Offer/Subsection'
+import type ReportValidator from 'App/Validators/Report/ReportValidator'
 import type UserReportFilterValidator from 'App/Validators/Report/UserReportFilterValidator'
 import type OfferReportFilterValidator from 'App/Validators/Report/OfferReportFilterValidator'
 import type { Err } from 'Contracts/response'
@@ -123,6 +124,15 @@ export default class ReportService {
 
     try {
       return await query.getViaPaginate(config)
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+    }
+  }
+
+  public static async create(payload: ReportValidator['schema']['props']): Promise<void> {
+    try {
+      await Report.create(payload)
     } catch (err: any) {
       Logger.error(err)
       throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err

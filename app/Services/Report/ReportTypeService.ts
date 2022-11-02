@@ -41,6 +41,22 @@ export default class ReportTypeService {
     return item
   }
 
+  public static async getAll(type: 'user' | 'offer'): Promise<ReportType[]> {
+    let query: ModelQueryBuilderContract<typeof ReportType> = ReportType.query()
+
+    if (type === 'user')
+      query = query.withScopes((scopes) => scopes.getByForUsers())
+    else if (type === 'offer')
+      query = query.withScopes((scopes) => scopes.getByForOffers())
+
+    try {
+      return await query
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+    }
+  }
+
   public static async create(payload: ReportTypeValidator['schema']['props']): Promise<void> {
     const reportTypePayload: Partial<ModelAttributes<ReportType>> = {
       name: payload.name,

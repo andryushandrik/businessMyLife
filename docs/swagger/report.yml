@@ -1,0 +1,92 @@
+/api/report/type/user:
+  get:
+    tags:
+      - Report
+    summary: Get all report types for users
+    responses:
+      200:
+        allOf:
+          - $ref: '#/components/responses/Success'
+          - content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    body:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/ReportType'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
+
+/api/report/type/offer:
+  get:
+    tags:
+      - Report
+    summary: Get all report types for offers
+    responses:
+      200:
+        allOf:
+          - $ref: '#/components/responses/Success'
+          - content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    body:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/ReportType'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
+
+/api/report:
+  post:
+    tags:
+      - Report
+    summary: Create new report
+    description: If you need to create user report, fill 'toId' request body property, if you need to create offer report, than fill 'offerId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              description:
+                type: string
+                required: true
+                maxLength: 3000
+
+              userId: { $ref: '#/components/schemas/Id' }
+              reportTypeId: { $ref: '#/components/schemas/Id' }
+
+              toId: { $ref: '#/components/schemas/Id' }
+              offerId: { $ref: '#/components/schemas/Id' }
+    responses:
+      200:
+        $ref: '#/components/responses/Success'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
+
+components:
+  schemas:
+    ReportType:
+      type: object
+      properties:
+        id: { $ref: '#/components/schemas/Id' }
+        name: { $ref: '#/components/schemas/ReportTypeName' }
+        createdAt: { $ref: '#/components/schemas/CreatedAt' }
+        updatedAt: { $ref: '#/components/schemas/UpdatedAt' }
+
+    # * Columns
+
+    ReportTypeName:
+      type: string
+      required: true
