@@ -94,6 +94,13 @@ export const TABLES_NAMES = {
   FRIENDS: 'friends',
   SESSIONS: 'sessions',
   USERS_IMAGES: 'usersImages',
+
+  /**
+   * * Chat
+   */
+
+  MESSAGES: 'messages',
+  CONVERSATIONS: 'conversations',
 } as const
 
 /**
@@ -216,3 +223,9 @@ export const USER_LAST_NAME_MAX_LENGTH: number = 255
 
 export const USER_PATRONYMIC_MIN_LENGTH: number = 2
 export const USER_PATRONYMIC_MAX_LENGTH: number = 255
+
+/**
+ * * Chat
+ */
+
+export const MESSAGE_TEXT_MAX_LENGTH: number = 8192

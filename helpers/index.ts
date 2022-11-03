@@ -1,3 +1,7 @@
+// * Types
+import type Conversation from 'App/Models/Chat/Conversation'
+// * Types
+
 import cyrillicToTranslit from 'cyrillic-to-translit-js'
 import { TABLES_NAMES } from 'Config/database'
 import { string as helperString } from '@ioc:Adonis/Core/Helpers'
@@ -32,4 +36,8 @@ export function getModelsManyToManyRelationsOptions<M extends LucidModel>(table?
       updatedAt: 'updatedAt',
     },
   }
+}
+
+export function getConversationRoomName(id: Conversation['id']): string {
+  return `conversationRoom-${id}`
 }
