@@ -8,7 +8,7 @@ import { schema } from '@ioc:Adonis/Core/Validator'
 
 export default class UploadTutorialFilterValidator extends ApiValidator {
   constructor(protected ctx: HttpContextContract) {
-    super(ctx)
+    super()
   }
 
   /**

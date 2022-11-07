@@ -413,6 +413,36 @@ export default class OfferService {
 
             break
 
+          case 'priceFrom':
+            query = query.withScopes((scopes) => scopes.getByPriceFrom(payload[key]!))
+
+            break
+
+          case 'priceTo':
+            query = query.withScopes((scopes) => scopes.getByPriceTo(payload[key]!))
+
+            break
+
+          case 'profitFrom':
+            query = query.withScopes((scopes) => scopes.getByProfitFrom(payload[key]!))
+
+            break
+
+          case 'profitTo':
+            query = query.withScopes((scopes) => scopes.getByProfitTo(payload[key]!))
+
+            break
+
+          case 'profitPerMonthFrom':
+            query = query.withScopes((scopes) => scopes.getByProfitPerMonthFrom(payload[key]!))
+
+            break
+
+          case 'profitPerMonthTo':
+            query = query.withScopes((scopes) => scopes.getByProfitPerMonthTo(payload[key]!))
+
+            break
+
           case 'projectStage':
             query = query.withScopes((scopes) => scopes.getByProjectStages([payload[key]!]))
 

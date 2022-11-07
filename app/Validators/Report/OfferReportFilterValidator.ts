@@ -10,7 +10,7 @@ import { getOfferCategoryRules } from '../Rules/Offer/offer'
 
 export default class OfferReportFilterValidator extends ApiValidator {
   constructor(protected ctx: HttpContextContract) {
-    super(ctx)
+    super()
   }
 
   /**

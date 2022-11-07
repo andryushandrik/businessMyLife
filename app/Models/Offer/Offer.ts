@@ -263,6 +263,30 @@ export default class Offer extends BaseModel {
     query.where('investments', '<=', to)
   ])
 
+  public static getByPriceFrom = scope((query, from: number) => [
+    query.where('price', '>=', from)
+  ])
+
+  public static getByPriceTo = scope((query, to: number) => [
+    query.where('price', '<=', to)
+  ])
+
+  public static getByProfitFrom = scope((query, from: number) => [
+    query.where('profit', '>=', from)
+  ])
+
+  public static getByProfitTo = scope((query, to: number) => [
+    query.where('profit', '<=', to)
+  ])
+
+  public static getByProfitPerMonthFrom = scope((query, from: number) => [
+    query.where('profitPerMonth', '>=', from)
+  ])
+
+  public static getByProfitPerMonthTo = scope((query, to: number) => [
+    query.where('profitPerMonth', '<=', to)
+  ])
+
   public static getByUserId = scope((query, userId: User['id']) => [
     query.where('user_id', userId)
   ])

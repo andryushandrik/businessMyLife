@@ -56,6 +56,36 @@
         schema:
           $ref: '#/components/schemas/OfferInvestments'
       - in: query
+        name: priceFrom
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferPrice'
+      - in: query
+        name: priceTo
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferPrice'
+      - in: query
+        name: profitFrom
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferProfit'
+      - in: query
+        name: profitTo
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferProfit'
+      - in: query
+        name: profitPerMonthFrom
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferProfitPerMonth'
+      - in: query
+        name: profitPerMonthTo
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferProfitPerMonth'
+      - in: query
         name: projectStage
         required: false
         schema:

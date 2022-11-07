@@ -11,7 +11,7 @@ import { getOfferCategoryRules, getOfferPaybackTimeRules, getOfferProjectStageRu
 
 export default class OfferFilterValidator extends ApiValidator {
   constructor(protected ctx: HttpContextContract) {
-    super(ctx)
+    super()
   }
 
   /**
@@ -41,14 +41,26 @@ export default class OfferFilterValidator extends ApiValidator {
      */
 
     random: schema.boolean.optional(),
+    query: schema.string.optional({ trim: true }),
 
     city: schema.string.optional({ trim: true }),
-    query: schema.string.optional({ trim: true }),
+
     areaId: schema.number.optional(getAreaIdRules()),
     category: schema.number.optional(getOfferCategoryRules()),
     subsectionId: schema.number.optional(getSubsectionIdRules()),
+
     investmentsTo: schema.number.optional([ rules.unsigned() ]),
     investmentsFrom: schema.number.optional([ rules.unsigned() ]),
+
+    priceTo: schema.number.optional([ rules.unsigned() ]),
+    priceFrom: schema.number.optional([ rules.unsigned() ]),
+
+    profitTo: schema.number.optional([ rules.unsigned() ]),
+    profitFrom: schema.number.optional([ rules.unsigned() ]),
+
+    profitPerMonthTo: schema.number.optional([ rules.unsigned() ]),
+    profitPerMonthFrom: schema.number.optional([ rules.unsigned() ]),
+
     paybackTime: schema.number.optional(getOfferPaybackTimeRules()),
     projectStage: schema.number.optional(getOfferProjectStageRules()),
   })
