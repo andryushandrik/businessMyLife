@@ -65,7 +65,10 @@ export default class OffersController {
     const currentUserId: User['id'] | undefined = params.currentUserId
 
     try {
-      let item: Offer | ModelObject = await OfferService.get(id, { relations: ['user', 'images'] })
+      let item: Offer | ModelObject = await OfferService.get(id, {
+        preloadArea: true,
+        relations: ['user', 'images'],
+      })
 
       if (currentUserId)
         item = await item.getForUser(currentUserId)

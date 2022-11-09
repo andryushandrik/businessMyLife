@@ -30,6 +30,10 @@ type FilterDependencies = {
   subsectionsIds: Subsection['id'][],
 }
 
+type OfferConfig = ServiceConfig<Offer> & {
+  preloadArea?: boolean,
+}
+
 export default class OfferService {
   public static async paginate(config: OfferServicePaginateConfig, filter?: OfferFilterValidator['schema']['props']): Promise<ModelPaginatorContract<Offer>> {
     let query: ModelQueryBuilderContract<typeof Offer, ModelObject> | ManyToManyQueryBuilderContract<typeof Offer, ModelObject> = Offer.query()
@@ -97,7 +101,7 @@ export default class OfferService {
     }
   }
 
-  public static async get(id: Offer['id'], { relations, trx }: ServiceConfig<Offer> = {}): Promise<Offer> {
+  public static async get(id: Offer['id'], { relations, trx, preloadArea }: OfferConfig = {}): Promise<Offer> {
     let item: Offer | null
 
     try {
@@ -115,6 +119,12 @@ export default class OfferService {
         for (const relation of relations) {
           await item.load(relation)
         }
+      }
+
+      if (preloadArea) {
+        await item.load('subsection', (query) => {
+          query.preload('area')
+        })
       }
 
       return item
@@ -480,18 +490,6 @@ export default class OfferService {
     return query
   }
 
-  private static async uploadImage(id: Offer['id'], image: MultipartFileContract): Promise<string> {
-    const path: string = `${OFFER_FOLDER_PATH}/${id}`
-
-    try {
-      await image.moveToDisk(path)
-      return `${path}/${image.fileName}`
-    } catch (err: any) {
-      Logger.error(err)
-      throw { code: ResponseCodes.SERVER_ERROR, message: ResponseMessages.ERROR } as Err
-    }
-  }
-
   private static getOfferDataFromPayload(payload: OfferValidator['schema']['props']): Partial<ModelAttributes<Offer>> {
     return {
       title: payload.title,
@@ -524,6 +522,18 @@ export default class OfferService {
 
       userId: payload.userId,
       subsectionId: payload.subsectionId,
+    }
+  }
+
+  private static async uploadImage(id: Offer['id'], image: MultipartFileContract): Promise<string> {
+    const path: string = `${OFFER_FOLDER_PATH}/${id}`
+
+    try {
+      await image.moveToDisk(path)
+      return `${path}/${image.fileName}`
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.SERVER_ERROR, message: ResponseMessages.ERROR } as Err
     }
   }
 }

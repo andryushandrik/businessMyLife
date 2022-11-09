@@ -1,4 +1,4 @@
-/api/offer/paginate:
+/api/offer/paginate/{currentUserId?}:
   get:
     tags:
       - Offer
@@ -118,7 +118,7 @@
       500:
         $ref: '#/components/responses/ServerError'
 
-/api/offer/:
+/api/offer:
   post:
     tags:
       - Offer
@@ -175,7 +175,7 @@
       500:
         $ref: '#/components/responses/ServerError'
 
-/api/offer/{id}:
+/api/offer/{id}/{currentUserId?}:
   get:
     tags:
       - Offer
