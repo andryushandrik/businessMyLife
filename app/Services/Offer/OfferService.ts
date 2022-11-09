@@ -32,6 +32,7 @@ type FilterDependencies = {
 
 type OfferConfig = ServiceConfig<Offer> & {
   preloadArea?: boolean,
+  addViewCount?: boolean,
 }
 
 export default class OfferService {
@@ -101,7 +102,7 @@ export default class OfferService {
     }
   }
 
-  public static async get(id: Offer['id'], { relations, trx, preloadArea }: OfferConfig = {}): Promise<Offer> {
+  public static async get(id: Offer['id'], { relations, trx, preloadArea, addViewCount }: OfferConfig = {}): Promise<Offer> {
     let item: Offer | null
 
     try {
@@ -113,6 +114,19 @@ export default class OfferService {
 
     if (!item)
       throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.ERROR } as Err
+
+    if (addViewCount) {
+      const newViewCount: Offer['viewsCount'] = ++item.viewsCount
+
+      try {
+        await item.merge({ viewsCount: newViewCount }).save()
+
+        item.viewsCount = newViewCount
+      } catch (err: any) {
+        Logger.error(err)
+        throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+      }
+    }
 
     try {
       if (relations) {

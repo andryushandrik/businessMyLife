@@ -67,6 +67,7 @@ export default class OffersController {
     try {
       let item: Offer | ModelObject = await OfferService.get(id, {
         preloadArea: true,
+        addViewCount: true,
         relations: ['user', 'images'],
       })
 
