@@ -13,13 +13,91 @@
         schema: { $ref: '#/components/schemas/Id' }
         required: true
 
-      # * Query parameters
+      # * Pagination parameters
 
       - $ref: '#/components/parameters/Page'
 
       - $ref: '#/components/parameters/Limit'
       - $ref: '#/components/parameters/OrderBy'
       - $ref: '#/components/parameters/OrderByColumn'
+
+      # * Query parameters
+
+      - $ref: '#/components/parameters/Query'
+      - in: query
+        name: random
+        required: false
+        schema: { type: boolean }
+      - in: query
+        name: city
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferCity'
+      - in: query
+        name: areaId
+        required: false
+        schema:
+          $ref: '#/components/schemas/Id'
+      - in: query
+        name: category
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferCategory'
+      - in: query
+        name: subsectionId
+        required: false
+        schema:
+          $ref: '#/components/schemas/Id'
+      - in: query
+        name: investmentsFrom
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferInvestments'
+      - in: query
+        name: investmentsTo
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferInvestments'
+      - in: query
+        name: priceFrom
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferPrice'
+      - in: query
+        name: priceTo
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferPrice'
+      - in: query
+        name: profitFrom
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferProfit'
+      - in: query
+        name: profitTo
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferProfit'
+      - in: query
+        name: profitPerMonthFrom
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferProfitPerMonth'
+      - in: query
+        name: profitPerMonthTo
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferProfitPerMonth'
+      - in: query
+        name: projectStage
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferProjectStage'
+      - in: query
+        name: projectTime
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferPaybackTime'
     responses:
       200:
         allOf:
@@ -56,13 +134,91 @@
         schema: { $ref: '#/components/schemas/Id' }
         required: true
 
-      # * Query parameters
+      # * Pagination parameters
 
       - $ref: '#/components/parameters/Page'
 
       - $ref: '#/components/parameters/Limit'
       - $ref: '#/components/parameters/OrderBy'
       - $ref: '#/components/parameters/OrderByColumn'
+
+      # * Query parameters
+
+      - $ref: '#/components/parameters/Query'
+      - in: query
+        name: random
+        required: false
+        schema: { type: boolean }
+      - in: query
+        name: city
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferCity'
+      - in: query
+        name: areaId
+        required: false
+        schema:
+          $ref: '#/components/schemas/Id'
+      - in: query
+        name: category
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferCategory'
+      - in: query
+        name: subsectionId
+        required: false
+        schema:
+          $ref: '#/components/schemas/Id'
+      - in: query
+        name: investmentsFrom
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferInvestments'
+      - in: query
+        name: investmentsTo
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferInvestments'
+      - in: query
+        name: priceFrom
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferPrice'
+      - in: query
+        name: priceTo
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferPrice'
+      - in: query
+        name: profitFrom
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferProfit'
+      - in: query
+        name: profitTo
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferProfit'
+      - in: query
+        name: profitPerMonthFrom
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferProfitPerMonth'
+      - in: query
+        name: profitPerMonthTo
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferProfitPerMonth'
+      - in: query
+        name: projectStage
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferProjectStage'
+      - in: query
+        name: projectTime
+        required: false
+        schema:
+          $ref: '#/components/schemas/OfferPaybackTime'
     responses:
       200:
         allOf:
