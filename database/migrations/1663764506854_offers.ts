@@ -39,6 +39,7 @@ export default class extends BaseSchema {
        */
 
       table.string('image').nullable()
+      table.string('video').nullable().comment('Embed video, only for franchises')
 
       table.string('cooperationTerms', OFFER_COOPERATION_TERMS_MAX_LENGTH).nullable().comment('Условия сотрудничества, у продажи готового бизнеса это поле условия продажи')
       table.string('businessPlan', OFFER_BUSINESS_PLAN_MAX_LENGTH).nullable().comment('Бизнес план (все кроме предложения инвесторов)')

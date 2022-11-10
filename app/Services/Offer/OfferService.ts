@@ -510,6 +510,7 @@ export default class OfferService {
       description: payload.description,
       city: payload.city,
 
+      video: payload.video,
       category: payload.category,
 
       cooperationTerms: payload.cooperationTerms,

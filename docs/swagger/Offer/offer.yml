@@ -318,6 +318,7 @@ components:
         category: { $ref: '#/components/schemas/OfferCategory' }
 
         image: { $ref: '#/components/schemas/Image' }
+        video: { $ref: '#/components/schemas/OfferVideo' }
 
         cooperationTerms: { $ref: '#/components/schemas/OfferCooperationTerms' }
         businessPlan: { $ref: '#/components/schemas/OfferBusinessPlan' }
@@ -385,6 +386,11 @@ components:
     OfferCity:
       type: string
       required: true
+
+    OfferVideo:
+      type: string
+      required: false
+      nullable: true
 
     OfferCategory:
       type: integer

@@ -28,7 +28,8 @@ import {
 export default class Offer extends BaseModel {
   public static readonly columns = [
     'id', 'isBanned', 'isArchived', 'isVerified', 'viewsCount',
-    'slug', 'title', 'description', 'city', 'image',
+    'slug', 'title', 'description', 'city',
+    'image', 'video',
     'category', 'paybackTime',
     'cooperationTerms', 'businessPlan', 'benefits',
     'about', 'aboutCompany',
@@ -77,6 +78,9 @@ export default class Offer extends BaseModel {
 
   @column()
   public image?: string
+
+  @column()
+  public video?: string
 
   @column()
   public cooperationTerms?: string

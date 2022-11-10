@@ -67,6 +67,7 @@ export default class OfferValidator extends IndexValidator {
      */
 
     image: schema.file.optional(getOfferImageOptions()),
+    video: schema.string.optional({ trim: true }),
     images: schema.array.optional().members(schema.file(getOfferImageOptions())),
 
     cooperationTerms: schema.string.optional({ trim: true }, [
