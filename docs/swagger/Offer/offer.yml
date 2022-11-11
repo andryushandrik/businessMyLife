@@ -141,6 +141,7 @@
               userId: { $ref: '#/components/schemas/Id' }
               subsectionId: { $ref: '#/components/schemas/Id' }
 
+              video: { $ref: '#/components/schemas/OfferVideo' }
               image: { $ref: '#/components/schemas/Image' }
               images:
                 type: array
@@ -231,6 +232,7 @@
               userId: { $ref: '#/components/schemas/Id' }
               subsectionId: { $ref: '#/components/schemas/Id' }
 
+              video: { $ref: '#/components/schemas/OfferVideo' }
               image: { $ref: '#/components/schemas/Image' }
               images:
                 type: array
