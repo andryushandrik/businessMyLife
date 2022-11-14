@@ -401,7 +401,7 @@ export default class OfferService {
 
   private static filter(query: ModelQueryBuilderContract<typeof Offer, ModelObject> | ManyToManyQueryBuilderContract<typeof Offer, ModelObject>, payload: OfferFilterValidator['schema']['props'], dependencies?: FilterDependencies): ModelQueryBuilderContract<typeof Offer> | ManyToManyQueryBuilderContract<typeof Offer, ModelObject> {
     for (const key in payload) {
-      if (payload[key]) {
+      if (payload[key] !== undefined) {
 
         switch (key) {
           // Skip this api's keys
