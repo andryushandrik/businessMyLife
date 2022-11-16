@@ -176,35 +176,7 @@
       500:
         $ref: '#/components/responses/ServerError'
 
-/api/offer/{id}/{currentUserId?}:
-  get:
-    tags:
-      - Offer
-    summary: Get offer
-    description: Add current user id to path, for get offer's favorite status
-    parameters:
-      - in: path
-        name: id
-        schema: { $ref: '#/components/schemas/Id' }
-        required: true
-      - in: path
-        name: currentUserId
-        schema: { $ref: '#/components/schemas/Id' }
-        required: false
-    responses:
-      200:
-        allOf:
-          - $ref: '#/components/responses/Success'
-          - content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    body: { $ref: '#/components/schemas/Offer' }
-      400:
-        $ref: '#/components/responses/ClientError'
-      500:
-        $ref: '#/components/responses/ServerError'
+/api/offer/{id}:
   patch:
     tags:
       - Offer
@@ -278,6 +250,36 @@
     responses:
       200:
         $ref: '#/components/responses/Success'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
+
+/api/offer/{id}/{currentUserId?}:
+  get:
+    tags:
+      - Offer
+    summary: Get offer
+    description: Add current user id to path, for get offer's favorite status
+    parameters:
+      - in: path
+        name: id
+        schema: { $ref: '#/components/schemas/Id' }
+        required: true
+      - in: path
+        name: currentUserId
+        schema: { $ref: '#/components/schemas/Id' }
+        required: false
+    responses:
+      200:
+        allOf:
+          - $ref: '#/components/responses/Success'
+          - content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    body: { $ref: '#/components/schemas/Offer' }
       400:
         $ref: '#/components/responses/ClientError'
       500:

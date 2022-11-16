@@ -38,8 +38,8 @@ export default class extends BaseSchema {
       table.string('avatar').nullable()
       table.string('hobby').nullable()
 
-      table.integer('taxpayerIdentificationNumber').unique().unsigned().nullable().comment('ИНН')
-      table.integer('mainStateRegistrationNumber').unique().unsigned().nullable().comment('ОГРН или ОГРНИП у ИП')
+      table.bigInteger('taxpayerIdentificationNumber').unique().unsigned().nullable().comment('ИНН')
+      table.bigInteger('mainStateRegistrationNumber').unique().unsigned().nullable().comment('ОГРН или ОГРНИП у ИП')
 
       table.string('legalAddress').nullable()
       table.string('placeOfWork').nullable().comment('Отображается в профиле')
