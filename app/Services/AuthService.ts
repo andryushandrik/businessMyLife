@@ -36,7 +36,7 @@ export default class AuthService {
 
     try {
       let checkIsBlockedUser: boolean = false
-      user = await UserService.get(payload.email)
+      user = await UserService.get(payload.email, { aggregates: ['favoriteOffers'] })
 
       if (user.blockedUntil)
         checkIsBlockedUser = DateTime.now().toMillis() <= user.blockedUntil.toMillis()
@@ -76,7 +76,7 @@ export default class AuthService {
 
     try {
       tokenData = TokenService.verifyToken(token, authConfig.refresh.key)
-      user = await UserService.get(tokenData.id)
+      user = await UserService.get(tokenData.id, { aggregates: ['favoriteOffers'] })
     } catch (err: Err | any) {
       throw err
     }

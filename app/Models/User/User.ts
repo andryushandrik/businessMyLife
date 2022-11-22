@@ -115,6 +115,9 @@ export default class User extends BaseModel {
   @column({ columnName: 'reports_count' })
   public reportsCount?: number
 
+  @column({ columnName: 'favoriteOffers_count' })
+  public favoriteOffersCount?: number
+
   /**
    * * Relations
    */
@@ -148,7 +151,15 @@ export default class User extends BaseModel {
       query.where('isRequest', true)
     },
   })
-  public requests: ManyToMany<typeof User>
+  public incomings: ManyToMany<typeof User>
+
+  @manyToMany(() => User, {
+    ...getModelsManyToManyRelationsOptions('FRIENDS', 'from_id', 'to_id'),
+    onQuery(query) {
+      query.where('isRequest', true)
+    },
+  })
+  public outgoings: ManyToMany<typeof User>
 
   /**
    * * Computed properties

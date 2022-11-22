@@ -96,7 +96,15 @@ Route.group(() => {
         .middleware('CheckAccessToken')
 
       Route
-        .get('/requests/:currentUserId', 'Api/User/FriendsController.paginateRequests')
+        .get('/incomings/:currentUserId', 'Api/User/FriendsController.paginateIncomings')
+        .where('currentUserId', {
+          match: /^[0-9]+$/,
+          cast: (currentUserId) => Number(currentUserId),
+        })
+        .middleware('CheckAccessToken')
+
+      Route
+        .get('/outgoings/:currentUserId', 'Api/User/FriendsController.paginateOutgoings')
         .where('currentUserId', {
           match: /^[0-9]+$/,
           cast: (currentUserId) => Number(currentUserId),

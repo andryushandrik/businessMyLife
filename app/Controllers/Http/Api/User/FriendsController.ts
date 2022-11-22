@@ -36,7 +36,7 @@ export default class FriendsController {
     }
   }
 
-  public async paginateRequests({ request, response, params }: HttpContextContract) {
+  public async paginateIncomings({ request, response, params }: HttpContextContract) {
     const currentUserId: User['id'] = params.currentUserId
     let payload: ApiValidator['schema']['props']
 
@@ -51,9 +51,32 @@ export default class FriendsController {
     }
 
     try {
-      const requests: ModelPaginatorContract<User> = await FriendService.paginate(currentUserId, payload, 'requests')
+      const incomings: ModelPaginatorContract<User> = await FriendService.paginate(currentUserId, payload, 'incomings')
 
-      return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, requests))
+      return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, incomings))
+    } catch (err: Err | any) {
+      throw new ExceptionService(err)
+    }
+  }
+
+  public async paginateOutgoings({ request, response, params }: HttpContextContract) {
+    const currentUserId: User['id'] = params.currentUserId
+    let payload: ApiValidator['schema']['props']
+
+    try {
+      payload = await request.validate(ApiValidator)
+    } catch (err: any) {
+      throw new ExceptionService({
+        code: ResponseCodes.VALIDATION_ERROR,
+        message: ResponseMessages.VALIDATION_ERROR,
+        body: err.messages,
+      })
+    }
+
+    try {
+      const outgoings: ModelPaginatorContract<User> = await FriendService.paginate(currentUserId, payload, 'outgoings')
+
+      return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, outgoings))
     } catch (err: Err | any) {
       throw new ExceptionService(err)
     }

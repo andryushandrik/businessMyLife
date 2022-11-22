@@ -178,6 +178,8 @@ components:
         updatedAt: { $ref: '#/components/schemas/UpdatedAt' }
         blockedUntil: { $ref: '#/components/schemas/UserBlockedUntil' }
 
+        favoriteOffersCount: { $ref: '#/components/schemas/UserFavoriteOffersCount' }
+
         fullName: { $ref: '#/components/schemas/UserFullName' }
         createdAtForUser: { $ref: '#/components/schemas/CreatedAtForUser' }
         blockedUntilForUser: { $ref: '#/components/schemas/UserBlockedUntilForUser' }
@@ -307,6 +309,13 @@ components:
     UserBlockedUntil:
       type: string
       format: date-time
+
+    # * Aggregates
+
+    UserFavoriteOffersCount:
+      type: integer
+      required: false
+      nullable: true
 
     # * Computed properties
 

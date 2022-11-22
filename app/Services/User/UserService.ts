@@ -65,7 +65,7 @@ export default class UserService {
 
   public static async get(id: User['id'], config?: ServiceConfig<User>): Promise<User>
   public static async get(email: User['email'], config?: ServiceConfig<User>): Promise<User>
-  public static async get(idOrEmail: User['id'] | User['email'], { relations }: ServiceConfig<User> = {}): Promise<User> {
+  public static async get(idOrEmail: User['id'] | User['email'], { relations, aggregates }: ServiceConfig<User> = {}): Promise<User> {
     let item: User | null
 
     try {
@@ -87,12 +87,18 @@ export default class UserService {
           await item.load(relation)
         }
       }
+
+      if (aggregates) {
+        for (const relation of aggregates) {
+          await item.loadCount(relation)
+        }
+      }
+
+      return item
     } catch (err: any) {
       Logger.error(err)
       throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
     }
-
-    return item
   }
 
   public static async getUsersIdsByQuery(query: string): Promise<User['id'][]> {

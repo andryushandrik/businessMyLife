@@ -47,12 +47,56 @@
       500:
         $ref: '#/components/responses/ServerError'
 
-/api/user/friend/requests/{currentUserId}:
+/api/user/friend/incomings/{currentUserId}:
   get:
     tags:
       - User
       - Friend
-    summary: Paginate requests
+    summary: Paginate incomings
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: currentUserId
+        schema: { $ref: '#/components/schemas/Id' }
+        required: true
+
+      # * Query parameters
+
+      - $ref: '#/components/parameters/Page'
+
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/OrderBy'
+      - $ref: '#/components/parameters/OrderByColumn'
+    responses:
+      200:
+        allOf:
+          - $ref: '#/components/responses/Success'
+          - content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    body:
+                      allOf:
+                        - $ref: '#/components/schemas/Pagination'
+                        - type: object
+                          properties:
+                            data:
+                              type: array
+                              items:
+                                $ref: '#/components/schemas/User'
+      400:
+        $ref: '#/components/responses/ClientError'
+      500:
+        $ref: '#/components/responses/ServerError'
+
+/api/user/friend/outgoings/{currentUserId}:
+  get:
+    tags:
+      - User
+      - Friend
+    summary: Paginate outgoings
     security:
       - bearerAuth: []
     parameters:
