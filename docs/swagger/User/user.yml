@@ -38,7 +38,7 @@
       500:
         $ref: '#/components/responses/ServerError'
 
-/api/user/{id}:
+/api/user/{id}/{currentUserId?}:
   get:
     tags:
       - User
@@ -48,6 +48,10 @@
         name: id
         schema: { $ref: '#/components/schemas/Id' }
         required: true
+      - in: path
+        name: currentUserId
+        schema: { $ref: '#/components/schemas/Id' }
+        required: false
     responses:
       200:
         allOf:
@@ -187,6 +191,10 @@ components:
         birthdayForUser: { $ref: '#/components/schemas/UserBirthdayForUser' }
         roleForUser: { $ref: '#/components/schemas/UserRoleForUser' }
         typeForUser: { $ref: '#/components/schemas/UserTypeForUser' }
+
+        friendStatus: { $ref: '#/components/schemas/UserFriendStatus' }
+        outgoingStatus: { $ref: '#/components/schemas/UserOutgoingStatus' }
+        incomingStatus: { $ref: '#/components/schemas/UserIncomingStatus' }
 
     # * Columns
 
@@ -340,3 +348,15 @@ components:
     UserTypeForUser:
       type: string
       description: Type in string
+
+    UserFriendStatus:
+      type: boolean
+      description: It shows, if you give current user id to path. It will be true, if current user is friend with user, which you take
+
+    UserOutgoingStatus:
+      type: boolean
+      description: It shows, if you give current user id to path. It will be true, if current user sended request to friends to user, which you take
+
+    UserIncomingStatus:
+      type: boolean
+      description: It shows, if you give current user id to path. It will be true, if user, which you take, sended request to friends to current user

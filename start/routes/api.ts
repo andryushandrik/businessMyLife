@@ -135,7 +135,7 @@ Route.group(() => {
     }).prefix('updateEmail')
 
     Route
-      .get('/:id', 'Api/User/UsersController.get')
+      .get('/:id/:currentUserId?', 'Api/User/UsersController.get')
       .where('id', {
         match: /^[0-9]+$/,
         cast: (id) => Number(id),

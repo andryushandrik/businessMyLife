@@ -2,8 +2,8 @@
 import type User from 'App/Models/User/User'
 import type { Err } from 'Contracts/response'
 import type { PaginateConfig } from 'Contracts/services'
-import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import type { ModelObject, ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 
 import UserService from 'App/Services/User/UserService'
@@ -47,9 +47,13 @@ export default class UsersController {
 
   public async get({ params, response }: HttpContextContract) {
     const id: User['id'] = params.id
+    const currentUserId: User['id'] | undefined = params.currentUserId
 
     try {
-      const item: User = await UserService.get(id)
+      let item: User | ModelObject = await UserService.get(id)
+
+      if (currentUserId)
+        item = await item.getForUser(currentUserId)
 
       return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, item))
     } catch (err: Err | any) {

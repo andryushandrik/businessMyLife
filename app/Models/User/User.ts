@@ -1,16 +1,20 @@
 // * Types
 import type { DateTime } from 'luxon'
+import type { Err } from 'Contracts/response'
 import type { UserExperienceTypes } from 'Config/user'
-import type { HasMany, ManyToMany, ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
+import type { HasMany, ManyToMany, ModelObject, ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 
+import Friend from './Friend'
 import Role from '../User/Role'
 import Offer from '../Offer/Offer'
 import UserImage from './UserImage'
 import Report from '../Report/Report'
 import Hash from '@ioc:Adonis/Core/Hash'
+import Logger from '@ioc:Adonis/Core/Logger'
 import { GLOBAL_DATETIME_FORMAT } from 'Config/app'
 import { RoleNames, UserTypeNames } from 'Config/user'
+import { ResponseCodes, ResponseMessages } from 'Config/response'
 import { getModelsManyToManyRelationsOptions } from 'Helpers/index'
 import { ROLE_NAMES, USER_EXPERIENCE_TYPES, USER_TYPE_NAMES } from 'Config/user'
 import { BaseModel, beforeSave, column, computed, hasMany, scope, manyToMany } from '@ioc:Adonis/Lucid/Orm'
@@ -241,5 +245,53 @@ export default class User extends BaseModel {
   public static async hashPassword(item: User) {
     if (item.$dirty.password)
       item.password = await Hash.make(item.password)
+  }
+
+  /**
+   * * Other
+   */
+
+  public async getForUser(currentUserId: User['id']): Promise<ModelObject> {
+    const item: ModelObject = { ...this.serialize() }
+
+    try {
+      const outgoingStatus: Friend | null = await Friend
+        .query()
+        .withScopes((scopes) => scopes.getByRequest(true))
+        .withScopes((scopes) => scopes.getByFromIdAndToId(currentUserId, item.id))
+        .first()
+
+      const incomingStatus: Friend | null = await Friend
+        .query()
+        .withScopes((scopes) => scopes.getByRequest(true))
+        .withScopes((scopes) => scopes.getByFromIdAndToId(item.id, currentUserId))
+        .first()
+
+      const friendStatusFromCurrentUser: Friend | null = await Friend
+        .query()
+        .withScopes((scopes) => scopes.getByRequest(false))
+        .withScopes((scopes) => scopes.getByFromIdAndToId(currentUserId, item.id))
+        .first()
+
+      if (!friendStatusFromCurrentUser) {
+        const friendStatusToCurrentUser: Friend | null = await Friend
+          .query()
+          .withScopes((scopes) => scopes.getByRequest(false))
+          .withScopes((scopes) => scopes.getByFromIdAndToId(item.id, currentUserId))
+          .first()
+
+        item.friendStatus = Boolean(friendStatusToCurrentUser)
+      } else {
+        item.friendStatus = Boolean(friendStatusFromCurrentUser)
+      }
+
+      item.outgoingStatus = Boolean(outgoingStatus)
+      item.incomingStatus = Boolean(incomingStatus)
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+    }
+
+    return item
   }
 }
