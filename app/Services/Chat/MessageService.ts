@@ -75,6 +75,8 @@ export default class MessageService {
       conversation = await ConversationService.getWithoutTopic(payload, { trx })
     } catch (err: Err | any) {}
 
+    console.log('first', conversation?.id)
+
     if (!conversation) {
       try {
         conversation = await ConversationService.create(payload, { trx })
@@ -85,6 +87,9 @@ export default class MessageService {
       }
     }
 
+    console.log('second', conversation?.id)
+
+
     try {
       conversation = await ConversationService.get(conversation.id, { trx })
       await ConversationService.updateWhenMessageCreatedOrDeleted(conversation, { trx })
@@ -93,6 +98,9 @@ export default class MessageService {
 
       throw err
     }
+
+    console.log('third', conversation?.id)
+
 
     try {
       const message: Message = await Message.create({

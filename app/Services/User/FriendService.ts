@@ -1,18 +1,55 @@
 // * Types
-import type User from 'App/Models/User/User'
 import type FriendValidator from 'App/Validators/User/FriendValidator'
 import type { Err } from 'Contracts/response'
 import type { PaginateConfig } from 'Contracts/services'
 import type { ModelAttributes, ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 
+import User from 'App/Models/User/User'
 import UserService from './UserService'
 import Friend from 'App/Models/User/Friend'
 import Logger from '@ioc:Adonis/Core/Logger'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 
 export default class FriendService {
-  public static async paginate(id: User['id'], config: PaginateConfig<User>, action: 'friends' | 'incomings' | 'outgoings'): Promise<ModelPaginatorContract<User>> {
+  public static async paginate(id: User['id'], config: PaginateConfig<User>): Promise<ModelPaginatorContract<User>> {
+    const friendsIds: User['id'][] = []
+
+    try {
+      const query1: Array<{ to_id: Friend['toId'] }> = await Friend
+        .query()
+        .select('to_id')
+        .where('from_id', id)
+        .withScopes((scopes) => scopes.getByRequest(false))
+        .pojo()
+
+      friendsIds.push(...query1.map((item) => item.to_id))
+
+      const query2: Array<{ from_id: Friend['fromId'] }> = await Friend
+        .query()
+        .select('from_id')
+        .where('to_id', id)
+        .withScopes((scopes) => scopes.getByRequest(false))
+        .pojo()
+
+      friendsIds.push(...query2.map((item) => item.from_id))
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+    }
+
+    try {
+      return await User
+        .query()
+        .whereIn('id', friendsIds)
+        .getViaPaginate(config)
+    } catch (err: any) {
+      Logger.error(err)
+      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+    }
+  }
+
+  public static async paginateRequests(id: User['id'], config: PaginateConfig<User>, action: 'incomings' | 'outgoings'): Promise<ModelPaginatorContract<User>> {
     let user: User
 
     try {

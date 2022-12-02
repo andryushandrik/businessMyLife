@@ -77,22 +77,31 @@ export default class Conversation extends BaseModel {
 
   public static getUserConversations = scope((query, userId: User['id']) => {
     query
-      .where('from_id', userId)
-      .orWhere('to_id', userId)
+      .where((query) => {
+        query
+          .where('from_id', userId)
+          .orWhere('to_id', userId)
+      })
   })
 
   public static getWithoutTopic = scope((query, fromId: User['id'], toId: User['id']) => {
     query
       .whereNull('offer_id')
-      .andWhereIn(['from_id', 'to_id'], [[ fromId, toId ]])
-      .orWhereIn(['to_id', 'from_id'], [[ toId, fromId ]])
+      .andWhere((query) => {
+        query
+          .whereIn(['from_id', 'to_id'], [[ fromId, toId ]])
+          .orWhereIn(['from_id', 'to_id'], [[ toId, fromId ]])
+      })
   })
 
   public static getWithOfferTopic = scope((query, fromId: User['id'], toId: User['id'], offerId: Offer['id']) => {
     query
       .where('offer_id', offerId)
-      .andWhereIn(['from_id', 'to_id'], [[ fromId, toId ]])
-      .orWhereIn(['to_id', 'from_id'], [[ toId, fromId ]])
+      .andWhere((query) => {
+        query
+          .whereIn(['from_id', 'to_id'], [[ fromId, toId ]])
+          .orWhereIn(['from_id', 'to_id'], [[ toId, fromId ]])
+      })
   })
 
   public static countNewMessagesForCurrentUser = scope((query: ModelQueryBuilderContract<typeof Conversation>, userId: User['id']) => {
