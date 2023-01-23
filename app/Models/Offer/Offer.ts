@@ -220,7 +220,7 @@ export default class Offer extends BaseModel {
 
   @computed()
   public get archiveExpire(): string {
-    const expireDate: DateTime = this.updatedAt.plus({ months: 1 })
+    const expireDate: DateTime = this.updatedAt.plus({ days: 90 })
     const archiveExpireInDays: number = expireDate.diff(DateTime.now(), 'days').days
     const archiveExpireInDaysWithoutFraction: number = Math.floor(archiveExpireInDays)
 
