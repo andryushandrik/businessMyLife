@@ -83,7 +83,7 @@ export default class Offer extends BaseModel {
 	@column()
 	public isArchived: boolean
 
-	@column({ serializeAs: null })
+	@column()
 	public isVerified: boolean
 
 	@column()

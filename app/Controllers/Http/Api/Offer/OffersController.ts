@@ -110,7 +110,7 @@ export default class OffersController {
 		let payload: OfferValidator['schema']['props']
 		try {
 			payload = await request.validate(OfferValidator)
-			payload.isArchived = true
+			payload.isArchived = false
 			payload.isVerified = false
 		} catch (err: Err | any) {
 			throw new ExceptionService({
@@ -139,7 +139,7 @@ export default class OffersController {
 			payload = await request.validate(OfferValidator)
 
 			payload.isVerified = false
-			payload.isArchived = true
+			//payload.isArchived = true
 		} catch (err: Err | any) {
 			throw new ExceptionService({
 				code: ResponseCodes.VALIDATION_ERROR,
