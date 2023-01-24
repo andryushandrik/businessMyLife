@@ -1,191 +1,236 @@
 import Route from '@ioc:Adonis/Core/Route'
 
 Route.group(() => {
-	Route.get('/projectData', 'Api/IndexController.getProjectData')
 
-	Route.post('/feedback', 'Api/IndexController.createFeedback')
+  Route.get('/projectData', 'Api/IndexController.getProjectData')
 
-	Route.get('/banner', 'Api/IndexController.getAllBanners')
+  Route.post('/feedback', 'Api/IndexController.createFeedback')
 
-	Route.get('/partner', 'Api/PartnersController.paginate').middleware('CheckAccessToken')
+  Route.get('/banner', 'Api/IndexController.getAllBanners')
 
-	Route.get('/uploadTutorial', 'Api/IndexController.paginateUploadTutorials').middleware(
-		'CheckAccessToken',
-	)
+  Route
+    .get('/partner', 'Api/PartnersController.paginate')
+    .middleware('CheckAccessToken')
 
-	/**
-	 * * Auth
-	 */
+  Route
+    .get('/uploadTutorial', 'Api/IndexController.paginateUploadTutorials')
+    .middleware('CheckAccessToken')
 
-	Route.group(() => {
-		Route.post('/login', 'Api/AuthController.login').middleware('CheckAuthHeaders')
+  /**
+   * * Auth
+   */
 
-		Route.delete('/logout', 'Api/AuthController.logout').middleware([
-			'CheckAuthHeaders',
-			'CheckRefreshToken',
-		])
+  Route.group(() => {
 
-		Route.get('/refreshToken', 'Api/AuthController.refreshToken').middleware([
-			'CheckAuthHeaders',
-			'CheckRefreshToken',
-		])
+    Route
+      .post('/login', 'Api/AuthController.login')
+      .middleware('CheckAuthHeaders')
 
-		Route.group(() => {
-			Route.post('/emailVerify', 'Api/AuthController.emailVerify')
-			Route.post('/codeVerify', 'Api/AuthController.codeVerify')
+    Route
+      .delete('/logout', 'Api/AuthController.logout')
+      .middleware(['CheckAuthHeaders', 'CheckRefreshToken'])
 
-			Route.post('/', 'Api/AuthController.register').middleware('CheckAuthHeaders')
-		}).prefix('register')
+    Route
+      .get('/refreshToken', 'Api/AuthController.refreshToken')
+      .middleware(['CheckAuthHeaders', 'CheckRefreshToken'])
 
-		Route.group(() => {
-			Route.post('/', 'Api/AuthController.forgotPassword')
-			Route.post('/emailVerify', 'Api/AuthController.forgotPasswordEmailVerify')
-			Route.post('/codeVerify', 'Api/AuthController.forgotPasswordCodeVerify')
-		}).prefix('/forgotPassword')
-	}).prefix('auth')
+    Route.group(() => {
 
-	/**
-	 * * News
-	 */
+      Route.post('/emailVerify', 'Api/AuthController.emailVerify')
+      Route.post('/codeVerify', 'Api/AuthController.codeVerify')
 
-	Route.group(() => {
-		Route.get('/', 'Api/NewsController.paginate')
+      Route
+        .post('/', 'Api/AuthController.register')
+        .middleware('CheckAuthHeaders')
 
-		Route.get('/:slug', 'Api/NewsController.get')
-	}).prefix('news')
+    }).prefix('register')
 
-	/**
-	 * * User
-	 */
+    Route.group(() => {
 
-	Route.group(() => {
-		Route.get('/', 'Api/User/UsersController.paginate').middleware('CheckAccessToken')
+      Route.post('/', 'Api/AuthController.forgotPassword')
+      Route.post('/emailVerify', 'Api/AuthController.forgotPasswordEmailVerify')
+      Route.post('/codeVerify', 'Api/AuthController.forgotPasswordCodeVerify')
 
-		Route.patch('/updatePassword/:currentUserId', 'Api/User/UsersController.updatePassword')
-			.where('currentUserId', {
-				match: /^[0-9]+$/,
-				cast: (currentUserId) => Number(currentUserId),
-			})
-			.middleware('CheckAccessToken')
+    }).prefix('/forgotPassword')
 
-		Route.group(() => {
-			Route.post('/', 'Api/User/FriendsController.create').middleware('CheckAccessToken')
+  }).prefix('auth')
 
-			Route.delete('/', 'Api/User/FriendsController.delete').middleware('CheckAccessToken')
+  /**
+   * * News
+   */
 
-			Route.get('/incomings/:currentUserId', 'Api/User/FriendsController.paginateIncomings')
-				.where('currentUserId', {
-					match: /^[0-9]+$/,
-					cast: (currentUserId) => Number(currentUserId),
-				})
-				.middleware('CheckAccessToken')
+  Route.group(() => {
 
-			Route.get('/outgoings/:currentUserId', 'Api/User/FriendsController.paginateOutgoings')
-				.where('currentUserId', {
-					match: /^[0-9]+$/,
-					cast: (currentUserId) => Number(currentUserId),
-				})
-				.middleware('CheckAccessToken')
+    Route.get('/', 'Api/NewsController.paginate')
 
-			Route.get('/friends/:id', 'Api/User/FriendsController.paginateFriends').where('id', {
-				match: /^[0-9]+$/,
-				cast: (id) => Number(id),
-			})
-		}).prefix('friend')
+    Route.get('/:slug', 'Api/NewsController.get')
 
-		Route.group(() => {
-			Route.post('/emailVerify', 'Api/User/UsersController.emailVerify')
+  }).prefix('news')
 
-			Route.patch('/:currentUserId', 'Api/User/UsersController.updateEmail')
-				.where('currentUserId', {
-					match: /^[0-9]+$/,
-					cast: (currentUserId) => Number(currentUserId),
-				})
-				.middleware('CheckAccessToken')
-		}).prefix('updateEmail')
+  /**
+   * * User
+   */
 
-		Route.get('/:id/:currentUserId?', 'Api/User/UsersController.get').where('id', {
-			match: /^[0-9]+$/,
-			cast: (id) => Number(id),
-		})
+  Route.group(() => {
 
-		Route.patch('/:id', 'Api/User/UsersController.update')
-			.where('id', {
-				match: /^[0-9]+$/,
-				cast: (id) => Number(id),
-			})
-			.middleware('CheckAccessToken')
-	}).prefix('user')
+    Route
+      .get('/', 'Api/User/UsersController.paginate')
+      .middleware('CheckAccessToken')
 
-	/**
-	 * * Offer
-	 */
+    Route
+      .patch('/updatePassword/:currentUserId', 'Api/User/UsersController.updatePassword')
+      .where('currentUserId', {
+        match: /^[0-9]+$/,
+        cast: (currentUserId) => Number(currentUserId),
+      })
+      .middleware('CheckAccessToken')
 
-	Route.group(() => {
-		Route.get('/area', 'Api/Offer/OffersController.getAllAreas')
+    Route.group(() => {
 
-		Route.get('/subsection/:areaId?', 'Api/Offer/OffersController.getAllSubsections')
+      Route
+        .post('/', 'Api/User/FriendsController.create')
+        .middleware('CheckAccessToken')
 
-		Route.get('/paginate/:currentUserId?', 'Api/Offer/OffersController.paginate')
+      Route
+        .delete('/', 'Api/User/FriendsController.delete')
+        .middleware('CheckAccessToken')
 
-		Route.delete('/deleteImage/:offerImageId', 'Api/Offer/OffersController.deleteImage').middleware(
-			'CheckAccessToken',
-		)
+      Route
+        .get('/incomings/:currentUserId', 'Api/User/FriendsController.paginateIncomings')
+        .where('currentUserId', {
+          match: /^[0-9]+$/,
+          cast: (currentUserId) => Number(currentUserId),
+        })
+        .middleware('CheckAccessToken')
 
-		Route.group(() => {
-			Route.group(() => {
-				Route.get(
-					'/notArchived/:userId',
-					'Api/Offer/OffersArchivesController.paginateUserNotArchivedOffers',
-				)
+      Route
+        .get('/outgoings/:currentUserId', 'Api/User/FriendsController.paginateOutgoings')
+        .where('currentUserId', {
+          match: /^[0-9]+$/,
+          cast: (currentUserId) => Number(currentUserId),
+        })
+        .middleware('CheckAccessToken')
 
-				Route.get(
-					'/archived/:userId',
-					'Api/Offer/OffersArchivesController.paginateUserArchivedOffers',
-				).middleware('CheckAccessToken')
+      Route
+        .get('/friends/:id', 'Api/User/FriendsController.paginateFriends')
+        .where('id', {
+          match: /^[0-9]+$/,
+          cast: (id) => Number(id),
+        })
 
-				Route.patch('/:id', 'Api/Offer/OffersArchivesController.archive').middleware(
-					'CheckAccessToken',
-				)
+    }).prefix('friend')
 
-				Route.delete('/:id', 'Api/Offer/OffersArchivesController.unarchive').middleware(
-					'CheckAccessToken',
-				)
-			}).prefix('archive')
+    Route.group(() => {
 
-			Route.group(() => {
-				Route.get('/:userId', 'Api/Offer/OffersFavoritesController.paginate').where('userId', {
-					match: /^[0-9]+$/,
-					cast: (userId) => Number(userId),
-				})
+      Route.post('/emailVerify', 'Api/User/UsersController.emailVerify')
 
-				Route.post('/', 'Api/Offer/OffersFavoritesController.create')
-				Route.delete('/', 'Api/Offer/OffersFavoritesController.delete')
-			})
-				.prefix('favorites')
-				.middleware('CheckAccessToken')
-		}).prefix('user')
+      Route
+        .patch('/:currentUserId', 'Api/User/UsersController.updateEmail')
+        .where('currentUserId', {
+          match: /^[0-9]+$/,
+          cast: (currentUserId) => Number(currentUserId),
+        })
+        .middleware('CheckAccessToken')
 
-		Route.post('/', 'Api/Offer/OffersController.create').middleware('CheckAccessToken')
+    }).prefix('updateEmail')
 
-		Route.get('/:id/:currentUserId?', 'Api/Offer/OffersController.get')
-		Route.delete('/:id', 'Api/Offer/OffersController.delete')
+    Route
+      .get('/:id/:currentUserId?', 'Api/User/UsersController.get')
+      .where('id', {
+        match: /^[0-9]+$/,
+        cast: (id) => Number(id),
+      })
 
-		Route.patch('/:id', 'Api/Offer/OffersController.update').middleware('CheckAccessToken')
-	}).prefix('offer')
+    Route
+      .patch('/:id', 'Api/User/UsersController.update')
+      .where('id', {
+        match: /^[0-9]+$/,
+        cast: (id) => Number(id),
+      })
+      .middleware('CheckAccessToken')
 
-	/**
-	 * * Report
-	 */
+  }).prefix('user')
 
-	Route.group(() => {
-		Route.group(() => {
-			Route.get('/user', 'Api/ReportsController.getAllUserTypes')
-			Route.get('/offer', 'Api/ReportsController.getAllOfferTypes')
-		}).prefix('type')
+  /**
+   * * Offer
+   */
 
-		Route.post('/', 'Api/ReportsController.create')
-	})
-		.prefix('report')
-		.middleware('CheckAccessToken')
+  Route.group(() => {
+
+    Route.get('/area', 'Api/Offer/OffersController.getAllAreas')
+
+    Route.get('/subsection/:areaId?', 'Api/Offer/OffersController.getAllSubsections')
+
+    Route.get('/paginate/:currentUserId?', 'Api/Offer/OffersController.paginate')
+
+    Route
+      .delete('/deleteImage/:offerImageId', 'Api/Offer/OffersController.deleteImage')
+      .middleware('CheckAccessToken')
+
+    Route.group(() => {
+
+      Route.group(() => {
+
+        Route.get('/notArchived/:userId', 'Api/Offer/OffersArchivesController.paginateUserNotArchivedOffers')
+
+        Route
+          .get('/archived/:userId', 'Api/Offer/OffersArchivesController.paginateUserArchivedOffers')
+          .middleware('CheckAccessToken')
+
+        Route
+          .patch('/:id', 'Api/Offer/OffersArchivesController.archive')
+          .middleware('CheckAccessToken')
+
+        Route
+          .delete('/:id', 'Api/Offer/OffersArchivesController.unarchive')
+          .middleware('CheckAccessToken')
+
+      }).prefix('archive')
+
+      Route.group(() => {
+
+        Route
+          .get('/:userId', 'Api/Offer/OffersFavoritesController.paginate')
+          .where('userId', {
+            match: /^[0-9]+$/,
+            cast: (userId) => Number(userId),
+          })
+
+        Route.post('/', 'Api/Offer/OffersFavoritesController.create')
+        Route.delete('/', 'Api/Offer/OffersFavoritesController.delete')
+
+      }).prefix('favorites').middleware('CheckAccessToken')
+
+    }).prefix('user')
+
+    Route
+      .post('/', 'Api/Offer/OffersController.create')
+      .middleware('CheckAccessToken')
+
+    Route.get('/:id/:currentUserId?', 'Api/Offer/OffersController.get')
+    Route.delete('/:id', 'Api/Offer/OffersController.delete')
+
+    Route
+      .patch('/:id', 'Api/Offer/OffersController.update')
+      .middleware('CheckAccessToken')
+
+  }).prefix('offer')
+
+  /**
+   * * Report
+   */
+
+  Route.group(() => {
+
+    Route.group(() => {
+
+      Route.get('/user', 'Api/ReportsController.getAllUserTypes')
+      Route.get('/offer', 'Api/ReportsController.getAllOfferTypes')
+
+    }).prefix('type')
+
+    Route.post('/', 'Api/ReportsController.create')
+
+  }).prefix('report').middleware('CheckAccessToken')
+
 }).prefix('api')
