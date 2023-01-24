@@ -252,6 +252,7 @@ export default class OfferService {
     }
 
     try {
+      console.log(itemPayload);
       await item.merge(itemPayload).save()
     } catch (err: any) {
       await trx.rollback()
@@ -515,6 +516,9 @@ export default class OfferService {
       title: payload.title,
       description: payload.description,
       city: payload.city,
+
+      isArchived: payload.isArchived,
+      isVerified: payload.isVerified,
 
       video: payload.video,
       category: payload.category,
