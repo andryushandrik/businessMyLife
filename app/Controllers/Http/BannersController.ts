@@ -11,103 +11,106 @@ import BannerDelayValidator from 'App/Validators/Banner/BannerDelayValidator'
 import { ResponseMessages } from 'Config/response'
 
 export default class BannersController {
-  public async index({ view, request, response, session, route }: HttpContextContract) {
-    const baseUrl: string = route!.pattern
-    const page: number = request.input('page', 1)
+	public async index({ view, request, response, session, route }: HttpContextContract) {
+		const baseUrl: string = route!.pattern
+		const page: number = request.input('page', 1)
 
-    try {
-      const delay: number | undefined = await BannerService.getBannersDelay()
-      const banners: ModelPaginatorContract<Banner> = await BannerService.paginate({ page, baseUrl })
+		try {
+			const delay: number | undefined = await BannerService.getBannersDelay()
+			const banners: ModelPaginatorContract<Banner> = await BannerService.paginate({
+				page,
+				baseUrl,
+			})
 
-      return await view.render('pages/banner/index', { banners, delay })
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-      return response.redirect().back()
-    }
-  }
+			return await view.render('pages/banner/index', { banners, delay })
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
 
-  public async create({ view }: HttpContextContract) {
-    return await view.render('pages/banner/create')
-  }
+	public async create({ view }: HttpContextContract) {
+		return await view.render('pages/banner/create')
+	}
 
-  public async store({ request, response, session }: HttpContextContract) {
-    const payload = await request.validate(BannerValidator)
+	public async store({ request, response, session }: HttpContextContract) {
+		const payload = await request.validate(BannerValidator)
 
-    try {
-      await BannerService.create(payload)
+		try {
+			await BannerService.create(payload)
 
-      session.flash('success', ResponseMessages.SUCCESS)
-      response.redirect().toRoute('banners.index')
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-      return response.redirect().back()
-    }
-  }
+			session.flash('success', ResponseMessages.SUCCESS)
+			response.redirect().toRoute('banners.index')
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
 
-  public async show({ view, response, session, params }: HttpContextContract) {
-    try {
-      const item: Banner = await BannerService.get(params.id)
+	public async show({ view, response, session, params }: HttpContextContract) {
+		try {
+			const item: Banner = await BannerService.get(params.id)
 
-      return view.render('pages/banner/show', { item })
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-      return response.redirect().back()
-    }
-  }
+			return view.render('pages/banner/show', { item })
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
 
-  public async edit({ view, params, response, session }: HttpContextContract) {
-    const id: Banner['id'] = params.id
+	public async edit({ view, params, response, session }: HttpContextContract) {
+		const id: Banner['id'] = params.id
 
-    try {
-      const item: Banner = await BannerService.get(id)
+		try {
+			const item: Banner = await BannerService.get(id)
 
-      return view.render('pages/banner/edit', { item })
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-      return response.redirect().back()
-    }
-  }
+			return view.render('pages/banner/edit', { item })
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
 
-  public async update({ request, response, session, params }: HttpContextContract) {
-    const id: Banner['id'] = params.id
-    const payload = await request.validate(BannerValidator)
+	public async update({ request, response, session, params }: HttpContextContract) {
+		const id: Banner['id'] = params.id
+		const payload = await request.validate(BannerValidator)
 
-    try {
-      await BannerService.update(id, payload)
+		try {
+			await BannerService.update(id, payload)
 
-      session.flash('success', ResponseMessages.SUCCESS)
-      return response.redirect().toRoute('banners.index')
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-      return response.redirect().back()
-    }
-  }
+			session.flash('success', ResponseMessages.SUCCESS)
+			return response.redirect().toRoute('banners.index')
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
 
-  public async updateBannersDelay({ request, response, session }: HttpContextContract) {
-    const payload = await request.validate(BannerDelayValidator)
+	public async updateBannersDelay({ request, response, session }: HttpContextContract) {
+		const payload = await request.validate(BannerDelayValidator)
 
-    try {
-      await BannerService.updateBannersDelay(payload)
+		try {
+			await BannerService.updateBannersDelay(payload)
 
-      session.flash('success', ResponseMessages.SUCCESS)
-      return response.redirect().back()
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-      return response.redirect().back()
-    }
-  }
+			session.flash('success', ResponseMessages.SUCCESS)
+			return response.redirect().back()
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
 
-  public async destroy({ params, response, session }: HttpContextContract) {
-    const id: Banner['id'] = params.id
+	public async destroy({ params, response, session }: HttpContextContract) {
+		const id: Banner['id'] = params.id
 
-    try {
-      await BannerService.delete(id)
+		try {
+			await BannerService.delete(id)
 
-      session.flash('success', ResponseMessages.SUCCESS)
-      return response.redirect().back()
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-      return response.redirect().back()
-    }
-  }
+			session.flash('success', ResponseMessages.SUCCESS)
+			return response.redirect().back()
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
 }

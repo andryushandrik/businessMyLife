@@ -11,29 +11,29 @@ import { getToken } from 'Helpers/index'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 
 export default class CheckAccessToken {
-  public async handle({ request }: HttpContextContract, next: () => Promise<void>) {
-    const headerToken: string | undefined = request.header('Authorization')
+	public async handle({ request }: HttpContextContract, next: () => Promise<void>) {
+		const headerToken: string | undefined = request.header('Authorization')
 
-    if (!headerToken) {
-      throw new ExceptionService({
-        code: ResponseCodes.CLIENT_ERROR,
-        message: ResponseMessages.MISS_AUTH_HEADERS,
-      })
-    }
+		if (!headerToken) {
+			throw new ExceptionService({
+				code: ResponseCodes.CLIENT_ERROR,
+				message: ResponseMessages.MISS_AUTH_HEADERS,
+			})
+		}
 
-    try {
-      const token: string = getToken(headerToken)
+		try {
+			const token: string = getToken(headerToken)
 
-      try {
-        TokenService.verifyToken<UserTokenPayload>(token, authConfig.access.key)
-      } catch (err: Err | any) {
-        throw { code: ResponseCodes.TOKEN_EXPIRED, message: ResponseMessages.TOKEN_ERROR }
-      }
+			try {
+				TokenService.verifyToken<UserTokenPayload>(token, authConfig.access.key)
+			} catch (err: Err | any) {
+				throw { code: ResponseCodes.TOKEN_EXPIRED, message: ResponseMessages.TOKEN_ERROR }
+			}
 
-      await next()
-    } catch (err: Err | any) {
-      console.log(err)
-      throw new ExceptionService(err)
-    }
-  }
+			await next()
+		} catch (err: Err | any) {
+			console.log(err)
+			throw new ExceptionService(err)
+		}
+	}
 }

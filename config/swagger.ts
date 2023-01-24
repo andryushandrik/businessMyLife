@@ -14,17 +14,13 @@ export default {
 			info: {
 				title: 'Business My Life',
 				version: '1.0.0',
-				description: 'Business My Life swagger docs'
-			}
+				description: 'Business My Life swagger docs',
+			},
 		},
 
-		apis: [
-			'app/**/*.ts',
-			'docs/swagger/**/*.yml',
-			'start/routes.ts'
-		],
-		basePath: '/'
+		apis: ['app/**/*.ts', 'docs/swagger/**/*.yml', 'start/routes.ts'],
+		basePath: '/',
 	},
 	mode: process.env.NODE_ENV === 'production' ? 'PRODUCTION' : 'RUNTIME',
-  specFilePath: 'docs/swagger.json'
+	specFilePath: 'docs/swagger.json',
 } as SwaggerConfig

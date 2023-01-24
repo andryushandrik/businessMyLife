@@ -11,58 +11,89 @@ import type { SocketId } from 'socket.io-adapter'
 // * Types
 
 export interface ServerToClientEvents {
-  /**
-   * * Conversation
-   */
+	/**
+	 * * Conversation
+	 */
 
-  'conversation:countNewMessages': (count: number) => void,
-  'conversation:update': (conversation: Conversation) => void,
+	'conversation:countNewMessages': (count: number) => void
+	'conversation:update': (conversation: Conversation) => void
 
-  /**
-   * * Message
-   */
+	/**
+	 * * Message
+	 */
 
-  'message:viewed': () => void,
-  'message:create': (message: Message) => void,
+	'message:viewed': () => void
+	'message:create': (message: Message) => void
 }
 
 export interface ClientToServerEvents {
-  /**
-   * * Conversation
-   */
+	/**
+	 * * Conversation
+	 */
 
-  'conversation:get': (conversationId: Conversation['id'], cb: (response: Err | ResponseService) => void) => void,
-  'conversation:delete': (conversationId: Conversation['id'], cb: (response: Err | ResponseService) => void) => void,
-  'conversation:paginate': (payload: ApiValidator['schema']['props'], cb: (response: Err | ResponseService) => void) => void,
+	'conversation:get': (
+		conversationId: Conversation['id'],
+		cb: (response: Err | ResponseService) => void,
+	) => void
+	'conversation:delete': (
+		conversationId: Conversation['id'],
+		cb: (response: Err | ResponseService) => void,
+	) => void
+	'conversation:paginate': (
+		payload: ApiValidator['schema']['props'],
+		cb: (response: Err | ResponseService) => void,
+	) => void
 
-  'conversation:close': (conversationId: Conversation['id'], cb: (response: Err | ResponseService) => void) => void,
+	'conversation:close': (
+		conversationId: Conversation['id'],
+		cb: (response: Err | ResponseService) => void,
+	) => void
 
-  /**
-   * * Message
-   */
+	/**
+	 * * Message
+	 */
 
-  'message:create': (payload: MessageWithoutTopicValidator['schema']['props'], cb: (response: Err | ResponseService) => void) => void,
-  'message:createWithoutTopic': (toId: User['id'], payload: MessageWithoutTopicValidator['schema']['props'], cb: (response: Err | ResponseService) => void) => void,
-  'message:createWithOfferTopic': (toId: User['id'], payload: MessageWithOfferTopicValidator['schema']['props'], cb: (response: Err | ResponseService) => void) => void,
+	'message:create': (
+		payload: MessageWithoutTopicValidator['schema']['props'],
+		cb: (response: Err | ResponseService) => void,
+	) => void
+	'message:createWithoutTopic': (
+		toId: User['id'],
+		payload: MessageWithoutTopicValidator['schema']['props'],
+		cb: (response: Err | ResponseService) => void,
+	) => void
+	'message:createWithOfferTopic': (
+		toId: User['id'],
+		payload: MessageWithOfferTopicValidator['schema']['props'],
+		cb: (response: Err | ResponseService) => void,
+	) => void
 
-  'message:viewed': (conversationId: Conversation['id'], userId: User['id'], cb: (response: Err | ResponseService) => void) => void,
-  'message:paginate': (conversationId: Conversation['id'], payload: ApiValidator['schema']['props'], cb: (response: Err | ResponseService) => void) => void,
+	'message:viewed': (
+		conversationId: Conversation['id'],
+		userId: User['id'],
+		cb: (response: Err | ResponseService) => void,
+	) => void
+	'message:paginate': (
+		conversationId: Conversation['id'],
+		payload: ApiValidator['schema']['props'],
+		cb: (response: Err | ResponseService) => void,
+	) => void
 }
 
 export interface InterServerEvents {}
 
 export interface SocketData {
-  userId: User['id'],
+	userId: User['id']
 }
 
 export type AllSockets = {
-  sockets: SomeSocket[],
-  getSocket: (userId: User['id']) => SomeSocket | undefined,
-  addSocket: (socket: SomeSocket) => void,
-  removeSocket: (userId: User['id']) => void,
+	sockets: SomeSocket[]
+	getSocket: (userId: User['id']) => SomeSocket | undefined
+	addSocket: (socket: SomeSocket) => void
+	removeSocket: (userId: User['id']) => void
 }
 
 export type SomeSocket = {
-  userId: User['id'],
-  socketId: SocketId,
+	userId: User['id']
+	socketId: SocketId
 }

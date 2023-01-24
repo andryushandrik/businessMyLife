@@ -6,66 +6,61 @@ import { UserFactory } from 'Database/factories'
 import { RoleNames, UserExperienceTypes, UserTypeNames } from 'Config/user'
 
 export default class extends BaseSeeder {
-  public async run () {
+	public async run() {
+		try {
+			await User.createMany([
+				{
+					firstName: 'Admin',
+					lastName: 'Admin',
+					patronymic: 'Admin',
 
-    try {
-      await User.createMany([
-        {
-          firstName: 'Admin',
-          lastName: 'Admin',
-          patronymic: 'Admin',
+					type: UserTypeNames.PHYSICAL_PERSON,
 
-          type: UserTypeNames.PHYSICAL_PERSON,
+					email: 'admin@mail.ru',
+					password: '1234Admin',
 
-          email: 'admin@mail.ru',
-          password: '1234Admin',
+					placeOfWork: 'Business my life',
+					companyName: 'Business my life',
+					experienceType: UserExperienceTypes.AFTER_THREE_YEARS,
 
-          placeOfWork: 'Business my life',
-          companyName: 'Business my life',
-          experienceType: UserExperienceTypes.AFTER_THREE_YEARS,
+					birthday: DateTime.now(),
+					city: 'Kazan',
+					phone: '+79999999999',
+					hobby: 'Programming',
 
-          birthday: DateTime.now(),
-          city: 'Kazan',
-          phone: '+79999999999',
-          hobby: 'Programming',
+					roleId: RoleNames.ADMIN + 1,
+				},
+				{
+					firstName: 'Moderator',
+					lastName: 'Moderator',
+					patronymic: 'Moderator',
 
-          roleId: RoleNames.ADMIN + 1,
-        },
-        {
-          firstName: 'Moderator',
-          lastName: 'Moderator',
-          patronymic: 'Moderator',
+					type: UserTypeNames.PHYSICAL_PERSON,
 
-          type: UserTypeNames.PHYSICAL_PERSON,
+					email: 'moderator@mail.ru',
+					password: '1234Moderator',
 
-          email: 'moderator@mail.ru',
-          password: '1234Moderator',
+					placeOfWork: 'Business my life',
+					companyName: 'Business my life',
+					experienceType: UserExperienceTypes.AFTER_THREE_YEARS,
 
-          placeOfWork: 'Business my life',
-          companyName: 'Business my life',
-          experienceType: UserExperienceTypes.AFTER_THREE_YEARS,
+					birthday: DateTime.now(),
+					city: 'Kazan',
+					phone: '+79999999999',
+					hobby: 'Programming',
 
-          birthday: DateTime.now(),
-          city: 'Kazan',
-          phone: '+79999999999',
-          hobby: 'Programming',
+					roleId: RoleNames.MODERATOR + 1,
+				},
+			])
 
-          roleId: RoleNames.MODERATOR + 1,
-        },
-      ])
-
-      await UserFactory
-        .with('images', 3)
-        .with('reportsTo', 3)
-        .with('offers', 3, (offer) => {
-          offer
-            .with('images', 3)
-            .with('reports', 3)
-        })
-        .createMany(20)
-    } catch (err: any) {
-      Logger.error(err)
-    }
-
-  }
+			await UserFactory.with('images', 3)
+				.with('reportsTo', 3)
+				.with('offers', 3, (offer) => {
+					offer.with('images', 3).with('reports', 3)
+				})
+				.createMany(20)
+		} catch (err: any) {
+			Logger.error(err)
+		}
+	}
 }

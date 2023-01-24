@@ -5,11 +5,11 @@ import type Conversation from 'App/Models/Chat/Conversation'
 // * Types
 
 export type MessageCreateWithoutTopicPayload = {
-  toId: User['id'],
-  fromId: User['id'],
+	toId: User['id']
+	fromId: User['id']
 }
 
 export type ReturnMessageCreatePayload = {
-  message: Message,
-  conversation: Conversation,
+	message: Message
+	conversation: Conversation
 }

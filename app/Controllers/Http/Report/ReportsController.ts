@@ -14,65 +14,83 @@ import OfferReportFilterValidator from 'App/Validators/Report/OfferReportFilterV
 import { OFFER_CATEGORIES } from 'Config/offer'
 
 export default class OffersController {
-  public async paginateOffersReports({ request, response, route, view, session }: HttpContextContract) {
-    let payload: OfferReportFilterValidator['schema']['props'] | undefined = undefined
-    const isFiltered: boolean = request.input('isFiltered', false)
-    const config: PaginateConfig<Report> = {
-      baseUrl: route!.pattern,
-      relations: ['offer', 'user'],
-      page: request.input('page', 1),
-    }
+	public async paginateOffersReports({
+		request,
+		response,
+		route,
+		view,
+		session,
+	}: HttpContextContract) {
+		let payload: OfferReportFilterValidator['schema']['props'] | undefined = undefined
+		const isFiltered: boolean = request.input('isFiltered', false)
+		const config: PaginateConfig<Report> = {
+			baseUrl: route!.pattern,
+			relations: ['offer', 'user'],
+			page: request.input('page', 1),
+		}
 
-    if (isFiltered) {
-      payload = await request.validate(OfferReportFilterValidator)
+		if (isFiltered) {
+			payload = await request.validate(OfferReportFilterValidator)
 
-      config.orderBy = payload.orderBy
-      config.orderByColumn = payload.orderByColumn
-    }
+			config.orderBy = payload.orderBy
+			config.orderByColumn = payload.orderByColumn
+		}
 
-    try {
-      const areas: Area[] = await AreaService.getAll()
-      const reports: ModelPaginatorContract<Report> = await ReportService.paginateOffersReports(config, payload)
+		try {
+			const areas: Area[] = await AreaService.getAll()
+			const reports: ModelPaginatorContract<Report> = await ReportService.paginateOffersReports(
+				config,
+				payload,
+			)
 
-      return view.render('pages/report/paginateOffersReports', {
-        areas,
-        reports,
-        payload,
-        categories: OFFER_CATEGORIES,
-      })
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-      return response.redirect().back()
-    }
-  }
+			return view.render('pages/report/paginateOffersReports', {
+				areas,
+				reports,
+				payload,
+				categories: OFFER_CATEGORIES,
+			})
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
 
-  public async paginateUsersReports({ request, response, route, view, session }: HttpContextContract) {
-    let payload: UserReportFilterValidator['schema']['props'] | undefined = undefined
-    const isFiltered: boolean = request.input('isFiltered', false)
-    const config: PaginateConfig<Report> = {
-      baseUrl: route!.pattern,
-      relations: ['user', 'userTo'],
-      page: request.input('page', 1),
-    }
+	public async paginateUsersReports({
+		request,
+		response,
+		route,
+		view,
+		session,
+	}: HttpContextContract) {
+		let payload: UserReportFilterValidator['schema']['props'] | undefined = undefined
+		const isFiltered: boolean = request.input('isFiltered', false)
+		const config: PaginateConfig<Report> = {
+			baseUrl: route!.pattern,
+			relations: ['user', 'userTo'],
+			page: request.input('page', 1),
+		}
 
-    if (isFiltered) {
-      payload = await request.validate(UserReportFilterValidator)
+		if (isFiltered) {
+			payload = await request.validate(UserReportFilterValidator)
 
-      config.orderBy = payload.orderBy
-      config.orderByColumn = payload.orderByColumn
-    }
+			config.orderBy = payload.orderBy
+			config.orderByColumn = payload.orderByColumn
+		}
 
-    try {
-      const reports: ModelPaginatorContract<Report> = await ReportService.paginateUsersReports(config, payload)
+		try {
+			const reports: ModelPaginatorContract<Report> = await ReportService.paginateUsersReports(
+				config,
+				payload,
+			)
 
-      return view.render('pages/report/paginateUsersReports', {
-        reports,
-        payload,
-      })
-    } catch (err: Err | any) {
-      console.log(err)
-      session.flash('error', err.message)
-      return response.redirect().back()
-    }
-  }
+			return view.render('pages/report/paginateUsersReports', {
+				reports,
+				payload,
+			})
+		} catch (err: Err | any) {
+			console.log(err)
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
 }

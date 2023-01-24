@@ -18,194 +18,209 @@ import SubsectionService from '../Offer/SubsectionService'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 
 type FilterDependencies = {
-  usersIds: User['id'][],
-  offersIds: Offer['id'][],
+	usersIds: User['id'][]
+	offersIds: Offer['id'][]
 }
 
 export default class ReportService {
-  public static async paginateOffersReports(config: PaginateConfig<Report>, filter?: OfferReportFilterValidator['schema']['props']): Promise<ModelPaginatorContract<Report>> {
-    let query: ModelQueryBuilderContract<typeof Report> = Report
-      .query()
-      .withScopes((scopes) => scopes.offersReports())
+	public static async paginateOffersReports(
+		config: PaginateConfig<Report>,
+		filter?: OfferReportFilterValidator['schema']['props'],
+	): Promise<ModelPaginatorContract<Report>> {
+		let query: ModelQueryBuilderContract<typeof Report> = Report.query().withScopes((scopes) =>
+			scopes.offersReports(),
+		)
 
-    if (config.relations) {
-      for (const item of config.relations) {
-        query = query.preload(item)
-      }
-    }
+		if (config.relations) {
+			for (const item of config.relations) {
+				query = query.preload(item)
+			}
+		}
 
-    if (filter) {
-      let dependencies: FilterDependencies = {
-        usersIds: [],
-        offersIds: [],
-      }
+		if (filter) {
+			const dependencies: FilterDependencies = {
+				usersIds: [],
+				offersIds: [],
+			}
 
-      if (filter.query) {
-        try {
-          const usersIds: Offer['id'][] = await UserService.getUsersIdsByQuery(filter.query)
+			if (filter.query) {
+				try {
+					const usersIds: Offer['id'][] = await UserService.getUsersIdsByQuery(filter.query)
 
-          dependencies.usersIds = [...dependencies.usersIds, ...usersIds]
-        } catch (err: Err | any) {
-          throw err
-        }
-      }
+					dependencies.usersIds = [...dependencies.usersIds, ...usersIds]
+				} catch (err: Err | any) {
+					throw err
+				}
+			}
 
-      if (filter.offerQuery) {
-        try {
-          const offersIds: Offer['id'][] = await OfferService.getOffersIdsByQuery(filter.offerQuery)
+			if (filter.offerQuery) {
+				try {
+					const offersIds: Offer['id'][] = await OfferService.getOffersIdsByQuery(filter.offerQuery)
 
-          dependencies.offersIds = [...dependencies.offersIds, ...offersIds]
-        } catch (err: Err | any) {
-          throw err
-        }
-      }
+					dependencies.offersIds = [...dependencies.offersIds, ...offersIds]
+				} catch (err: Err | any) {
+					throw err
+				}
+			}
 
-      if (filter.areaId) {
-        try {
-          const subsectionsIds: Subsection['id'][] = await SubsectionService.getSubsectionsIdsByAreaId(filter.areaId)
-          const offersIds: Offer['id'][] = await OfferService.getOffersIdsBySubSectionIds(subsectionsIds)
+			if (filter.areaId) {
+				try {
+					const subsectionsIds: Subsection['id'][] =
+						await SubsectionService.getSubsectionsIdsByAreaId(filter.areaId)
+					const offersIds: Offer['id'][] = await OfferService.getOffersIdsBySubSectionIds(
+						subsectionsIds,
+					)
 
-          dependencies.offersIds = [...dependencies.offersIds, ...offersIds]
-        } catch (err: Err | any) {
-          throw err
-        }
-      }
+					dependencies.offersIds = [...dependencies.offersIds, ...offersIds]
+				} catch (err: Err | any) {
+					throw err
+				}
+			}
 
-      if (filter.category !== undefined && filter.category !== null) {
-        try {
-          const offersIds: Offer['id'][] = await OfferService.getOffersIdsByCategory(filter.category)
+			if (filter.category !== undefined && filter.category !== null) {
+				try {
+					const offersIds: Offer['id'][] = await OfferService.getOffersIdsByCategory(
+						filter.category,
+					)
 
-          dependencies.offersIds = [...dependencies.offersIds, ...offersIds]
-        } catch (err: Err | any) {
-          throw err
-        }
-      }
+					dependencies.offersIds = [...dependencies.offersIds, ...offersIds]
+				} catch (err: Err | any) {
+					throw err
+				}
+			}
 
-      query = this.offerFilter(query, filter, dependencies)
-    }
+			query = this.offerFilter(query, filter, dependencies)
+		}
 
-    try {
-      return await query.getViaPaginate(config)
-    } catch (err: any) {
-      Logger.error(err)
-      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
-    }
-  }
+		try {
+			return await query.getViaPaginate(config)
+		} catch (err: any) {
+			Logger.error(err)
+			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+		}
+	}
 
-  public static async paginateUsersReports(config: PaginateConfig<Report>, filter?: UserReportFilterValidator['schema']['props']): Promise<ModelPaginatorContract<Report>> {
-    let query: ModelQueryBuilderContract<typeof Report> = Report
-      .query()
-      .withScopes((scopes) => scopes.usersReports())
+	public static async paginateUsersReports(
+		config: PaginateConfig<Report>,
+		filter?: UserReportFilterValidator['schema']['props'],
+	): Promise<ModelPaginatorContract<Report>> {
+		let query: ModelQueryBuilderContract<typeof Report> = Report.query().withScopes((scopes) =>
+			scopes.usersReports(),
+		)
 
-    if (config.relations) {
-      for (const item of config.relations) {
-        query = query.preload(item)
-      }
-    }
+		if (config.relations) {
+			for (const item of config.relations) {
+				query = query.preload(item)
+			}
+		}
 
-    if (filter) {
-      let dependencies: FilterDependencies = {
-        usersIds: [],
-        offersIds: [],
-      }
+		if (filter) {
+			const dependencies: FilterDependencies = {
+				usersIds: [],
+				offersIds: [],
+			}
 
-      if (filter.query) {
-        try {
-          const usersIds: Offer['id'][] = await UserService.getUsersIdsByQuery(filter.query)
+			if (filter.query) {
+				try {
+					const usersIds: Offer['id'][] = await UserService.getUsersIdsByQuery(filter.query)
 
-          dependencies.usersIds = [...dependencies.usersIds, ...usersIds]
-        } catch (err: Err | any) {
-          throw err
-        }
-      }
+					dependencies.usersIds = [...dependencies.usersIds, ...usersIds]
+				} catch (err: Err | any) {
+					throw err
+				}
+			}
 
-      query = this.userFilter(query, filter, dependencies)
-    }
+			query = this.userFilter(query, filter, dependencies)
+		}
 
-    try {
-      return await query.getViaPaginate(config)
-    } catch (err: any) {
-      Logger.error(err)
-      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
-    }
-  }
+		try {
+			return await query.getViaPaginate(config)
+		} catch (err: any) {
+			Logger.error(err)
+			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+		}
+	}
 
-  public static async create(payload: ReportValidator['schema']['props']): Promise<void> {
-    try {
-      await Report.create(payload)
-    } catch (err: any) {
-      Logger.error(err)
-      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
-    }
-  }
+	public static async create(payload: ReportValidator['schema']['props']): Promise<void> {
+		try {
+			await Report.create(payload)
+		} catch (err: any) {
+			Logger.error(err)
+			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+		}
+	}
 
-  /**
-   * * Private methods
-   */
+	/**
+	 * * Private methods
+	 */
 
-  private static offerFilter(query: ModelQueryBuilderContract<typeof Report>, payload: OfferReportFilterValidator['schema']['props'], dependencies: FilterDependencies): ModelQueryBuilderContract<typeof Report> {
-    for (const key in payload) {
-      if (payload[key] !== undefined && payload[key] !== null) {
+	private static offerFilter(
+		query: ModelQueryBuilderContract<typeof Report>,
+		payload: OfferReportFilterValidator['schema']['props'],
+		dependencies: FilterDependencies,
+	): ModelQueryBuilderContract<typeof Report> {
+		for (const key in payload) {
+			if (payload[key] !== undefined && payload[key] !== null) {
+				switch (key) {
+					// Skip this api's keys
+					case 'page':
+					case 'limit':
+					case 'orderBy':
+					case 'orderByColumn':
+						break
+					// Skip this api's keys
 
-        switch (key) {
-          // Skip this api's keys
-          case 'page':
-          case 'limit':
-          case 'orderBy':
-          case 'orderByColumn':
-            break
-          // Skip this api's keys
+					case 'query':
+						if (dependencies.usersIds?.length)
+							query = query.withScopes((scopes) => scopes.getByUsersIds(dependencies.usersIds!))
 
-          case 'query':
-            if (dependencies.usersIds?.length)
-              query = query.withScopes((scopes) => scopes.getByUsersIds(dependencies.usersIds!))
+						break
 
-            break
+					case 'areaId':
+					case 'category':
+					case 'offerQuery':
+						if (dependencies.offersIds?.length)
+							query = query.withScopes((scopes) => scopes.getByOffersIds(dependencies.offersIds!))
 
-          case 'areaId':
-          case 'category':
-          case 'offerQuery':
-            if (dependencies.offersIds?.length)
-              query = query.withScopes((scopes) => scopes.getByOffersIds(dependencies.offersIds!))
+						break
 
-            break
+					default:
+						break
+				}
+			}
+		}
 
-          default:
-            break
-        }
+		return query
+	}
 
-      }
-    }
+	private static userFilter(
+		query: ModelQueryBuilderContract<typeof Report>,
+		payload: UserReportFilterValidator['schema']['props'],
+		dependencies: Pick<FilterDependencies, 'usersIds'>,
+	): ModelQueryBuilderContract<typeof Report> {
+		for (const key in payload) {
+			if (payload[key] !== undefined && payload[key] !== null) {
+				switch (key) {
+					// Skip this api's keys
+					case 'page':
+					case 'limit':
+					case 'orderBy':
+					case 'orderByColumn':
+						break
+					// Skip this api's keys
 
-    return query
-  }
+					case 'query':
+						if (dependencies.usersIds?.length)
+							query = query.withScopes((scopes) => scopes.getByUsersToIds(dependencies.usersIds!))
 
-  private static userFilter(query: ModelQueryBuilderContract<typeof Report>, payload: UserReportFilterValidator['schema']['props'], dependencies: Pick<FilterDependencies, 'usersIds'>): ModelQueryBuilderContract<typeof Report> {
-    for (const key in payload) {
-      if (payload[key] !== undefined && payload[key] !== null) {
+						break
 
-        switch (key) {
-          // Skip this api's keys
-          case 'page':
-          case 'limit':
-          case 'orderBy':
-          case 'orderByColumn':
-            break
-          // Skip this api's keys
+					default:
+						break
+				}
+			}
+		}
 
-          case 'query':
-            if (dependencies.usersIds?.length)
-              query = query.withScopes((scopes) => scopes.getByUsersToIds(dependencies.usersIds!))
-
-            break
-
-          default:
-            break
-        }
-
-      }
-    }
-
-    return query
-  }
+		return query
+	}
 }

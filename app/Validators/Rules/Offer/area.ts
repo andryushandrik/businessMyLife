@@ -8,18 +8,17 @@ import { AREA_NAME_MAX_LENGTH, TABLES_NAMES } from 'Config/database'
 
 const TABLE: string = TABLES_NAMES.AREAS
 
-export function getAreaIdRules(withExistsRule: boolean = false): Rule[] {
-  const areaRules: Rule[] = [ rules.unsigned() ]
+export function getAreaIdRules(withExistsRule = false): Rule[] {
+	const areaRules: Rule[] = [rules.unsigned()]
 
-  if (withExistsRule)
-    areaRules.push(rules.exists({ table: TABLE, column: 'id' }))
+	if (withExistsRule) areaRules.push(rules.exists({ table: TABLE, column: 'id' }))
 
-  return areaRules
+	return areaRules
 }
 
 export function getAreaNameRules(id: Area['id'] | null = null): Rule[] {
-  return [
-    rules.maxLength(AREA_NAME_MAX_LENGTH),
-    rules.unique({ table: TABLE, column: 'name', whereNot: { id } }),
-  ]
+	return [
+		rules.maxLength(AREA_NAME_MAX_LENGTH),
+		rules.unique({ table: TABLE, column: 'name', whereNot: { id } }),
+	]
 }

@@ -17,7 +17,7 @@ import { ShieldConfig } from '@ioc:Adonis/Addons/Shield'
 | variety of options to choose from.
 */
 export const csp: ShieldConfig['csp'] = {
-  /*
+	/*
   |--------------------------------------------------------------------------
   | Enable/disable CSP
   |--------------------------------------------------------------------------
@@ -25,9 +25,9 @@ export const csp: ShieldConfig['csp'] = {
   | The CSP rules are disabled by default for seamless onboarding.
   |
   */
-  enabled: false,
+	enabled: false,
 
-  /*
+	/*
   |--------------------------------------------------------------------------
   | Directives
   |--------------------------------------------------------------------------
@@ -43,10 +43,9 @@ export const csp: ShieldConfig['csp'] = {
   | }
   |
   */
-  directives: {
-  },
+	directives: {},
 
-  /*
+	/*
   |--------------------------------------------------------------------------
   | Report only
   |--------------------------------------------------------------------------
@@ -55,7 +54,7 @@ export const csp: ShieldConfig['csp'] = {
   | instead report them to a URL.
   |
   */
-  reportOnly: false,
+	reportOnly: false,
 }
 
 /*
@@ -68,14 +67,14 @@ export const csp: ShieldConfig['csp'] = {
 |
 */
 export const csrf: ShieldConfig['csrf'] = {
-  /*
+	/*
   |--------------------------------------------------------------------------
   | Enable/Disable CSRF
   |--------------------------------------------------------------------------
   */
-  enabled: true,
+	enabled: true,
 
-  /*
+	/*
   |--------------------------------------------------------------------------
   | Routes to Ignore
   |--------------------------------------------------------------------------
@@ -92,9 +91,9 @@ export const csrf: ShieldConfig['csrf'] = {
 	| ```
   |
   */
-  exceptRoutes: ({ request }) => request.url().includes('/api'),
+	exceptRoutes: ({ request }) => request.url().includes('/api'),
 
-  /*
+	/*
   |--------------------------------------------------------------------------
   | Enable Sharing Token Via Cookie
   |--------------------------------------------------------------------------
@@ -108,9 +107,9 @@ export const csrf: ShieldConfig['csrf'] = {
   | AJAX requests.
   |
   */
-  enableXsrfCookie: true,
+	enableXsrfCookie: true,
 
-  /*
+	/*
   |--------------------------------------------------------------------------
   | Methods to Validate
   |--------------------------------------------------------------------------
@@ -118,7 +117,7 @@ export const csrf: ShieldConfig['csrf'] = {
   | Define an array of HTTP methods to be validated for a valid CSRF token.
   |
   */
-  methods: ['POST', 'PUT', 'PATCH', 'DELETE'],
+	methods: ['POST', 'PUT', 'PATCH', 'DELETE'],
 }
 
 /*
@@ -133,14 +132,14 @@ export const csrf: ShieldConfig['csrf'] = {
 |
 */
 export const dnsPrefetch: ShieldConfig['dnsPrefetch'] = {
-  /*
+	/*
   |--------------------------------------------------------------------------
   | Enable/disable this feature
   |--------------------------------------------------------------------------
   */
-  enabled: true,
+	enabled: true,
 
-  /*
+	/*
   |--------------------------------------------------------------------------
   | Allow or Dis-Allow Explicitly
   |--------------------------------------------------------------------------
@@ -152,7 +151,7 @@ export const dnsPrefetch: ShieldConfig['dnsPrefetch'] = {
   | - When `allow = false`, then `X-DNS-Prefetch-Control = 'off'`
   |
   */
-  allow: true,
+	allow: true,
 }
 
 /*
@@ -170,8 +169,8 @@ export const dnsPrefetch: ShieldConfig['dnsPrefetch'] = {
 | Learn more at https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
 */
 export const xFrame: ShieldConfig['xFrame'] = {
-  enabled: true,
-  action: 'DENY',
+	enabled: true,
+	action: 'DENY',
 }
 
 /*
@@ -186,8 +185,8 @@ export const xFrame: ShieldConfig['xFrame'] = {
 |
 */
 export const hsts: ShieldConfig['hsts'] = {
-  enabled: true,
-  /*
+	enabled: true,
+	/*
   |--------------------------------------------------------------------------
   | Max Age
   |--------------------------------------------------------------------------
@@ -196,9 +195,9 @@ export const hsts: ShieldConfig['hsts'] = {
   | accessed using HTTPS.
   |
   */
-  maxAge: '180 days',
+	maxAge: '180 days',
 
-  /*
+	/*
   |--------------------------------------------------------------------------
   | Include Subdomains
   |--------------------------------------------------------------------------
@@ -206,9 +205,9 @@ export const hsts: ShieldConfig['hsts'] = {
   | Apply rules on the subdomains as well.
   |
   */
-  includeSubDomains: true,
+	includeSubDomains: true,
 
-  /*
+	/*
   |--------------------------------------------------------------------------
   | Preloading
   |--------------------------------------------------------------------------
@@ -217,7 +216,7 @@ export const hsts: ShieldConfig['hsts'] = {
   | the HSTS policy. Learn more https://hstspreload.org/
   |
   */
-  preload: false,
+	preload: false,
 }
 
 /*
@@ -233,5 +232,5 @@ export const hsts: ShieldConfig['hsts'] = {
 |
 */
 export const contentTypeSniffing: ShieldConfig['contentTypeSniffing'] = {
-  enabled: true,
+	enabled: true,
 }

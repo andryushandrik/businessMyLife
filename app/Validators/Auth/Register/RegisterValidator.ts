@@ -7,62 +7,65 @@ import { getVerifyCodeRules } from '../../Rules/auth'
 import { getUserTypeRules } from 'App/Validators/Rules/User/user'
 import { schema, CustomMessages } from '@ioc:Adonis/Core/Validator'
 import {
-  getUserCompanyNameRules, getUserEmailRules, getUserFirstNameRules,
-  getUserLastNameRules, getUserPasswordRules,
+	getUserCompanyNameRules,
+	getUserEmailRules,
+	getUserFirstNameRules,
+	getUserLastNameRules,
+	getUserPasswordRules,
 } from '../../Rules/User/user'
 
 export default class RegisterValidator extends IndexValidator {
-  constructor(protected ctx: HttpContextContract) {
-    super()
-  }
+	constructor(protected ctx: HttpContextContract) {
+		super()
+	}
 
-  /**
-   * Define schema to validate the "shape", "type", "formatting" and "integrity" of data.
-   *
-   * For example:
-   * 1. The username must be of data type string. But then also, it should
-   *    not contain special characters or numbers.
-   *    ```
-   *     schema.string({}, [ rules.alpha() ])
-   *    ```
-   *
-   * 2. The email must be of data type string, formatted as a valid
-   *    email. But also, not used by any other user.
-   *    ```
-   *     schema.string({}, [
-   *       rules.email(),
-   *       rules.unique({ table: 'users', column: 'email' }),
-   *     ])
-   *    ```
-   */
-  public schema = schema.create({
-    verifyCode: schema.number(getVerifyCodeRules()),
+	/**
+	 * Define schema to validate the "shape", "type", "formatting" and "integrity" of data.
+	 *
+	 * For example:
+	 * 1. The username must be of data type string. But then also, it should
+	 *    not contain special characters or numbers.
+	 *    ```
+	 *     schema.string({}, [ rules.alpha() ])
+	 *    ```
+	 *
+	 * 2. The email must be of data type string, formatted as a valid
+	 *    email. But also, not used by any other user.
+	 *    ```
+	 *     schema.string({}, [
+	 *       rules.email(),
+	 *       rules.unique({ table: 'users', column: 'email' }),
+	 *     ])
+	 *    ```
+	 */
+	public schema = schema.create({
+		verifyCode: schema.number(getVerifyCodeRules()),
 
-    firstName: schema.string({ trim: true }, getUserFirstNameRules()),
-    lastName: schema.string({ trim: true }, getUserLastNameRules()),
+		firstName: schema.string({ trim: true }, getUserFirstNameRules()),
+		lastName: schema.string({ trim: true }, getUserLastNameRules()),
 
-    password: schema.string({ trim: true }, getUserPasswordRules(true)),
-    email: schema.string({ trim: true }, getUserEmailRules('unique')),
+		password: schema.string({ trim: true }, getUserPasswordRules(true)),
+		email: schema.string({ trim: true }, getUserEmailRules('unique')),
 
-    type: schema.number(getUserTypeRules()),
+		type: schema.number(getUserTypeRules()),
 
-    /**
-     * * Optional fields
-     */
+		/**
+		 * * Optional fields
+		 */
 
-    companyName: schema.string.optional({ trim: true }, getUserCompanyNameRules('type')),
-  })
+		companyName: schema.string.optional({ trim: true }, getUserCompanyNameRules('type')),
+	})
 
-  /**
-   * Custom messages for validation failures. You can make use of dot notation `(.)`
-   * for targeting nested fields and array expressions `(*)` for targeting all
-   * children of an array. For example:
-   *
-   * {
-   *   'profile.username.required': 'Username is required',
-   *   'scores.*.number': 'Define scores as valid numbers'
-   * }
-   *
-   */
-  public messages: CustomMessages = this.messages
+	/**
+	 * Custom messages for validation failures. You can make use of dot notation `(.)`
+	 * for targeting nested fields and array expressions `(*)` for targeting all
+	 * children of an array. For example:
+	 *
+	 * {
+	 *   'profile.username.required': 'Username is required',
+	 *   'scores.*.number': 'Define scores as valid numbers'
+	 * }
+	 *
+	 */
+	public messages: CustomMessages = this.messages
 }

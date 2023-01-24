@@ -16,334 +16,350 @@ import { GLOBAL_DATETIME_FORMAT } from 'Config/app'
 import { formatStringForCyrillic } from 'Helpers/index'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 import {
-  OfferCategories, OfferPaybackTimes, OfferProjectStages,
-  OFFER_CATEGORIES, OFFER_PAYBACK_TIMES, OFFER_PROJECT_STAGES,
+	OfferCategories,
+	OfferPaybackTimes,
+	OfferProjectStages,
+	OFFER_CATEGORIES,
+	OFFER_PAYBACK_TIMES,
+	OFFER_PROJECT_STAGES,
 } from 'Config/offer'
 import {
-  BaseModel, beforeDelete, beforeSave,
-  belongsTo, column, computed,
-  hasMany, scope,
+	BaseModel,
+	beforeDelete,
+	beforeSave,
+	belongsTo,
+	column,
+	computed,
+	hasMany,
+	scope,
 } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Offer extends BaseModel {
-  public static readonly columns = [
-    'id', 'isBanned', 'isArchived', 'isVerified', 'viewsCount',
-    'slug', 'title', 'description', 'city',
-    'image', 'video',
-    'category', 'paybackTime',
-    'cooperationTerms', 'businessPlan', 'benefits',
-    'about', 'aboutCompany',
-    'investments', 'projectStage', 'dateOfrCreation',
-    'price', 'pricePerMonth',
-    'profitPerMonth', 'profit',
-    'branchCount', 'soldBranchCount',
-    'blockDescription',
-    'userId', 'subsectionId',
-    'createdAt', 'updatedAt',
-  ] as const
+	public static readonly columns = [
+		'id',
+		'isBanned',
+		'isArchived',
+		'isVerified',
+		'viewsCount',
+		'slug',
+		'title',
+		'description',
+		'city',
+		'image',
+		'video',
+		'category',
+		'paybackTime',
+		'cooperationTerms',
+		'businessPlan',
+		'benefits',
+		'about',
+		'aboutCompany',
+		'investments',
+		'projectStage',
+		'dateOfrCreation',
+		'price',
+		'pricePerMonth',
+		'profitPerMonth',
+		'profit',
+		'branchCount',
+		'soldBranchCount',
+		'blockDescription',
+		'userId',
+		'subsectionId',
+		'createdAt',
+		'updatedAt',
+	] as const
+
+	/**
+	 * * Columns
+	 */
+
+	@column({ isPrimary: true })
+	public id: number
+
+	@column({ serializeAs: null })
+	public isBanned: boolean
 
-  /**
-   * * Columns
-   */
+	@column()
+	public isArchived: boolean
 
-  @column({ isPrimary: true })
-  public id: number
+	@column({ serializeAs: null })
+	public isVerified: boolean
 
-  @column({ serializeAs: null })
-  public isBanned: boolean
+	@column()
+	public viewsCount: number
+
+	@column()
+	public slug: string
 
-  @column()
-  public isArchived: boolean
+	@column()
+	public title: string
 
-  @column({ serializeAs: null })
-  public isVerified: boolean
+	@column()
+	public description: string
 
-  @column()
-  public viewsCount: number
+	@column()
+	public city: string
 
-  @column()
-  public slug: string
+	@column()
+	public category: number
 
-  @column()
-  public title: string
+	@column()
+	public image?: string
 
-  @column()
-  public description: string
+	@column()
+	public video?: string
 
-  @column()
-  public city: string
+	@column()
+	public cooperationTerms?: string
 
-  @column()
-  public category: number
+	@column()
+	public businessPlan?: string
 
-  @column()
-  public image?: string
+	@column()
+	public benefits?: string
 
-  @column()
-  public video?: string
+	@column()
+	public about?: string
 
-  @column()
-  public cooperationTerms?: string
+	@column()
+	public aboutCompany?: string
+
+	@column()
+	public paybackTime?: number
 
-  @column()
-  public businessPlan?: string
+	@column()
+	public projectStage?: number
 
-  @column()
-  public benefits?: string
+	@column()
+	public investments?: number
 
-  @column()
-  public about?: string
+	@column.date()
+	public dateOfCreation?: DateTime
 
-  @column()
-  public aboutCompany?: string
+	@column()
+	public price?: number
 
-  @column()
-  public paybackTime?: number
+	@column()
+	public pricePerMonth?: number
 
-  @column()
-  public projectStage?: number
+	@column()
+	public profitPerMonth?: number
 
-  @column()
-  public investments?: number
+	@column()
+	public profit?: number
 
-  @column.date()
-  public dateOfCreation?: DateTime
+	@column()
+	public branchCount?: number
 
-  @column()
-  public price?: number
+	@column()
+	public soldBranchCount?: number
 
-  @column()
-  public pricePerMonth?: number
+	@column()
+	public blockDescription?: string | null
 
-  @column()
-  public profitPerMonth?: number
+	/**
+	 * * Foreign keys
+	 */
 
-  @column()
-  public profit?: number
+	@column({ columnName: 'user_id' })
+	public userId: User['id']
 
-  @column()
-  public branchCount?: number
+	@column({ columnName: 'subsection_id' })
+	public subsectionId: Subsection['id']
 
-  @column()
-  public soldBranchCount?: number
+	/**
+	 * * Timestamps
+	 */
 
-  @column()
-  public blockDescription?: string | null
+	@column.dateTime({ autoCreate: true })
+	public createdAt: DateTime
 
-  /**
-   * * Foreign keys
-   */
+	@column.dateTime({ autoCreate: true, autoUpdate: true })
+	public updatedAt: DateTime
 
-  @column({ columnName: 'user_id' })
-  public userId: User['id']
+	/**
+	 * * Aggregates columns
+	 */
 
-  @column({ columnName: 'subsection_id' })
-  public subsectionId: Subsection['id']
+	@column({ columnName: 'reports_count' })
+	public reportsCount?: number
 
-  /**
-   * * Timestamps
-   */
+	/**
+	 * * Relations
+	 */
 
-  @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime
+	@belongsTo(() => User)
+	public user: BelongsTo<typeof User>
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt: DateTime
+	@belongsTo(() => Subsection)
+	public subsection: BelongsTo<typeof Subsection>
 
-  /**
-   * * Aggregates columns
-   */
+	@hasMany(() => OfferImage)
+	public images: HasMany<typeof OfferImage>
 
-  @column({ columnName: 'reports_count' })
-  public reportsCount?: number
+	@hasMany(() => Report)
+	public reports: HasMany<typeof Report>
 
-  /**
-   * * Relations
-   */
+	/**
+	 * * Computed properties
+	 */
 
-  @belongsTo(() => User)
-  public user: BelongsTo<typeof User>
+	@computed()
+	public get isArchivedForUser(): string {
+		return this.isArchived ? 'Да' : 'Нет'
+	}
 
-  @belongsTo(() => Subsection)
-  public subsection: BelongsTo<typeof Subsection>
+	@computed()
+	public get isBannedForUser(): string {
+		return this.isBanned ? 'Да' : 'Нет'
+	}
 
-  @hasMany(() => OfferImage)
-  public images: HasMany<typeof OfferImage>
+	@computed()
+	public get isVerifiedForUser(): string {
+		return this.isVerified ? 'Да' : 'Нет'
+	}
 
-  @hasMany(() => Report)
-  public reports: HasMany<typeof Report>
+	@computed()
+	public get categoryForUser(): string {
+		return OFFER_CATEGORIES[this.category]
+	}
 
-  /**
-   * * Computed properties
-   */
+	@computed()
+	public get paybackTimeForUser(): string {
+		if (this.paybackTime !== undefined) return OFFER_PAYBACK_TIMES[this.paybackTime]
 
-  @computed()
-  public get isArchivedForUser(): string {
-    return this.isArchived ? 'Да' : 'Нет'
-  }
+		return ''
+	}
 
-  @computed()
-  public get isBannedForUser(): string {
-    return this.isBanned ? 'Да' : 'Нет'
-  }
+	@computed()
+	public get projectStageForUser(): string {
+		if (this.projectStage !== undefined) return OFFER_PROJECT_STAGES[this.projectStage]
 
-  @computed()
-  public get isVerifiedForUser(): string {
-    return this.isVerified ? 'Да' : 'Нет'
-  }
+		return ''
+	}
 
-  @computed()
-  public get categoryForUser(): string {
-    return OFFER_CATEGORIES[this.category]
-  }
+	@computed()
+	public get createdAtForUser(): string {
+		return this.createdAt.setLocale('ru-RU').toFormat(GLOBAL_DATETIME_FORMAT)
+	}
 
-  @computed()
-  public get paybackTimeForUser(): string {
-    if (this.paybackTime !== undefined)
-      return OFFER_PAYBACK_TIMES[this.paybackTime]
+	@computed()
+	public get archiveExpire(): string {
+		const expireDate: DateTime = this.updatedAt.plus({ days: 90 })
+		const archiveExpireInDays: number = expireDate.diff(DateTime.now(), 'days').days
+		const archiveExpireInDaysWithoutFraction: number = Math.floor(archiveExpireInDays)
 
-    return ''
-  }
+		return `Осталось ${archiveExpireInDaysWithoutFraction} дней - до ${expireDate
+			.setLocale('ru-RU')
+			.toFormat('dd MMMM')}`
+	}
 
-  @computed()
-  public get projectStageForUser(): string {
-    if (this.projectStage !== undefined)
-      return OFFER_PROJECT_STAGES[this.projectStage]
+	/**
+	 * * Query scopes
+	 */
 
-    return ''
-  }
+	public static getByArchived = scope((query, isArchived: Offer['isArchived']) => [
+		query.where('isArchived', isArchived),
+	])
 
-  @computed()
-  public get createdAtForUser(): string {
-    return this.createdAt.setLocale('ru-RU').toFormat(GLOBAL_DATETIME_FORMAT)
-  }
+	public static getByCategories = scope((query, categories: OfferCategories[]) => [
+		query.whereIn('category', categories),
+	])
 
-  @computed()
-  public get archiveExpire(): string {
-    const expireDate: DateTime = this.updatedAt.plus({ days: 90 })
-    const archiveExpireInDays: number = expireDate.diff(DateTime.now(), 'days').days
-    const archiveExpireInDaysWithoutFraction: number = Math.floor(archiveExpireInDays)
+	public static getByProjectStages = scope((query, projectStages: OfferProjectStages[]) => [
+		query.whereIn('projectStage', projectStages),
+	])
 
-    return `Осталось ${archiveExpireInDaysWithoutFraction} дней - до ${expireDate.setLocale('ru-RU').toFormat('dd MMMM')}`
-  }
+	public static getByPaybackTimes = scope((query, paybackTime: OfferPaybackTimes[]) => [
+		query.whereIn('paybackTime', paybackTime),
+	])
 
-  /**
-   * * Query scopes
-   */
+	public static getByCity = scope((query, city: Offer['city']) => [
+		query.where('city', 'ILIKE', `${city}%`),
+	])
 
-  public static getByArchived = scope((query, isArchived: Offer['isArchived']) => [
-    query.where('isArchived', isArchived)
-  ])
+	public static getByVerified = scope((query, isVerified: Offer['isVerified']) => [
+		query.where('isVerified', isVerified),
+	])
 
-  public static getByCategories = scope((query, categories: OfferCategories[]) => [
-    query.whereIn('category', categories)
-  ])
+	public static getByBanned = scope((query, isBanned: Offer['isBanned']) => [
+		query.where('isBanned', isBanned),
+	])
 
-  public static getByProjectStages = scope((query, projectStages: OfferProjectStages[]) => [
-    query.whereIn('projectStage', projectStages)
-  ])
+	public static getByInvestmentsFrom = scope((query, from: number) => [
+		query.where('investments', '>=', from),
+	])
 
-  public static getByPaybackTimes = scope((query, paybackTime: OfferPaybackTimes[]) => [
-    query.whereIn('paybackTime', paybackTime)
-  ])
+	public static getByInvestmentsTo = scope((query, to: number) => [
+		query.where('investments', '<=', to),
+	])
 
-  public static getByCity = scope((query, city: Offer['city']) => [
-    query.where('city', 'ILIKE', `${city}%`)
-  ])
+	public static getByPriceFrom = scope((query, from: number) => [query.where('price', '>=', from)])
 
-  public static getByVerified = scope((query, isVerified: Offer['isVerified']) => [
-    query.where('isVerified', isVerified)
-  ])
+	public static getByPriceTo = scope((query, to: number) => [query.where('price', '<=', to)])
 
-  public static getByBanned = scope((query, isBanned: Offer['isBanned']) => [
-    query.where('isBanned', isBanned)
-  ])
+	public static getByProfitFrom = scope((query, from: number) => [
+		query.where('profit', '>=', from),
+	])
 
-  public static getByInvestmentsFrom = scope((query, from: number) => [
-    query.where('investments', '>=', from)
-  ])
+	public static getByProfitTo = scope((query, to: number) => [query.where('profit', '<=', to)])
 
-  public static getByInvestmentsTo = scope((query, to: number) => [
-    query.where('investments', '<=', to)
-  ])
+	public static getByProfitPerMonthFrom = scope((query, from: number) => [
+		query.where('profitPerMonth', '>=', from),
+	])
 
-  public static getByPriceFrom = scope((query, from: number) => [
-    query.where('price', '>=', from)
-  ])
+	public static getByProfitPerMonthTo = scope((query, to: number) => [
+		query.where('profitPerMonth', '<=', to),
+	])
 
-  public static getByPriceTo = scope((query, to: number) => [
-    query.where('price', '<=', to)
-  ])
+	public static getByUserId = scope((query, userId: User['id']) => [query.where('user_id', userId)])
 
-  public static getByProfitFrom = scope((query, from: number) => [
-    query.where('profit', '>=', from)
-  ])
+	public static getBySubsectionsIds = scope((query, subsectionsIds: Subsection['id'][]) => {
+		query.whereIn('subsection_id', subsectionsIds)
+	})
 
-  public static getByProfitTo = scope((query, to: number) => [
-    query.where('profit', '<=', to)
-  ])
+	public static search = scope((query, searchQuery: string) => {
+		query.where('title', 'ILIKE', `%${searchQuery}%`)
+	})
 
-  public static getByProfitPerMonthFrom = scope((query, from: number) => [
-    query.where('profitPerMonth', '>=', from)
-  ])
+	/**
+	 * * Hooks
+	 */
 
-  public static getByProfitPerMonthTo = scope((query, to: number) => [
-    query.where('profitPerMonth', '<=', to)
-  ])
+	@beforeSave()
+	public static formatSlug(item: Offer) {
+		const today: number = DateTime.now().day
 
-  public static getByUserId = scope((query, userId: User['id']) => [
-    query.where('user_id', userId)
-  ])
+		if (item.$dirty.slug) item.slug = formatStringForCyrillic(item.slug, 'snakeCase', '_')
 
-  public static getBySubsectionsIds = scope((query, subsectionsIds: Subsection['id'][]) => {
-    query.whereIn('subsection_id', subsectionsIds)
-  })
+		if (!item.slug) item.slug = formatStringForCyrillic(`${item.title}_${today}`, 'snakeCase', '_')
+	}
 
-  public static search = scope((query, searchQuery: string) => {
-    query.where('title', 'ILIKE', `%${searchQuery}%`)
-  })
+	@beforeDelete()
+	public static async deleteStoredImage(item: Offer) {
+		if (item.image) await Drive.delete(item.image)
+	}
 
-  /**
-   * * Hooks
-   */
+	/**
+	 * * Other
+	 */
 
-  @beforeSave()
-  public static formatSlug(item: Offer) {
-    const today: number = DateTime.now().day
+	public async getForUser(currentUserId: User['id']): Promise<ModelObject> {
+		const item: ModelObject = { ...this.serialize() }
 
-    if (item.$dirty.slug)
-      item.slug = formatStringForCyrillic(item.slug, 'snakeCase', '_')
+		try {
+			const isFavorite = await Database.from(TABLES_NAMES.FAVORITE_OFFERS)
+				.where('user_id', currentUserId)
+				.andWhere('offer_id', item.id)
+				.first()
 
-    if (!item.slug)
-      item.slug = formatStringForCyrillic(`${item.title}_${today}`, 'snakeCase', '_')
-  }
+			item.isFavorite = Boolean(isFavorite)
+		} catch (err: any) {
+			Logger.error(err)
+			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+		}
 
-  @beforeDelete()
-  public static async deleteStoredImage(item: Offer) {
-    if (item.image)
-      await Drive.delete(item.image)
-  }
-
-  /**
-   * * Other
-   */
-
-  public async getForUser(currentUserId: User['id']): Promise<ModelObject> {
-    const item: ModelObject = { ...this.serialize() }
-
-    try {
-      const isFavorite = await Database
-        .from(TABLES_NAMES.FAVORITE_OFFERS)
-        .where('user_id', currentUserId)
-        .andWhere('offer_id', item.id)
-        .first()
-
-      item.isFavorite = Boolean(isFavorite)
-    } catch (err: any) {
-      Logger.error(err)
-      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
-    }
-
-    return item
-  }
+		return item
+	}
 }

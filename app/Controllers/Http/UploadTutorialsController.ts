@@ -12,103 +12,104 @@ import UploadTutorialFilterValidator from 'App/Validators/UploadTutorial/UploadT
 import { ResponseMessages } from 'Config/response'
 
 export default class UploadTutorialsController {
-  public async index({ request, response, route, view, session }: HttpContextContract) {
-    let payload: UploadTutorialFilterValidator['schema']['props'] | undefined = undefined
-    const isFiltered: boolean = request.input('isFiltered', false)
-    const config: PaginateConfig<UploadTutorial> = {
-      baseUrl: route!.pattern,
-      page: request.input('page', 1),
-    }
+	public async index({ request, response, route, view, session }: HttpContextContract) {
+		let payload: UploadTutorialFilterValidator['schema']['props'] | undefined = undefined
+		const isFiltered: boolean = request.input('isFiltered', false)
+		const config: PaginateConfig<UploadTutorial> = {
+			baseUrl: route!.pattern,
+			page: request.input('page', 1),
+		}
 
-    if (isFiltered) {
-      payload = await request.validate(UploadTutorialFilterValidator)
+		if (isFiltered) {
+			payload = await request.validate(UploadTutorialFilterValidator)
 
-      config.orderBy = payload.orderBy
-      config.orderByColumn = payload.orderByColumn
-    }
+			config.orderBy = payload.orderBy
+			config.orderByColumn = payload.orderByColumn
+		}
 
-    try {
-      const tutorials: ModelPaginatorContract<UploadTutorial> = await UploadTutorialService.paginate(config, payload)
+		try {
+			const tutorials: ModelPaginatorContract<UploadTutorial> =
+				await UploadTutorialService.paginate(config, payload)
 
-      return view.render('pages/uploadTutorial/index', {
-        payload,
-        tutorials,
-      })
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-      return response.redirect().back()
-    }
-  }
+			return view.render('pages/uploadTutorial/index', {
+				payload,
+				tutorials,
+			})
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
 
-  public async create({ view }: HttpContextContract) {
-    return view.render('pages/uploadTutorial/create')
-  }
+	public async create({ view }: HttpContextContract) {
+		return view.render('pages/uploadTutorial/create')
+	}
 
-  public async store({ request, session, response }: HttpContextContract) {
-    const payload = await request.validate(UploadTutorialValidator)
+	public async store({ request, session, response }: HttpContextContract) {
+		const payload = await request.validate(UploadTutorialValidator)
 
-    try {
-      await UploadTutorialService.create(payload)
+		try {
+			await UploadTutorialService.create(payload)
 
-      session.flash('success', ResponseMessages.SUCCESS)
-      return response.redirect().toRoute('upload_tutorials.index')
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-      return response.redirect().back()
-    }
-  }
+			session.flash('success', ResponseMessages.SUCCESS)
+			return response.redirect().toRoute('upload_tutorials.index')
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
 
-  public async show({ view, params, session, response }: HttpContextContract) {
-    const id: UploadTutorial['id'] = params.id
+	public async show({ view, params, session, response }: HttpContextContract) {
+		const id: UploadTutorial['id'] = params.id
 
-    try {
-      const item: UploadTutorial = await UploadTutorialService.get(id)
+		try {
+			const item: UploadTutorial = await UploadTutorialService.get(id)
 
-      return view.render('pages/uploadTutorial/show', { item })
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-      return response.redirect().back()
-    }
-  }
+			return view.render('pages/uploadTutorial/show', { item })
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
 
-  public async edit({ view, params, session, response }: HttpContextContract) {
-    const id: UploadTutorial['id'] = params.id
+	public async edit({ view, params, session, response }: HttpContextContract) {
+		const id: UploadTutorial['id'] = params.id
 
-    try {
-      const item: UploadTutorial = await UploadTutorialService.get(id)
+		try {
+			const item: UploadTutorial = await UploadTutorialService.get(id)
 
-      return view.render('pages/uploadTutorial/edit', { item })
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-      return response.redirect().back()
-    }
-  }
+			return view.render('pages/uploadTutorial/edit', { item })
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
 
-  public async update({ params, request, session, response }: HttpContextContract) {
-    const id: UploadTutorial['id'] = params.id
-    let payload = await request.validate(UploadTutorialValidator)
+	public async update({ params, request, session, response }: HttpContextContract) {
+		const id: UploadTutorial['id'] = params.id
+		const payload = await request.validate(UploadTutorialValidator)
 
-    try {
-      await UploadTutorialService.update(id, payload)
+		try {
+			await UploadTutorialService.update(id, payload)
 
-      session.flash('success', ResponseMessages.SUCCESS)
-      return response.redirect().toRoute('upload_tutorials.index')
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-      return response.redirect().back()
-    }
-  }
+			session.flash('success', ResponseMessages.SUCCESS)
+			return response.redirect().toRoute('upload_tutorials.index')
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
 
-  public async destroy({ params, session, response }: HttpContextContract) {
-    const id: UploadTutorial['id'] = params.id
+	public async destroy({ params, session, response }: HttpContextContract) {
+		const id: UploadTutorial['id'] = params.id
 
-    try {
-      await UploadTutorialService.delete(id)
-      session.flash('success', ResponseMessages.SUCCESS)
-      return response.redirect().back()
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-      return response.redirect().back()
-    }
-  }
+		try {
+			await UploadTutorialService.delete(id)
+			session.flash('success', ResponseMessages.SUCCESS)
+			return response.redirect().back()
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
 }
