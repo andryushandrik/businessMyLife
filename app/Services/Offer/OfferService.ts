@@ -7,7 +7,7 @@ import type OfferFavoriteValidator from 'App/Validators/Offer/OfferFavoriteValid
 import type OfferBlockDescriptionValidator from 'App/Validators/Offer/OfferBlockDescriptionValidator'
 import type { Err } from 'Contracts/response'
 import type { MultipartFileContract } from '@ioc:Adonis/Core/BodyParser'
-import type { TransactionClientContract } from '@ioc:Adonis/Lucid/Database'
+import type {  TransactionClientContract } from '@ioc:Adonis/Lucid/Database'
 import type { OfferServicePaginateConfig, ServiceConfig } from 'Contracts/services'
 import type {
 	ManyToManyQueryBuilderContract,
@@ -104,7 +104,8 @@ export default class OfferService {
 		}
 
 		try {
-			return await query.getViaPaginate(config)
+      const result = await query.getViaPaginate(config) as ModelPaginatorContract<Offer>
+			return result
 		} catch (err: any) {
 			Logger.error(err)
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
@@ -593,3 +594,4 @@ export default class OfferService {
 		}
 	}
 }
+

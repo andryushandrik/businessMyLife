@@ -8,7 +8,6 @@ import type EmailVerifyValidator from 'App/Validators/Auth/Register/EmailVerifyV
 import type ForgotPasswordValidator from 'App/Validators/Auth/ForgotPassword/ForgotPasswordValidator'
 import type { Err } from 'Contracts/response'
 import type { AuthHeaders } from 'Contracts/auth'
-import type { ModelAttributes } from '@ioc:Adonis/Lucid/Orm'
 import type { SignTokenConfig, Tokens, UserTokenPayload } from 'Contracts/token'
 // * Types
 
@@ -28,6 +27,17 @@ import { ResponseCodes, ResponseMessages } from 'Config/response'
 type LoginViaAPIReturnData = {
 	user: User
 	tokens: Tokens
+}
+
+type UserPayloadType = {
+	firstName: string
+	lastName: string
+	companyName: string | undefined
+
+	email: string
+	password: string
+
+	type: number
 }
 
 export default class AuthService {
@@ -169,7 +179,7 @@ export default class AuthService {
 		payload: RegisterValidator['schema']['props'],
 		headers: AuthHeaders,
 	): Promise<LoginViaAPIReturnData> {
-		const userPayload: Partial<ModelAttributes<User>> = {
+		const userPayload: UserPayloadType = {
 			firstName: payload.firstName,
 			lastName: payload.lastName,
 			companyName: payload.companyName,
@@ -262,3 +272,4 @@ export default class AuthService {
 		return TokenService.createToken(payload, config)
 	}
 }
+
