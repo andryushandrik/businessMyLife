@@ -141,9 +141,8 @@ export default class Conversation extends BaseModel {
 	public async getForUser(currentUserId: User['id']): Promise<ModelObject> {
 		const item: ModelObject = { ...this.toJSON() }
 		const actualUserId: User['id'] = this.fromId == currentUserId ? this.toId : this.fromId
-
 		item.user = await UserService.get(Number(actualUserId))
-
+		item.newMessagesCount = this.$extras.newMessagesCount
 		return item
 	}
 }
