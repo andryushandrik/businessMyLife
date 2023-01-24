@@ -149,6 +149,8 @@ export default class OfferValidator extends IndexValidator {
       rules.unsigned(),
       // rules.requiredWhen('category', '=', OfferCategories.FRANCHISES),
     ]),
+    isArchived: schema.boolean.optional(),
+    isVerified: schema.boolean.optional()
   })
 
   /**
