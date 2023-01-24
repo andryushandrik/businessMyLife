@@ -14,6 +14,6 @@ import { ResponseCodes } from 'Config/response'
 |
 */
 export default class MailerException extends IndexException {
-  status: number = 400
-  code: ResponseCodes = ResponseCodes.MAILER_ERROR
+	status = 400
+	code: ResponseCodes = ResponseCodes.MAILER_ERROR
 }

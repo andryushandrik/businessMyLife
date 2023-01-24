@@ -6,64 +6,68 @@ import Drive from '@ioc:Adonis/Core/Drive'
 import { BaseModel, beforeDelete, column, computed, scope } from '@ioc:Adonis/Lucid/Orm'
 
 export default class UploadTutorial extends BaseModel {
-  public static readonly columns = [
-    'id', 'isVisible', 'isEmbed', 'isTitleLink',
-    'title', 'media',
-    'createdAt', 'updatedAt',
-  ] as const
+	public static readonly columns = [
+		'id',
+		'isVisible',
+		'isEmbed',
+		'isTitleLink',
+		'title',
+		'media',
+		'createdAt',
+		'updatedAt',
+	] as const
 
-  /**
-   * * Columns
-   */
+	/**
+	 * * Columns
+	 */
 
-  @column({ isPrimary: true })
-  public id: number
+	@column({ isPrimary: true })
+	public id: number
 
-  @column({ serializeAs: null })
-  public isVisible: boolean
+	@column({ serializeAs: null })
+	public isVisible: boolean
 
-  @column()
-  public isEmbed: boolean
+	@column()
+	public isEmbed: boolean
 
-  @column()
-  public isTitleLink: boolean
+	@column()
+	public isTitleLink: boolean
 
-  @column()
-  public title: string
+	@column()
+	public title: string
 
-  @column()
-  public media: string
+	@column()
+	public media: string
 
-  @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime
+	@column.dateTime({ autoCreate: true })
+	public createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt: DateTime
+	@column.dateTime({ autoCreate: true, autoUpdate: true })
+	public updatedAt: DateTime
 
-  /**
-   * * Computed properties
-   */
+	/**
+	 * * Computed properties
+	 */
 
-  @computed()
-  public get isVisibleForUser(): string {
-    return this.isVisible ? 'Отображается' : 'Не отображается'
-  }
+	@computed()
+	public get isVisibleForUser(): string {
+		return this.isVisible ? 'Отображается' : 'Не отображается'
+	}
 
-  /**
-   * * Query scopes
-   */
+	/**
+	 * * Query scopes
+	 */
 
-  public static search = scope((query, searchQuery: string) => {
-    query.where('title', 'ILIKE', `%${searchQuery}%`)
-  })
+	public static search = scope((query, searchQuery: string) => {
+		query.where('title', 'ILIKE', `%${searchQuery}%`)
+	})
 
-  /**
-   * * Hooks
-   */
+	/**
+	 * * Hooks
+	 */
 
-  @beforeDelete()
-  public static async deleteStoredImage(item: UploadTutorial) {
-    if (item.media)
-      await Drive.delete(item.media)
-  }
+	@beforeDelete()
+	public static async deleteStoredImage(item: UploadTutorial) {
+		if (item.media) await Drive.delete(item.media)
+	}
 }

@@ -18,236 +18,241 @@ import ForgotPasswordCodePasswordVerifyValidator from 'App/Validators/Auth/Forgo
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 import { COOKIE_REFRESH_TOKEN_CONFIG, COOKIE_REFRESH_TOKEN_KEY } from 'Config/auth'
 
-
 export default class AuthController {
-  public async login({ request, response }: HttpContextContract) {
-    let payload: ApiLoginValidator['schema']['props']
-    const headers: AuthHeaders = {
-      fingerprint: request.header('User-Fingerprint')!,
-      userAgent: request.header('User-Agent')!,
-      ip: request.ip(),
-    }
+	public async login({ request, response }: HttpContextContract) {
+		let payload: ApiLoginValidator['schema']['props']
+		const headers: AuthHeaders = {
+			fingerprint: request.header('User-Fingerprint')!,
+			userAgent: request.header('User-Agent')!,
+			ip: request.ip(),
+		}
 
-    try {
-      payload = await request.validate(ApiLoginValidator)
-    } catch (err: any) {
-      throw new ExceptionService({
-        code: ResponseCodes.VALIDATION_ERROR,
-        message: ResponseMessages.VALIDATION_ERROR,
-        errors: err.messages,
-      })
-    }
+		try {
+			payload = await request.validate(ApiLoginValidator)
+		} catch (err: any) {
+			throw new ExceptionService({
+				code: ResponseCodes.VALIDATION_ERROR,
+				message: ResponseMessages.VALIDATION_ERROR,
+				errors: err.messages,
+			})
+		}
 
-    try {
-      const data = await AuthService.loginViaAPI(payload, headers)
+		try {
+			const data = await AuthService.loginViaAPI(payload, headers)
 
-      response.cookie(COOKIE_REFRESH_TOKEN_KEY, data.tokens.refresh, COOKIE_REFRESH_TOKEN_CONFIG)
+			response.cookie(COOKIE_REFRESH_TOKEN_KEY, data.tokens.refresh, COOKIE_REFRESH_TOKEN_CONFIG)
 
-      return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, {
-        user: data.user,
-        token: data.tokens.access
-      }))
-    } catch (err: Err | any) {
-      response.clearCookie(COOKIE_REFRESH_TOKEN_KEY)
+			return response.status(200).send(
+				new ResponseService(ResponseMessages.SUCCESS, {
+					user: data.user,
+					token: data.tokens.access,
+				}),
+			)
+		} catch (err: Err | any) {
+			response.clearCookie(COOKIE_REFRESH_TOKEN_KEY)
 
-      throw new ExceptionService(err)
-    }
-  }
+			throw new ExceptionService(err)
+		}
+	}
 
-  public async logout({ request, response }: HttpContextContract) {
-    const token: string = request.cookie(COOKIE_REFRESH_TOKEN_KEY)
-    const headers: AuthHeaders = {
-      fingerprint: request.header('User-Fingerprint')!,
-      userAgent: request.header('User-Agent')!,
-      ip: request.ip(),
-    }
+	public async logout({ request, response }: HttpContextContract) {
+		const token: string = request.cookie(COOKIE_REFRESH_TOKEN_KEY)
+		const headers: AuthHeaders = {
+			fingerprint: request.header('User-Fingerprint')!,
+			userAgent: request.header('User-Agent')!,
+			ip: request.ip(),
+		}
 
-    try {
-      await AuthService.logoutViaAPI(token, headers)
+		try {
+			await AuthService.logoutViaAPI(token, headers)
 
-      response.clearCookie(COOKIE_REFRESH_TOKEN_KEY)
+			response.clearCookie(COOKIE_REFRESH_TOKEN_KEY)
 
-      return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS))
-    } catch (err: Err | any) {
-      response.clearCookie(COOKIE_REFRESH_TOKEN_KEY)
+			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS))
+		} catch (err: Err | any) {
+			response.clearCookie(COOKIE_REFRESH_TOKEN_KEY)
 
-      throw new ExceptionService(err)
-    }
-  }
+			throw new ExceptionService(err)
+		}
+	}
 
-  public async refreshToken({ request, response }: HttpContextContract) {
-    const token: string = request.cookie(COOKIE_REFRESH_TOKEN_KEY)
-    const headers: AuthHeaders = {
-      fingerprint: request.header('User-Fingerprint')!,
-      userAgent: request.header('User-Agent')!,
-      ip: request.ip(),
-    }
+	public async refreshToken({ request, response }: HttpContextContract) {
+		const token: string = request.cookie(COOKIE_REFRESH_TOKEN_KEY)
+		const headers: AuthHeaders = {
+			fingerprint: request.header('User-Fingerprint')!,
+			userAgent: request.header('User-Agent')!,
+			ip: request.ip(),
+		}
 
-    try {
-      const data = await AuthService.refreshToken(token, headers)
+		try {
+			const data = await AuthService.refreshToken(token, headers)
 
-      response.cookie(COOKIE_REFRESH_TOKEN_KEY, data.tokens.refresh, COOKIE_REFRESH_TOKEN_CONFIG)
+			response.cookie(COOKIE_REFRESH_TOKEN_KEY, data.tokens.refresh, COOKIE_REFRESH_TOKEN_CONFIG)
 
-      return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, {
-        user: data.user,
-        token: data.tokens.access
-      }))
-    } catch (err: Err | any) {
-      response.clearCookie(COOKIE_REFRESH_TOKEN_KEY)
+			return response.status(200).send(
+				new ResponseService(ResponseMessages.SUCCESS, {
+					user: data.user,
+					token: data.tokens.access,
+				}),
+			)
+		} catch (err: Err | any) {
+			response.clearCookie(COOKIE_REFRESH_TOKEN_KEY)
 
-      throw new ExceptionService(err)
-    }
-  }
+			throw new ExceptionService(err)
+		}
+	}
 
-  /**
-   * * Register
-   */
+	/**
+	 * * Register
+	 */
 
-  public async register({ request, response }: HttpContextContract) {
-    let payload: RegisterValidator['schema']['props']
-    const headers: AuthHeaders = {
-      fingerprint: request.header('User-Fingerprint')!,
-      userAgent: request.header('User-Agent')!,
-      ip: request.ip(),
-    }
+	public async register({ request, response }: HttpContextContract) {
+		let payload: RegisterValidator['schema']['props']
+		const headers: AuthHeaders = {
+			fingerprint: request.header('User-Fingerprint')!,
+			userAgent: request.header('User-Agent')!,
+			ip: request.ip(),
+		}
 
-    try {
-      payload = await request.validate(RegisterValidator)
-    } catch (err: any) {
-      throw new ExceptionService({
-        code: ResponseCodes.VALIDATION_ERROR,
-        message: ResponseMessages.VALIDATION_ERROR,
-        errors: err.messages,
-      })
-    }
+		try {
+			payload = await request.validate(RegisterValidator)
+		} catch (err: any) {
+			throw new ExceptionService({
+				code: ResponseCodes.VALIDATION_ERROR,
+				message: ResponseMessages.VALIDATION_ERROR,
+				errors: err.messages,
+			})
+		}
 
-    try {
-      const data = await AuthService.registerViaAPI(payload, headers)
+		try {
+			const data = await AuthService.registerViaAPI(payload, headers)
 
-      response.cookie(COOKIE_REFRESH_TOKEN_KEY, data.tokens.refresh, COOKIE_REFRESH_TOKEN_CONFIG)
+			response.cookie(COOKIE_REFRESH_TOKEN_KEY, data.tokens.refresh, COOKIE_REFRESH_TOKEN_CONFIG)
 
-      return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, {
-        user: data.user,
-        token: data.tokens.access,
-      }))
-    } catch (err: Err | any) {
-      response.clearCookie(COOKIE_REFRESH_TOKEN_KEY)
+			return response.status(200).send(
+				new ResponseService(ResponseMessages.SUCCESS, {
+					user: data.user,
+					token: data.tokens.access,
+				}),
+			)
+		} catch (err: Err | any) {
+			response.clearCookie(COOKIE_REFRESH_TOKEN_KEY)
 
-      throw new ExceptionService(err)
-    }
-  }
+			throw new ExceptionService(err)
+		}
+	}
 
-  public async emailVerify({ request, response }: HttpContextContract) {
-    let payload: EmailVerifyValidator['schema']['props']
+	public async emailVerify({ request, response }: HttpContextContract) {
+		let payload: EmailVerifyValidator['schema']['props']
 
-    try {
-      payload = await request.validate(EmailVerifyValidator)
-    } catch (err: any) {
-      throw new ExceptionService({
-        code: ResponseCodes.VALIDATION_ERROR,
-        message: ResponseMessages.VALIDATION_ERROR,
-        errors: err.messages,
-      })
-    }
+		try {
+			payload = await request.validate(EmailVerifyValidator)
+		} catch (err: any) {
+			throw new ExceptionService({
+				code: ResponseCodes.VALIDATION_ERROR,
+				message: ResponseMessages.VALIDATION_ERROR,
+				errors: err.messages,
+			})
+		}
 
-    try {
-      await AuthService.emailVerify(payload)
+		try {
+			await AuthService.emailVerify(payload)
 
-      return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS))
-    } catch (err: Err | any) {
-      throw new ExceptionService(err)
-    }
-  }
+			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS))
+		} catch (err: Err | any) {
+			throw new ExceptionService(err)
+		}
+	}
 
-  public async codeVerify({ request, response }: HttpContextContract) {
-    let payload: CodeVerifyValidator['schema']['props']
+	public async codeVerify({ request, response }: HttpContextContract) {
+		let payload: CodeVerifyValidator['schema']['props']
 
-    try {
-      payload = await request.validate(CodeVerifyValidator)
-    } catch (err: any) {
-      throw new ExceptionService({
-        code: ResponseCodes.VALIDATION_ERROR,
-        message: ResponseMessages.VALIDATION_ERROR,
-        errors: err.messages,
-      })
-    }
+		try {
+			payload = await request.validate(CodeVerifyValidator)
+		} catch (err: any) {
+			throw new ExceptionService({
+				code: ResponseCodes.VALIDATION_ERROR,
+				message: ResponseMessages.VALIDATION_ERROR,
+				errors: err.messages,
+			})
+		}
 
-    try {
-      await AuthService.codeVerify(payload)
+		try {
+			await AuthService.codeVerify(payload)
 
-      return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS))
-    } catch (err: Err | any) {
-      throw new ExceptionService(err)
-    }
-  }
+			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS))
+		} catch (err: Err | any) {
+			throw new ExceptionService(err)
+		}
+	}
 
-  /**
-   * * Forgot password
-   */
+	/**
+	 * * Forgot password
+	 */
 
-  public async forgotPassword({ request, response }: HttpContextContract) {
-    let payload: ForgotPasswordValidator['schema']['props']
+	public async forgotPassword({ request, response }: HttpContextContract) {
+		let payload: ForgotPasswordValidator['schema']['props']
 
-    try {
-      payload = await request.validate(ForgotPasswordValidator)
-    } catch (err: any) {
-      throw new ExceptionService({
-        code: ResponseCodes.VALIDATION_ERROR,
-        message: ResponseMessages.VALIDATION_ERROR,
-        errors: err.messages,
-      })
-    }
+		try {
+			payload = await request.validate(ForgotPasswordValidator)
+		} catch (err: any) {
+			throw new ExceptionService({
+				code: ResponseCodes.VALIDATION_ERROR,
+				message: ResponseMessages.VALIDATION_ERROR,
+				errors: err.messages,
+			})
+		}
 
-    try {
-      const user: User = await AuthService.forgotPassword(payload)
+		try {
+			const user: User = await AuthService.forgotPassword(payload)
 
-      return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, user))
-    } catch (err: Err | any) {
-      throw new ExceptionService(err)
-    }
-  }
+			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, user))
+		} catch (err: Err | any) {
+			throw new ExceptionService(err)
+		}
+	}
 
-  public async forgotPasswordEmailVerify({ request, response }: HttpContextContract) {
-    let payload: ForgotPasswordEmailVerifyValidator['schema']['props']
+	public async forgotPasswordEmailVerify({ request, response }: HttpContextContract) {
+		let payload: ForgotPasswordEmailVerifyValidator['schema']['props']
 
-    try {
-      payload = await request.validate(ForgotPasswordEmailVerifyValidator)
-    } catch (err: any) {
-      throw new ExceptionService({
-        code: ResponseCodes.VALIDATION_ERROR,
-        message: ResponseMessages.VALIDATION_ERROR,
-        errors: err.messages,
-      })
-    }
+		try {
+			payload = await request.validate(ForgotPasswordEmailVerifyValidator)
+		} catch (err: any) {
+			throw new ExceptionService({
+				code: ResponseCodes.VALIDATION_ERROR,
+				message: ResponseMessages.VALIDATION_ERROR,
+				errors: err.messages,
+			})
+		}
 
-    try {
-      await AuthService.emailVerify(payload, true)
+		try {
+			await AuthService.emailVerify(payload, true)
 
-      return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS))
-    } catch (err: Err | any) {
-      throw new ExceptionService(err)
-    }
-  }
+			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS))
+		} catch (err: Err | any) {
+			throw new ExceptionService(err)
+		}
+	}
 
-  public async forgotPasswordCodeVerify({ request, response }: HttpContextContract) {
-    let payload: ForgotPasswordCodePasswordVerifyValidator['schema']['props']
+	public async forgotPasswordCodeVerify({ request, response }: HttpContextContract) {
+		let payload: ForgotPasswordCodePasswordVerifyValidator['schema']['props']
 
-    try {
-      payload = await request.validate(ForgotPasswordCodePasswordVerifyValidator)
-    } catch (err: any) {
-      throw new ExceptionService({
-        code: ResponseCodes.VALIDATION_ERROR,
-        message: ResponseMessages.VALIDATION_ERROR,
-        errors: err.messages,
-      })
-    }
+		try {
+			payload = await request.validate(ForgotPasswordCodePasswordVerifyValidator)
+		} catch (err: any) {
+			throw new ExceptionService({
+				code: ResponseCodes.VALIDATION_ERROR,
+				message: ResponseMessages.VALIDATION_ERROR,
+				errors: err.messages,
+			})
+		}
 
-    try {
-      await AuthService.codeVerify(payload, true)
+		try {
+			await AuthService.codeVerify(payload, true)
 
-      return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS))
-    } catch (err: Err | any) {
-      throw new ExceptionService(err)
-    }
-  }
+			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS))
+		} catch (err: Err | any) {
+			throw new ExceptionService(err)
+		}
+	}
 }

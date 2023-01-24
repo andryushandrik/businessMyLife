@@ -10,21 +10,21 @@ import { RoleNames } from 'Config/user'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 
 export default class RoleService {
-  public static async changeRole(userId: User['id'], to: RoleNames): Promise<void> {
-    let item: User
-    const roleId: Role['id'] = to + 1
+	public static async changeRole(userId: User['id'], to: RoleNames): Promise<void> {
+		let item: User
+		const roleId: Role['id'] = to + 1
 
-    try {
-      item = await UserService.get(userId)
-    } catch (err: Err | any) {
-      throw err
-    }
+		try {
+			item = await UserService.get(userId)
+		} catch (err: Err | any) {
+			throw err
+		}
 
-    try {
-      await item.merge({ roleId }).save()
-    } catch (err: any) {
-      Logger.error(err)
-      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
-    }
-  }
+		try {
+			await item.merge({ roleId }).save()
+		} catch (err: any) {
+			Logger.error(err)
+			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+		}
+	}
 }

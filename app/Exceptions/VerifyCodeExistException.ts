@@ -14,6 +14,6 @@ import { ResponseCodes } from 'Config/response'
 |
 */
 export default class VerifyCodeExistException extends IndexException {
-  status: number = 400
-  code: ResponseCodes = ResponseCodes.VERIFY_CODE_EXISTS
+	status = 400
+	code: ResponseCodes = ResponseCodes.VERIFY_CODE_EXISTS
 }

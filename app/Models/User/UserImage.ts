@@ -7,38 +7,33 @@ import { TABLES_NAMES } from 'Config/database'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 
 export default class UserImage extends BaseModel {
-  public static readonly table: string = TABLES_NAMES.USERS_IMAGES
-  public static readonly columns = [
-    'id',
-    'image',
-    'userId',
-    'createdAt', 'updatedAt',
-  ] as const
+	public static readonly table: string = TABLES_NAMES.USERS_IMAGES
+	public static readonly columns = ['id', 'image', 'userId', 'createdAt', 'updatedAt'] as const
 
-  /**
-   * * Columns
-   */
+	/**
+	 * * Columns
+	 */
 
-  @column({ isPrimary: true })
-  public id: number
+	@column({ isPrimary: true })
+	public id: number
 
-  @column()
-  public image: string
+	@column()
+	public image: string
 
-  /**
-   * * Foreign keys
-   */
+	/**
+	 * * Foreign keys
+	 */
 
-  @column({ columnName: 'user_id' })
-  public userId: User['id']
+	@column({ columnName: 'user_id' })
+	public userId: User['id']
 
-  /**
-   * * Timestamps
-   */
+	/**
+	 * * Timestamps
+	 */
 
-  @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime
+	@column.dateTime({ autoCreate: true })
+	public createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt: DateTime
+	@column.dateTime({ autoCreate: true, autoUpdate: true })
+	public updatedAt: DateTime
 }

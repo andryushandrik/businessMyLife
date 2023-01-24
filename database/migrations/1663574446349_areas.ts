@@ -2,30 +2,30 @@ import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 import { TABLES_NAMES } from 'Config/database'
 
 export default class extends BaseSchema {
-  protected tableName = TABLES_NAMES.AREAS
+	protected tableName = TABLES_NAMES.AREAS
 
-  public async up () {
-    this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
+	public async up() {
+		this.schema.createTable(this.tableName, (table) => {
+			table.increments('id')
 
-      /**
-       * * Not nullable columns
-       */
+			/**
+			 * * Not nullable columns
+			 */
 
-      table.string('name').unique().notNullable()
+			table.string('name').unique().notNullable()
 
-      /**
-       * * Timestamps
-       */
+			/**
+			 * * Timestamps
+			 */
 
-      table.timestamp('createdAt', { useTz: true }).notNullable()
-      table.timestamp('updatedAt', { useTz: true }).notNullable()
+			table.timestamp('createdAt', { useTz: true }).notNullable()
+			table.timestamp('updatedAt', { useTz: true }).notNullable()
 
-      table.comment('Сферы')
-    })
-  }
+			table.comment('Сферы')
+		})
+	}
 
-  public async down () {
-    this.schema.dropTable(this.tableName)
-  }
+	public async down() {
+		this.schema.dropTable(this.tableName)
+	}
 }

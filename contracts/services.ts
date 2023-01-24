@@ -6,29 +6,29 @@ import type { ExtractModelRelations, LucidRow } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 
 export type PaginateConfig<M extends LucidRow> = {
-  page: number,
-  baseUrl?: string,
-  limit?: number,
-  orderBy?: 'asc' | 'desc',
-  orderByColumn?: string,
+	page: number
+	baseUrl?: string
+	limit?: number
+	orderBy?: 'asc' | 'desc'
+	orderByColumn?: string
 
-  relations?: ExtractModelRelations<M>[],
-  aggregates?: ExtractModelRelations<M>[],
+	relations?: ExtractModelRelations<M>[]
+	aggregates?: ExtractModelRelations<M>[]
 }
 
 export type ServiceConfig<M extends LucidRow> = {
-  trx?: TransactionClientContract,
-  relations?: ExtractModelRelations<M>[],
-  aggregates?: ExtractModelRelations<M>[],
+	trx?: TransactionClientContract
+	relations?: ExtractModelRelations<M>[]
+	aggregates?: ExtractModelRelations<M>[]
 }
 
 export type OfferServicePaginateConfig = PaginateConfig<Offer> & {
-  isBanned?: Offer['isBanned'],
-  isArchived?: Offer['isArchived'],
-  isVerified?: Offer['isVerified'],
+	isBanned?: Offer['isBanned']
+	isArchived?: Offer['isArchived']
+	isVerified?: Offer['isVerified']
 
-  userId?: Offer['userId'],
+	userId?: Offer['userId']
 
-  preloadArea?: boolean,
-  userIdForFavorites?: User['id'],
+	preloadArea?: boolean
+	userIdForFavorites?: User['id']
 }

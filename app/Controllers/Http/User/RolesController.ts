@@ -9,31 +9,31 @@ import { RoleNames } from 'Config/user'
 import { ResponseMessages } from 'Config/response'
 
 export default class RolesController {
-  public async changeRoleToModerator({ response, params, session }: HttpContextContract) {
-    let userId: User['id'] = params.userId
+	public async changeRoleToModerator({ response, params, session }: HttpContextContract) {
+		const userId: User['id'] = params.userId
 
-    try {
-      await RoleService.changeRole(userId, RoleNames.MODERATOR)
+		try {
+			await RoleService.changeRole(userId, RoleNames.MODERATOR)
 
-      session.flash('success', ResponseMessages.SUCCESS)
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-    }
+			session.flash('success', ResponseMessages.SUCCESS)
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+		}
 
-    return response.redirect().back()
-  }
+		return response.redirect().back()
+	}
 
-  public async changeRoleToUser({ response, params, session }: HttpContextContract) {
-    let userId: User['id'] = params.userId
+	public async changeRoleToUser({ response, params, session }: HttpContextContract) {
+		const userId: User['id'] = params.userId
 
-    try {
-      await RoleService.changeRole(userId, RoleNames.USER)
+		try {
+			await RoleService.changeRole(userId, RoleNames.USER)
 
-      session.flash('success', ResponseMessages.SUCCESS)
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-    }
+			session.flash('success', ResponseMessages.SUCCESS)
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+		}
 
-    return response.redirect().back()
-  }
+		return response.redirect().back()
+	}
 }
