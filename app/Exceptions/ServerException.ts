@@ -14,6 +14,6 @@ import { ResponseCodes } from 'Config/response'
 |
 */
 export default class ServerException extends IndexException {
-  status: number = 500
-  code: ResponseCodes = ResponseCodes.SERVER_ERROR
+	status = 500
+	code: ResponseCodes = ResponseCodes.SERVER_ERROR
 }

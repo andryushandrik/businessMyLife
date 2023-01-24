@@ -9,32 +9,32 @@ import MainPageVideoValidator from 'App/Validators/MainPageVideoValidator'
 import { ResponseMessages } from 'Config/response'
 
 export default class IndexController {
-  public async home({ view }: HttpContextContract) {
-    return view.render('pages/index')
-  }
+	public async home({ view }: HttpContextContract) {
+		return view.render('pages/index')
+	}
 
-  public async mainPageVideo({ view, session, response }: HttpContextContract) {
-    try {
-      const item: MainPageVideo = await MainPageVideoService.get()
+	public async mainPageVideo({ view, session, response }: HttpContextContract) {
+		try {
+			const item: MainPageVideo = await MainPageVideoService.get()
 
-      return view.render('pages/mainPageVideo', { item })
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-      return response.redirect().back()
-    }
-  }
+			return view.render('pages/mainPageVideo', { item })
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
 
-  public async updateMainPageVideo({ request, session, response }: HttpContextContract) {
-    const payload = await request.validate(MainPageVideoValidator)
+	public async updateMainPageVideo({ request, session, response }: HttpContextContract) {
+		const payload = await request.validate(MainPageVideoValidator)
 
-    try {
-      await MainPageVideoService.update(payload)
+		try {
+			await MainPageVideoService.update(payload)
 
-      session.flash('success', ResponseMessages.SUCCESS)
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-    }
+			session.flash('success', ResponseMessages.SUCCESS)
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+		}
 
-    return response.redirect().back()
-  }
+		return response.redirect().back()
+	}
 }

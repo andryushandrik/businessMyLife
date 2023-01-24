@@ -3,13 +3,11 @@ import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
 import { BannerFactory } from 'Database/factories'
 
 export default class extends BaseSeeder {
-  public async run () {
-
-    try {
-      await BannerFactory.createMany(15)
-    } catch (err: any) {
-      Logger.error(err)
-    }
-
-  }
+	public async run() {
+		try {
+			await BannerFactory.createMany(15)
+		} catch (err: any) {
+			Logger.error(err)
+		}
+	}
 }

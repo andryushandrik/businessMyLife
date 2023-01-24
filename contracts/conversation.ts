@@ -4,12 +4,12 @@ import type Offer from 'App/Models/Offer/Offer'
 // * Types
 
 export type ConversationGetPayload = {
-  toId: User['id'],
-  fromId: User['id'],
-  offerId?: Offer['id'],
+	toId: User['id']
+	fromId: User['id']
+	offerId?: Offer['id']
 }
 
 export type ConversationGetWithoutTopicPayload = {
-  toId: User['id'],
-  fromId: User['id'],
+	toId: User['id']
+	fromId: User['id']
 }

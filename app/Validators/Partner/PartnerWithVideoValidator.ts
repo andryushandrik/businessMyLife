@@ -8,21 +8,21 @@ import { schema } from '@ioc:Adonis/Core/Validator'
 import { getPartnersTitleRules, getPartnerVideoRules } from '../Rules/partners'
 
 export default class PartnerWithVideoValidator extends IndexValidator {
-  constructor(protected ctx: HttpContextContract) {
-    super()
-  }
+	constructor(protected ctx: HttpContextContract) {
+		super()
+	}
 
-  public schema = schema.create({
-    title: schema.string({ trim: true }, getPartnersTitleRules()),
-    media: schema.string({ trim: true }, getPartnerVideoRules()),
-    mediaType: schema.boolean(),
+	public schema = schema.create({
+		title: schema.string({ trim: true }, getPartnersTitleRules()),
+		media: schema.string({ trim: true }, getPartnerVideoRules()),
+		mediaType: schema.boolean(),
 
-    /**
-     * * Optional fields
-     */
+		/**
+		 * * Optional fields
+		 */
 
-    isTitleLink: schema.boolean.optional(),
-  })
+		isTitleLink: schema.boolean.optional(),
+	})
 
-  public messages: CustomMessages = this.messages
+	public messages: CustomMessages = this.messages
 }

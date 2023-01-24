@@ -13,152 +13,150 @@ import PartnerWithVideoValidator from 'App/Validators/Partner/PartnerWithVideoVa
 import { ResponseMessages } from 'Config/response'
 
 export default class PartnersController {
-  public async index({ view, request, response, session, route }: HttpContextContract) {
-    let payload: PartnerFilterValidator['schema']['props'] | undefined = undefined
-    const isFiltered: boolean = request.input('isFiltered', false)
-    const config: PaginateConfig<Partner> = {
-      baseUrl: route!.pattern,
-      page: request.input('page', 1),
-    }
+	public async index({ view, request, response, session, route }: HttpContextContract) {
+		let payload: PartnerFilterValidator['schema']['props'] | undefined = undefined
+		const isFiltered: boolean = request.input('isFiltered', false)
+		const config: PaginateConfig<Partner> = {
+			baseUrl: route!.pattern,
+			page: request.input('page', 1),
+		}
 
-    if (isFiltered) {
-      payload = await request.validate(PartnerFilterValidator)
+		if (isFiltered) {
+			payload = await request.validate(PartnerFilterValidator)
 
-      config.orderBy = payload.orderBy
-      config.orderByColumn = payload.orderByColumn
-    }
+			config.orderBy = payload.orderBy
+			config.orderByColumn = payload.orderByColumn
+		}
 
-    try {
-      const partners: ModelPaginatorContract<Partner> = await PartnerService.paginate(config, payload)
+		try {
+			const partners: ModelPaginatorContract<Partner> = await PartnerService.paginate(
+				config,
+				payload,
+			)
 
-      return view.render('pages/partner/index', {
-        payload,
-        partners,
-      })
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-      return response.redirect().back()
-    }
-  }
+			return view.render('pages/partner/index', {
+				payload,
+				partners,
+			})
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
 
-  public async create({ view, request, response }: HttpContextContract) {
-    const mediaType: boolean | null = request.input('mediaType', null)
+	public async create({ view, request, response }: HttpContextContract) {
+		const mediaType: boolean | null = request.input('mediaType', null)
 
-    if (mediaType === null)
-      return response.redirect().back()
+		if (mediaType === null) return response.redirect().back()
 
-    return view.render('pages/partner/create', { mediaType })
-  }
+		return view.render('pages/partner/create', { mediaType })
+	}
 
-  public async store({ request, response, session }: HttpContextContract) {
-    const mediaType: boolean = request.input('mediaType') === 'true'
-    let payload: (PartnerWithImageValidator | PartnerWithVideoValidator)['schema']['props']
+	public async store({ request, response, session }: HttpContextContract) {
+		const mediaType: boolean = request.input('mediaType') === 'true'
+		let payload: (PartnerWithImageValidator | PartnerWithVideoValidator)['schema']['props']
 
-    if (mediaType)
-      payload = await request.validate(PartnerWithVideoValidator)
-    else
-      payload = await request.validate(PartnerWithImageValidator)
+		if (mediaType) payload = await request.validate(PartnerWithVideoValidator)
+		else payload = await request.validate(PartnerWithImageValidator)
 
-    try {
-      await PartnerService.create(payload)
+		try {
+			await PartnerService.create(payload)
 
-      session.flash('success', ResponseMessages.SUCCESS)
-      return response.redirect().toRoute('partners.index')
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-      return response.redirect().back()
-    }
-  }
+			session.flash('success', ResponseMessages.SUCCESS)
+			return response.redirect().toRoute('partners.index')
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
 
-  public async show({ view, params, session, response }: HttpContextContract) {
-    const id: Partner['id'] = params.id
+	public async show({ view, params, session, response }: HttpContextContract) {
+		const id: Partner['id'] = params.id
 
-    try {
-      const item: Partner = await PartnerService.get(id)
+		try {
+			const item: Partner = await PartnerService.get(id)
 
-      return view.render('pages/partner/show', { item })
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-      return response.redirect().back()
-    }
-  }
+			return view.render('pages/partner/show', { item })
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
 
-  public async edit({ params, response, view, session }: HttpContextContract) {
-    const id: Partner['id'] = params.id
+	public async edit({ params, response, view, session }: HttpContextContract) {
+		const id: Partner['id'] = params.id
 
-    try {
-      const item: Partner = await PartnerService.get(id)
+		try {
+			const item: Partner = await PartnerService.get(id)
 
-      return view.render('pages/partner/edit', { item })
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-      return response.redirect().back()
-    }
-  }
+			return view.render('pages/partner/edit', { item })
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
 
-  public async update({ request, response, session, params }: HttpContextContract) {
-    const id: Partner['id'] = params.id
-    const mediaType: boolean = request.input('mediaType') === 'true'
-    let payload: (PartnerWithImageValidator | PartnerWithVideoValidator)['schema']['props']
+	public async update({ request, response, session, params }: HttpContextContract) {
+		const id: Partner['id'] = params.id
+		const mediaType: boolean = request.input('mediaType') === 'true'
+		let payload: (PartnerWithImageValidator | PartnerWithVideoValidator)['schema']['props']
 
-    if (mediaType)
-      payload = await request.validate(PartnerWithVideoValidator)
-    else
-      payload = await request.validate(PartnerWithImageValidator)
+		if (mediaType) payload = await request.validate(PartnerWithVideoValidator)
+		else payload = await request.validate(PartnerWithImageValidator)
 
-    try {
-      await PartnerService.update(id, payload)
+		try {
+			await PartnerService.update(id, payload)
 
-      session.flash('success', ResponseMessages.SUCCESS)
-      return response.redirect().toRoute('partners.index')
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-      return response.redirect().back()
-    }
-  }
+			session.flash('success', ResponseMessages.SUCCESS)
+			return response.redirect().toRoute('partners.index')
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
 
-  public async destroy({ params, response, session }: HttpContextContract) {
-    const id: Partner['id'] = params.id
+	public async destroy({ params, response, session }: HttpContextContract) {
+		const id: Partner['id'] = params.id
 
-    try {
-      await PartnerService.delete(id)
-      session.flash('success', ResponseMessages.SUCCESS)
-      return response.redirect().back()
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-      return response.redirect().back()
-    }
-  }
+		try {
+			await PartnerService.delete(id)
+			session.flash('success', ResponseMessages.SUCCESS)
+			return response.redirect().back()
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
 
-  /**
-   * * Visible
-   */
+	/**
+	 * * Visible
+	 */
 
-  public async visible({ params, response, session }: HttpContextContract) {
-    const id: Partner['id'] = params.id
+	public async visible({ params, response, session }: HttpContextContract) {
+		const id: Partner['id'] = params.id
 
-    try {
-      await PartnerService.visibleAction(id, true)
+		try {
+			await PartnerService.visibleAction(id, true)
 
-      session.flash('success', ResponseMessages.SUCCESS)
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-    }
+			session.flash('success', ResponseMessages.SUCCESS)
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+		}
 
-    return response.redirect().back()
-  }
+		return response.redirect().back()
+	}
 
-  public async invisible({ params, response, session }: HttpContextContract) {
-    const id: Partner['id'] = params.id
+	public async invisible({ params, response, session }: HttpContextContract) {
+		const id: Partner['id'] = params.id
 
-    try {
-      await PartnerService.visibleAction(id, false)
+		try {
+			await PartnerService.visibleAction(id, false)
 
-      session.flash('success', ResponseMessages.SUCCESS)
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-    }
+			session.flash('success', ResponseMessages.SUCCESS)
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+		}
 
-    return response.redirect().back()
-  }
+		return response.redirect().back()
+	}
 }

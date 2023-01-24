@@ -12,72 +12,75 @@ import { OFFER_FOLDER_PATH } from 'Config/drive'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 
 export default class OfferImageService {
-  public static async createMany(offerId: Offer['id'], images: MultipartFileContract[], trx: TransactionClientContract): Promise<void> {
-    try {
-      const offerImages: Partial<ModelAttributes<OfferImage>>[] = []
+	public static async createMany(
+		offerId: Offer['id'],
+		images: MultipartFileContract[],
+		trx: TransactionClientContract,
+	): Promise<void> {
+		try {
+			const offerImages: Partial<ModelAttributes<OfferImage>>[] = []
 
-      for (const item of images) {
-        const imagePath: string = await this.uploadImage(offerId, item)
+			for (const item of images) {
+				const imagePath: string = await this.uploadImage(offerId, item)
 
-        offerImages.push({
-          offerId,
-          image: imagePath,
-        })
-      }
+				offerImages.push({
+					offerId,
+					image: imagePath,
+				})
+			}
 
-      await OfferImage.createMany(offerImages, { client: trx })
-    } catch (err: any) {
-      Logger.error(err)
-      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
-    }
-  }
+			await OfferImage.createMany(offerImages, { client: trx })
+		} catch (err: any) {
+			Logger.error(err)
+			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+		}
+	}
 
-  public static async delete(id: OfferImage['id']): Promise<void> {
-    let item: OfferImage
+	public static async delete(id: OfferImage['id']): Promise<void> {
+		let item: OfferImage
 
-    try {
-      item = await this.get(id)
-    } catch (err: Err | any) {
-      throw err
-    }
+		try {
+			item = await this.get(id)
+		} catch (err: Err | any) {
+			throw err
+		}
 
-    try {
-      await item.delete()
-    } catch (err: any) {
-      Logger.error(err)
-      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
-    }
-  }
+		try {
+			await item.delete()
+		} catch (err: any) {
+			Logger.error(err)
+			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+		}
+	}
 
-  /**
-   * * Private methods
-   */
+	/**
+	 * * Private methods
+	 */
 
-  private static async get(id: OfferImage['id']): Promise<OfferImage> {
-    let item: OfferImage | null
+	private static async get(id: OfferImage['id']): Promise<OfferImage> {
+		let item: OfferImage | null
 
-    try {
-      item = await OfferImage.find(id)
-    } catch (err: any) {
-      Logger.error(err)
-      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
-    }
+		try {
+			item = await OfferImage.find(id)
+		} catch (err: any) {
+			Logger.error(err)
+			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+		}
 
-    if (!item)
-      throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.ERROR } as Err
+		if (!item) throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.ERROR } as Err
 
-    return item
-  }
+		return item
+	}
 
-  private static async uploadImage(id: Offer['id'], image: MultipartFileContract): Promise<string> {
-    const path: string = `${OFFER_FOLDER_PATH}/${id}`
+	private static async uploadImage(id: Offer['id'], image: MultipartFileContract): Promise<string> {
+		const path = `${OFFER_FOLDER_PATH}/${id}`
 
-    try {
-      await image.moveToDisk(path)
-      return `${path}/${image.fileName}`
-    } catch (err: any) {
-      Logger.error(err)
-      throw { code: ResponseCodes.SERVER_ERROR, message: ResponseMessages.ERROR } as Err
-    }
-  }
+		try {
+			await image.moveToDisk(path)
+			return `${path}/${image.fileName}`
+		} catch (err: any) {
+			Logger.error(err)
+			throw { code: ResponseCodes.SERVER_ERROR, message: ResponseMessages.ERROR } as Err
+		}
+	}
 }

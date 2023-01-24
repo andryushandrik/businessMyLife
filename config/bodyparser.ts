@@ -7,10 +7,10 @@
 
 import { BodyParserConfig } from '@ioc:Adonis/Core/BodyParser'
 
-export const MAX_LIMIT: number = 500
+export const MAX_LIMIT = 500
 
 const bodyParserConfig: BodyParserConfig = {
-  /*
+	/*
   |--------------------------------------------------------------------------
   | White listed methods
   |--------------------------------------------------------------------------
@@ -19,9 +19,9 @@ const bodyParserConfig: BodyParserConfig = {
   | to avoid body parsing for `GET` requests.
   |
   */
-  whitelistedMethods: ['POST', 'PUT', 'PATCH', 'DELETE'],
+	whitelistedMethods: ['POST', 'PUT', 'PATCH', 'DELETE'],
 
-  /*
+	/*
   |--------------------------------------------------------------------------
   | JSON parser settings
   |--------------------------------------------------------------------------
@@ -30,19 +30,19 @@ const bodyParserConfig: BodyParserConfig = {
   | types which gets processed by the JSON parser.
   |
   */
-  json: {
-    encoding: 'utf-8',
-    limit: `${MAX_LIMIT}mb`,
-    strict: true,
-    types: [
-      'application/json',
-      'application/json-patch+json',
-      'application/vnd.api+json',
-      'application/csp-report',
-    ],
-  },
+	json: {
+		encoding: 'utf-8',
+		limit: `${MAX_LIMIT}mb`,
+		strict: true,
+		types: [
+			'application/json',
+			'application/json-patch+json',
+			'application/vnd.api+json',
+			'application/csp-report',
+		],
+	},
 
-  /*
+	/*
   |--------------------------------------------------------------------------
   | Form parser settings
   |--------------------------------------------------------------------------
@@ -51,12 +51,12 @@ const bodyParserConfig: BodyParserConfig = {
   | defines the request content types which gets processed by the form parser.
   |
   */
-  form: {
-    encoding: 'utf-8',
-    limit: '20mb',
-    queryString: {},
+	form: {
+		encoding: 'utf-8',
+		limit: '20mb',
+		queryString: {},
 
-    /*
+		/*
     |--------------------------------------------------------------------------
     | Convert empty strings to null
     |--------------------------------------------------------------------------
@@ -66,14 +66,12 @@ const bodyParserConfig: BodyParserConfig = {
     | field values to "null"
     |
     */
-    convertEmptyStringsToNull: true,
+		convertEmptyStringsToNull: true,
 
-    types: [
-      'application/x-www-form-urlencoded',
-    ],
-  },
+		types: ['application/x-www-form-urlencoded'],
+	},
 
-  /*
+	/*
   |--------------------------------------------------------------------------
   | Raw body parser settings
   |--------------------------------------------------------------------------
@@ -83,16 +81,14 @@ const bodyParserConfig: BodyParserConfig = {
   | supported by the body parser.
   |
   */
-  raw: {
-    encoding: 'utf-8',
-    limit: '1mb',
-    queryString: {},
-    types: [
-      'text/*',
-    ],
-  },
+	raw: {
+		encoding: 'utf-8',
+		limit: '1mb',
+		queryString: {},
+		types: ['text/*'],
+	},
 
-  /*
+	/*
   |--------------------------------------------------------------------------
   | Multipart parser settings
   |--------------------------------------------------------------------------
@@ -101,8 +97,8 @@ const bodyParserConfig: BodyParserConfig = {
   | request content types which gets processed by the form parser.
   |
   */
-  multipart: {
-    /*
+	multipart: {
+		/*
     |--------------------------------------------------------------------------
     | Auto process
     |--------------------------------------------------------------------------
@@ -115,9 +111,9 @@ const bodyParserConfig: BodyParserConfig = {
     | file sizes.
     |
     */
-    autoProcess: true,
+		autoProcess: true,
 
-    /*
+		/*
     |--------------------------------------------------------------------------
     | Files to be processed manually
     |--------------------------------------------------------------------------
@@ -137,9 +133,9 @@ const bodyParserConfig: BodyParserConfig = {
     | projects/:id/file
     | ```
     */
-    processManually: [],
+		processManually: [],
 
-    /*
+		/*
     |--------------------------------------------------------------------------
     | Temporary file name
     |--------------------------------------------------------------------------
@@ -149,10 +145,10 @@ const bodyParserConfig: BodyParserConfig = {
     | However, you can also define your own custom method.
     |
     */
-    // tmpFileName () {
-    // },
+		// tmpFileName () {
+		// },
 
-    /*
+		/*
     |--------------------------------------------------------------------------
     | Encoding
     |--------------------------------------------------------------------------
@@ -160,9 +156,9 @@ const bodyParserConfig: BodyParserConfig = {
     | Request body encoding
     |
     */
-    encoding: 'utf-8',
+		encoding: 'utf-8',
 
-    /*
+		/*
     |--------------------------------------------------------------------------
     | Convert empty strings to null
     |--------------------------------------------------------------------------
@@ -172,9 +168,9 @@ const bodyParserConfig: BodyParserConfig = {
     | field values to "null"
     |
     */
-    convertEmptyStringsToNull: true,
+		convertEmptyStringsToNull: true,
 
-    /*
+		/*
     |--------------------------------------------------------------------------
     | Max Fields
     |--------------------------------------------------------------------------
@@ -183,9 +179,9 @@ const bodyParserConfig: BodyParserConfig = {
     | text inputs and files both.
     |
     */
-    maxFields: 1000,
+		maxFields: 1000,
 
-    /*
+		/*
     |--------------------------------------------------------------------------
     | Request body limit
     |--------------------------------------------------------------------------
@@ -194,9 +190,9 @@ const bodyParserConfig: BodyParserConfig = {
     | and fields data.
     |
     */
-    limit: `${MAX_LIMIT}mb`,
+		limit: `${MAX_LIMIT}mb`,
 
-    /*
+		/*
     |--------------------------------------------------------------------------
     | Types
     |--------------------------------------------------------------------------
@@ -204,10 +200,8 @@ const bodyParserConfig: BodyParserConfig = {
     | The types that will be considered and parsed as multipart body.
     |
     */
-    types: [
-      'multipart/form-data',
-    ],
-  },
+		types: ['multipart/form-data'],
+	},
 }
 
 export default bodyParserConfig

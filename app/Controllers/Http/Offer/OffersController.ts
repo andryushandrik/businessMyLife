@@ -17,250 +17,264 @@ import { SESSION_AUTH_KEY } from 'Config/session'
 import { ResponseMessages } from 'Config/response'
 
 export default class OffersController {
-  public async paginate({ request, response, route, view, session }: HttpContextContract) {
-    let payload: OfferFilterValidator['schema']['props'] | undefined = undefined
-    const isFiltered: boolean = request.input('isFiltered', false)
-    const config: OfferServicePaginateConfig = {
-      baseUrl: route!.pattern,
-      page: request.input('page', 1),
+	public async paginate({ request, response, route, view, session }: HttpContextContract) {
+		let payload: OfferFilterValidator['schema']['props'] | undefined = undefined
+		const isFiltered: boolean = request.input('isFiltered', false)
+		const config: OfferServicePaginateConfig = {
+			baseUrl: route!.pattern,
+			page: request.input('page', 1),
 
-      aggregates: ['reports'],
-      relations: ['user', 'subsection'],
+			aggregates: ['reports'],
+			relations: ['user', 'subsection'],
 
-      isVerified: true,
-    }
+			isVerified: true,
+		}
 
-    if (isFiltered) {
-      payload = await request.validate(OfferFilterValidator)
+		if (isFiltered) {
+			payload = await request.validate(OfferFilterValidator)
 
-      config.orderBy = payload.orderBy
-      config.orderByColumn = payload.orderByColumn
-    }
+			config.orderBy = payload.orderBy
+			config.orderByColumn = payload.orderByColumn
+		}
 
-    try {
-      const areas: Area[] = await AreaService.getAll()
-      const offers: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload)
+		try {
+			const areas: Area[] = await AreaService.getAll()
+			const offers: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload)
 
-      return view.render('pages/offer/paginate', {
-        areas,
-        offers,
-        payload,
-        categories: OFFER_CATEGORIES,
-      })
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-      return response.redirect().back()
-    }
-  }
+			return view.render('pages/offer/paginate', {
+				areas,
+				offers,
+				payload,
+				categories: OFFER_CATEGORIES,
+			})
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
 
-  public async paginateCurrentUserOffers({ request, response, route, view, session }: HttpContextContract) {
-    let payload: OfferFilterValidator['schema']['props'] | undefined = undefined
-    const titleFromController: string = 'Мои объявления'
-    const isFiltered: boolean = request.input('isFiltered', false)
-    const currentUserId: User['id'] = (session.get(SESSION_AUTH_KEY) as User).id
-    const config: OfferServicePaginateConfig = {
-      baseUrl: route!.pattern,
-      page: request.input('page', 1),
+	public async paginateCurrentUserOffers({
+		request,
+		response,
+		route,
+		view,
+		session,
+	}: HttpContextContract) {
+		let payload: OfferFilterValidator['schema']['props'] | undefined = undefined
+		const titleFromController = 'Мои объявления'
+		const isFiltered: boolean = request.input('isFiltered', false)
+		const currentUserId: User['id'] = (session.get(SESSION_AUTH_KEY) as User).id
+		const config: OfferServicePaginateConfig = {
+			baseUrl: route!.pattern,
+			page: request.input('page', 1),
 
-      userId: currentUserId,
+			userId: currentUserId,
 
-      relations: ['user', 'subsection'],
-    }
+			relations: ['user', 'subsection'],
+		}
 
-    if (isFiltered) {
-      payload = await request.validate(OfferFilterValidator)
+		if (isFiltered) {
+			payload = await request.validate(OfferFilterValidator)
 
-      config.orderBy = payload.orderBy
-      config.orderByColumn = payload.orderByColumn
-    }
+			config.orderBy = payload.orderBy
+			config.orderByColumn = payload.orderByColumn
+		}
 
-    try {
-      const areas: Area[] = await AreaService.getAll()
-      const offers: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload)
+		try {
+			const areas: Area[] = await AreaService.getAll()
+			const offers: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload)
 
-      return view.render('pages/offer/paginate', {
-        areas,
-        offers,
-        payload,
-        titleFromController,
-        categories: OFFER_CATEGORIES,
-      })
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-      return response.redirect().back()
-    }
-  }
+			return view.render('pages/offer/paginate', {
+				areas,
+				offers,
+				payload,
+				titleFromController,
+				categories: OFFER_CATEGORIES,
+			})
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
 
-  public async paginateNotVerifiedOffers({ request, response, route, view, session }: HttpContextContract) {
-    let payload: OfferFilterValidator['schema']['props'] | undefined = undefined
-    const isFiltered: boolean = request.input('isFiltered', false)
-    const config: OfferServicePaginateConfig = {
-      baseUrl: route!.pattern,
-      page: request.input('page', 1),
+	public async paginateNotVerifiedOffers({
+		request,
+		response,
+		route,
+		view,
+		session,
+	}: HttpContextContract) {
+		let payload: OfferFilterValidator['schema']['props'] | undefined = undefined
+		const isFiltered: boolean = request.input('isFiltered', false)
+		const config: OfferServicePaginateConfig = {
+			baseUrl: route!.pattern,
+			page: request.input('page', 1),
 
-      isVerified: false,
+			isVerified: false,
 
-      relations: ['user', 'subsection'],
-    }
+			relations: ['user', 'subsection'],
+		}
 
-    if (isFiltered) {
-      payload = await request.validate(OfferFilterValidator)
+		if (isFiltered) {
+			payload = await request.validate(OfferFilterValidator)
 
-      config.orderBy = payload.orderBy
-      config.orderByColumn = payload.orderByColumn
-    }
+			config.orderBy = payload.orderBy
+			config.orderByColumn = payload.orderByColumn
+		}
 
-    try {
-      const areas: Area[] = await AreaService.getAll()
-      const offers: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload)
+		try {
+			const areas: Area[] = await AreaService.getAll()
+			const offers: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload)
 
-      return view.render('pages/offer/paginate', {
-        areas,
-        offers,
-        payload,
-        isModeratePage: true,
-        categories: OFFER_CATEGORIES,
-        titleFromController: 'Модерация',
-      })
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-      return response.redirect().back()
-    }
-  }
+			return view.render('pages/offer/paginate', {
+				areas,
+				offers,
+				payload,
+				isModeratePage: true,
+				categories: OFFER_CATEGORIES,
+				titleFromController: 'Модерация',
+			})
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
 
-  public async get({ view, params, response, session }: HttpContextContract) {
-    const id: Offer['id'] = params.id
+	public async get({ view, params, response, session }: HttpContextContract) {
+		const id: Offer['id'] = params.id
 
-    try {
-      const item: Offer = await OfferService.get(id, { relations: ['user', 'subsection', 'images'] })
+		try {
+			const item: Offer = await OfferService.get(id, {
+				relations: ['user', 'subsection', 'images'],
+			})
 
-      return view.render('pages/offer/get', { item })
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-      return response.redirect().back()
-    }
-  }
+			return view.render('pages/offer/get', { item })
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
 
-  public async updateBlockDescription({ request, response, session, params }: HttpContextContract) {
-    const id: Offer['id'] = params.id
-    const payload = await request.validate(OfferBlockDescriptionValidator)
+	public async updateBlockDescription({ request, response, session, params }: HttpContextContract) {
+		const id: Offer['id'] = params.id
+		const payload = await request.validate(OfferBlockDescriptionValidator)
 
-    try {
-      await OfferService.updateBlockDescription(id, payload)
+		try {
+			await OfferService.updateBlockDescription(id, payload)
 
-      session.flash('success', ResponseMessages.SUCCESS)
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-    }
+			session.flash('success', ResponseMessages.SUCCESS)
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+		}
 
-    return response.redirect().back()
-  }
+		return response.redirect().back()
+	}
 
-  /**
-   * * Archive
-   */
+	/**
+	 * * Archive
+	 */
 
-  public async archive({ params, response, session }: HttpContextContract) {
-    const id: Offer['id'] = params.id
+	public async archive({ params, response, session }: HttpContextContract) {
+		const id: Offer['id'] = params.id
 
-    try {
-      await OfferService.actions(id, 'archive', true)
+		try {
+			await OfferService.actions(id, 'archive', true)
 
-      session.flash('success', ResponseMessages.SUCCESS)
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-    }
+			session.flash('success', ResponseMessages.SUCCESS)
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+		}
 
-    return response.redirect().back()
-  }
+		return response.redirect().back()
+	}
 
-  public async unarchive({ params, response, session }: HttpContextContract) {
-    const id: Offer['id'] = params.id
+	public async unarchive({ params, response, session }: HttpContextContract) {
+		const id: Offer['id'] = params.id
 
-    try {
-      await OfferService.actions(id, 'archive', false)
+		try {
+			await OfferService.actions(id, 'archive', false)
 
-      session.flash('success', ResponseMessages.SUCCESS)
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-    }
+			session.flash('success', ResponseMessages.SUCCESS)
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+		}
 
-    return response.redirect().back()
-  }
+		return response.redirect().back()
+	}
 
-  /**
-   * * Ban
-   */
+	/**
+	 * * Ban
+	 */
 
-  public async ban({ params, response, session }: HttpContextContract) {
-    const id: Offer['id'] = params.id
+	public async ban({ params, response, session }: HttpContextContract) {
+		const id: Offer['id'] = params.id
 
-    try {
-      await OfferService.actions(id, 'ban', true)
+		try {
+			await OfferService.actions(id, 'ban', true)
 
-      session.flash('success', ResponseMessages.SUCCESS)
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-    }
+			session.flash('success', ResponseMessages.SUCCESS)
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+		}
 
-    return response.redirect().back()
-  }
+		return response.redirect().back()
+	}
 
-  public async unban({ params, response, session }: HttpContextContract) {
-    const id: Offer['id'] = params.id
+	public async unban({ params, response, session }: HttpContextContract) {
+		const id: Offer['id'] = params.id
 
-    try {
-      await OfferService.actions(id, 'ban', false)
+		try {
+			await OfferService.actions(id, 'ban', false)
 
-      session.flash('success', ResponseMessages.SUCCESS)
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-    }
+			session.flash('success', ResponseMessages.SUCCESS)
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+		}
 
-    return response.redirect().back()
-  }
+		return response.redirect().back()
+	}
 
-  /**
-   * * Verify
-   */
+	/**
+	 * * Verify
+	 */
 
-  public async verifyAll({ response, session }: HttpContextContract) {
-    try {
-      await OfferService.verifyAll()
+	public async verifyAll({ response, session }: HttpContextContract) {
+		try {
+			await OfferService.verifyAll()
 
-      session.flash('success', ResponseMessages.SUCCESS)
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-    }
+			session.flash('success', ResponseMessages.SUCCESS)
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+		}
 
-    return response.redirect().back()
-  }
+		return response.redirect().back()
+	}
 
-  public async verify({ params, response, session }: HttpContextContract) {
-    const id: Offer['id'] = params.id
+	public async verify({ params, response, session }: HttpContextContract) {
+		const id: Offer['id'] = params.id
 
-    try {
-      await OfferService.actions(id, 'verify', true)
+		try {
+			await OfferService.actions(id, 'verify', true)
 
-      session.flash('success', ResponseMessages.SUCCESS)
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-    }
+			session.flash('success', ResponseMessages.SUCCESS)
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+		}
 
-    return response.redirect().back()
-  }
+		return response.redirect().back()
+	}
 
-  public async unverify({ params, response, session }: HttpContextContract) {
-    const id: Offer['id'] = params.id
+	public async unverify({ params, response, session }: HttpContextContract) {
+		const id: Offer['id'] = params.id
 
-    try {
-      await OfferService.actions(id, 'verify', false)
+		try {
+			await OfferService.actions(id, 'verify', false)
 
-      session.flash('success', ResponseMessages.SUCCESS)
-    } catch (err: Err | any) {
-      session.flash('error', err.message)
-    }
+			session.flash('success', ResponseMessages.SUCCESS)
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+		}
 
-    return response.redirect().back()
-  }
+		return response.redirect().back()
+	}
 }

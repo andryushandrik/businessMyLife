@@ -4,17 +4,17 @@ import type { SignOptions } from 'jsonwebtoken'
 // * Types
 
 export type SignTokenConfig = Pick<SignOptions, 'algorithm' | 'expiresIn'> & {
-  key: string,
+	key: string
 }
 
 export type Tokens = {
-  access: string,
-  refresh: string,
+	access: string
+	refresh: string
 }
 
 export type UserTokenPayload = {
-  id: User['id'],
-  email: User['email'],
-  roleId: User['roleId'],
-  type: User['type'],
+	id: User['id']
+	email: User['email']
+	roleId: User['roleId']
+	type: User['type']
 }

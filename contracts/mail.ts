@@ -11,5 +11,5 @@ import type { InferMailersFromConfig } from '@adonisjs/mail/build/config'
 // * Types
 
 declare module '@ioc:Adonis/Addons/Mail' {
-  interface MailersList extends InferMailersFromConfig<typeof mailConfig> {}
+	interface MailersList extends InferMailersFromConfig<typeof mailConfig> {}
 }
