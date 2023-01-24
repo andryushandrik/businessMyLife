@@ -190,7 +190,7 @@ export default class OfferService {
     }
   }
 
-  public static async create(payload: OfferValidator['schema']['props']): Promise<void> {
+  public static async create(payload: OfferValidator['schema']['props']): Promise<Offer> {
     let item: Offer
     const trx: TransactionClientContract = await Database.transaction()
     const itemPayload: Partial<ModelAttributes<Offer>> = this.getOfferDataFromPayload(payload)
@@ -236,6 +236,7 @@ export default class OfferService {
     }
 
     await trx.commit()
+    return item
   }
 
   public static async update(id: Offer['id'], payload: OfferValidator['schema']['props']): Promise<void> {

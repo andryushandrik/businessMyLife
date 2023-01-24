@@ -116,9 +116,9 @@ export default class OffersController {
     }
 
     try {
-      await OfferService.create(payload)
+      const offer: Offer = await OfferService.create(payload)
 
-      return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS))
+      return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, offer))
     } catch (err: Err | any) {
       throw new ExceptionService(err)
     }
