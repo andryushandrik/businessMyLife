@@ -126,7 +126,7 @@ export const OfferFactory = Factory.define(Offer, async ({ faker }) => {
 			max: OfferCategories.FRANCHISES,
 		}),
 		paybackTime: faker.datatype.number({
-			min: OfferPaybackTimes.BEFORE_THREE_MONTH,
+			min: OfferPaybackTimes.DONT_DISPLAY,
 			max: OfferPaybackTimes.AFTER_THREE_YEARS,
 		}),
 

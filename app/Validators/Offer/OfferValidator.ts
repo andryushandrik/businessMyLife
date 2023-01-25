@@ -103,7 +103,7 @@ export default class OfferValidator extends IndexValidator {
 			// rules.requiredWhen('category', '=', OfferCategories.FRANCHISES),
 		]),
 
-		paybackTime: schema.number.optional(getOfferPaybackTimeRules()),
+		paybackTime: schema.number.nullableAndOptional(getOfferPaybackTimeRules()),
 		projectStage: schema.number.optional([
 			...getOfferProjectStageRules(),
 			// rules.requiredWhen('category', 'in', [

@@ -28,7 +28,7 @@ export function getOfferProjectStageRules(): Rule[] {
 export function getOfferPaybackTimeRules(): Rule[] {
 	return [
 		rules.unsigned(),
-		rules.range(OfferPaybackTimes.BEFORE_THREE_MONTH, OfferPaybackTimes.AFTER_THREE_YEARS),
+		rules.range(OfferPaybackTimes.DONT_DISPLAY, OfferPaybackTimes.AFTER_THREE_YEARS),
 	]
 }
 

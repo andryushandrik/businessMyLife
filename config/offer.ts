@@ -16,6 +16,7 @@ export enum OfferCategories {
 
 // Don't change orders below
 export const OFFER_PAYBACK_TIMES = [
+	'',
 	'до 3 месяцев',
 	'от 3 до 6 месяцев',
 	'от 6 месяцев до 1 года',
@@ -23,11 +24,12 @@ export const OFFER_PAYBACK_TIMES = [
 	'от 3 лет',
 ] as const
 export enum OfferPaybackTimes {
-	BEFORE_THREE_MONTH = 0,
-	AFTER_THREE_MONTH = 1,
-	AFTER_SIX_MONTH = 2,
-	AFTER_YEAR = 3,
-	AFTER_THREE_YEARS = 4,
+	DONT_DISPLAY = 0,
+	BEFORE_THREE_MONTH = 1,
+	AFTER_THREE_MONTH = 2,
+	AFTER_SIX_MONTH = 3,
+	AFTER_YEAR = 4,
+	AFTER_THREE_YEARS = 5,
 }
 
 // Don't change orders below

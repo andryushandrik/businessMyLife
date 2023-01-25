@@ -126,7 +126,7 @@ export default class Offer extends BaseModel {
 	public aboutCompany?: string
 
 	@column()
-	public paybackTime?: number
+	public paybackTime?: number | null
 
 	@column()
 	public projectStage?: number
@@ -227,7 +227,7 @@ export default class Offer extends BaseModel {
 
 	@computed()
 	public get paybackTimeForUser(): string {
-		if (this.paybackTime !== undefined) return OFFER_PAYBACK_TIMES[this.paybackTime]
+		if ((this.paybackTime !== undefined) && (this.paybackTime !== null)) return OFFER_PAYBACK_TIMES[this.paybackTime]
 
 		return ''
 	}
