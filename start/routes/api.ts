@@ -233,4 +233,9 @@ Route.group(() => {
 
   }).prefix('report').middleware('CheckAccessToken')
 
+    /**
+   * * Email Subscribtion
+   */
+
+    Route.post('/', 'Api/REmailSubscribersController.create')
 }).prefix('api')
