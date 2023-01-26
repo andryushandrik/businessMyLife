@@ -94,7 +94,7 @@
         schema:
           $ref: '#/components/schemas/OfferProjectStage'
       - in: query
-        name: projectTime
+        name: paybackTime
         required: false
         schema:
           $ref: '#/components/schemas/OfferPaybackTime'
@@ -215,7 +215,7 @@
         schema:
           $ref: '#/components/schemas/OfferProjectStage'
       - in: query
-        name: projectTime
+        name: paybackTime
         required: false
         schema:
           $ref: '#/components/schemas/OfferPaybackTime'
