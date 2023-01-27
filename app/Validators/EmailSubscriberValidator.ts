@@ -1,5 +1,4 @@
 // * Types
-import type User from 'App/Models/User/User'
 import { CustomMessages, rules } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 // * Types
@@ -8,7 +7,6 @@ import IndexValidator from './IndexValidator'
 import { schema } from '@ioc:Adonis/Core/Validator'
 
 export default class UserValidator extends IndexValidator {
-	private readonly currentUserId: User['id'] | null = this.ctx.params.id ?? null
 
 	constructor(protected ctx: HttpContextContract) {
 		super()

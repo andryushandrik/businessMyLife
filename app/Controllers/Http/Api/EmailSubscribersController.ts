@@ -10,8 +10,10 @@ import { Err } from 'Contracts/response'
 export default class EmailSubscribersController {
     public async create({ request, response }: HttpContextContract) {
         let payload
+        console.log('EmailSubscribersController');
+        
 		try {
-			payload = request.validate(EmailSubscriberValidator)
+			payload = await request.validate(EmailSubscriberValidator)
 		} catch (err: Err | any) {
 			throw new ExceptionService({
 				code: ResponseCodes.VALIDATION_ERROR,
@@ -22,10 +24,14 @@ export default class EmailSubscribersController {
 
 
     try {
+      
       const subscriber: EmailSubscriber = await EmailSubscriber.create(payload)
+      console.log(subscriber);
 
       return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, subscriber))
     } catch (err: Err | any) {
+      console.log(err);
+      
       throw new ExceptionService(err)
     }
   }
