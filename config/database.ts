@@ -66,7 +66,7 @@ export const TABLES_NAMES = {
 	FEEDBACKS: 'feedbacks',
 	PROMO_CODES: 'promoCodes',
 	UPLOAD_TUTORIALS: 'uploadTutorials',
-	EMAIL_SUBSCRIBERS: 'email_subscribers',
+	EMAIL_SUBSCRIBERS: 'emailSubscribers',
 
 	/**
 	 * * Report
