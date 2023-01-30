@@ -6,11 +6,10 @@ import EmailSubscriberValidator from 'App/Validators/EmailSubscriberValidator'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 import { Err } from 'Contracts/response'
 
-
 export default class EmailSubscribersController {
-    public async create({ request, response }: HttpContextContract) {
-        let payload
-        console.log('EmailSubscribersController');
+	public async create({ request, response }: HttpContextContract) {
+		let payload
+		console.log('EmailSubscribersController')
 
 		try {
 			payload = await request.validate(EmailSubscriberValidator)
@@ -22,16 +21,14 @@ export default class EmailSubscribersController {
 			})
 		}
 
+		try {
+			const subscriber: EmailSubscriber = await EmailSubscriber.create(payload)
+			console.log(subscriber)
 
-    try {
-
-      const subscriber: EmailSubscriber = await EmailSubscriber.create(payload)
-      console.log(subscriber);
-
-      return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, subscriber))
-    } catch (err: Err | any) {
-        console.log(err);
-      throw new ExceptionService(err)
-    }
-  }
+			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, subscriber))
+		} catch (err: Err | any) {
+			console.log(err)
+			throw new ExceptionService(err)
+		}
+	}
 }

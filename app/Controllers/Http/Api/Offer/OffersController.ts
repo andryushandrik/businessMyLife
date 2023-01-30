@@ -120,17 +120,14 @@ export default class OffersController {
 			})
 		}
 
+		try {
+			const offer: Offer = await OfferService.create(payload)
 
-    try {
-      const offer: Offer = await OfferService.create(payload)
-
-      return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, offer))
-    } catch (err: Err | any) {
-      throw new ExceptionService(err)
-    }
-  }
-
-
+			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, offer))
+		} catch (err: Err | any) {
+			throw new ExceptionService(err)
+		}
+	}
 
 	public async update({ request, response, params }: HttpContextContract) {
 		const id: Offer['id'] = params.id
@@ -147,7 +144,7 @@ export default class OffersController {
 				body: err.messages,
 			})
 		}
-		console.log(payload.paybackTime);
+		console.log(payload.paybackTime)
 		try {
 			await OfferService.update(id, payload)
 

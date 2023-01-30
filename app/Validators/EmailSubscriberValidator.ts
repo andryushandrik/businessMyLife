@@ -7,7 +7,6 @@ import IndexValidator from './IndexValidator'
 import { schema } from '@ioc:Adonis/Core/Validator'
 
 export default class UserValidator extends IndexValidator {
-
 	constructor(protected ctx: HttpContextContract) {
 		super()
 	}
@@ -32,7 +31,10 @@ export default class UserValidator extends IndexValidator {
 	 *    ```
 	 */
 	public schema = schema.create({
-		email: schema.string({}, [rules.email(), rules.unique({ table: 'emailSubscribers', column: 'email' })]),
+		email: schema.string({}, [
+			rules.email(),
+			rules.unique({ table: 'emailSubscribers', column: 'email' }),
+		]),
 	})
 
 	/**

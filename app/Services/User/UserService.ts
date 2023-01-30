@@ -118,7 +118,9 @@ export default class UserService {
 		}
 	}
 
-	public static async create(payload: Omit<RegisterValidator['schema']['props'],'verifyCode'>): Promise<User> {
+	public static async create(
+		payload: Omit<RegisterValidator['schema']['props'], 'verifyCode'>,
+	): Promise<User> {
 		let item: User
 		const roleId: User['roleId'] = RoleNames.USER + 1
 

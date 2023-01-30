@@ -272,4 +272,3 @@ export default class AuthService {
 		return TokenService.createToken(payload, config)
 	}
 }
-
