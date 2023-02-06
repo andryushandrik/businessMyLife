@@ -11,7 +11,7 @@ export default class EmailSubscribersController {
     public async create({ request, response }: HttpContextContract) {
         let payload
         console.log('EmailSubscribersController');
-        
+
 		try {
 			payload = await request.validate(EmailSubscriberValidator)
 		} catch (err: Err | any) {
@@ -24,14 +24,13 @@ export default class EmailSubscribersController {
 
 
     try {
-      
+
       const subscriber: EmailSubscriber = await EmailSubscriber.create(payload)
       console.log(subscriber);
 
       return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, subscriber))
     } catch (err: Err | any) {
-      console.log(err);
-      
+        console.log(err);
       throw new ExceptionService(err)
     }
   }
