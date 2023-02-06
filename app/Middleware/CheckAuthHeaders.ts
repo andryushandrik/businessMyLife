@@ -7,7 +7,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 // import { ResponseCodes, ResponseMessages } from 'Config/response'
 
 export default class CheckAuthHeaders {
-	public async handle({  }: HttpContextContract, next: () => Promise<void>) {
+	public async handle({}: HttpContextContract, next: () => Promise<void>) {
 		// try {
 		// 	if (!request.header('User-Agent') || !request.header('User-Fingerprint') || !request.ip())
 		// 		throw {

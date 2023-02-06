@@ -227,7 +227,8 @@ export default class Offer extends BaseModel {
 
 	@computed()
 	public get paybackTimeForUser(): string {
-		if ((this.paybackTime !== undefined) && (this.paybackTime !== null)) return OFFER_PAYBACK_TIMES[this.paybackTime]
+		if (this.paybackTime !== undefined && this.paybackTime !== null)
+			return OFFER_PAYBACK_TIMES[this.paybackTime]
 
 		return ''
 	}
