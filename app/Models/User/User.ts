@@ -222,7 +222,6 @@ export default class User extends BaseModel {
 	@computed()
 	public get birthdayForUser(): string {
 		if (this.birthday) return this.birthday.setLocale('ru-RU').toFormat(GLOBAL_DATETIME_FORMAT)
-
 		return ''
 	}
 
@@ -234,6 +233,24 @@ export default class User extends BaseModel {
 	@computed()
 	public get typeForUser(): string {
 		return USER_TYPE_NAMES[this.type]
+	}
+
+  @computed()
+	public get isFormCompleted(): boolean {
+    if( this.type === 0){
+      // PHYSICAL_PERSON
+      return Boolean(this.firstName && this.lastName && this.email && this.phone && this.city)
+    }
+    if(this.type === 1){
+      //INDIVIDUAL_ENTREPRENEUR
+      return Boolean(this.companyName && this.firstName && this.lastName && this.mainStateRegistrationNumber && this.email && this.phone && this.city)
+    }
+    if(this.type === 2){
+      // LIMITED_LIABILITY_COMPANY
+      return Boolean(this.companyName && this.firstName && this.lastName && this.mainStateRegistrationNumber && this.email && this.phone && this.city)
+
+    }
+		return false
 	}
 
 	/**
