@@ -243,11 +243,11 @@ export default class User extends BaseModel {
     }
     if(this.type === 1){
       //INDIVIDUAL_ENTREPRENEUR
-      return Boolean(this.companyName && this.firstName && this.lastName && this.mainStateRegistrationNumber && this.email && this.phone && this.city)
+      return Boolean(this.companyName && this.firstName && this.lastName && this.mainStateRegistrationNumber && this.taxpayerIdentificationNumber && this.email && this.phone && this.city)
     }
     if(this.type === 2){
       // LIMITED_LIABILITY_COMPANY
-      return Boolean(this.companyName && this.firstName && this.lastName && this.mainStateRegistrationNumber && this.email && this.phone && this.city)
+      return Boolean(this.companyName && this.firstName && this.lastName && this.mainStateRegistrationNumber && this.taxpayerIdentificationNumber && this.email && this.phone && this.city)
 
     }
 		return false
