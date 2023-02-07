@@ -47,7 +47,6 @@ export default class PartnerService {
 		}
 
 		if (!item) throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.ERROR } as Err
-
 		return item
 	}
 
