@@ -1,4 +1,3 @@
-import Advertisement from 'App/Models/Advertisement';
 // * Types
 import type { Err } from 'Contracts/response'
 import type { ServiceConfig } from 'Contracts/services'
