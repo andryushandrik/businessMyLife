@@ -13,6 +13,7 @@ export default class UploadTutorial extends BaseModel {
 		'isTitleLink',
 		'title',
 		'media',
+    'link',
 		'createdAt',
 		'updatedAt',
 	] as const
@@ -32,6 +33,9 @@ export default class UploadTutorial extends BaseModel {
 
 	@column()
 	public isTitleLink: boolean
+
+  @column()
+	public link: string
 
 	@column()
 	public title: string

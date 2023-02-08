@@ -44,7 +44,16 @@
                 @endif
               </div>
             </div>
+            <div class="form-group">
+              <label class="mb-1"><strong>Ссылка для названия *</strong></label>
+              <input type="string" class="form-control" name="link" value="{{ flashMessages.get('title') ?? '' }}">
 
+              @if(flashMessages.has('errors.link'))
+                <div class="invalid-feedback d-block">
+                  {{ flashMessages.get('errors.link')[0] }}
+                </div>
+              @endif
+            </div>
             <div class="form-group">
               <div class="custom-control custom-checkbox mb-3 checkbox-success">
                 <input type="checkbox" name="isTitleLink" class="custom-control-input" id="isTitleLink">
