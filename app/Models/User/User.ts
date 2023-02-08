@@ -235,21 +235,38 @@ export default class User extends BaseModel {
 		return USER_TYPE_NAMES[this.type]
 	}
 
-  @computed()
+	@computed()
 	public get isFormCompleted(): boolean {
-    if( this.type === 0){
-      // PHYSICAL_PERSON
-      return Boolean(this.firstName && this.lastName && this.email && this.phone && this.city)
-    }
-    if(this.type === 1){
-      //INDIVIDUAL_ENTREPRENEUR
-      return Boolean(this.companyName && this.firstName && this.lastName && this.mainStateRegistrationNumber && this.taxpayerIdentificationNumber && this.email && this.phone && this.city)
-    }
-    if(this.type === 2){
-      // LIMITED_LIABILITY_COMPANY
-      return Boolean(this.companyName && this.firstName && this.lastName && this.mainStateRegistrationNumber && this.taxpayerIdentificationNumber && this.email && this.phone && this.city)
-
-    }
+		if (this.type === 0) {
+			// PHYSICAL_PERSON
+			return Boolean(this.firstName && this.lastName && this.email && this.phone && this.city)
+		}
+		if (this.type === 1) {
+			//INDIVIDUAL_ENTREPRENEUR
+			return Boolean(
+				this.companyName &&
+					this.firstName &&
+					this.lastName &&
+					this.mainStateRegistrationNumber &&
+					this.taxpayerIdentificationNumber &&
+					this.email &&
+					this.phone &&
+					this.city,
+			)
+		}
+		if (this.type === 2) {
+			// LIMITED_LIABILITY_COMPANY
+			return Boolean(
+				this.companyName &&
+					this.firstName &&
+					this.lastName &&
+					this.mainStateRegistrationNumber &&
+					this.taxpayerIdentificationNumber &&
+					this.email &&
+					this.phone &&
+					this.city,
+			)
+		}
 		return false
 	}
 

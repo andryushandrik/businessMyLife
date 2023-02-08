@@ -24,8 +24,7 @@ export default class AdvertisementService {
 			return await query
 		} catch (err: any) {
 			Logger.error(err)
-      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
 		}
 	}
 }
-

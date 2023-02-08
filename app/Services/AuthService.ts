@@ -208,9 +208,9 @@ export default class AuthService {
 	public static async login(payload: LoginValidator['schema']['props']): Promise<User> {
 		try {
 			const user: User = await UserService.get(payload.email)
-
-			if (!(await Hash.verify(user.password, payload.password)))
+			if (!(await Hash.verify(user.password, payload.password))) {
 				throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.USER_NOT_FOUND } as Err
+			}
 
 			return user
 		} catch (err: Err | any) {

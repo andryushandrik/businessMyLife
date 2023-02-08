@@ -60,7 +60,7 @@ const databaseConfig: DatabaseConfig = {
 export default databaseConfig
 
 export const TABLES_NAMES = {
-  ADS : 'ads',
+	ADS: 'ads',
 	NEWS: 'news',
 	BANNERS: 'banners',
 	PARTNERS: 'partners',

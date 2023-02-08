@@ -12,6 +12,7 @@ export default class Banner extends BaseModel {
 		'description',
 		'image',
 		'link',
+		'orderNumber',
 		'createdAt',
 		'updatedAt',
 	] as const
@@ -25,6 +26,9 @@ export default class Banner extends BaseModel {
 
 	@column()
 	public title: string
+
+	@column({ columnName: 'order_number' })
+	public orderNumber: number
 
 	@column()
 	public description: string

@@ -46,7 +46,7 @@ export default class BannerService {
 
 	public static async getAll(): Promise<Banner[]> {
 		try {
-			return await Banner.all()
+			return await Banner.query().orderBy('orderNumber')
 		} catch (err: any) {
 			Logger.error(err)
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err

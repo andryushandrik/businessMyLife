@@ -25,6 +25,17 @@
           <form action="{{ route('banners.update', { id: item.id }, { qs: { _method: 'PATCH' } }) }}" method="POST" enctype="multipart/form-data">
 
             <div class="form-group">
+              <label class="mb-1"><strong>Порядковый номер *</strong></label>
+              <input type="number" class="form-control" name="orderNumber" value="{{ flashMessages.get('title', item.orderNumber) ?? '' }}">
+
+              @if(flashMessages.has('errors.orderNumber'))
+                <div class="invalid-feedback d-block">
+                  {{ flashMessages.get('errors.orderNumber')[0] }}
+                </div>
+              @endif
+            </div>
+
+            <div class="form-group">
               <label class="mb-1"><strong>Название *</strong></label>
               <input type="string" class="form-control" name="title" value="{{ flashMessages.get('title', item.title) ?? '' }}">
 
@@ -49,7 +60,7 @@
             <div class="form-group mb-3">
               <label class="mb-1">Текущее изображение</label>
               <br>
-              <img src="{{ getMedia(item.image) }}" class="news_image" alt="">
+              <img src="{{ getMedia(item.image) }}" class="news_image" alt="" style="max-width:100%">
             </div>
 
             <div class="form-group">

@@ -2,16 +2,10 @@
 import type { DateTime } from 'luxon'
 // * Types
 
-import { BaseModel, column} from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Advertisement extends BaseModel {
-	public static readonly columns = [
-		'id',
-    'image',
-    'description',
-		'createdAt',
-		'updatedAt',
-	] as const
+	public static readonly columns = ['id', 'image', 'description', 'createdAt', 'updatedAt'] as const
 
 	/**
 	 * * Columns
@@ -20,12 +14,11 @@ export default class Advertisement extends BaseModel {
 	@column({ isPrimary: true })
 	public id: number
 
-  @column()
+	@column()
 	public image: string
 
 	@column()
 	public description: string
-
 
 	@column.dateTime({ autoCreate: true })
 	public createdAt: DateTime
@@ -39,7 +32,6 @@ export default class Advertisement extends BaseModel {
 	/**
 	 * * Query scopes
 	 */
-
 
 	/**
 	 * * Hooks

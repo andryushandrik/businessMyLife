@@ -196,8 +196,6 @@ Route.group(() => {
 		.middleware('CheckAccessToken')
 
 	Route.group(() => {
-
 		Route.get('/', 'Api/AdvertisementController.show')
-	})
-		.prefix('ads')
+	}).prefix('ads')
 }).prefix('api')

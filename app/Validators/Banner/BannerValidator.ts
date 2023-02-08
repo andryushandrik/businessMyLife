@@ -22,7 +22,7 @@ export default class BannerValidator extends IndexValidator {
 	public schema = schema.create({
 		title: schema.string({ trim: true }, getBannerTitleRules()),
 		description: schema.string({ trim: true }, getBannerDescriptionRules()),
-
+		orderNumber: schema.number.optional(),
 		/**
 		 * * Optional fields
 		 */

@@ -21,7 +21,6 @@ export default class BannersController {
 				page,
 				baseUrl,
 			})
-
 			return await view.render('pages/banner/index', { banners, delay })
 		} catch (err: Err | any) {
 			session.flash('error', err.message)
