@@ -80,6 +80,7 @@ export default class UsersController {
 				users,
 				payload,
 				titleFromController,
+        roleEnum: RoleNames,
 				roles: ROLE_NAMES,
 				usersTypes: USER_TYPE_NAMES,
 			})

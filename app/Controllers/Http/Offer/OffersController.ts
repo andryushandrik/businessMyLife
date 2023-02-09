@@ -12,7 +12,7 @@ import AreaService from 'App/Services/Offer/AreaService'
 import OfferService from 'App/Services/Offer/OfferService'
 import OfferFilterValidator from 'App/Validators/Offer/OfferFilterValidator'
 import OfferBlockDescriptionValidator from 'App/Validators/Offer/OfferBlockDescriptionValidator'
-import { OFFER_CATEGORIES } from 'Config/offer'
+import { OfferCategories, OFFER_CATEGORIES } from 'Config/offer'
 import { SESSION_AUTH_KEY } from 'Config/session'
 import { ResponseMessages } from 'Config/response'
 
@@ -53,13 +53,7 @@ export default class OffersController {
 		}
 	}
 
-	public async paginateCurrentUserOffers({
-		request,
-		response,
-		route,
-		view,
-		session,
-	}: HttpContextContract) {
+	public async paginateCurrentUserOffers({ request, response, route, view, session }: HttpContextContract) {
 		let payload: OfferFilterValidator['schema']['props'] | undefined = undefined
 		const titleFromController = 'Мои объявления'
 		const isFiltered: boolean = request.input('isFiltered', false)
@@ -97,13 +91,7 @@ export default class OffersController {
 		}
 	}
 
-	public async paginateNotVerifiedOffers({
-		request,
-		response,
-		route,
-		view,
-		session,
-	}: HttpContextContract) {
+	public async paginateNotVerifiedOffers({ request, response, route, view, session }: HttpContextContract) {
 		let payload: OfferFilterValidator['schema']['props'] | undefined = undefined
 		const isFiltered: boolean = request.input('isFiltered', false)
 		const config: OfferServicePaginateConfig = {
@@ -147,8 +135,7 @@ export default class OffersController {
 			const item: Offer = await OfferService.get(id, {
 				relations: ['user', 'subsection', 'images'],
 			})
-
-			return view.render('pages/offer/get', { item })
+			return view.render('pages/offer/get', { item, categoriesForUser: OFFER_CATEGORIES })
 		} catch (err: Err | any) {
 			session.flash('error', err.message)
 			return response.redirect().back()
@@ -278,3 +265,4 @@ export default class OffersController {
 		return response.redirect().back()
 	}
 }
+

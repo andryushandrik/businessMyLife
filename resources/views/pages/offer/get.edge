@@ -3,256 +3,279 @@
 @set('title', `Объявление - ${item.title}`)
 
 @section('styles')
-  <link href="/vendor/summernote/summernote.css" rel="stylesheet">
+  <link href="/vendor/summernote/summernote.css" rel="stylesheet" />
 @endsection
-
 @section('body')
-  <div class="col-lg-12">
-    <div class="card">
-      <div class="card-header">
-        <h4 class="card-title">Причина блокировки</h4>
+<div class="col-lg-12">
+	<div class="card">
+		<div class="card-header">
+			<h4 class="card-title">Причина блокировки</h4>
 
-        <div class="d-flex">
-          @if(item.isArchived)
-            <form action="{{ route('offer.unarchive', { id: item.id }, { qs: { _method: 'DELETE' } }) }}" method="POST">
-              {{ csrfField() }}
-              <button type="submit" class="btn btn-primary btn-sm">Разархивировать</button>
-            </form>
-          @else
-            <form action="{{ route('offer.archive', { id: item.id }, { qs: { _method: 'PATCH' } }) }}" method="POST">
-              {{ csrfField() }}
-              <button type="submit" class="btn btn-danger btn-sm">Архивировать</button>
-            </form>
-          @endif
-
-          @if(item.isVerified)
-            <form action="{{ route('offer.notVerified.unverify', { id: item.id }, { qs: { _method: 'DELETE' } }) }}" class="ml-2" method="POST">
-              {{ csrfField() }}
-              <button type="submit" class="btn btn-primary btn-sm">Анверифицировать</button>
-            </form>
-          @else
-            <form action="{{ route('offer.notVerified.verify', { id: item.id }, { qs: { _method: 'PATCH' } }) }}" class="ml-2" method="POST">
-              {{ csrfField() }}
-              <button type="submit" class="btn btn-danger btn-sm">Верифицировать</button>
-            </form>
-          @endif
-
-          @if(item.isBanned)
-            <form action="{{ route('offer.unban', { id: item.id }, { qs: { _method: 'DELETE' } }) }}" class="ml-2" method="POST">
-              {{ csrfField() }}
-              <button type="submit" class="btn btn-primary btn-sm">Разбанить</button>
-            </form>
-          @else
-            <form action="{{ route('offer.ban', { id: item.id }, { qs: { _method: 'PATCH' } }) }}" class="ml-2" method="POST">
-              {{ csrfField() }}
-              <button type="submit" class="btn btn-danger btn-sm">Забанить</button>
-            </form>
-          @endif
-
-          <a href="{{ route('offer.paginate') }}" class="btn btn-primary btn-sm ml-2">Назад</a>
-        </div>
-      </div>
-
-      <div class="card-body">
-        <div class="basic-form">
-
-          <form action="{{ route('offer.updateBlockDescription', { id: item.id }, { qs: { _method: 'PATCH' } }) }}" method="POST">
+			<div class="d-flex">
+				@if(item.isArchived)
+          <form action="{{ route('offer.unarchive', { id: item.id }, { qs: { _method: 'DELETE' } }) }}" method="POST">
             {{ csrfField() }}
-
-            <div class="form-group">
-              <label class="mb-1">Причина блокировки</label>
-              <textarea id="summernote" class="summernote" name="blockDescription">{{ flashMessages.get('blockDescription', item.blockDescription) ?? '' }}</textarea>
-
-              @if(flashMessages.has('errors.blockDescription'))
-                <div class="invalid-feedback d-block">
-                  {{ flashMessages.get('errors.blockDescription')[0] }}
-                </div>
-              @endif
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-sm">Подтвердить</button>
+            <button type="submit" class="btn btn-primary btn-sm">Разархивировать</button>
           </form>
+				@else
+          <form action="{{ route('offer.archive', { id: item.id }, { qs: { _method: 'PATCH' } }) }}" method="POST">
+            {{ csrfField() }}
+            <button type="submit" class="btn btn-danger btn-sm">Архивировать</button>
+          </form>
+				@endif
 
-        </div>
-      </div>
-    </div>
-  </div>
+        @if(item.isVerified)
+          <form action="{{ route('offer.notVerified.unverify', { id: item.id }, { qs: { _method: 'DELETE' } }) }}" class="ml-2" method="POST">
+            {{ csrfField() }}
+            <button type="submit" class="btn btn-primary btn-sm">Анверифицировать</button>
+          </form>
+				@else
+          <form action="{{ route('offer.notVerified.verify', { id: item.id }, { qs: { _method: 'PATCH' } }) }}" class="ml-2" method="POST">
+            {{ csrfField() }}
+            <button type="submit" class="btn btn-danger btn-sm">Верифицировать</button>
+          </form>
+				@endif
+        @if(item.isBanned)
+          <form action="{{ route('offer.unban', { id: item.id }, { qs: { _method: 'DELETE' } }) }}" class="ml-2" method="POST">
+            {{ csrfField() }}
+            <button type="submit" class="btn btn-primary btn-sm">Разбанить</button>
+          </form>
+				@else
+          <form action="{{ route('offer.ban', { id: item.id }, { qs: { _method: 'PATCH' } }) }}" class="ml-2" method="POST">
+            {{ csrfField() }}
+            <button type="submit" class="btn btn-danger btn-sm">Забанить</button>
+          </form>
+				@endif
 
-  <div class="col-lg-12">
-    <div class="card">
-      <div class="card-header">
-        <h4 class="card-title">{{ title }}</h4>
-      </div>
+				<a href="{{ route('offer.paginate') }}" class="btn btn-primary btn-sm ml-2">Назад</a>
+			</div>
+		</div>
 
-      <div class="card-body">
-        <div class="basic-form">
+		<div class="card-body">
+			<div class="basic-form">
+				<form action="{{ route('offer.updateBlockDescription', { id: item.id }, { qs: { _method: 'PATCH' } }) }}" method="POST">
+					{{ csrfField() }}
 
-          <div class="form-group">
-            <label class="mb-1">Просмотров</label>
-            <input type="string" class="form-control" value="{{ item.viewsCount }}" disabled>
-          </div>
+					<div class="form-group">
+						<label class="mb-1">Причина блокировки</label>
+						<textarea id="summernote" class="summernote" name="blockDescription">
+{{ flashMessages.get('blockDescription', item.blockDescription) ?? '' }}</textarea
+						>
 
-          <div class="form-group">
-            <label class="mb-1">Архивирован</label>
-            <input type="string" class="form-control" value="{{ item.isArchivedForUser }}" disabled>
-          </div>
+						@if(flashMessages.has('errors.blockDescription'))
+						<div class="invalid-feedback d-block">{{ flashMessages.get('errors.blockDescription')[0] }}</div>
+						@endif
+					</div>
 
-          <div class="form-group">
-            <label class="mb-1">Забанен</label>
-            <input type="string" class="form-control" value="{{ item.isBannedForUser }}" disabled>
-          </div>
+					<button type="submit" class="btn btn-primary btn-sm">Подтвердить</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
 
-          <div class="form-group">
-            <label class="mb-1">Верифицирован</label>
-            <input type="string" class="form-control" value="{{ item.isVerifiedForUser }}" disabled>
-          </div>
+<div class="col-lg-12">
+	<div class="card">
+		<div class="card-header">
+			<h4 class="card-title">{{ title }}</h4>
+		</div>
 
-          <div class="form-group">
-            <label class="mb-1">Слаг</label>
-            <input type="string" class="form-control" value="{{ item.slug }}" disabled>
-          </div>
+		<div class="card-body">
+			<div class="basic-form">
+				<div class="form-group">
+					<label class="mb-1">Просмотров</label>
+					<input type="string" class="form-control" value="{{ item.viewsCount }}" disabled />
+				</div>
 
-          <div class="form-group">
-            <label class="mb-1">Название</label>
-            <input type="string" class="form-control" value="{{ item.title }}" disabled>
-          </div>
+				<div class="form-group">
+					<label class="mb-1">Архивирован</label>
+					<input type="string" class="form-control" value="{{ item.isArchivedForUser }}" disabled />
+				</div>
 
-          <div class="form-group">
-            <label class="mb-1"><strong>Описание</strong></label>
-            <textarea class="form-control" class="form-control" disabled>{{ item.description }}</textarea>
-          </div>
+				<div class="form-group">
+					<label class="mb-1">Забанен</label>
+					<input type="string" class="form-control" value="{{ item.isBannedForUser }}" disabled />
+				</div>
 
-          <div class="form-group">
-            <label class="mb-1">Город</label>
-            <input type="string" class="form-control" value="{{ item.city }}" disabled>
-          </div>
+				<div class="form-group">
+					<label class="mb-1">Верифицирован</label>
+					<input type="string" class="form-control" value="{{ item.isVerifiedForUser }}" disabled />
+				</div>
 
-          <div class="form-group">
-            <label class="mb-1">Категория</label>
-            <input type="string" class="form-control" value="{{ item.categoryForUser }}" disabled>
-          </div>
+				<div class="form-group">
+					<label class="mb-1">Слаг</label>
+					<input type="string" class="form-control" value="{{ item.slug }}" disabled />
+				</div>
 
-          <div class="form-group">
-            <label class="mb-1">Срок окупаемости</label>
-            <input type="string" class="form-control" value="{{ item.paybackTimeForUser }}" disabled>
-          </div>
+				<div class="form-group">
+					<label class="mb-1">Название</label>
+					<input type="string" class="form-control" value="{{ item.title }}" disabled />
+				</div>
 
-          <div class="form-group mb-3">
-            <label class="mb-1">Обложка</label>
-            <br>
-            <img src="{{ getMedia(item.image) }}" alt="">
-          </div>
+				<div class="form-group">
+					<label class="mb-1"><strong>Описание</strong></label>
+					<textarea class="form-control" class="form-control" disabled>{{ item.description }}</textarea>
+				</div>
 
-          <div class="form-group mb-3">
-            <label class="mb-1">Остальные изображения</label>
-            <br>
+				<div class="form-group">
+					<label class="mb-1">Город</label>
+					<input type="string" class="form-control" value="{{ item.city }}" disabled />
+				</div>
 
-            @each(imageItem in item.images)
-              <img src="{{ getMedia(imageItem.image) }}" width="250" height="350" alt="">
-            @endeach
-          </div>
+				<div class="form-group">
+					<label class="mb-1">Категория</label>
+					<input type="string" class="form-control" value="{{ item.categoryForUser }}" disabled />
+				</div>
 
+				<div class="form-group">
+					<label class="mb-1">Срок окупаемости</label>
+					<input type="string" class="form-control" value="{{ item.paybackTimeForUser }}" disabled />
+				</div>
 
-          <div class="form-group mb-3">
-            <label class="mb-1">Видео</label>
-            <br>
-            {{{ item.video }}}
-          </div>
+				<div class="form-group mb-3">
+					<label class="mb-1">Обложка</label>
+					<br />
+					<img src="{{ getMedia(item.image) }}" alt="" />
+				</div>
 
-          <div class="form-group">
-            <label class="mb-1"><strong>Условия сотрудничества</strong></label>
-            <textarea class="form-control" disabled>{{ item.cooperationTerms ?? '' }}</textarea>
-          </div>
+				<div class="form-group mb-3">
+					<label class="mb-1">Остальные изображения</label>
+					<br />
 
-          <div class="form-group">
-            <label class="mb-1"><strong>Бизнес план</strong></label>
-            <textarea class="form-control" disabled>{{ item.businessPlan ?? '' }}</textarea>
-          </div>
+					@each(imageItem in item.images)
+					<img src="{{ getMedia(imageItem.image) }}" width="250" height="350" alt="" />
+					@endeach
+				</div>
 
-          <div class="form-group">
-            <label class="mb-1"><strong>Преимущества</strong></label>
-            <textarea class="form-control" disabled>{{ item.benefits ?? '' }}</textarea>
-          </div>
+				<div class="form-group mb-3">
+					<label class="mb-1">Видео</label>
+					<br />
+					{{{ item.video }}}
+				</div>
 
-          <div class="form-group">
-            <label class="mb-1"><strong>О себе</strong></label>
-            <textarea class="form-control" disabled>{{ item.about ?? '' }}</textarea>
-          </div>
+				<div class="form-group">
+					<label class="mb-1"><strong>Условия сотрудничества</strong></label>
+					<textarea class="form-control" disabled>{{ item.cooperationTerms ?? '' }}</textarea>
+				</div>
 
-          <div class="form-group">
-            <label class="mb-1"><strong>О компании</strong></label>
-            <textarea class="form-control" disabled>{{ item.aboutCompany ?? '' }}</textarea>
-          </div>
+				@if(item.categoryForUser !== categoriesForUser[1])
+				<div class="form-group">
+					<label class="mb-1"><strong>Бизнес план</strong></label>
+					<textarea class="form-control" disabled>{{ item.businessPlan ?? '' }}</textarea>
+				</div>
+				@endif
 
-          <div class="form-group">
-            <label class="mb-1">Инвестиции</label>
-            <input type="string" class="form-control" value="{{ item.investments ?? '' }}" disabled>
-          </div>
+        @if(item.categoryForUser == categoriesForUser[4] )
+				<div class="form-group">
+					<label class="mb-1"><strong>Преимущества</strong></label>
+					<textarea class="form-control" disabled>{{ item.benefits ?? '' }}</textarea>
+				</div>
+				@endif
 
-          <div class="form-group">
-            <label class="mb-1">Стадия проекта</label>
-            <input type="string" class="form-control" value="{{ item.projectStageForUser }}" disabled>
-          </div>
+        @if(item.categoryForUser !== categoriesForUser[3] && item.categoryForUser !== categoriesForUser[4])
+				<div class="form-group">
+					<label class="mb-1"><strong>О себе</strong></label>
+					<textarea class="form-control" disabled>{{ item.about ?? '' }}</textarea>
+				</div>
+				@endif
 
-          <div class="form-group">
-            <label class="mb-1">Дата создания бизнеса</label>
-            <input type="string" class="form-control" value="{{ item.dateOfCreation ?? '' }}" disabled>
-          </div>
+        @if(item.categoryForUser == categoriesForUser[4] )
+				<div class="form-group">
+					<label class="mb-1"><strong>О компании</strong></label>
+					<textarea class="form-control" disabled>{{ item.aboutCompany ?? '' }}</textarea>
+				</div>
+				@endif
 
-          <div class="form-group">
-            <label class="mb-1">Окупаемость в месяц</label>
-            <input type="string" class="form-control" value="{{ item.profitPerMonth ?? '' }}" disabled>
-          </div>
+        @if(item.categoryForUser !== categoriesForUser[3] )
+				<div class="form-group">
+					<label class="mb-1">Инвестиции</label>
+					<input type="string" class="form-control" value="{{ item.investments ?? '' }}" disabled />
+				</div>
+				@endif
 
-          <div class="form-group">
-            <label class="mb-1">Окупаемость</label>
-            <input type="string" class="form-control" value="{{ item.profit ?? '' }}" disabled>
-          </div>
+        @if(item.categoryForUser !== categoriesForUser[1] && item.categoryForUser !== categoriesForUser[3] && item.categoryForUser !==
+				categoriesForUser[4])
+				<div class="form-group">
+					<label class="mb-1">Стадия проекта</label>
+					<input type="string" class="form-control" value="{{ item.projectStageForUser }}" disabled />
+				</div>
+				@endif
 
-          <div class="form-group">
-            <label class="mb-1">Количество филиалов</label>
-            <input type="string" class="form-control" value="{{ item.branchCount ?? '' }}" disabled>
-          </div>
+        @if(item.categoryForUser == categoriesForUser[4] )
+				<div class="form-group">
+					<label class="mb-1">Дата создания бизнеса</label>
+					<input type="string" class="form-control" value="{{ item.dateOfCreation ?? '' }}" disabled />
+				</div>
+				@endif
 
-          <div class="form-group">
-            <label class="mb-1">Количество проданных филиалов</label>
-            <input type="string" class="form-control" value="{{ item.soldBranchCount ?? '' }}" disabled>
-          </div>
+        @if( item.categoryForUser !== categoriesForUser[1])
+				<div class="form-group">
+					<label class="mb-1">Окупаемость в месяц</label>
+					<input type="string" class="form-control" value="{{ item.profitPerMonth ?? '' }}" disabled />
+				</div>
+				@endif
 
-          <div class="form-group">
-            <label class="mb-1">Цена</label>
-            <input type="string" class="form-control" value="{{ item.price ?? '' }}" disabled>
-          </div>
+        @if(item.categoryForUser !== categoriesForUser[0] && item.categoryForUser !== categoriesForUser[1] && item.categoryForUser !==
+				categoriesForUser[4])
+				<div class="form-group">
+					<label class="mb-1">Окупаемость</label>
+					<input type="string" class="form-control" value="{{ item.profit ?? '' }}" disabled />
+				</div>
+				@endif
 
-          <div class="form-group">
-            <label class="mb-1">Цена в месяц</label>
-            <input type="string" class="form-control" value="{{ item.pricePerMonth ?? '' }}" disabled>
-          </div>
+        @if(item.categoryForUser !== categoriesForUser[0] && item.categoryForUser !== categoriesForUser[1] && item.categoryForUser !==
+				categoriesForUser[2])
+				<div class="form-group">
+					<label class="mb-1">Количество филиалов</label>
+					<input type="string" class="form-control" value="{{ item.branchCount ?? '' }}" disabled />
+				</div>
+				@endif
 
-          <div class="form-group">
-            <label class="mb-1">Дата создания Объявления</label>
-            <input type="string" class="form-control" value="{{ item.createdAtForUser }}" disabled>
-          </div>
+        @if(item.categoryForUser == categoriesForUser[4] )
+				<div class="form-group">
+					<label class="mb-1">Количество проданных филиалов</label>
+					<input type="string" class="form-control" value="{{ item.soldBranchCount ?? '' }}" disabled />
+				</div>
+				@endif
 
-          <div class="form-group">
-            Пользователь
-            <br />
-            <a href="{{ route('user.get', { id: item.user.id }) }}" class="text-primary">{{ item.user.fullName }}</a>
-          </div>
+        @if(item.categoryForUser !== categoriesForUser[0] && item.categoryForUser !== categoriesForUser[1] && item.categoryForUser !==
+				categoriesForUser[2])
+				<div class="form-group">
+					<label class="mb-1">Цена</label>
+					<input type="string" class="form-control" value="{{ item.price ?? '' }}" disabled />
+				</div>
+				@endif
 
-          <div class="form-group">
-            Подраздел
-            <br />
-            <a href="{{ route('subsections.edit', { id: item.subsection.id }) }}" class="text-primary">{{ item.subsection.name }}</a>
-          </div>
+        @if(item.categoryForUser == categoriesForUser[4] )
+				<div class="form-group">
+					<label class="mb-1">Цена в месяц</label>
+					<input type="string" class="form-control" value="{{ item.pricePerMonth ?? '' }}" disabled />
+				</div>
+				@endif
 
-        </div>
-      </div>
-    </div>
-  </div>
+				<div class="form-group">
+					<label class="mb-1">Дата создания Объявления</label>
+					<input type="string" class="form-control" value="{{ item.createdAtForUser }}" disabled />
+				</div>
+
+				<div class="form-group">
+					Пользователь
+					<br />
+					<a href="{{ route('user.get', { id: item.user.id }) }}" class="text-primary">{{ item.user.fullName }}</a>
+				</div>
+
+				<div class="form-group">
+					Подраздел
+					<br />
+					<a href="{{ route('subsections.edit', { id: item.subsection.id }) }}" class="text-primary">{{ item.subsection.name }}</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 @endsection
-
 @section('scripts')
   <script src="/vendor/summernote/js/summernote.min.js"></script>
   <script src="/js/plugins-init/summernote-init.js"></script>
 @endsection
+

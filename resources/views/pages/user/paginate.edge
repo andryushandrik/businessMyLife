@@ -31,6 +31,7 @@
                 <th><strong>Уровень доступа</strong></th>
                 <th><strong>Тип профиля</strong></th>
                 <th><strong>ФИ</strong></th>
+                <th><strong>Телефон</strong></th>
                 <th><strong>Email</strong></th>
                 <th><strong>Город</strong></th>
                 <th><strong>Кол-во жалоб</strong></th>
@@ -48,6 +49,7 @@
                   <td>{{ roles[item.roleId - 1] }}</td>
                   <td>{{ usersTypes[item.type] }}</td>
                   <td>{{ item.fullName }}</td>
+                  <td>{{ item.phone }}</td>
                   <td>{{ item.email }}</td>
                   <td>{{ item.city }}</td>
                   <td>{{ item.reportsCount }}</td>
@@ -70,7 +72,7 @@
                       <div class="dropdown-menu" style="">
 
 
-                        @if((item.roleId - 1) == roleEnum.USER)
+                        @if((item.roleId - 1) == roleEnum['USER'])
                           <form action="{{ route('user.role.changeRoleToModerator', { userId: item.id }, { qs: { _method: 'PATCH' } }) }}" method="POST">
                             {{ csrfField() }}
 
@@ -86,6 +88,7 @@
 
 
                         <a class="dropdown-item" href="{{ route('user.get', { id: item.id }) }}">Показать</a>
+                        <a class="dropdown-item" href="https://business-mylife.ru/account/profile/user/{{item.id}}" target="_blank">Открыть на сайте</a>
 
                         <form action="{{ route('user.delete', { id: item.id }, { qs: { _method: 'DELETE' } }) }}" method="POST">
                           <button type="submit" class="dropdown-item">Удалить</button>
