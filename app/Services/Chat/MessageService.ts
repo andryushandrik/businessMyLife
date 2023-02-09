@@ -7,10 +7,7 @@ import type MessageWithOfferTopicValidator from 'App/Validators/Message/MessageW
 import type { Err } from 'Contracts/response'
 import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import type { ConversationGetPayload } from 'Contracts/conversation'
-import type {
-	MessageCreateWithoutTopicPayload,
-	ReturnMessageCreatePayload,
-} from 'Contracts/message'
+import type { MessageCreateWithoutTopicPayload, ReturnMessageCreatePayload } from 'Contracts/message'
 // * Types
 
 import Logger from '@ioc:Adonis/Core/Logger'
@@ -20,10 +17,7 @@ import ConversationService from './ConversationService'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 
 export default class MessageService {
-	public static async paginate(
-		conversationId: Conversation['id'],
-		config: ApiValidator['schema']['props'],
-	): Promise<ModelPaginatorContract<Message>> {
+	public static async paginate(conversationId: Conversation['id'], config: ApiValidator['schema']['props']): Promise<ModelPaginatorContract<Message>> {
 		let conversation: Conversation
 
 		try {
@@ -40,10 +34,7 @@ export default class MessageService {
 		}
 	}
 
-	public static async create(
-		userId: User['id'],
-		payload: MessageWithoutTopicValidator['schema']['props'],
-	): Promise<ReturnMessageCreatePayload> {
+	public static async create(userId: User['id'], payload: MessageWithoutTopicValidator['schema']['props']): Promise<ReturnMessageCreatePayload> {
 		let conversation: Conversation
 		const trx = await Database.transaction()
 
@@ -191,10 +182,7 @@ export default class MessageService {
 
 	public static async viewed(conversation: Conversation, userId: User['id']): Promise<void>
 	public static async viewed(conversationId: Conversation['id'], userId: User['id']): Promise<void>
-	public static async viewed(
-		conversationOrConversationId: Conversation | Conversation['id'],
-		userId: User['id'],
-	): Promise<void> {
+	public static async viewed(conversationOrConversationId: Conversation | Conversation['id'], userId: User['id']): Promise<void> {
 		if (typeof conversationOrConversationId !== 'object') {
 			try {
 				conversationOrConversationId = await ConversationService.get(conversationOrConversationId)

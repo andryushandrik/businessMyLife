@@ -41,18 +41,14 @@ type UserPayloadType = {
 }
 
 export default class AuthService {
-	public static async loginViaAPI(
-		payload: ApiLoginValidator['schema']['props'],
-		headers: AuthHeaders,
-	): Promise<LoginViaAPIReturnData> {
+	public static async loginViaAPI(payload: ApiLoginValidator['schema']['props'], headers: AuthHeaders): Promise<LoginViaAPIReturnData> {
 		let user: User
 
 		try {
 			let checkIsBlockedUser = false
 			user = await UserService.get(payload.email, { aggregates: ['favoriteOffers'] })
 
-			if (user.blockedUntil)
-				checkIsBlockedUser = DateTime.now().toMillis() <= user.blockedUntil.toMillis()
+			if (user.blockedUntil) checkIsBlockedUser = DateTime.now().toMillis() <= user.blockedUntil.toMillis()
 
 			if (!(await Hash.verify(user.password, payload.password)) || checkIsBlockedUser)
 				throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.USER_NOT_FOUND } as Err
@@ -81,10 +77,7 @@ export default class AuthService {
 		}
 	}
 
-	public static async refreshToken(
-		token: string,
-		headers: AuthHeaders,
-	): Promise<LoginViaAPIReturnData> {
+	public static async refreshToken(token: string, headers: AuthHeaders): Promise<LoginViaAPIReturnData> {
 		let user: User
 		let tokenData: UserTokenPayload
 
@@ -106,14 +99,9 @@ export default class AuthService {
 		}
 	}
 
-	public static async emailVerify(
-		{ email }: EmailVerifyValidator['schema']['props'],
-		isForForgotPassword = false,
-	): Promise<void> {
+	public static async emailVerify({ email }: EmailVerifyValidator['schema']['props'], isForForgotPassword = false): Promise<void> {
 		const code: number = getRandom(100000, 999999) // Only 6-digit code
-		const redisKey: RedisKeys = isForForgotPassword
-			? RedisKeys.FORGOT_PASSWORD_USER_VERIFY
-			: RedisKeys.EMAIL_VERIFY
+		const redisKey: RedisKeys = isForForgotPassword ? RedisKeys.FORGOT_PASSWORD_USER_VERIFY : RedisKeys.EMAIL_VERIFY
 
 		try {
 			await RedisService.set(redisKey, email, code, {
@@ -128,13 +116,8 @@ export default class AuthService {
 		}
 	}
 
-	public static async codeVerify(
-		payload: CodeVerifyValidator['schema']['props'],
-		isForForgotPassword = false,
-	): Promise<void> {
-		const redisKey: RedisKeys = isForForgotPassword
-			? RedisKeys.FORGOT_PASSWORD_USER_VERIFY
-			: RedisKeys.EMAIL_VERIFY
+	public static async codeVerify(payload: CodeVerifyValidator['schema']['props'], isForForgotPassword = false): Promise<void> {
+		const redisKey: RedisKeys = isForForgotPassword ? RedisKeys.FORGOT_PASSWORD_USER_VERIFY : RedisKeys.EMAIL_VERIFY
 
 		try {
 			const candidateCode: string = await RedisService.get(redisKey, payload.email)
@@ -149,9 +132,7 @@ export default class AuthService {
 		}
 	}
 
-	public static async forgotPassword(
-		payload: ForgotPasswordValidator['schema']['props'],
-	): Promise<User> {
+	public static async forgotPassword(payload: ForgotPasswordValidator['schema']['props']): Promise<User> {
 		try {
 			await this.codeVerify(payload, true)
 
@@ -175,10 +156,7 @@ export default class AuthService {
 		}
 	}
 
-	public static async registerViaAPI(
-		payload: RegisterValidator['schema']['props'],
-		headers: AuthHeaders,
-	): Promise<LoginViaAPIReturnData> {
+	public static async registerViaAPI(payload: RegisterValidator['schema']['props'], headers: AuthHeaders): Promise<LoginViaAPIReturnData> {
 		const userPayload: UserPayloadType = {
 			firstName: payload.firstName,
 			lastName: payload.lastName,
@@ -230,8 +208,7 @@ export default class AuthService {
 			throw err
 		}
 
-		if (!roleIds.includes(user.roleId))
-			throw { code: ResponseCodes.SERVER_ERROR, message: ResponseMessages.USER_NOT_FOUND } as Err
+		if (!roleIds.includes(user.roleId)) throw { code: ResponseCodes.SERVER_ERROR, message: ResponseMessages.USER_NOT_FOUND } as Err
 	}
 
 	/**

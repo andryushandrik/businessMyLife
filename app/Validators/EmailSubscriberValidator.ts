@@ -31,10 +31,7 @@ export default class UserValidator extends IndexValidator {
 	 *    ```
 	 */
 	public schema = schema.create({
-		email: schema.string({}, [
-			rules.email(),
-			rules.unique({ table: 'emailSubscribers', column: 'email' }),
-		]),
+		email: schema.string({}, [rules.email(), rules.unique({ table: 'emailSubscribers', column: 'email' })]),
 	})
 
 	/**

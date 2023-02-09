@@ -6,16 +6,7 @@ import Drive from '@ioc:Adonis/Core/Drive'
 import { BaseModel, column, beforeDelete } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Banner extends BaseModel {
-	public static readonly columns = [
-		'id',
-		'title',
-		'description',
-		'image',
-		'link',
-		'orderNumber',
-		'createdAt',
-		'updatedAt',
-	] as const
+	public static readonly columns = ['id', 'title', 'description', 'image', 'link', 'orderNumber', 'createdAt', 'updatedAt'] as const
 
 	/**
 	 * * Columns

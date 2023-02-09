@@ -6,14 +6,7 @@ import type { DateTime } from 'luxon'
 import { BaseModel, column, scope } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Friend extends BaseModel {
-	public static readonly columns = [
-		'id',
-		'isRequest',
-		'fromId',
-		'toId',
-		'createdAt',
-		'updatedAt',
-	] as const
+	public static readonly columns = ['id', 'isRequest', 'fromId', 'toId', 'createdAt', 'updatedAt'] as const
 
 	/**
 	 * * Columns

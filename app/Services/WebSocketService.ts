@@ -1,10 +1,5 @@
 // * Types
-import type {
-	ClientToServerEvents,
-	InterServerEvents,
-	ServerToClientEvents,
-	SocketData,
-} from 'Contracts/webSocket'
+import type { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from 'Contracts/webSocket'
 // * Types
 
 import AdonisServer from '@ioc:Adonis/Core/Server'

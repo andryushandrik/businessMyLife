@@ -1,9 +1,5 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
-import {
-	BANNER_DESCRIPTION_MAX_LENGTH,
-	BANNER_LINK_MAX_LENGTH,
-	TABLES_NAMES,
-} from 'Config/database'
+import { BANNER_DESCRIPTION_MAX_LENGTH, BANNER_LINK_MAX_LENGTH, TABLES_NAMES } from 'Config/database'
 
 export default class extends BaseSchema {
 	protected tableName = TABLES_NAMES.BANNERS

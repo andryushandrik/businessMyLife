@@ -15,10 +15,7 @@ export function getOfferBlockDescriptionRules(): Rule[] {
 }
 
 export function getOfferCategoryRules(): Rule[] {
-	return [
-		rules.unsigned(),
-		rules.range(OfferCategories.SEARCH_FOR_INVESTORS, OfferCategories.FRANCHISES),
-	]
+	return [rules.unsigned(), rules.range(OfferCategories.SEARCH_FOR_INVESTORS, OfferCategories.FRANCHISES)]
 }
 
 export function getOfferProjectStageRules(): Rule[] {
@@ -26,10 +23,7 @@ export function getOfferProjectStageRules(): Rule[] {
 }
 
 export function getOfferPaybackTimeRules(): Rule[] {
-	return [
-		rules.unsigned(),
-		rules.range(OfferPaybackTimes.DONT_DISPLAY, OfferPaybackTimes.AFTER_THREE_YEARS),
-	]
+	return [rules.unsigned(), rules.range(OfferPaybackTimes.DONT_DISPLAY, OfferPaybackTimes.AFTER_THREE_YEARS)]
 }
 
 export function getOfferImageOptions() {

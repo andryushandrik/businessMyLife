@@ -9,9 +9,7 @@ Route.group(() => {
 	Route.resource('/news', 'NewsController')
 
 	Route.resource('/banners', 'BannersController')
-	Route.post('/banners/updateBannersDelay', 'BannersController.updateBannersDelay').as(
-		'banners.updateBannersDelay',
-	)
+	Route.post('/banners/updateBannersDelay', 'BannersController.updateBannersDelay').as('banners.updateBannersDelay')
 
 	Route.resource('/partners', 'PartnersController')
 	Route.patch('/partners/visible/:id', 'PartnersController.visible').as('partner.visible')
@@ -28,9 +26,7 @@ Route.group(() => {
 	Route.group(() => {
 		Route.resource('/types', 'Report/ReportTypesController').except(['show'])
 
-		Route.get('/offers', 'Report/ReportsController.paginateOffersReports').as(
-			'paginateOffersReports',
-		)
+		Route.get('/offers', 'Report/ReportsController.paginateOffersReports').as('paginateOffersReports')
 		Route.get('/users', 'Report/ReportsController.paginateUsersReports').as('paginateUsersReports')
 	})
 		.prefix('report')
@@ -48,9 +44,7 @@ Route.group(() => {
 	Route.group(() => {
 		Route.get('/', 'Offer/OffersController.paginate').as('paginate')
 
-		Route.get('/currentUser', 'Offer/OffersController.paginateCurrentUserOffers').as(
-			'paginateCurrentUserOffers',
-		)
+		Route.get('/currentUser', 'Offer/OffersController.paginateCurrentUserOffers').as('paginateCurrentUserOffers')
 
 		Route.group(() => {
 			Route.get('/', 'Offer/OffersController.paginateNotVerifiedOffers').as('paginate')
@@ -63,9 +57,7 @@ Route.group(() => {
 			.as('notVerified')
 
 		Route.get('/:id', 'Offer/OffersController.get').as('get')
-		Route.patch('/:id', 'Offer/OffersController.updateBlockDescription').as(
-			'updateBlockDescription',
-		)
+		Route.patch('/:id', 'Offer/OffersController.updateBlockDescription').as('updateBlockDescription')
 
 		Route.patch('/archive/:id', 'Offer/OffersController.archive').as('archive')
 		Route.delete('/archive/:id', 'Offer/OffersController.unarchive').as('unarchive')
@@ -82,9 +74,7 @@ Route.group(() => {
 
 	Route.group(() => {
 		Route.get('/', 'User/UsersController.paginate').as('paginate')
-		Route.get('/adminsAndModerators', 'User/UsersController.paginateAdminAndModerators').as(
-			'paginateAdminsAndModerators',
-		)
+		Route.get('/adminsAndModerators', 'User/UsersController.paginateAdminAndModerators').as('paginateAdminsAndModerators')
 
 		Route.group(() => {
 			Route.patch('/toModerator/:userId', 'User/RolesController.changeRoleToModerator')
@@ -118,7 +108,7 @@ Route.group(() => {
 			})
 			.as('block')
 
-      Route.patch('/unblock/:id', 'User/UsersController.unblock')
+		Route.patch('/unblock/:id', 'User/UsersController.unblock')
 			.where('id', {
 				match: /^[0-9]+$/,
 				cast: (id) => Number(id),

@@ -17,8 +17,5 @@ export function getAreaIdRules(withExistsRule = false): Rule[] {
 }
 
 export function getAreaNameRules(id: Area['id'] | null = null): Rule[] {
-	return [
-		rules.maxLength(AREA_NAME_MAX_LENGTH),
-		rules.unique({ table: TABLE, column: 'name', whereNot: { id } }),
-	]
+	return [rules.maxLength(AREA_NAME_MAX_LENGTH), rules.unique({ table: TABLE, column: 'name', whereNot: { id } })]
 }

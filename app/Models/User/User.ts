@@ -2,12 +2,7 @@
 import type { DateTime } from 'luxon'
 import type { Err } from 'Contracts/response'
 import type { UserExperienceTypes } from 'Config/user'
-import type {
-	HasMany,
-	ManyToMany,
-	ModelObject,
-	ModelQueryBuilderContract,
-} from '@ioc:Adonis/Lucid/Orm'
+import type { HasMany, ManyToMany, ModelObject, ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 
 import Friend from './Friend'
@@ -22,15 +17,7 @@ import { RoleNames, UserTypeNames } from 'Config/user'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 import { getModelsManyToManyRelationsOptions } from 'Helpers/index'
 import { ROLE_NAMES, USER_EXPERIENCE_TYPES, USER_TYPE_NAMES } from 'Config/user'
-import {
-	BaseModel,
-	beforeSave,
-	column,
-	computed,
-	hasMany,
-	scope,
-	manyToMany,
-} from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, beforeSave, column, computed, hasMany, scope, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 
 export default class User extends BaseModel {
 	public static readonly columns = [
@@ -59,7 +46,6 @@ export default class User extends BaseModel {
 		'updatedAt',
 		'blockedUntil',
 		'blockDescription',
-
 	] as const
 
 	@column({ isPrimary: true })
@@ -142,8 +128,8 @@ export default class User extends BaseModel {
 	@column.dateTime()
 	public blockedUntil?: DateTime | null
 
-  @column({columnName: 'blockDescription'})
-  public blockDescription?: string | null
+	@column({ columnName: 'blockDescription' })
+	public blockDescription?: string | null
 	/**
 	 * * Aggregates columns
 	 */
@@ -213,9 +199,7 @@ export default class User extends BaseModel {
 
 	@computed()
 	public get blockedUntilForUser(): string {
-		return this.blockedUntil
-			? this.blockedUntil.setLocale('ru-RU').toFormat(GLOBAL_DATETIME_FORMAT)
-			: ''
+		return this.blockedUntil ? this.blockedUntil.setLocale('ru-RU').toFormat(GLOBAL_DATETIME_FORMAT) : ''
 	}
 
 	@computed()
@@ -278,13 +262,11 @@ export default class User extends BaseModel {
 	 * * Query scopes
 	 */
 
-	public static getByRoleIds = scope(
-		(query: ModelQueryBuilderContract<typeof User>, roleTypes: RoleNames[]) => {
-			const roleTypesToRoleIds: Role['id'][] = roleTypes.map((item) => ++item)
+	public static getByRoleIds = scope((query: ModelQueryBuilderContract<typeof User>, roleTypes: RoleNames[]) => {
+		const roleTypesToRoleIds: Role['id'][] = roleTypes.map((item) => ++item)
 
-			query.whereIn('role_id', roleTypesToRoleIds)
-		},
-	)
+		query.whereIn('role_id', roleTypesToRoleIds)
+	})
 
 	public static search = scope((query, searchQuery: string) => {
 		const parts: string[] = searchQuery.split(' ')
@@ -300,9 +282,7 @@ export default class User extends BaseModel {
 					.orWhere('patronymic', 'ILIKE', `%${parts[1]}%`)
 			})
 		} else {
-			query
-				.where('firstName', 'ILIKE', `%${parts[0]}%`)
-				.andWhere('lastName', 'ILIKE', `%${parts[1]}%`)
+			query.where('firstName', 'ILIKE', `%${parts[0]}%`).andWhere('lastName', 'ILIKE', `%${parts[1]}%`)
 		}
 	})
 

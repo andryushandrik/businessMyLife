@@ -28,10 +28,7 @@ export default class PromoCodesController {
 		}
 
 		try {
-			const promoCodes: ModelPaginatorContract<PromoCode> = await PromoCodeService.paginate(
-				config,
-				payload,
-			)
+			const promoCodes: ModelPaginatorContract<PromoCode> = await PromoCodeService.paginate(config, payload)
 
 			return view.render('pages/promoCode/index', {
 				payload,

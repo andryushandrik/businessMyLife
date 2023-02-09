@@ -47,16 +47,11 @@ export default class OffersController {
 				isVerified: true,
 				isArchived: false,
 			}
-			let offers: ModelPaginatorContract<Offer> | JSONPaginate = await OfferService.paginate(
-				config,
-				payload,
-			)
+			let offers: ModelPaginatorContract<Offer> | JSONPaginate = await OfferService.paginate(config, payload)
 
 			if (currentUserId) {
 				offers = offers.toJSON()
-				offers.data = await Promise.all(
-					offers.data.map(async (item: Offer) => await item.getForUser(currentUserId)),
-				)
+				offers.data = await Promise.all(offers.data.map(async (item: Offer) => await item.getForUser(currentUserId)))
 			}
 
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, offers))

@@ -9,13 +9,7 @@ import type { Err } from 'Contracts/response'
 import type { MultipartFileContract } from '@ioc:Adonis/Core/BodyParser'
 import type { TransactionClientContract } from '@ioc:Adonis/Lucid/Database'
 import type { OfferServicePaginateConfig, ServiceConfig } from 'Contracts/services'
-import type {
-	ManyToManyQueryBuilderContract,
-	ModelAttributes,
-	ModelObject,
-	ModelPaginatorContract,
-	ModelQueryBuilderContract,
-} from '@ioc:Adonis/Lucid/Orm'
+import type { ManyToManyQueryBuilderContract, ModelAttributes, ModelObject, ModelPaginatorContract, ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 
 import Offer from 'App/Models/Offer/Offer'
@@ -39,13 +33,8 @@ type OfferConfig = ServiceConfig<Offer> & {
 }
 
 export default class OfferService {
-	public static async paginate(
-		config: OfferServicePaginateConfig,
-		filter?: OfferFilterValidator['schema']['props'],
-	): Promise<ModelPaginatorContract<Offer>> {
-		let query:
-			| ModelQueryBuilderContract<typeof Offer, ModelObject>
-			| ManyToManyQueryBuilderContract<typeof Offer, ModelObject> = Offer.query()
+	public static async paginate(config: OfferServicePaginateConfig, filter?: OfferFilterValidator['schema']['props']): Promise<ModelPaginatorContract<Offer>> {
+		let query: ModelQueryBuilderContract<typeof Offer, ModelObject> | ManyToManyQueryBuilderContract<typeof Offer, ModelObject> = Offer.query()
 
 		if (config.userIdForFavorites) {
 			try {
@@ -56,17 +45,13 @@ export default class OfferService {
 			}
 		}
 
-		if (config.isArchived !== undefined)
-			query = query.withScopes((scopes) => scopes.getByArchived(config.isArchived!))
+		if (config.isArchived !== undefined) query = query.withScopes((scopes) => scopes.getByArchived(config.isArchived!))
 
-		if (config.isVerified !== undefined)
-			query = query.withScopes((scopes) => scopes.getByVerified(config.isVerified!))
+		if (config.isVerified !== undefined) query = query.withScopes((scopes) => scopes.getByVerified(config.isVerified!))
 
-		if (config.isBanned !== undefined)
-			query = query.withScopes((scopes) => scopes.getByBanned(config.isBanned!))
+		if (config.isBanned !== undefined) query = query.withScopes((scopes) => scopes.getByBanned(config.isBanned!))
 
-		if (config.userId !== undefined)
-			query = query.withScopes((scopes) => scopes.getByUserId(config.userId!))
+		if (config.userId !== undefined) query = query.withScopes((scopes) => scopes.getByUserId(config.userId!))
 
 		if (config.preloadArea) {
 			query = query.preload('subsection', (subsection) => {
@@ -91,8 +76,7 @@ export default class OfferService {
 
 			if (filter.areaId) {
 				try {
-					const subsectionsIds: Subsection['id'][] =
-						await SubsectionService.getSubsectionsIdsByAreaId(filter.areaId)
+					const subsectionsIds: Subsection['id'][] = await SubsectionService.getSubsectionsIdsByAreaId(filter.areaId)
 
 					dependencies = { subsectionsIds }
 				} catch (err: Err | any) {
@@ -112,10 +96,7 @@ export default class OfferService {
 		}
 	}
 
-	public static async get(
-		id: Offer['id'],
-		{ relations, trx, preloadArea, addViewCount }: OfferConfig = {},
-	): Promise<Offer> {
+	public static async get(id: Offer['id'], { relations, trx, preloadArea, addViewCount }: OfferConfig = {}): Promise<Offer> {
 		let item: Offer | null
 
 		try {
@@ -160,9 +141,7 @@ export default class OfferService {
 		}
 	}
 
-	public static async getOffersIdsBySubSectionIds(
-		subsectionsIds: Subsection['id'][],
-	): Promise<Offer['id'][]> {
+	public static async getOffersIdsBySubSectionIds(subsectionsIds: Subsection['id'][]): Promise<Offer['id'][]> {
 		try {
 			const offers: { id: Offer['id'] }[] = await Offer.query()
 				.select('id')
@@ -250,10 +229,7 @@ export default class OfferService {
 		return item
 	}
 
-	public static async update(
-		id: Offer['id'],
-		payload: OfferValidator['schema']['props'],
-	): Promise<void> {
+	public static async update(id: Offer['id'], payload: OfferValidator['schema']['props']): Promise<void> {
 		let item: Offer
 		const trx: TransactionClientContract = await Database.transaction()
 		const itemPayload: Partial<ModelAttributes<Offer>> = this.getOfferDataFromPayload(payload)
@@ -311,10 +287,7 @@ export default class OfferService {
 		await trx.commit()
 	}
 
-	public static async updateBlockDescription(
-		id: Offer['id'],
-		payload: OfferBlockDescriptionValidator['schema']['props'],
-	): Promise<void> {
+	public static async updateBlockDescription(id: Offer['id'], payload: OfferBlockDescriptionValidator['schema']['props']): Promise<void> {
 		let item: Offer
 
 		try {
@@ -366,11 +339,7 @@ export default class OfferService {
 	 * * Actions
 	 */
 
-	public static async actions(
-		id: Offer['id'],
-		actionType: 'archive' | 'ban' | 'verify',
-		actionValue: boolean,
-	): Promise<void> {
+	public static async actions(id: Offer['id'], actionType: 'archive' | 'ban' | 'verify', actionValue: boolean): Promise<void> {
 		let item: Offer
 		const offerData: Partial<ModelAttributes<Offer>> = {}
 
@@ -405,10 +374,7 @@ export default class OfferService {
 		}
 	}
 
-	public static async favoriteAction(
-		payload: OfferFavoriteValidator['schema']['props'],
-		action: 'attach' | 'detach',
-	): Promise<void> {
+	public static async favoriteAction(payload: OfferFavoriteValidator['schema']['props'], action: 'attach' | 'detach'): Promise<void> {
 		let user: User
 
 		try {
@@ -430,9 +396,7 @@ export default class OfferService {
 	 */
 
 	private static filter(
-		query:
-			| ModelQueryBuilderContract<typeof Offer, ModelObject>
-			| ManyToManyQueryBuilderContract<typeof Offer, ModelObject>,
+		query: ModelQueryBuilderContract<typeof Offer, ModelObject> | ManyToManyQueryBuilderContract<typeof Offer, ModelObject>,
 		payload: OfferFilterValidator['schema']['props'],
 		dependencies?: FilterDependencies,
 	):
@@ -521,10 +485,7 @@ export default class OfferService {
 						break
 
 					case 'areaId':
-						if (dependencies?.subsectionsIds)
-							query = query.withScopes((scopes) =>
-								scopes.getBySubsectionsIds(dependencies.subsectionsIds),
-							)
+						if (dependencies?.subsectionsIds) query = query.withScopes((scopes) => scopes.getBySubsectionsIds(dependencies.subsectionsIds))
 
 						break
 
@@ -542,9 +503,7 @@ export default class OfferService {
 		return query
 	}
 
-	private static getOfferDataFromPayload(
-		payload: OfferValidator['schema']['props'],
-	): Partial<ModelAttributes<Offer>> {
+	private static getOfferDataFromPayload(payload: OfferValidator['schema']['props']): Partial<ModelAttributes<Offer>> {
 		return {
 			title: payload.title,
 			description: payload.description,

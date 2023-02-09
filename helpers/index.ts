@@ -7,11 +7,7 @@ import { TABLES_NAMES } from 'Config/database'
 import { string as helperString } from '@ioc:Adonis/Core/Helpers'
 import { LucidModel, ManyToMany, ManyToManyRelationOptions } from '@ioc:Adonis/Lucid/Orm'
 
-export function formatStringForCyrillic(
-	val: string,
-	style: 'camelCase' | 'snakeCase',
-	replacement?: string,
-): string {
+export function formatStringForCyrillic(val: string, style: 'camelCase' | 'snakeCase', replacement?: string): string {
 	val = cyrillicToTranslit().transform(val, replacement)
 
 	return helperString[style](val)

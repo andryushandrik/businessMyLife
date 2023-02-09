@@ -123,7 +123,7 @@ export default class UsersController {
 		return response.redirect().back()
 	}
 
-	public async unblock({  response, params, session }: HttpContextContract) {
+	public async unblock({ response, params, session }: HttpContextContract) {
 		const id: User['id'] = params.id
 
 		try {
@@ -137,4 +137,3 @@ export default class UsersController {
 		return response.redirect().back()
 	}
 }
-

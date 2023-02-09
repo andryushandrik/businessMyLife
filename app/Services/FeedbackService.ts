@@ -11,10 +11,7 @@ import Logger from '@ioc:Adonis/Core/Logger'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 
 export default class FeedbackService {
-	public static async paginate(
-		config: PaginationConfig,
-		filter?: FeedbackFilterValidator['schema']['props'],
-	): Promise<ModelPaginatorContract<Feedback>> {
+	public static async paginate(config: PaginationConfig, filter?: FeedbackFilterValidator['schema']['props']): Promise<ModelPaginatorContract<Feedback>> {
 		let query = Feedback.query()
 
 		if (filter) query = this.filter(query, filter)

@@ -12,7 +12,7 @@ import AreaService from 'App/Services/Offer/AreaService'
 import OfferService from 'App/Services/Offer/OfferService'
 import OfferFilterValidator from 'App/Validators/Offer/OfferFilterValidator'
 import OfferBlockDescriptionValidator from 'App/Validators/Offer/OfferBlockDescriptionValidator'
-import { OfferCategories, OFFER_CATEGORIES } from 'Config/offer'
+import { OFFER_CATEGORIES } from 'Config/offer'
 import { SESSION_AUTH_KEY } from 'Config/session'
 import { ResponseMessages } from 'Config/response'
 

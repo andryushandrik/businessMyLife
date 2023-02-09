@@ -6,13 +6,7 @@ import IndexValidator from '../../IndexValidator'
 import { getVerifyCodeRules } from '../../Rules/auth'
 import { getUserTypeRules } from 'App/Validators/Rules/User/user'
 import { schema, CustomMessages } from '@ioc:Adonis/Core/Validator'
-import {
-	getUserCompanyNameRules,
-	getUserEmailRules,
-	getUserFirstNameRules,
-	getUserLastNameRules,
-	getUserPasswordRules,
-} from '../../Rules/User/user'
+import { getUserCompanyNameRules, getUserEmailRules, getUserFirstNameRules, getUserLastNameRules, getUserPasswordRules } from '../../Rules/User/user'
 
 export default class RegisterValidator extends IndexValidator {
 	constructor(protected ctx: HttpContextContract) {

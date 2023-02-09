@@ -12,11 +12,7 @@ import { OFFER_FOLDER_PATH } from 'Config/drive'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 
 export default class OfferImageService {
-	public static async createMany(
-		offerId: Offer['id'],
-		images: MultipartFileContract[],
-		trx: TransactionClientContract,
-	): Promise<void> {
+	public static async createMany(offerId: Offer['id'], images: MultipartFileContract[], trx: TransactionClientContract): Promise<void> {
 		try {
 			const offerImages: Partial<ModelAttributes<OfferImage>>[] = []
 

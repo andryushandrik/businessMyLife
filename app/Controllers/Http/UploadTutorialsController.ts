@@ -28,8 +28,7 @@ export default class UploadTutorialsController {
 		}
 
 		try {
-			const tutorials: ModelPaginatorContract<UploadTutorial> =
-				await UploadTutorialService.paginate(config, payload)
+			const tutorials: ModelPaginatorContract<UploadTutorial> = await UploadTutorialService.paginate(config, payload)
 
 			return view.render('pages/uploadTutorial/index', {
 				payload,

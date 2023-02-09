@@ -29,10 +29,7 @@ export default class PartnersController {
 		}
 
 		try {
-			const partners: ModelPaginatorContract<Partner> = await PartnerService.paginate(
-				config,
-				payload,
-			)
+			const partners: ModelPaginatorContract<Partner> = await PartnerService.paginate(config, payload)
 
 			return view.render('pages/partner/index', {
 				payload,

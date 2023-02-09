@@ -14,9 +14,7 @@ import { NEWS_FOLDER_PATH } from 'Config/drive'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 
 export default class NewsService {
-	public static async paginate(
-		config: PaginateConfig<News>,
-	): Promise<ModelPaginatorContract<News>> {
+	public static async paginate(config: PaginateConfig<News>): Promise<ModelPaginatorContract<News>> {
 		try {
 			return await News.query().getViaPaginate(config)
 		} catch (err: any) {
@@ -27,10 +25,7 @@ export default class NewsService {
 
 	public static async get(id: News['id'], config?: ServiceConfig<News>): Promise<News>
 	public static async get(slug: News['slug'], config?: ServiceConfig<News>): Promise<News>
-	public static async get(
-		idOrSlug: News['id'] | News['slug'],
-		{ trx }: ServiceConfig<News> = {},
-	): Promise<News> {
+	public static async get(idOrSlug: News['id'] | News['slug'], { trx }: ServiceConfig<News> = {}): Promise<News> {
 		let item: News | null
 
 		try {
@@ -74,10 +69,7 @@ export default class NewsService {
 		return item
 	}
 
-	public static async update(
-		id: News['id'],
-		payload: NewsValidator['schema']['props'],
-	): Promise<News> {
+	public static async update(id: News['id'], payload: NewsValidator['schema']['props']): Promise<News> {
 		let item: News
 		const trx: TransactionClientContract = await Database.transaction()
 

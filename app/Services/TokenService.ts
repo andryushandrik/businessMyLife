@@ -11,11 +11,7 @@ import { sign, verify } from 'jsonwebtoken'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 
 export default class TokenService {
-	public static async createUserTokenSession(
-		userId: User['id'],
-		token: string,
-		headers: AuthHeaders,
-	): Promise<void> {
+	public static async createUserTokenSession(userId: User['id'], token: string, headers: AuthHeaders): Promise<void> {
 		try {
 			await Session.create({ userId, token, ...headers })
 		} catch (err: any) {
@@ -34,17 +30,12 @@ export default class TokenService {
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
 		}
 
-		if (!tokenSession)
-			throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.TOKEN_ERROR } as Err
+		if (!tokenSession) throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.TOKEN_ERROR } as Err
 
 		return tokenSession
 	}
 
-	public static async updateUserTokenSession(
-		oldToken: Session['token'],
-		newToken: string,
-		headers?: AuthHeaders,
-	): Promise<void> {
+	public static async updateUserTokenSession(oldToken: Session['token'], newToken: string, headers?: AuthHeaders): Promise<void> {
 		let tokenSession: Session
 
 		try {
@@ -55,10 +46,7 @@ export default class TokenService {
 
 		if (headers) {
 			// * Safety update
-			if (
-				headers.fingerprint != tokenSession.fingerprint ||
-				headers.userAgent != tokenSession.userAgent
-			)
+			if (headers.fingerprint != tokenSession.fingerprint || headers.userAgent != tokenSession.userAgent)
 				throw {
 					code: ResponseCodes.CLIENT_ERROR,
 					message: ResponseMessages.MISS_AUTH_HEADERS,
@@ -73,10 +61,7 @@ export default class TokenService {
 		}
 	}
 
-	public static async deleteUserTokenSession(
-		token: Session['token'],
-		headers?: AuthHeaders,
-	): Promise<void> {
+	public static async deleteUserTokenSession(token: Session['token'], headers?: AuthHeaders): Promise<void> {
 		let tokenSession: Session
 
 		try {
@@ -87,10 +72,7 @@ export default class TokenService {
 
 		if (headers) {
 			// * Safety delete
-			if (
-				headers.fingerprint != tokenSession.fingerprint ||
-				headers.userAgent != tokenSession.userAgent
-			)
+			if (headers.fingerprint != tokenSession.fingerprint || headers.userAgent != tokenSession.userAgent)
 				throw {
 					code: ResponseCodes.CLIENT_ERROR,
 					message: ResponseMessages.MISS_AUTH_HEADERS,

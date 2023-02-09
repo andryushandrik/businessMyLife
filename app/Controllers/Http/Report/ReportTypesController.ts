@@ -28,10 +28,7 @@ export default class ReportTypesController {
 		}
 
 		try {
-			const reportTypes: ModelPaginatorContract<ReportType> = await ReportTypeService.paginate(
-				config,
-				payload,
-			)
+			const reportTypes: ModelPaginatorContract<ReportType> = await ReportTypeService.paginate(config, payload)
 
 			return view.render('pages/reportType/index', {
 				payload,

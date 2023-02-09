@@ -4,10 +4,7 @@ import type Offer from 'App/Models/Offer/Offer'
 import type { Err } from 'Contracts/response'
 import type { JSONPaginate } from 'Contracts/database'
 import type { ServiceConfig } from 'Contracts/services'
-import type {
-	ConversationGetPayload,
-	ConversationGetWithoutTopicPayload,
-} from 'Contracts/conversation'
+import type { ConversationGetPayload, ConversationGetWithoutTopicPayload } from 'Contracts/conversation'
 // * Types
 
 import Logger from '@ioc:Adonis/Core/Logger'
@@ -21,10 +18,7 @@ type GetConfig = ServiceConfig<Conversation> & {
 }
 
 export default class ConversationService {
-	public static async paginate(
-		userId: User['id'],
-		config: ApiValidator['schema']['props'],
-	): Promise<JSONPaginate> {
+	public static async paginate(userId: User['id'], config: ApiValidator['schema']['props']): Promise<JSONPaginate> {
 		try {
 			const conversations: JSONPaginate = (
 				await Conversation.query()
@@ -33,9 +27,7 @@ export default class ConversationService {
 					.getViaPaginate(config)
 			).toJSON()
 
-			conversations.data = await Promise.all(
-				conversations.data.map(async (item: Conversation) => item.getForUser(userId)),
-			)
+			conversations.data = await Promise.all(conversations.data.map(async (item: Conversation) => item.getForUser(userId)))
 
 			return conversations
 		} catch (err: any) {
@@ -44,10 +36,7 @@ export default class ConversationService {
 		}
 	}
 
-	public static async get(
-		conversationId: Conversation['id'],
-		{ trx, currentUser }: GetConfig = {},
-	): Promise<Conversation> {
+	public static async get(conversationId: Conversation['id'], { trx, currentUser }: GetConfig = {}): Promise<Conversation> {
 		let item: Conversation | null
 
 		try {
@@ -55,8 +44,7 @@ export default class ConversationService {
 
 			if (trx) query = query.useTransaction(trx)
 
-			if (currentUser)
-				query = query.withScopes((scopes) => scopes.countNewMessagesForCurrentUser(currentUser))
+			if (currentUser) query = query.withScopes((scopes) => scopes.countNewMessagesForCurrentUser(currentUser))
 
 			item = await query.withScopes((scopes) => scopes.getById(conversationId)).first()
 		} catch (err: any) {
@@ -81,12 +69,9 @@ export default class ConversationService {
 
 			if (trx) query = query.useTransaction(trx)
 
-			if (currentUser)
-				query = query.withScopes((scopes) => scopes.countNewMessagesForCurrentUser(currentUser))
+			if (currentUser) query = query.withScopes((scopes) => scopes.countNewMessagesForCurrentUser(currentUser))
 
-			item = await query
-				.withScopes((scopes) => scopes.getWithOfferTopic(payload.fromId, payload.toId, offerId))
-				.first()
+			item = await query.withScopes((scopes) => scopes.getWithOfferTopic(payload.fromId, payload.toId, offerId)).first()
 		} catch (err: any) {
 			Logger.error(err)
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
@@ -97,10 +82,7 @@ export default class ConversationService {
 		return item
 	}
 
-	public static async getWithoutTopic(
-		payload: ConversationGetWithoutTopicPayload,
-		{ trx, currentUser }: GetConfig = {},
-	): Promise<Conversation> {
+	public static async getWithoutTopic(payload: ConversationGetWithoutTopicPayload, { trx, currentUser }: GetConfig = {}): Promise<Conversation> {
 		let item: Conversation | null
 
 		try {
@@ -108,12 +90,9 @@ export default class ConversationService {
 
 			if (trx) query = query.useTransaction(trx)
 
-			if (currentUser)
-				query = query.withScopes((scopes) => scopes.countNewMessagesForCurrentUser(currentUser))
+			if (currentUser) query = query.withScopes((scopes) => scopes.countNewMessagesForCurrentUser(currentUser))
 
-			item = await query
-				.withScopes((scopes) => scopes.getWithoutTopic(payload.fromId, payload.toId))
-				.first()
+			item = await query.withScopes((scopes) => scopes.getWithoutTopic(payload.fromId, payload.toId)).first()
 		} catch (err: any) {
 			Logger.error(err)
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
@@ -129,9 +108,7 @@ export default class ConversationService {
 			const result: { total: number }[] = await Conversation.query()
 				.withScopes((scopes) => scopes.getUserConversations(userId))
 				.whereHas('messages', (query) => {
-					query
-						.withScopes((scopes) => scopes.getNew())
-						.withScopes((scopes) => scopes.notCurrentUser(userId))
+					query.withScopes((scopes) => scopes.getNew()).withScopes((scopes) => scopes.notCurrentUser(userId))
 				})
 				.pojo<{ total: number }>()
 				.count('*', 'total')
@@ -143,10 +120,7 @@ export default class ConversationService {
 		}
 	}
 
-	public static async create(
-		payload: ConversationGetPayload,
-		{ trx }: ServiceConfig<Conversation> = {},
-	): Promise<Conversation> {
+	public static async create(payload: ConversationGetPayload, { trx }: ServiceConfig<Conversation> = {}): Promise<Conversation> {
 		let conversationId: Conversation['id']
 		let checkAlreadyExistsConversation: Conversation | null = null
 
@@ -154,8 +128,7 @@ export default class ConversationService {
 			checkAlreadyExistsConversation = await this.getWithoutTopic(payload)
 		} catch (err: Err | any) {}
 
-		if (checkAlreadyExistsConversation)
-			throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.ERROR } as Err
+		if (checkAlreadyExistsConversation) throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.ERROR } as Err
 
 		try {
 			conversationId = (await Conversation.create(payload)).id
@@ -171,14 +144,8 @@ export default class ConversationService {
 		}
 	}
 
-	public static async updateWhenMessageCreatedOrDeleted(
-		conversation: Conversation,
-		config?: ServiceConfig<Conversation>,
-	): Promise<void>
-	public static async updateWhenMessageCreatedOrDeleted(
-		conversationId: Conversation['id'],
-		config?: ServiceConfig<Conversation>,
-	): Promise<void>
+	public static async updateWhenMessageCreatedOrDeleted(conversation: Conversation, config?: ServiceConfig<Conversation>): Promise<void>
+	public static async updateWhenMessageCreatedOrDeleted(conversationId: Conversation['id'], config?: ServiceConfig<Conversation>): Promise<void>
 	public static async updateWhenMessageCreatedOrDeleted(
 		conversationIdOrItem: Conversation | Conversation['id'],
 		{ trx }: ServiceConfig<Conversation> = {},

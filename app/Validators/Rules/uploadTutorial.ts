@@ -12,17 +12,11 @@ import {
 } from 'Config/database'
 
 export function getUploadTutorialTitleRules(): Rule[] {
-	return [
-		rules.minLength(UPLOAD_TUTORIAL_TITLE_MIN_LENGTH),
-		rules.maxLength(UPLOAD_TUTORIAL_TITLE_MAX_LENGTH),
-	]
+	return [rules.minLength(UPLOAD_TUTORIAL_TITLE_MIN_LENGTH), rules.maxLength(UPLOAD_TUTORIAL_TITLE_MAX_LENGTH)]
 }
 
 export function getUploadTutorialEmbedRules(): Rule[] {
-	return [
-		rules.minLength(UPLOAD_TUTORIAL_VIDEO_LINK_MIN_LENGTH),
-		rules.maxLength(UPLOAD_TUTORIAL_VIDEO_LINK_MAX_LENGTH),
-	]
+	return [rules.minLength(UPLOAD_TUTORIAL_VIDEO_LINK_MIN_LENGTH), rules.maxLength(UPLOAD_TUTORIAL_VIDEO_LINK_MAX_LENGTH)]
 }
 
 export function getUploadTutorialVideoOptions() {

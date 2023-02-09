@@ -5,14 +5,7 @@ import type { DateTime } from 'luxon'
 import { BaseModel, column, scope } from '@ioc:Adonis/Lucid/Orm'
 
 export default class PromoCode extends BaseModel {
-	public static readonly columns = [
-		'id',
-		'name',
-		'code',
-		'discountPrice',
-		'createdAt',
-		'updatedAt',
-	] as const
+	public static readonly columns = ['id', 'name', 'code', 'discountPrice', 'createdAt', 'updatedAt'] as const
 
 	/**
 	 * * Columns

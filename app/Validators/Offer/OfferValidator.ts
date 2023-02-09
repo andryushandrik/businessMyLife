@@ -8,12 +8,7 @@ import { GLOBAL_DATETIME_FORMAT } from 'Config/app'
 import { getUserIdRules } from '../Rules/User/user'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import { getSubsectionIdRules } from '../Rules/Offer/subsection'
-import {
-	getOfferCategoryRules,
-	getOfferImageOptions,
-	getOfferPaybackTimeRules,
-	getOfferProjectStageRules,
-} from '../Rules/Offer/offer'
+import { getOfferCategoryRules, getOfferImageOptions, getOfferPaybackTimeRules, getOfferProjectStageRules } from '../Rules/Offer/offer'
 import {
 	OFFER_ABOUT_COMPANY_MAX_LENGTH,
 	OFFER_ABOUT_COMPANY_MIN_LENGTH,
@@ -56,14 +51,8 @@ export default class OfferValidator extends IndexValidator {
 	 *    ```
 	 */
 	public schema = schema.create({
-		title: schema.string({ trim: true }, [
-			rules.minLength(OFFER_TITLE_MIN_LENGTH),
-			rules.maxLength(OFFER_TITLE_MAX_LENGTH),
-		]),
-		description: schema.string({ trim: true }, [
-			rules.minLength(OFFER_DESCRIPTION_MIN_LENGTH),
-			rules.maxLength(OFFER_DESCRIPTION_MAX_LENGTH),
-		]),
+		title: schema.string({ trim: true }, [rules.minLength(OFFER_TITLE_MIN_LENGTH), rules.maxLength(OFFER_TITLE_MAX_LENGTH)]),
+		description: schema.string({ trim: true }, [rules.minLength(OFFER_DESCRIPTION_MIN_LENGTH), rules.maxLength(OFFER_DESCRIPTION_MAX_LENGTH)]),
 		city: schema.string({ trim: true }),
 
 		category: schema.number(getOfferCategoryRules()),
@@ -83,20 +72,14 @@ export default class OfferValidator extends IndexValidator {
 			rules.minLength(OFFER_COOPERATION_TERMS_MIN_LENGTH),
 			rules.maxLength(OFFER_COOPERATION_TERMS_MAX_LENGTH),
 		]),
-		businessPlan: schema.string.optional({ trim: true }, [
-			rules.minLength(OFFER_BUSINESS_PLAN_MIN_LENGTH),
-			rules.maxLength(OFFER_BUSINESS_PLAN_MAX_LENGTH),
-		]),
+		businessPlan: schema.string.optional({ trim: true }, [rules.minLength(OFFER_BUSINESS_PLAN_MIN_LENGTH), rules.maxLength(OFFER_BUSINESS_PLAN_MAX_LENGTH)]),
 		benefits: schema.string.optional({ trim: true }, [
 			rules.minLength(OFFER_BENEFITS_MIN_LENGTH),
 			rules.maxLength(OFFER_BENEFITS_MAX_LENGTH),
 			// rules.requiredWhen('category', '=', OfferCategories.FRANCHISES),
 		]),
 
-		about: schema.string.optional({ trim: true }, [
-			rules.minLength(OFFER_ABOUT_MIN_LENGTH),
-			rules.maxLength(OFFER_ABOUT_MAX_LENGTH),
-		]),
+		about: schema.string.optional({ trim: true }, [rules.minLength(OFFER_ABOUT_MIN_LENGTH), rules.maxLength(OFFER_ABOUT_MAX_LENGTH)]),
 		aboutCompany: schema.string.optional({ trim: true }, [
 			rules.minLength(OFFER_ABOUT_COMPANY_MIN_LENGTH),
 			rules.maxLength(OFFER_ABOUT_COMPANY_MAX_LENGTH),

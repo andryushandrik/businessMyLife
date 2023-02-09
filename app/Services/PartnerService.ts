@@ -17,10 +17,7 @@ import { PARTNERS_FOLDER_PATH } from 'Config/drive'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 
 export default class PartnerService {
-	public static async paginate(
-		config: PaginateConfig<Partner>,
-		filter?: PartnerFilterValidator['schema']['props'],
-	): Promise<ModelPaginatorContract<Partner>> {
+	public static async paginate(config: PaginateConfig<Partner>, filter?: PartnerFilterValidator['schema']['props']): Promise<ModelPaginatorContract<Partner>> {
 		let query: ModelQueryBuilderContract<typeof Partner> = Partner.query()
 
 		if (filter) query = this.filter(query, filter)
@@ -33,10 +30,7 @@ export default class PartnerService {
 		}
 	}
 
-	public static async get(
-		id: Partner['id'],
-		{ trx }: ServiceConfig<Partner> = {},
-	): Promise<Partner> {
+	public static async get(id: Partner['id'], { trx }: ServiceConfig<Partner> = {}): Promise<Partner> {
 		let item: Partner | null
 
 		try {
@@ -50,9 +44,7 @@ export default class PartnerService {
 		return item
 	}
 
-	public static async create(
-		payload: (PartnerWithImageValidator | PartnerWithVideoValidator)['schema']['props'],
-	): Promise<void> {
+	public static async create(payload: (PartnerWithImageValidator | PartnerWithVideoValidator)['schema']['props']): Promise<void> {
 		let item: Partner
 		let media: string = payload.media as string
 		let trx: TransactionClientContract | undefined = undefined
@@ -73,10 +65,7 @@ export default class PartnerService {
 
 		if (!payload.mediaType) {
 			try {
-				const filePath: string = await this.uploadImage(
-					item.id,
-					payload.media as MultipartFileContract,
-				)
+				const filePath: string = await this.uploadImage(item.id, payload.media as MultipartFileContract)
 				await item.merge({ media: filePath }).save()
 
 				await trx!.commit()
@@ -88,10 +77,7 @@ export default class PartnerService {
 		}
 	}
 
-	public static async update(
-		id: Partner['id'],
-		payload: (PartnerWithImageValidator | PartnerWithVideoValidator)['schema']['props'],
-	): Promise<void> {
+	public static async update(id: Partner['id'], payload: (PartnerWithImageValidator | PartnerWithVideoValidator)['schema']['props']): Promise<void> {
 		let item: Partner
 		let media: string = payload.media as string
 		let trx: TransactionClientContract | undefined = undefined
@@ -125,10 +111,7 @@ export default class PartnerService {
 			}
 
 			try {
-				const filePath: string = await this.uploadImage(
-					item.id,
-					payload.media as MultipartFileContract,
-				)
+				const filePath: string = await this.uploadImage(item.id, payload.media as MultipartFileContract)
 				await item.merge({ media: filePath }).save()
 
 				await trx!.commit()
@@ -157,10 +140,7 @@ export default class PartnerService {
 		}
 	}
 
-	public static async visibleAction(
-		id: Partner['id'],
-		isVisible: Partner['isVisible'],
-	): Promise<void> {
+	public static async visibleAction(id: Partner['id'], isVisible: Partner['isVisible']): Promise<void> {
 		let item: Partner
 
 		try {
@@ -181,10 +161,7 @@ export default class PartnerService {
 	 * * Private methods
 	 */
 
-	private static async uploadImage(
-		id: Partner['id'],
-		image: MultipartFileContract,
-	): Promise<string> {
+	private static async uploadImage(id: Partner['id'], image: MultipartFileContract): Promise<string> {
 		const fileName = `${id}_${image.clientName}`
 
 		try {

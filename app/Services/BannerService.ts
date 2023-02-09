@@ -18,9 +18,7 @@ import { BANNER_FOLDER_PATH } from '../../config/drive'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 
 export default class BannerService {
-	public static async paginate(
-		config: PaginateConfig<Banner>,
-	): Promise<ModelPaginatorContract<Banner>> {
+	public static async paginate(config: PaginateConfig<Banner>): Promise<ModelPaginatorContract<Banner>> {
 		try {
 			return await Banner.query().getViaPaginate(config)
 		} catch (err: any) {
@@ -93,10 +91,7 @@ export default class BannerService {
 		await trx.commit()
 	}
 
-	public static async update(
-		id: Banner['id'],
-		payload: BannerValidator['schema']['props'],
-	): Promise<void> {
+	public static async update(id: Banner['id'], payload: BannerValidator['schema']['props']): Promise<void> {
 		let banner: Banner
 		const trx: TransactionClientContract = await Database.transaction()
 
@@ -134,9 +129,7 @@ export default class BannerService {
 		await trx.commit()
 	}
 
-	public static async updateBannersDelay({
-		delay,
-	}: BannerDelayValidator['schema']['props']): Promise<void> {
+	public static async updateBannersDelay({ delay }: BannerDelayValidator['schema']['props']): Promise<void> {
 		try {
 			await RedisService.set(RedisKeys.BANNER, 'delay', delay, {})
 		} catch (err: Err | any) {
@@ -165,10 +158,7 @@ export default class BannerService {
 	 * * Private methods
 	 */
 
-	private static async uploadImage(
-		id: Banner['id'],
-		image: MultipartFileContract,
-	): Promise<string> {
+	private static async uploadImage(id: Banner['id'], image: MultipartFileContract): Promise<string> {
 		const fileName = `${id}_${image.clientName}`
 
 		try {

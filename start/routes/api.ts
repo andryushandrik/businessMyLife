@@ -15,9 +15,7 @@ Route.group(() => {
 
 	Route.get('/partner', 'Api/PartnersController.paginate').middleware('CheckAccessToken')
 
-	Route.get('/uploadTutorial', 'Api/IndexController.paginateUploadTutorials').middleware(
-		'CheckAccessToken',
-	)
+	Route.get('/uploadTutorial', 'Api/IndexController.paginateUploadTutorials').middleware('CheckAccessToken')
 
 	/**
 	 * * Auth
@@ -26,15 +24,9 @@ Route.group(() => {
 	Route.group(() => {
 		Route.post('/login', 'Api/AuthController.login').middleware('CheckAuthHeaders')
 
-		Route.delete('/logout', 'Api/AuthController.logout').middleware([
-			'CheckAuthHeaders',
-			'CheckRefreshToken',
-		])
+		Route.delete('/logout', 'Api/AuthController.logout').middleware(['CheckAuthHeaders', 'CheckRefreshToken'])
 
-		Route.get('/refreshToken', 'Api/AuthController.refreshToken').middleware([
-			'CheckAuthHeaders',
-			'CheckRefreshToken',
-		])
+		Route.get('/refreshToken', 'Api/AuthController.refreshToken').middleware(['CheckAuthHeaders', 'CheckRefreshToken'])
 
 		Route.group(() => {
 			Route.post('/emailVerify', 'Api/AuthController.emailVerify')
@@ -134,29 +126,17 @@ Route.group(() => {
 
 		Route.get('/paginate/:currentUserId?', 'Api/Offer/OffersController.paginate')
 
-		Route.delete('/deleteImage/:offerImageId', 'Api/Offer/OffersController.deleteImage').middleware(
-			'CheckAccessToken',
-		)
+		Route.delete('/deleteImage/:offerImageId', 'Api/Offer/OffersController.deleteImage').middleware('CheckAccessToken')
 
 		Route.group(() => {
 			Route.group(() => {
-				Route.get(
-					'/notArchived/:userId',
-					'Api/Offer/OffersArchivesController.paginateUserNotArchivedOffers',
-				)
+				Route.get('/notArchived/:userId', 'Api/Offer/OffersArchivesController.paginateUserNotArchivedOffers')
 
-				Route.get(
-					'/archived/:userId',
-					'Api/Offer/OffersArchivesController.paginateUserArchivedOffers',
-				).middleware('CheckAccessToken')
+				Route.get('/archived/:userId', 'Api/Offer/OffersArchivesController.paginateUserArchivedOffers').middleware('CheckAccessToken')
 
-				Route.patch('/:id', 'Api/Offer/OffersArchivesController.archive').middleware(
-					'CheckAccessToken',
-				)
+				Route.patch('/:id', 'Api/Offer/OffersArchivesController.archive').middleware('CheckAccessToken')
 
-				Route.delete('/:id', 'Api/Offer/OffersArchivesController.unarchive').middleware(
-					'CheckAccessToken',
-				)
+				Route.delete('/:id', 'Api/Offer/OffersArchivesController.unarchive').middleware('CheckAccessToken')
 			}).prefix('archive')
 
 			Route.group(() => {

@@ -7,15 +7,7 @@ import type { DateTime } from 'luxon'
 import { BaseModel, column, scope } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Message extends BaseModel {
-	public static readonly columns = [
-		'id',
-		'isViewed',
-		'text',
-		'userId',
-		'conversationId',
-		'createdAt',
-		'updatedAt',
-	] as const
+	public static readonly columns = ['id', 'isViewed', 'text', 'userId', 'conversationId', 'createdAt', 'updatedAt'] as const
 
 	/**
 	 * * Columns

@@ -6,17 +6,7 @@ import Drive from '@ioc:Adonis/Core/Drive'
 import { BaseModel, beforeDelete, column, computed, scope } from '@ioc:Adonis/Lucid/Orm'
 
 export default class UploadTutorial extends BaseModel {
-	public static readonly columns = [
-		'id',
-		'isVisible',
-		'isEmbed',
-		'isTitleLink',
-		'title',
-		'media',
-    'link',
-		'createdAt',
-		'updatedAt',
-	] as const
+	public static readonly columns = ['id', 'isVisible', 'isEmbed', 'isTitleLink', 'title', 'media', 'link', 'createdAt', 'updatedAt'] as const
 
 	/**
 	 * * Columns
@@ -34,7 +24,7 @@ export default class UploadTutorial extends BaseModel {
 	@column()
 	public isTitleLink: boolean
 
-  @column()
+	@column()
 	public link: string
 
 	@column()

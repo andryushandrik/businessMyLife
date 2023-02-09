@@ -34,8 +34,7 @@ export function getUserEmailRules(
 ): Rule[] {
 	const rulesArr: Rule[] = [rules.email()]
 
-	if (withUniqueOrExists == 'unique')
-		rulesArr.push(rules.unique({ table, column: 'email', whereNot: { id: currentUserId } }))
+	if (withUniqueOrExists == 'unique') rulesArr.push(rules.unique({ table, column: 'email', whereNot: { id: currentUserId } }))
 	else if (withUniqueOrExists == 'exists') rulesArr.push(rules.exists({ table, column: 'email' }))
 
 	return rulesArr
@@ -58,10 +57,7 @@ export function getUserCompanyNameRules(typeFieldName: string): Rule[] {
 	return [
 		rules.minLength(USER_COMPANY_NAME_MIN_LENGTH),
 		rules.maxLength(USER_COMPANY_NAME_MAX_LENGTH),
-		rules.requiredWhen(typeFieldName, 'in', [
-			`${UserTypeNames.INDIVIDUAL_ENTREPRENEUR}`,
-			`${UserTypeNames.LIMITED_LIABILITY_COMPANY}`,
-		]),
+		rules.requiredWhen(typeFieldName, 'in', [`${UserTypeNames.INDIVIDUAL_ENTREPRENEUR}`, `${UserTypeNames.LIMITED_LIABILITY_COMPANY}`]),
 	]
 }
 
@@ -78,8 +74,5 @@ export function getUserPatronymicRules(): Rule[] {
 }
 
 export function getUserTypeRules(): Rule[] {
-	return [
-		rules.unsigned(),
-		rules.range(UserTypeNames.PHYSICAL_PERSON, UserTypeNames.LIMITED_LIABILITY_COMPANY),
-	]
+	return [rules.unsigned(), rules.range(UserTypeNames.PHYSICAL_PERSON, UserTypeNames.LIMITED_LIABILITY_COMPANY)]
 }

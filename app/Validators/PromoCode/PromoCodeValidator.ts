@@ -5,12 +5,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 import IndexValidator from '../IndexValidator'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
-import {
-	PROMO_CODE_CODE_MAX_LENGTH,
-	PROMO_CODE_CODE_MIN_LENGTH,
-	PROMO_CODE_NAME_MAX_LENGTH,
-	PROMO_CODE_NAME_MIN_LENGTH,
-} from 'Config/database'
+import { PROMO_CODE_CODE_MAX_LENGTH, PROMO_CODE_CODE_MIN_LENGTH, PROMO_CODE_NAME_MAX_LENGTH, PROMO_CODE_NAME_MIN_LENGTH } from 'Config/database'
 
 export default class PromoCodeValidator extends IndexValidator {
 	constructor(protected ctx: HttpContextContract) {
@@ -37,14 +32,8 @@ export default class PromoCodeValidator extends IndexValidator {
 	 *    ```
 	 */
 	public schema = schema.create({
-		name: schema.string({ trim: true }, [
-			rules.minLength(PROMO_CODE_NAME_MIN_LENGTH),
-			rules.maxLength(PROMO_CODE_NAME_MAX_LENGTH),
-		]),
-		code: schema.string({ trim: true }, [
-			rules.minLength(PROMO_CODE_CODE_MIN_LENGTH),
-			rules.maxLength(PROMO_CODE_CODE_MAX_LENGTH),
-		]),
+		name: schema.string({ trim: true }, [rules.minLength(PROMO_CODE_NAME_MIN_LENGTH), rules.maxLength(PROMO_CODE_NAME_MAX_LENGTH)]),
+		code: schema.string({ trim: true }, [rules.minLength(PROMO_CODE_CODE_MIN_LENGTH), rules.maxLength(PROMO_CODE_CODE_MAX_LENGTH)]),
 		discountPrice: schema.number([rules.unsigned()]),
 	})
 

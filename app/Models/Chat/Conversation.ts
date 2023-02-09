@@ -1,38 +1,16 @@
 // * Types
 import type User from '../User/User'
 import type { DateTime } from 'luxon'
-import type {
-	BelongsTo,
-	HasMany,
-	HasOne,
-	ModelObject,
-	ModelQueryBuilderContract,
-} from '@ioc:Adonis/Lucid/Orm'
+import type { BelongsTo, HasMany, HasOne, ModelObject, ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 
 import Message from './Message'
 import Offer from '../Offer/Offer'
 import UserService from 'App/Services/User/UserService'
-import {
-	BaseModel,
-	beforeFetch,
-	beforeFind,
-	belongsTo,
-	column,
-	hasMany,
-	hasOne,
-	scope,
-} from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, beforeFetch, beforeFind, belongsTo, column, hasMany, hasOne, scope } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Conversation extends BaseModel {
-	public static readonly columns = [
-		'id',
-		'fromId',
-		'toId',
-		'offerId',
-		'createdAt',
-		'updatedAt',
-	] as const
+	public static readonly columns = ['id', 'fromId', 'toId', 'offerId', 'createdAt', 'updatedAt'] as const
 
 	/**
 	 * * Columns
@@ -97,32 +75,24 @@ export default class Conversation extends BaseModel {
 
 	public static getWithoutTopic = scope((query, fromId: User['id'], toId: User['id']) => {
 		query.whereNull('offer_id').andWhere((query) => {
-			query
-				.whereIn(['from_id', 'to_id'], [[fromId, toId]])
-				.orWhereIn(['from_id', 'to_id'], [[toId, fromId]])
+			query.whereIn(['from_id', 'to_id'], [[fromId, toId]]).orWhereIn(['from_id', 'to_id'], [[toId, fromId]])
 		})
 	})
 
-	public static getWithOfferTopic = scope(
-		(query, fromId: User['id'], toId: User['id'], offerId: Offer['id']) => {
-			query.where('offer_id', offerId).andWhere((query) => {
-				query
-					.whereIn(['from_id', 'to_id'], [[fromId, toId]])
-					.orWhereIn(['from_id', 'to_id'], [[toId, fromId]])
-			})
-		},
-	)
+	public static getWithOfferTopic = scope((query, fromId: User['id'], toId: User['id'], offerId: Offer['id']) => {
+		query.where('offer_id', offerId).andWhere((query) => {
+			query.whereIn(['from_id', 'to_id'], [[fromId, toId]]).orWhereIn(['from_id', 'to_id'], [[toId, fromId]])
+		})
+	})
 
-	public static countNewMessagesForCurrentUser = scope(
-		(query: ModelQueryBuilderContract<typeof Conversation>, userId: User['id']) => {
-			query.withCount('messages', (query) => {
-				query
-					.withScopes((scopes) => scopes.getNew())
-					.withScopes((scopes) => scopes.notCurrentUser(userId))
-					.as('newMessagesCount')
-			})
-		},
-	)
+	public static countNewMessagesForCurrentUser = scope((query: ModelQueryBuilderContract<typeof Conversation>, userId: User['id']) => {
+		query.withCount('messages', (query) => {
+			query
+				.withScopes((scopes) => scopes.getNew())
+				.withScopes((scopes) => scopes.notCurrentUser(userId))
+				.as('newMessagesCount')
+		})
+	})
 
 	/**
 	 * * Hooks

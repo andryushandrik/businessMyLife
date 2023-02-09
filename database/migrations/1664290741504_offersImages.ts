@@ -18,12 +18,7 @@ export default class extends BaseSchema {
 			 * * Foreign keys
 			 */
 
-			table
-				.integer('offer_id')
-				.unsigned()
-				.notNullable()
-				.references(`${TABLES_NAMES.OFFERS}.id`)
-				.onDelete('CASCADE')
+			table.integer('offer_id').unsigned().notNullable().references(`${TABLES_NAMES.OFFERS}.id`).onDelete('CASCADE')
 
 			/**
 			 * * Timestamps
