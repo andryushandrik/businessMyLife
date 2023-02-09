@@ -39,6 +39,7 @@ export default class UsersController {
 				payload,
 				titleFromController,
 				roles: ROLE_NAMES,
+        roleEnum: RoleNames,
 				usersTypes: USER_TYPE_NAMES,
 			})
 		} catch (err: Err | any) {
@@ -79,6 +80,7 @@ export default class UsersController {
 				users,
 				payload,
 				titleFromController,
+        roleEnum: RoleNames,
 				roles: ROLE_NAMES,
 				usersTypes: USER_TYPE_NAMES,
 			})

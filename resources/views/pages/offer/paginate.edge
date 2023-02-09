@@ -47,7 +47,7 @@
         @if (isModeratePage)
           <form action="{{ route('offer.notVerified.verifyAll', {}, { qs: { _method: 'PATCH' } }) }}" method="POST">
             {{ csrfField() }}
-            <button type="submit" class="btn btn-primary btn-sm">Верифицировать все</button>
+            <button type="submit" class="btn btn-primary btn-sm">Опубликовать все</button>
           </form>
         @endif
       </div>
@@ -113,6 +113,9 @@
                       </button>
                       <div class="dropdown-menu" style="">
                         <a class="dropdown-item" href="{{ route('offer.get', { id: item.id }) }}">Просмотреть</a>
+                        <a class="dropdown-item" target="_blank" href="https://business-mylife.ru/adv-page/{{item.id}}">Открыть на сайте</a>
+                      </div>
+
                       </div>
                     </div>
                   </td>

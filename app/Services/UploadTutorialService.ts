@@ -64,6 +64,7 @@ export default class UploadTutorialService {
 			isTitleLink: Boolean(payload.isTitleLink),
 			isEmbed: true,
 			title: payload.title,
+      link: payload.link,
 		}
 
 		if (payload.video) {
@@ -108,6 +109,7 @@ export default class UploadTutorialService {
 			isTitleLink: Boolean(payload.isTitleLink),
 			isEmbed: true,
 			title: payload.title,
+      link: payload.link,
 		}
 
 		if (payload.video) {
