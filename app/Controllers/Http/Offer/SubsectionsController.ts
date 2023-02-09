@@ -31,10 +31,7 @@ export default class SubsectionsController {
 		}
 
 		try {
-			const subsections: ModelPaginatorContract<Subsection> = await SubsectionService.paginate(
-				config,
-				payload,
-			)
+			const subsections: ModelPaginatorContract<Subsection> = await SubsectionService.paginate(config, payload)
 
 			return view.render('pages/subsection/index', {
 				payload,
@@ -59,10 +56,8 @@ export default class SubsectionsController {
 
 	public async store({ request, response, session }: HttpContextContract) {
 		const payload = await request.validate(SubsectionValidator)
-
 		try {
 			await SubsectionService.create(payload)
-
 			session.flash('success', ResponseMessages.SUCCESS)
 			response.redirect().toRoute('subsections.index')
 		} catch (err: Err | any) {
@@ -115,3 +110,4 @@ export default class SubsectionsController {
 		}
 	}
 }
+

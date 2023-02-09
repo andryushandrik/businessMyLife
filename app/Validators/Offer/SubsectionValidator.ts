@@ -1,5 +1,5 @@
+import Area  from 'App/Models/Offer/Area';
 // * Types
-import type Subsection from 'App/Models/Offer/Subsection'
 import type { CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 // * Types
@@ -10,7 +10,7 @@ import { getAreaIdRules } from '../Rules/Offer/area'
 import { getSubsectionNameRules } from '../Rules/Offer/subsection'
 
 export default class SubsectionValidator extends IndexValidator {
-	private readonly currentSubsectionId: Subsection['id'] | null = this.ctx.params.id ?? null
+	private readonly areaId: Area['id'] | null = this.ctx.request.body().areaId ?? null
 
 	constructor(protected ctx: HttpContextContract) {
 		super()
@@ -36,7 +36,7 @@ export default class SubsectionValidator extends IndexValidator {
 	 *    ```
 	 */
 	public schema = schema.create({
-		name: schema.string({ trim: true }, getSubsectionNameRules(this.currentSubsectionId)),
+		name: schema.string({ trim: true }, getSubsectionNameRules(this.areaId)),
 		areaId: schema.number(getAreaIdRules()),
 	})
 
