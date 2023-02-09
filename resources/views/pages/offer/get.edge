@@ -27,12 +27,12 @@
         @if(item.isVerified)
           <form action="{{ route('offer.notVerified.unverify', { id: item.id }, { qs: { _method: 'DELETE' } }) }}" class="ml-2" method="POST">
             {{ csrfField() }}
-            <button type="submit" class="btn btn-primary btn-sm">Анверифицировать</button>
+            <button type="submit" class="btn btn-primary btn-sm">Отменить публикацию</button>
           </form>
 				@else
           <form action="{{ route('offer.notVerified.verify', { id: item.id }, { qs: { _method: 'PATCH' } }) }}" class="ml-2" method="POST">
             {{ csrfField() }}
-            <button type="submit" class="btn btn-danger btn-sm">Верифицировать</button>
+            <button type="submit" class="btn btn-danger btn-sm">Опубликовать</button>
           </form>
 				@endif
         @if(item.isBanned)
@@ -98,7 +98,7 @@
 				</div>
 
 				<div class="form-group">
-					<label class="mb-1">Верифицирован</label>
+					<label class="mb-1">Опубликован</label>
 					<input type="string" class="form-control" value="{{ item.isVerifiedForUser }}" disabled />
 				</div>
 
