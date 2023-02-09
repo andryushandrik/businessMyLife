@@ -31,32 +31,17 @@ export interface ClientToServerEvents {
 	 * * Conversation
 	 */
 
-	'conversation:get': (
-		conversationId: Conversation['id'],
-		cb: (response: Err | ResponseService) => void,
-	) => void
-	'conversation:delete': (
-		conversationId: Conversation['id'],
-		cb: (response: Err | ResponseService) => void,
-	) => void
-	'conversation:paginate': (
-		payload: ApiValidator['schema']['props'],
-		cb: (response: Err | ResponseService) => void,
-	) => void
+	'conversation:get': (conversationId: Conversation['id'], cb: (response: Err | ResponseService) => void) => void
+	'conversation:delete': (conversationId: Conversation['id'], cb: (response: Err | ResponseService) => void) => void
+	'conversation:paginate': (payload: ApiValidator['schema']['props'], cb: (response: Err | ResponseService) => void) => void
 
-	'conversation:close': (
-		conversationId: Conversation['id'],
-		cb: (response: Err | ResponseService) => void,
-	) => void
+	'conversation:close': (conversationId: Conversation['id'], cb: (response: Err | ResponseService) => void) => void
 
 	/**
 	 * * Message
 	 */
 
-	'message:create': (
-		payload: MessageWithoutTopicValidator['schema']['props'],
-		cb: (response: Err | ResponseService) => void,
-	) => void
+	'message:create': (payload: MessageWithoutTopicValidator['schema']['props'], cb: (response: Err | ResponseService) => void) => void
 	'message:createWithoutTopic': (
 		toId: User['id'],
 		payload: MessageWithoutTopicValidator['schema']['props'],
@@ -68,16 +53,8 @@ export interface ClientToServerEvents {
 		cb: (response: Err | ResponseService) => void,
 	) => void
 
-	'message:viewed': (
-		conversationId: Conversation['id'],
-		userId: User['id'],
-		cb: (response: Err | ResponseService) => void,
-	) => void
-	'message:paginate': (
-		conversationId: Conversation['id'],
-		payload: ApiValidator['schema']['props'],
-		cb: (response: Err | ResponseService) => void,
-	) => void
+	'message:viewed': (conversationId: Conversation['id'], userId: User['id'], cb: (response: Err | ResponseService) => void) => void
+	'message:paginate': (conversationId: Conversation['id'], payload: ApiValidator['schema']['props'], cb: (response: Err | ResponseService) => void) => void
 }
 
 export interface InterServerEvents {}

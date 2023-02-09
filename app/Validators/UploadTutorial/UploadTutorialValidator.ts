@@ -5,11 +5,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 import IndexValidator from '../IndexValidator'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
-import {
-	getUploadTutorialTitleRules,
-	getUploadTutorialEmbedRules,
-	getUploadTutorialVideoOptions,
-} from '../Rules/uploadTutorial'
+import { getUploadTutorialTitleRules, getUploadTutorialEmbedRules, getUploadTutorialVideoOptions } from '../Rules/uploadTutorial'
 
 export default class UploadTutorialValidator extends IndexValidator {
 	constructor(protected ctx: HttpContextContract) {
@@ -44,14 +40,9 @@ export default class UploadTutorialValidator extends IndexValidator {
 
 		isVisible: schema.boolean.optional(),
 		isTitleLink: schema.boolean.optional(),
-    link: schema.string.optional(),
-		video: schema.file.optional(getUploadTutorialVideoOptions(), [
-			rules.requiredIfNotExists('embed'),
-		]),
-		embed: schema.string.optional({ trim: true }, [
-			...getUploadTutorialEmbedRules(),
-			rules.requiredIfNotExists('video'),
-		]),
+		link: schema.string.optional(),
+		video: schema.file.optional(getUploadTutorialVideoOptions(), [rules.requiredIfNotExists('embed')]),
+		embed: schema.string.optional({ trim: true }, [...getUploadTutorialEmbedRules(), rules.requiredIfNotExists('video')]),
 	})
 
 	/**

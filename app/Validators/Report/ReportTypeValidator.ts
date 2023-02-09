@@ -6,11 +6,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 import IndexValidator from '../IndexValidator'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
-import {
-	REPORT_TYPE_NAME_MAX_LENGTH,
-	REPORT_TYPE_NAME_MIN_LENGTH,
-	TABLES_NAMES,
-} from 'Config/database'
+import { REPORT_TYPE_NAME_MAX_LENGTH, REPORT_TYPE_NAME_MIN_LENGTH, TABLES_NAMES } from 'Config/database'
 
 export default class ReportTypeValidator extends IndexValidator {
 	private readonly currentReportTypeId: ReportType['id'] | null = this.ctx.params.id

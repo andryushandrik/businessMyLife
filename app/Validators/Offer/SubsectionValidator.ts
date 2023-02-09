@@ -1,4 +1,4 @@
-import Area  from 'App/Models/Offer/Area';
+import Area from 'App/Models/Offer/Area'
 // * Types
 import type { CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'

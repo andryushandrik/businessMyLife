@@ -5,14 +5,7 @@ import type { DateTime } from 'luxon'
 import { BaseModel, column, computed, scope } from '@ioc:Adonis/Lucid/Orm'
 
 export default class ReportType extends BaseModel {
-	public static readonly columns = [
-		'id',
-		'isForUsers',
-		'isForOffers',
-		'name',
-		'createdAt',
-		'updatedAt',
-	] as const
+	public static readonly columns = ['id', 'isForUsers', 'isForOffers', 'name', 'createdAt', 'updatedAt'] as const
 
 	/**
 	 * * Columns

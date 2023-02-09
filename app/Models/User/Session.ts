@@ -6,16 +6,7 @@ import type { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Session extends BaseModel {
-	public static readonly columns = [
-		'id',
-		'token',
-		'fingerprint',
-		'userAgent',
-		'ip',
-		'userId',
-		'createdAt',
-		'updatedAt',
-	] as const
+	public static readonly columns = ['id', 'token', 'fingerprint', 'userAgent', 'ip', 'userId', 'createdAt', 'updatedAt'] as const
 
 	/**
 	 * * Columns

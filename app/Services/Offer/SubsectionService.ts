@@ -85,10 +85,7 @@ export default class SubsectionService {
 		}
 	}
 
-	public static async update(
-		id: Subsection['id'],
-		payload: SubsectionValidator['schema']['props'],
-	): Promise<Subsection> {
+	public static async update(id: Subsection['id'], payload: SubsectionValidator['schema']['props']): Promise<Subsection> {
 		let item: Subsection
 
 		try {

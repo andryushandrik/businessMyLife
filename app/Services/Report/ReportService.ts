@@ -27,9 +27,7 @@ export default class ReportService {
 		config: PaginateConfig<Report>,
 		filter?: OfferReportFilterValidator['schema']['props'],
 	): Promise<ModelPaginatorContract<Report>> {
-		let query: ModelQueryBuilderContract<typeof Report> = Report.query().withScopes((scopes) =>
-			scopes.offersReports(),
-		)
+		let query: ModelQueryBuilderContract<typeof Report> = Report.query().withScopes((scopes) => scopes.offersReports())
 
 		if (config.relations) {
 			for (const item of config.relations) {
@@ -65,11 +63,8 @@ export default class ReportService {
 
 			if (filter.areaId) {
 				try {
-					const subsectionsIds: Subsection['id'][] =
-						await SubsectionService.getSubsectionsIdsByAreaId(filter.areaId)
-					const offersIds: Offer['id'][] = await OfferService.getOffersIdsBySubSectionIds(
-						subsectionsIds,
-					)
+					const subsectionsIds: Subsection['id'][] = await SubsectionService.getSubsectionsIdsByAreaId(filter.areaId)
+					const offersIds: Offer['id'][] = await OfferService.getOffersIdsBySubSectionIds(subsectionsIds)
 
 					dependencies.offersIds = [...dependencies.offersIds, ...offersIds]
 				} catch (err: Err | any) {
@@ -79,9 +74,7 @@ export default class ReportService {
 
 			if (filter.category !== undefined && filter.category !== null) {
 				try {
-					const offersIds: Offer['id'][] = await OfferService.getOffersIdsByCategory(
-						filter.category,
-					)
+					const offersIds: Offer['id'][] = await OfferService.getOffersIdsByCategory(filter.category)
 
 					dependencies.offersIds = [...dependencies.offersIds, ...offersIds]
 				} catch (err: Err | any) {
@@ -104,9 +97,7 @@ export default class ReportService {
 		config: PaginateConfig<Report>,
 		filter?: UserReportFilterValidator['schema']['props'],
 	): Promise<ModelPaginatorContract<Report>> {
-		let query: ModelQueryBuilderContract<typeof Report> = Report.query().withScopes((scopes) =>
-			scopes.usersReports(),
-		)
+		let query: ModelQueryBuilderContract<typeof Report> = Report.query().withScopes((scopes) => scopes.usersReports())
 
 		if (config.relations) {
 			for (const item of config.relations) {
@@ -171,16 +162,14 @@ export default class ReportService {
 					// Skip this api's keys
 
 					case 'query':
-						if (dependencies.usersIds?.length)
-							query = query.withScopes((scopes) => scopes.getByUsersIds(dependencies.usersIds!))
+						if (dependencies.usersIds?.length) query = query.withScopes((scopes) => scopes.getByUsersIds(dependencies.usersIds!))
 
 						break
 
 					case 'areaId':
 					case 'category':
 					case 'offerQuery':
-						if (dependencies.offersIds?.length)
-							query = query.withScopes((scopes) => scopes.getByOffersIds(dependencies.offersIds!))
+						if (dependencies.offersIds?.length) query = query.withScopes((scopes) => scopes.getByOffersIds(dependencies.offersIds!))
 
 						break
 
@@ -210,8 +199,7 @@ export default class ReportService {
 					// Skip this api's keys
 
 					case 'query':
-						if (dependencies.usersIds?.length)
-							query = query.withScopes((scopes) => scopes.getByUsersToIds(dependencies.usersIds!))
+						if (dependencies.usersIds?.length) query = query.withScopes((scopes) => scopes.getByUsersToIds(dependencies.usersIds!))
 
 						break
 

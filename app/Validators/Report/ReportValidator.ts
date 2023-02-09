@@ -37,10 +37,7 @@ export default class ReportValidator extends IndexValidator {
 		description: schema.string({ trim: true }, [rules.maxLength(REPORT_DESCRIPTION_LENGTH)]),
 
 		userId: schema.number(getUserIdRules()),
-		reportTypeId: schema.number([
-			rules.unsigned(),
-			rules.exists({ table: TABLES_NAMES.REPORT_TYPES, column: 'id' }),
-		]),
+		reportTypeId: schema.number([rules.unsigned(), rules.exists({ table: TABLES_NAMES.REPORT_TYPES, column: 'id' })]),
 
 		/**
 		 * * Optional fields

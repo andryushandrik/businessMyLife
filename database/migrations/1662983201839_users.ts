@@ -12,16 +12,8 @@ export default class extends BaseSchema {
 			 * * Not nullable columns
 			 */
 
-			table
-				.boolean('isShowEmail')
-				.defaultTo(1)
-				.notNullable()
-				.comment('Show email in profile page or not')
-			table
-				.boolean('isShowPhone')
-				.defaultTo(1)
-				.notNullable()
-				.comment('Show phone in profile page or not')
+			table.boolean('isShowEmail').defaultTo(1).notNullable().comment('Show email in profile page or not')
+			table.boolean('isShowPhone').defaultTo(1).notNullable().comment('Show phone in profile page or not')
 
 			table.integer('type').unsigned().notNullable().comment(`
         0 - физ лицо
@@ -47,19 +39,11 @@ export default class extends BaseSchema {
 			table.string('hobby').nullable()
 
 			table.bigInteger('taxpayerIdentificationNumber').unique().unsigned().nullable().comment('ИНН')
-			table
-				.bigInteger('mainStateRegistrationNumber')
-				.unique()
-				.unsigned()
-				.nullable()
-				.comment('ОГРН или ОГРНИП у ИП')
+			table.bigInteger('mainStateRegistrationNumber').unique().unsigned().nullable().comment('ОГРН или ОГРНИП у ИП')
 
 			table.string('legalAddress').nullable()
 			table.string('placeOfWork').nullable().comment('Отображается в профиле')
-			table
-				.string('companyName')
-				.nullable()
-				.comment('Указывается при регистрации и больше нигде не используется')
+			table.string('companyName').nullable().comment('Указывается при регистрации и больше нигде не используется')
 			table.integer('experienceType').nullable().comment(`
         0 - до 3 месяцев
         1 - от 3 до 6 месяцев
@@ -72,12 +56,7 @@ export default class extends BaseSchema {
 			 * * Foreign keys
 			 */
 
-			table
-				.integer('role_id')
-				.unsigned()
-				.notNullable()
-				.references(`${TABLES_NAMES.ROLES}.id`)
-				.onDelete('CASCADE')
+			table.integer('role_id').unsigned().notNullable().references(`${TABLES_NAMES.ROLES}.id`).onDelete('CASCADE')
 
 			/**
 			 * * Timestamps

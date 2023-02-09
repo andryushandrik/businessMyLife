@@ -33,7 +33,7 @@ export default class BlockUntilValidator extends IndexValidator {
 	 */
 	public schema = schema.create({
 		blockedUntil: schema.date({ format: 'dd MMMM, yyyy' }, getUserBlockedUntilRules()),
-    blockDescription: schema.string()
+		blockDescription: schema.string(),
 	})
 
 	/**

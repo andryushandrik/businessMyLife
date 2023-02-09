@@ -17,11 +17,7 @@ import { ResponseCodes, ResponseMessages } from 'Config/response'
 const apiValidator: ApiValidator = new ApiValidator()
 
 export default class ConversationsController {
-	public static async paginate(
-		userId: SocketData['userId'],
-		payload: any,
-		cb: (response: Err | ResponseService) => void,
-	): Promise<void> {
+	public static async paginate(userId: SocketData['userId'], payload: any, cb: (response: Err | ResponseService) => void): Promise<void> {
 		let validatedPayload: ApiValidator['schema']['props']
 
 		try {
@@ -39,10 +35,7 @@ export default class ConversationsController {
 		}
 
 		try {
-			const conversations: JSONPaginate = await ConversationService.paginate(
-				userId,
-				validatedPayload,
-			)
+			const conversations: JSONPaginate = await ConversationService.paginate(userId, validatedPayload)
 
 			return cb(new ResponseService(ResponseMessages.SUCCESS, conversations))
 		} catch (err: Err | any) {
@@ -68,10 +61,7 @@ export default class ConversationsController {
 		}
 	}
 
-	public static async delete(
-		conversationId: Conversation['id'],
-		cb: (response: Err | ResponseService) => void,
-	): Promise<Conversation | void> {
+	public static async delete(conversationId: Conversation['id'], cb: (response: Err | ResponseService) => void): Promise<Conversation | void> {
 		try {
 			await ConversationService.delete(conversationId)
 

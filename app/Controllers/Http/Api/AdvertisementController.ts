@@ -22,9 +22,7 @@ export default class AdvertisementController {
 
 		try {
 			const advertisements: Advertisement[] = await AdvertisementService.getAll(Advertisement)
-			return response
-				.status(200)
-				.send(new ResponseService(ResponseMessages.SUCCESS, advertisements))
+			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, advertisements))
 		} catch (err: Err | any) {
 			throw new ExceptionService(err)
 		}

@@ -14,13 +14,7 @@ import OfferReportFilterValidator from 'App/Validators/Report/OfferReportFilterV
 import { OFFER_CATEGORIES } from 'Config/offer'
 
 export default class OffersController {
-	public async paginateOffersReports({
-		request,
-		response,
-		route,
-		view,
-		session,
-	}: HttpContextContract) {
+	public async paginateOffersReports({ request, response, route, view, session }: HttpContextContract) {
 		let payload: OfferReportFilterValidator['schema']['props'] | undefined = undefined
 		const isFiltered: boolean = request.input('isFiltered', false)
 		const config: PaginateConfig<Report> = {
@@ -38,10 +32,7 @@ export default class OffersController {
 
 		try {
 			const areas: Area[] = await AreaService.getAll()
-			const reports: ModelPaginatorContract<Report> = await ReportService.paginateOffersReports(
-				config,
-				payload,
-			)
+			const reports: ModelPaginatorContract<Report> = await ReportService.paginateOffersReports(config, payload)
 
 			return view.render('pages/report/paginateOffersReports', {
 				areas,
@@ -55,13 +46,7 @@ export default class OffersController {
 		}
 	}
 
-	public async paginateUsersReports({
-		request,
-		response,
-		route,
-		view,
-		session,
-	}: HttpContextContract) {
+	public async paginateUsersReports({ request, response, route, view, session }: HttpContextContract) {
 		let payload: UserReportFilterValidator['schema']['props'] | undefined = undefined
 		const isFiltered: boolean = request.input('isFiltered', false)
 		const config: PaginateConfig<Report> = {
@@ -78,10 +63,7 @@ export default class OffersController {
 		}
 
 		try {
-			const reports: ModelPaginatorContract<Report> = await ReportService.paginateUsersReports(
-				config,
-				payload,
-			)
+			const reports: ModelPaginatorContract<Report> = await ReportService.paginateUsersReports(config, payload)
 
 			return view.render('pages/report/paginateUsersReports', {
 				reports,

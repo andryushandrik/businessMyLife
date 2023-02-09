@@ -242,7 +242,7 @@ export default class UserService {
 		} catch (err: Err | any) {
 			throw err
 		}
-    const payload = {
+		const payload = {
 			blockedUntil: null,
 			blockDescription: null,
 		}
@@ -331,4 +331,3 @@ export default class UserService {
 		return query
 	}
 }
-

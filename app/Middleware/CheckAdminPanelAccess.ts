@@ -13,8 +13,7 @@ export default class CheckAdminPanelAccess {
 		const currentUser: User | null = session.get(SESSION_AUTH_KEY)
 
 		try {
-			if (!currentUser)
-				throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.USER_NOT_FOUND } as Err
+			if (!currentUser) throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.USER_NOT_FOUND } as Err
 
 			await AuthService.checkAdminAccess(currentUser.id)
 		} catch (err: Err | any) {

@@ -60,4 +60,3 @@ export default class RedisService {
 		return `${REDIS_KEYS[keyType]}/${key}`
 	}
 }
-

@@ -5,11 +5,7 @@ import type { Err } from 'Contracts/response'
 import type { PaginateConfig, ServiceConfig } from 'Contracts/services'
 import type { MultipartFileContract } from '@ioc:Adonis/Core/BodyParser'
 import type { TransactionClientContract } from '@ioc:Adonis/Lucid/Database'
-import type {
-	ModelAttributes,
-	ModelPaginatorContract,
-	ModelQueryBuilderContract,
-} from '@ioc:Adonis/Lucid/Orm'
+import type { ModelAttributes, ModelPaginatorContract, ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 
 import Drive from '@ioc:Adonis/Core/Drive'
@@ -36,10 +32,7 @@ export default class UploadTutorialService {
 		}
 	}
 
-	public static async get(
-		id: UploadTutorial['id'],
-		{ trx }: ServiceConfig<UploadTutorial> = {},
-	): Promise<UploadTutorial> {
+	public static async get(id: UploadTutorial['id'], { trx }: ServiceConfig<UploadTutorial> = {}): Promise<UploadTutorial> {
 		let item: UploadTutorial | null
 
 		try {
@@ -64,7 +57,7 @@ export default class UploadTutorialService {
 			isTitleLink: Boolean(payload.isTitleLink),
 			isEmbed: true,
 			title: payload.title,
-      link: payload.link,
+			link: payload.link,
 		}
 
 		if (payload.video) {
@@ -95,10 +88,7 @@ export default class UploadTutorialService {
 		}
 	}
 
-	public static async update(
-		id: UploadTutorial['id'],
-		payload: UploadTutorialValidator['schema']['props'],
-	): Promise<void> {
+	public static async update(id: UploadTutorial['id'], payload: UploadTutorialValidator['schema']['props']): Promise<void> {
 		let item: UploadTutorial
 		let oldMedia: string
 		const media: string = payload.embed ?? 'tmp'
@@ -109,7 +99,7 @@ export default class UploadTutorialService {
 			isTitleLink: Boolean(payload.isTitleLink),
 			isEmbed: true,
 			title: payload.title,
-      link: payload.link,
+			link: payload.link,
 		}
 
 		if (payload.video) {
@@ -170,10 +160,7 @@ export default class UploadTutorialService {
 	 * * Private methods
 	 */
 
-	private static async uploadImage(
-		id: UploadTutorial['id'],
-		video: MultipartFileContract,
-	): Promise<string> {
+	private static async uploadImage(id: UploadTutorial['id'], video: MultipartFileContract): Promise<string> {
 		const fileName = `${id}_${video.clientName}`
 
 		try {

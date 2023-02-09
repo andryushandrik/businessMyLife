@@ -51,10 +51,7 @@ export default class PromoCodeService {
 		}
 	}
 
-	public static async update(
-		id: PromoCode['id'],
-		payload: PromoCodeValidator['schema']['props'],
-	): Promise<void> {
+	public static async update(id: PromoCode['id'], payload: PromoCodeValidator['schema']['props']): Promise<void> {
 		let item: PromoCode
 
 		try {

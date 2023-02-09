@@ -35,10 +35,7 @@ export default class FeedbackValidator extends IndexValidator {
 	public schema = schema.create({
 		name: schema.string({ trim: true }, getUserFirstNameRules()),
 		email: schema.string({ trim: true }, getUserEmailRules()),
-		question: schema.string({ trim: true }, [
-			rules.minLength(FEEDBACK_QUESTION_MIN_LENGTH),
-			rules.maxLength(FEEDBACK_QUESTION_MAX_LENGTH),
-		]),
+		question: schema.string({ trim: true }, [rules.minLength(FEEDBACK_QUESTION_MIN_LENGTH), rules.maxLength(FEEDBACK_QUESTION_MAX_LENGTH)]),
 	})
 
 	/**

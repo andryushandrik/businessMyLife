@@ -15,13 +15,7 @@ export enum UserTypeNames {
 }
 
 // Don't change orders below
-export const USER_EXPERIENCE_TYPES = [
-	'до 3 месяцев',
-	'от 3 до 6 месяцев',
-	'от 6 месяцев до 1 года',
-	'от 1 года до 3 лет',
-	'от 3 лет',
-] as const
+export const USER_EXPERIENCE_TYPES = ['до 3 месяцев', 'от 3 до 6 месяцев', 'от 6 месяцев до 1 года', 'от 1 года до 3 лет', 'от 3 лет'] as const
 export enum UserExperienceTypes {
 	BEFORE_THREE_MONTH = 0,
 	AFTER_THREE_MONTH = 1,

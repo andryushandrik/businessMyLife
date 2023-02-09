@@ -6,14 +6,7 @@ import { GLOBAL_DATETIME_FORMAT } from 'Config/app'
 import { BaseModel, column, computed, scope } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Feedback extends BaseModel {
-	public static readonly columns = [
-		'id',
-		'name',
-		'email',
-		'question',
-		'createdAt',
-		'updatedAt',
-	] as const
+	public static readonly columns = ['id', 'name', 'email', 'question', 'createdAt', 'updatedAt'] as const
 
 	/**
 	 * * Columns

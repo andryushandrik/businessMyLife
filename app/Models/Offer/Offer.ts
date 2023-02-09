@@ -15,24 +15,8 @@ import { TABLES_NAMES } from 'Config/database'
 import { GLOBAL_DATETIME_FORMAT } from 'Config/app'
 import { formatStringForCyrillic } from 'Helpers/index'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
-import {
-	OfferCategories,
-	OfferPaybackTimes,
-	OfferProjectStages,
-	OFFER_CATEGORIES,
-	OFFER_PAYBACK_TIMES,
-	OFFER_PROJECT_STAGES,
-} from 'Config/offer'
-import {
-	BaseModel,
-	beforeDelete,
-	beforeSave,
-	belongsTo,
-	column,
-	computed,
-	hasMany,
-	scope,
-} from '@ioc:Adonis/Lucid/Orm'
+import { OfferCategories, OfferPaybackTimes, OfferProjectStages, OFFER_CATEGORIES, OFFER_PAYBACK_TIMES, OFFER_PROJECT_STAGES } from 'Config/offer'
+import { BaseModel, beforeDelete, beforeSave, belongsTo, column, computed, hasMany, scope } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Offer extends BaseModel {
 	public static readonly columns = [
@@ -215,12 +199,12 @@ export default class Offer extends BaseModel {
 		return this.isBanned ? 'Да' : 'Нет'
 	}
 
-  @computed()
+	@computed()
 	public get isBlocked(): boolean {
-    let isOfferBlocked = false
-    if(this.blockDescription){
-      isOfferBlocked = true
-    }
+		let isOfferBlocked = false
+		if (this.blockDescription) {
+			isOfferBlocked = true
+		}
 		return isOfferBlocked
 	}
 
@@ -236,8 +220,7 @@ export default class Offer extends BaseModel {
 
 	@computed()
 	public get paybackTimeForUser(): string {
-		if (this.paybackTime !== undefined && this.paybackTime !== null)
-			return OFFER_PAYBACK_TIMES[this.paybackTime]
+		if (this.paybackTime !== undefined && this.paybackTime !== null) return OFFER_PAYBACK_TIMES[this.paybackTime]
 
 		return ''
 	}
@@ -260,68 +243,42 @@ export default class Offer extends BaseModel {
 		const archiveExpireInDays: number = expireDate.diff(DateTime.now(), 'days').days
 		const archiveExpireInDaysWithoutFraction: number = Math.floor(archiveExpireInDays)
 
-		return `Осталось ${archiveExpireInDaysWithoutFraction} дней - до ${expireDate
-			.setLocale('ru-RU')
-			.toFormat('dd MMMM')}`
+		return `Осталось ${archiveExpireInDaysWithoutFraction} дней - до ${expireDate.setLocale('ru-RU').toFormat('dd MMMM')}`
 	}
 
 	/**
 	 * * Query scopes
 	 */
 
-	public static getByArchived = scope((query, isArchived: Offer['isArchived']) => [
-		query.where('isArchived', isArchived),
-	])
+	public static getByArchived = scope((query, isArchived: Offer['isArchived']) => [query.where('isArchived', isArchived)])
 
-	public static getByCategories = scope((query, categories: OfferCategories[]) => [
-		query.whereIn('category', categories),
-	])
+	public static getByCategories = scope((query, categories: OfferCategories[]) => [query.whereIn('category', categories)])
 
-	public static getByProjectStages = scope((query, projectStages: OfferProjectStages[]) => [
-		query.whereIn('projectStage', projectStages),
-	])
+	public static getByProjectStages = scope((query, projectStages: OfferProjectStages[]) => [query.whereIn('projectStage', projectStages)])
 
-	public static getByPaybackTimes = scope((query, paybackTime: OfferPaybackTimes[]) => [
-		query.whereIn('paybackTime', paybackTime),
-	])
+	public static getByPaybackTimes = scope((query, paybackTime: OfferPaybackTimes[]) => [query.whereIn('paybackTime', paybackTime)])
 
-	public static getByCity = scope((query, city: Offer['city']) => [
-		query.where('city', 'ILIKE', `${city}%`),
-	])
+	public static getByCity = scope((query, city: Offer['city']) => [query.where('city', 'ILIKE', `${city}%`)])
 
-	public static getByVerified = scope((query, isVerified: Offer['isVerified']) => [
-		query.where('isVerified', isVerified),
-	])
+	public static getByVerified = scope((query, isVerified: Offer['isVerified']) => [query.where('isVerified', isVerified)])
 
-	public static getByBanned = scope((query, isBanned: Offer['isBanned']) => [
-		query.where('isBanned', isBanned),
-	])
+	public static getByBanned = scope((query, isBanned: Offer['isBanned']) => [query.where('isBanned', isBanned)])
 
-	public static getByInvestmentsFrom = scope((query, from: number) => [
-		query.where('investments', '>=', from),
-	])
+	public static getByInvestmentsFrom = scope((query, from: number) => [query.where('investments', '>=', from)])
 
-	public static getByInvestmentsTo = scope((query, to: number) => [
-		query.where('investments', '<=', to),
-	])
+	public static getByInvestmentsTo = scope((query, to: number) => [query.where('investments', '<=', to)])
 
 	public static getByPriceFrom = scope((query, from: number) => [query.where('price', '>=', from)])
 
 	public static getByPriceTo = scope((query, to: number) => [query.where('price', '<=', to)])
 
-	public static getByProfitFrom = scope((query, from: number) => [
-		query.where('profit', '>=', from),
-	])
+	public static getByProfitFrom = scope((query, from: number) => [query.where('profit', '>=', from)])
 
 	public static getByProfitTo = scope((query, to: number) => [query.where('profit', '<=', to)])
 
-	public static getByProfitPerMonthFrom = scope((query, from: number) => [
-		query.where('profitPerMonth', '>=', from),
-	])
+	public static getByProfitPerMonthFrom = scope((query, from: number) => [query.where('profitPerMonth', '>=', from)])
 
-	public static getByProfitPerMonthTo = scope((query, to: number) => [
-		query.where('profitPerMonth', '<=', to),
-	])
+	public static getByProfitPerMonthTo = scope((query, to: number) => [query.where('profitPerMonth', '<=', to)])
 
 	public static getByUserId = scope((query, userId: User['id']) => [query.where('user_id', userId)])
 
@@ -359,10 +316,7 @@ export default class Offer extends BaseModel {
 		const item: ModelObject = { ...this.serialize() }
 
 		try {
-			const isFavorite = await Database.from(TABLES_NAMES.FAVORITE_OFFERS)
-				.where('user_id', currentUserId)
-				.andWhere('offer_id', item.id)
-				.first()
+			const isFavorite = await Database.from(TABLES_NAMES.FAVORITE_OFFERS).where('user_id', currentUserId).andWhere('offer_id', item.id).first()
 
 			item.isFavorite = Boolean(isFavorite)
 		} catch (err: any) {

@@ -13,11 +13,7 @@ export default class MailerService {
 
 		try {
 			await Mail.send((message) => {
-				message
-					.to(to)
-					.from(from)
-					.subject(`${code} - ваш код подтверждения`)
-					.htmlView('emails/registerVerify', { code })
+				message.to(to).from(from).subject(`${code} - ваш код подтверждения`).htmlView('emails/registerVerify', { code })
 			})
 		} catch (err: any) {
 			Logger.error(err)
@@ -30,11 +26,7 @@ export default class MailerService {
 
 		try {
 			await Mail.send((message) => {
-				message
-					.to(to)
-					.from(from)
-					.subject(`${code} - ваш код подтверждения`)
-					.htmlView('emails/forgotPassword', { code })
+				message.to(to).from(from).subject(`${code} - ваш код подтверждения`).htmlView('emails/forgotPassword', { code })
 			})
 		} catch (err: any) {
 			Logger.error(err)
@@ -47,11 +39,7 @@ export default class MailerService {
 
 		try {
 			await Mail.send((message) => {
-				message
-					.to(to)
-					.from(from)
-					.subject(`${code} - ваш код подтверждения`)
-					.htmlView('emails/updateEmail', { code })
+				message.to(to).from(from).subject(`${code} - ваш код подтверждения`).htmlView('emails/updateEmail', { code })
 			})
 		} catch (err: any) {
 			Logger.error(err)

@@ -7,11 +7,7 @@ import ApiValidator from '../ApiValidator'
 import { getAreaIdRules } from '../Rules/Offer/area'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import { getSubsectionIdRules } from '../Rules/Offer/subsection'
-import {
-	getOfferCategoryRules,
-	getOfferPaybackTimeRules,
-	getOfferProjectStageRules,
-} from '../Rules/Offer/offer'
+import { getOfferCategoryRules, getOfferPaybackTimeRules, getOfferProjectStageRules } from '../Rules/Offer/offer'
 
 export default class OfferFilterValidator extends ApiValidator {
 	constructor(protected ctx: HttpContextContract) {

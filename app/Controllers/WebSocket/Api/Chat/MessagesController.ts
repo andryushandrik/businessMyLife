@@ -4,10 +4,7 @@ import type Message from 'App/Models/Chat/Message'
 import type Conversation from 'App/Models/Chat/Conversation'
 import type { Err } from 'Contracts/response'
 import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
-import type {
-	MessageCreateWithoutTopicPayload,
-	ReturnMessageCreatePayload,
-} from 'Contracts/message'
+import type { MessageCreateWithoutTopicPayload, ReturnMessageCreatePayload } from 'Contracts/message'
 // * Types
 
 import ApiValidator from 'App/Validators/ApiValidator'
@@ -19,17 +16,11 @@ import { validator } from '@ioc:Adonis/Core/Validator'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 
 const apiValidator: ApiValidator = new ApiValidator()
-const messageWithoutTopicValidator: MessageWithoutTopicValidator =
-	new MessageWithoutTopicValidator()
-const messageWithRealEstateTopicValidator: MessageWithOfferTopicValidator =
-	new MessageWithOfferTopicValidator()
+const messageWithoutTopicValidator: MessageWithoutTopicValidator = new MessageWithoutTopicValidator()
+const messageWithRealEstateTopicValidator: MessageWithOfferTopicValidator = new MessageWithOfferTopicValidator()
 
 export default class MessagesController {
-	public static async paginate(
-		conversationId: Conversation['id'],
-		apiPayload: any,
-		cb: (response: Err | ResponseService) => void,
-	): Promise<void> {
+	public static async paginate(conversationId: Conversation['id'], apiPayload: any, cb: (response: Err | ResponseService) => void): Promise<void> {
 		let validatedApiPayload: ApiValidator['schema']['props']
 
 		try {
@@ -47,10 +38,7 @@ export default class MessagesController {
 		}
 
 		try {
-			const messages: ModelPaginatorContract<Message> = await MessageService.paginate(
-				conversationId,
-				validatedApiPayload,
-			)
+			const messages: ModelPaginatorContract<Message> = await MessageService.paginate(conversationId, validatedApiPayload)
 
 			return cb(new ResponseService(ResponseMessages.SUCCESS, messages))
 		} catch (err: Err | any) {
@@ -58,11 +46,7 @@ export default class MessagesController {
 		}
 	}
 
-	public static async create(
-		userId: User['id'],
-		payload: any,
-		cb: (response: Err | ResponseService) => void,
-	): Promise<ReturnMessageCreatePayload | void> {
+	public static async create(userId: User['id'], payload: any, cb: (response: Err | ResponseService) => void): Promise<ReturnMessageCreatePayload | void> {
 		let validatedPayload: MessageWithoutTopicValidator['schema']['props']
 
 		try {
@@ -111,10 +95,7 @@ export default class MessagesController {
 		}
 
 		try {
-			const data: ReturnMessageCreatePayload = await MessageService.createWithoutTopic(
-				validatedPayload,
-				createPayload,
-			)
+			const data: ReturnMessageCreatePayload = await MessageService.createWithoutTopic(validatedPayload, createPayload)
 
 			cb(new ResponseService(ResponseMessages.SUCCESS, data.message))
 			return data
@@ -145,10 +126,7 @@ export default class MessagesController {
 		}
 
 		try {
-			const data: ReturnMessageCreatePayload = await MessageService.createWithOfferTopic(
-				validatedPayload,
-				createPayload,
-			)
+			const data: ReturnMessageCreatePayload = await MessageService.createWithOfferTopic(validatedPayload, createPayload)
 
 			cb(new ResponseService(ResponseMessages.SUCCESS, data.message))
 			return data

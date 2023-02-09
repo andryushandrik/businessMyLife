@@ -51,11 +51,7 @@ export default class FriendsController {
 		}
 
 		try {
-			const incomings: ModelPaginatorContract<User> = await FriendService.paginateRequests(
-				currentUserId,
-				payload,
-				'incomings',
-			)
+			const incomings: ModelPaginatorContract<User> = await FriendService.paginateRequests(currentUserId, payload, 'incomings')
 
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, incomings))
 		} catch (err: Err | any) {
@@ -78,11 +74,7 @@ export default class FriendsController {
 		}
 
 		try {
-			const outgoings: ModelPaginatorContract<User> = await FriendService.paginateRequests(
-				currentUserId,
-				payload,
-				'outgoings',
-			)
+			const outgoings: ModelPaginatorContract<User> = await FriendService.paginateRequests(currentUserId, payload, 'outgoings')
 
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, outgoings))
 		} catch (err: Err | any) {

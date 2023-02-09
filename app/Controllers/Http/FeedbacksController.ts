@@ -27,10 +27,7 @@ export default class FeedbacksController {
 		}
 
 		try {
-			const feedbacks: ModelPaginatorContract<Feedback> = await FeedbackService.paginate(
-				config,
-				payload,
-			)
+			const feedbacks: ModelPaginatorContract<Feedback> = await FeedbackService.paginate(config, payload)
 
 			return view.render('pages/feedback/paginate', {
 				payload,

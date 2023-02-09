@@ -13,10 +13,7 @@ type IdRulesOptions = {
 	withUniqueOrExists?: 'unique' | 'exists' | false
 }
 
-export function getRoleIdRules(
-	options?: IdRulesOptions,
-	table: string = TABLES_NAMES.ROLES,
-): Rule[] {
+export function getRoleIdRules(options?: IdRulesOptions, table: string = TABLES_NAMES.ROLES): Rule[] {
 	const defaultOptions: IdRulesOptions = {
 		isWithoutAdmin: options?.isWithoutAdmin ?? false,
 		currentRoleId: options?.currentRoleId ?? null,
@@ -24,12 +21,8 @@ export function getRoleIdRules(
 	}
 	const rulesArr: Rule[] = [rules.unsigned()]
 
-	if (defaultOptions.withUniqueOrExists === 'unique')
-		rulesArr.push(
-			rules.unique({ table, column: 'id', whereNot: { id: defaultOptions.currentRoleId } }),
-		)
-	else if (defaultOptions.withUniqueOrExists === 'exists')
-		rulesArr.push(rules.exists({ table, column: 'id' }))
+	if (defaultOptions.withUniqueOrExists === 'unique') rulesArr.push(rules.unique({ table, column: 'id', whereNot: { id: defaultOptions.currentRoleId } }))
+	else if (defaultOptions.withUniqueOrExists === 'exists') rulesArr.push(rules.exists({ table, column: 'id' }))
 
 	if (defaultOptions.isWithoutAdmin) rulesArr.push(rules.notIn([RoleNames.ADMIN + 1]))
 

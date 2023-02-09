@@ -1,11 +1,5 @@
 // Don't change orders below
-export const OFFER_CATEGORIES = [
-	'поиск инвесторов',
-	'предложения инвесторов',
-	'поиск бизнес партнеров',
-	'продажа готового бизнеса',
-	'франшизы',
-] as const
+export const OFFER_CATEGORIES = ['поиск инвесторов', 'предложения инвесторов', 'поиск бизнес партнеров', 'продажа готового бизнеса', 'франшизы'] as const
 export enum OfferCategories {
 	SEARCH_FOR_INVESTORS = 0,
 	INVESTOR_PROPOSALS = 1,
@@ -15,14 +9,7 @@ export enum OfferCategories {
 }
 
 // Don't change orders below
-export const OFFER_PAYBACK_TIMES = [
-	'',
-	'до 3 месяцев',
-	'от 3 до 6 месяцев',
-	'от 6 месяцев до 1 года',
-	'от 1 года до 3 лет',
-	'от 3 лет',
-] as const
+export const OFFER_PAYBACK_TIMES = ['', 'до 3 месяцев', 'от 3 до 6 месяцев', 'от 6 месяцев до 1 года', 'от 1 года до 3 лет', 'от 3 лет'] as const
 export enum OfferPaybackTimes {
 	DONT_DISPLAY = 0,
 	BEFORE_THREE_MONTH = 1,

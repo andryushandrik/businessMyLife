@@ -18,33 +18,13 @@ export default class extends BaseSchema {
 			 * * Foreign keys
 			 */
 
-			table
-				.integer('user_id')
-				.unsigned()
-				.notNullable()
-				.references(`${TABLES_NAMES.USERS}.id`)
-				.onDelete('CASCADE')
+			table.integer('user_id').unsigned().notNullable().references(`${TABLES_NAMES.USERS}.id`).onDelete('CASCADE')
 
-			table
-				.integer('reportType_id')
-				.unsigned()
-				.notNullable()
-				.references(`${TABLES_NAMES.REPORT_TYPES}.id`)
-				.onDelete('CASCADE')
+			table.integer('reportType_id').unsigned().notNullable().references(`${TABLES_NAMES.REPORT_TYPES}.id`).onDelete('CASCADE')
 
-			table
-				.integer('to_id')
-				.unsigned()
-				.nullable()
-				.references(`${TABLES_NAMES.USERS}.id`)
-				.onDelete('CASCADE')
+			table.integer('to_id').unsigned().nullable().references(`${TABLES_NAMES.USERS}.id`).onDelete('CASCADE')
 
-			table
-				.integer('offer_id')
-				.unsigned()
-				.nullable()
-				.references(`${TABLES_NAMES.OFFERS}.id`)
-				.onDelete('CASCADE')
+			table.integer('offer_id').unsigned().nullable().references(`${TABLES_NAMES.OFFERS}.id`).onDelete('CASCADE')
 
 			/**
 			 * * Timestamps

@@ -8,16 +8,7 @@ import Offer from '../Offer/Offer'
 import { BaseModel, BelongsTo, belongsTo, column, scope } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Report extends BaseModel {
-	public static readonly columns = [
-		'id',
-		'description',
-		'userId',
-		'toId',
-		'offerId',
-		'reportTypeId',
-		'createdAt',
-		'updatedAt',
-	] as const
+	public static readonly columns = ['id', 'description', 'userId', 'toId', 'offerId', 'reportTypeId', 'createdAt', 'updatedAt'] as const
 
 	/**
 	 * * Columns

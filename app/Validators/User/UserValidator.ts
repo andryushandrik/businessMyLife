@@ -10,12 +10,7 @@ import { TABLES_NAMES } from 'Config/database'
 import { GLOBAL_DATETIME_FORMAT } from 'Config/app'
 import { getUserTypeRules } from '../Rules/User/user'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
-import {
-	getUserFirstNameRules,
-	getUserLastNameRules,
-	getUserPatronymicRules,
-	getUserCompanyNameRules,
-} from '../Rules/User/user'
+import { getUserFirstNameRules, getUserLastNameRules, getUserPatronymicRules, getUserCompanyNameRules } from '../Rules/User/user'
 
 export default class UserValidator extends IndexValidator {
 	private readonly currentUserId: User['id'] | null = this.ctx.params.id ?? null
@@ -76,10 +71,7 @@ export default class UserValidator extends IndexValidator {
 		companyName: schema.string.optional({ trim: true }, getUserCompanyNameRules('type')),
 
 		mainStateRegistrationNumber: schema.number.optional([
-			rules.requiredWhen('type', 'in', [
-				`${UserTypeNames.INDIVIDUAL_ENTREPRENEUR}`,
-				`${UserTypeNames.LIMITED_LIABILITY_COMPANY}`,
-			]),
+			rules.requiredWhen('type', 'in', [`${UserTypeNames.INDIVIDUAL_ENTREPRENEUR}`, `${UserTypeNames.LIMITED_LIABILITY_COMPANY}`]),
 			rules.unique({
 				table: TABLES_NAMES.USERS,
 				column: 'mainStateRegistrationNumber',
@@ -87,10 +79,7 @@ export default class UserValidator extends IndexValidator {
 			}),
 		]),
 		taxpayerIdentificationNumber: schema.number.optional([
-			rules.requiredWhen('type', 'in', [
-				`${UserTypeNames.INDIVIDUAL_ENTREPRENEUR}`,
-				`${UserTypeNames.LIMITED_LIABILITY_COMPANY}`,
-			]),
+			rules.requiredWhen('type', 'in', [`${UserTypeNames.INDIVIDUAL_ENTREPRENEUR}`, `${UserTypeNames.LIMITED_LIABILITY_COMPANY}`]),
 			rules.unique({
 				table: TABLES_NAMES.USERS,
 				column: 'taxpayerIdentificationNumber',

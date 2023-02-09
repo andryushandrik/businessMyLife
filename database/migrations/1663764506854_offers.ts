@@ -31,9 +31,7 @@ export default class extends BaseSchema {
 			table
 				.string('description', OFFER_DESCRIPTION_MAX_LENGTH)
 				.notNullable()
-				.comment(
-					'У всех категорий это поле описание объявления, у продажи готового бизнеса это поле описание бизнеса, у франшиз это поле описание франшизы',
-				)
+				.comment('У всех категорий это поле описание объявления, у продажи готового бизнеса это поле описание бизнеса, у франшиз это поле описание франшизы')
 			table.string('city').notNullable()
 
 			table.integer('category').unsigned().notNullable().comment(`
@@ -55,23 +53,11 @@ export default class extends BaseSchema {
 				.string('cooperationTerms', OFFER_COOPERATION_TERMS_MAX_LENGTH)
 				.nullable()
 				.comment('Условия сотрудничества, у продажи готового бизнеса это поле условия продажи')
-			table
-				.string('businessPlan', OFFER_BUSINESS_PLAN_MAX_LENGTH)
-				.nullable()
-				.comment('Бизнес план (все кроме предложения инвесторов)')
-			table
-				.string('benefits', OFFER_BENEFITS_MAX_LENGTH)
-				.nullable()
-				.comment('Есть только у франшиз')
+			table.string('businessPlan', OFFER_BUSINESS_PLAN_MAX_LENGTH).nullable().comment('Бизнес план (все кроме предложения инвесторов)')
+			table.string('benefits', OFFER_BENEFITS_MAX_LENGTH).nullable().comment('Есть только у франшиз')
 
-			table
-				.string('about', OFFER_ABOUT_MAX_LENGTH)
-				.nullable()
-				.comment('О себе (поиск инвесторов, предложения инвесторов, поиск бизнес партнера)')
-			table
-				.string('aboutCompany', OFFER_ABOUT_COMPANY_MAX_LENGTH)
-				.nullable()
-				.comment('Есть только у франшиз')
+			table.string('about', OFFER_ABOUT_MAX_LENGTH).nullable().comment('О себе (поиск инвесторов, предложения инвесторов, поиск бизнес партнера)')
+			table.string('aboutCompany', OFFER_ABOUT_COMPANY_MAX_LENGTH).nullable().comment('Есть только у франшиз')
 
 			table.integer('paybackTime').unsigned().nullable().comment(`
         Срок окупаемости
@@ -88,56 +74,27 @@ export default class extends BaseSchema {
         2 - Готовый бизнес
       `)
 
-			table
-				.integer('investments')
-				.unsigned()
-				.nullable()
-				.comment('Инвестиции (есть во всех категориях кроме готового бизнеса)')
+			table.integer('investments').unsigned().nullable().comment('Инвестиции (есть во всех категориях кроме готового бизнеса)')
 			table.date('dateOfCreation').nullable().comment('Есть только у франшиз')
 
-			table
-				.integer('price')
-				.unsigned()
-				.nullable()
-				.comment('Есть только у продажи готового бизнеса и франшизы')
+			table.integer('price').unsigned().nullable().comment('Есть только у продажи готового бизнеса и франшизы')
 			table.integer('pricePerMonth').unsigned().nullable().comment('Есть только у франшиз')
 
 			table.integer('profitPerMonth').unsigned().nullable()
-			table
-				.integer('profit')
-				.unsigned()
-				.nullable()
-				.comment('Есть только у продажи готового бизнеса и франшизы')
+			table.integer('profit').unsigned().nullable().comment('Есть только у продажи готового бизнеса и франшизы')
 
-			table
-				.integer('branchCount')
-				.unsigned()
-				.nullable()
-				.comment('Есть только у продажи готового бизнеса и франшизы')
+			table.integer('branchCount').unsigned().nullable().comment('Есть только у продажи готового бизнеса и франшизы')
 			table.integer('soldBranchCount').unsigned().nullable().comment('Есть только у франшиз')
 
-			table
-				.string('blockDescription', OFFER_BLOCK_DESCRIPTION_MAX_LENGTH)
-				.nullable()
-				.comment('Причина блокировки')
+			table.string('blockDescription', OFFER_BLOCK_DESCRIPTION_MAX_LENGTH).nullable().comment('Причина блокировки')
 
 			/**
 			 * * Foreign keys
 			 */
 
-			table
-				.integer('user_id')
-				.unsigned()
-				.notNullable()
-				.references(`${TABLES_NAMES.USERS}.id`)
-				.onDelete('CASCADE')
+			table.integer('user_id').unsigned().notNullable().references(`${TABLES_NAMES.USERS}.id`).onDelete('CASCADE')
 
-			table
-				.integer('subsection_id')
-				.unsigned()
-				.notNullable()
-				.references(`${TABLES_NAMES.SUBSECTIONS}.id`)
-				.onDelete('CASCADE')
+			table.integer('subsection_id').unsigned().notNullable().references(`${TABLES_NAMES.SUBSECTIONS}.id`).onDelete('CASCADE')
 
 			/**
 			 * * Timestamps

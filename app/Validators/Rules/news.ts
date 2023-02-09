@@ -23,10 +23,7 @@ export function getNewsTitleRules(): Rule[] {
 }
 
 export function getNewsDescriptionRules(): Rule[] {
-	return [
-		rules.minLength(NEWS_DESCRIPTION_MIN_LENGTH),
-		rules.maxLength(NEWS_DESCRIPTION_MAX_LENGTH),
-	]
+	return [rules.minLength(NEWS_DESCRIPTION_MIN_LENGTH), rules.maxLength(NEWS_DESCRIPTION_MAX_LENGTH)]
 }
 
 export function getNewsSuptitleRules(): Rule[] {

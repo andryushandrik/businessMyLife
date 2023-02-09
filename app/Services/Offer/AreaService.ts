@@ -11,10 +11,7 @@ import Logger from '@ioc:Adonis/Core/Logger'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 
 export default class AreaService {
-	public static async paginate(
-		config: PaginateConfig<Area>,
-		filter?: AreaFilterValidator['schema']['props'],
-	): Promise<ModelPaginatorContract<Area>> {
+	public static async paginate(config: PaginateConfig<Area>, filter?: AreaFilterValidator['schema']['props']): Promise<ModelPaginatorContract<Area>> {
 		let query: ModelQueryBuilderContract<typeof Area> = Area.query()
 
 		if (filter) query = this.filter(query, filter)
@@ -60,10 +57,7 @@ export default class AreaService {
 		}
 	}
 
-	public static async update(
-		id: Area['id'],
-		payload: AreaValidator['schema']['props'],
-	): Promise<Area> {
+	public static async update(id: Area['id'], payload: AreaValidator['schema']['props']): Promise<Area> {
 		let item: Area
 
 		try {

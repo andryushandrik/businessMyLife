@@ -3,11 +3,7 @@ import type ReportTypeValidator from 'App/Validators/Report/ReportTypeValidator'
 import type ReportTypeFilterValidator from 'App/Validators/Report/ReportTypeFilterValidator'
 import type { Err } from 'Contracts/response'
 import type { PaginateConfig } from 'Contracts/services'
-import type {
-	ModelAttributes,
-	ModelPaginatorContract,
-	ModelQueryBuilderContract,
-} from '@ioc:Adonis/Lucid/Orm'
+import type { ModelAttributes, ModelPaginatorContract, ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 
 import Logger from '@ioc:Adonis/Core/Logger'
@@ -75,10 +71,7 @@ export default class ReportTypeService {
 		}
 	}
 
-	public static async update(
-		id: ReportType['id'],
-		payload: ReportTypeValidator['schema']['props'],
-	): Promise<void> {
+	public static async update(id: ReportType['id'], payload: ReportTypeValidator['schema']['props']): Promise<void> {
 		let item: ReportType
 		const reportTypePayload: Partial<ModelAttributes<ReportType>> = {
 			name: payload.name,

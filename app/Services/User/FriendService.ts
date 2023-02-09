@@ -12,10 +12,7 @@ import Logger from '@ioc:Adonis/Core/Logger'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 
 export default class FriendService {
-	public static async paginate(
-		id: User['id'],
-		config: PaginateConfig<User>,
-	): Promise<ModelPaginatorContract<User>> {
+	public static async paginate(id: User['id'], config: PaginateConfig<User>): Promise<ModelPaginatorContract<User>> {
 		const friendsIds: User['id'][] = []
 
 		try {
@@ -47,11 +44,7 @@ export default class FriendService {
 		}
 	}
 
-	public static async paginateRequests(
-		id: User['id'],
-		config: PaginateConfig<User>,
-		action: 'incomings' | 'outgoings',
-	): Promise<ModelPaginatorContract<User>> {
+	public static async paginateRequests(id: User['id'], config: PaginateConfig<User>, action: 'incomings' | 'outgoings'): Promise<ModelPaginatorContract<User>> {
 		let user: User
 
 		try {
@@ -138,11 +131,7 @@ export default class FriendService {
 		return item
 	}
 
-	private static async update(
-		fromId: User['id'],
-		toId: User['id'],
-		isRequest: Friend['isRequest'],
-	): Promise<void> {
+	private static async update(fromId: User['id'], toId: User['id'], isRequest: Friend['isRequest']): Promise<void> {
 		let item: Friend
 
 		try {
