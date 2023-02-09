@@ -58,6 +58,8 @@ export default class User extends BaseModel {
 		'createdAt',
 		'updatedAt',
 		'blockedUntil',
+		'blockDescription',
+
 	] as const
 
 	@column({ isPrimary: true })
@@ -138,8 +140,10 @@ export default class User extends BaseModel {
 	public updatedAt: DateTime
 
 	@column.dateTime()
-	public blockedUntil?: DateTime
+	public blockedUntil?: DateTime | null
 
+  @column({columnName: 'blockDescription'})
+  public blockDescription?: string | null
 	/**
 	 * * Aggregates columns
 	 */

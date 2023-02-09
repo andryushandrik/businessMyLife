@@ -138,8 +138,14 @@
 
           @if(item.blockedUntil)
             <div class="form-group">
-              <label class="mb-1">Заблокирован до</label>
-              <input type="string" class="form-control" value="{{ item.blockedUntilForUser }}" disabled>
+              <label class="mb-1 text-danger font-weight-bold">Заблокирован до</label>
+              <input type="string" class="form-control text-danger mb-1" value="{{ item.blockedUntilForUser }}" disabled>
+              <label class="mb-1 font-weight-bold text-danger">По причине</label>
+              <input type="string"  class="mb-1 form-control text-danger" value="{{item.blockDescription}}" disabled>
+              <form  class="text-danger" action="{{ route('user.unblock', { id: item.id }, { qs: { _method: 'PATCH' } }) }}" method="POST">
+                {{ csrfField() }}
+                <button type="submit" class="btn btn-primary btn-sm">Разблокировать</button>
+              </form>
             </div>
           @endif
 
@@ -163,6 +169,17 @@
             <div class="form-group">
               <label class="mb-1">Заблокировать до</label>
               <input name="blockedUntil" class="datepicker-default form-control" id="datepicker" value="{{ flashMessages.get('blockedUntil') ?? '' }}">
+
+              @if(flashMessages.has('errors.blockedUntil'))
+                <div class="invalid-feedback d-block">
+                  {{ flashMessages.get('errors.blockedUntil')[0] }}
+                </div>
+              @endif
+            </div>
+
+            <div class="form-group">
+              <label class="mb-1">Причина блокировки</label>
+              <input name="blockDescription" class="form-control" id="description" value="{{ flashMessages.get('blockedUntil') ?? '' }}">
 
               @if(flashMessages.has('errors.blockedUntil'))
                 <div class="invalid-feedback d-block">

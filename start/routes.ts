@@ -111,12 +111,19 @@ Route.group(() => {
 			})
 			.as('get')
 
-		Route.patch('/:id', 'User/UsersController.blockUntil')
+		Route.patch('/block/:id', 'User/UsersController.blockUntil')
 			.where('id', {
 				match: /^[0-9]+$/,
 				cast: (id) => Number(id),
 			})
 			.as('block')
+
+      Route.patch('/unblock/:id', 'User/UsersController.unblock')
+			.where('id', {
+				match: /^[0-9]+$/,
+				cast: (id) => Number(id),
+			})
+			.as('unblock')
 
 		Route.delete('/:id', 'User/UsersController.delete')
 			.where('id', {

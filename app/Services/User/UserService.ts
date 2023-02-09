@@ -26,10 +26,7 @@ import { USER_FOLDER_PATH } from 'Config/drive'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 
 export default class UserService {
-	public static async paginate(
-		config: PaginateConfig<User>,
-		filter?: UserFilterValidator['schema']['props'],
-	): Promise<ModelPaginatorContract<User>> {
+	public static async paginate(config: PaginateConfig<User>, filter?: UserFilterValidator['schema']['props']): Promise<ModelPaginatorContract<User>> {
 		let query: ModelQueryBuilderContract<typeof User> = User.query()
 
 		if (config.aggregates) {
@@ -53,9 +50,7 @@ export default class UserService {
 		filter?: UserFilterValidator['schema']['props'],
 	): Promise<ModelPaginatorContract<User>> {
 		const roleTypes: RoleNames[] = [RoleNames.ADMIN, RoleNames.MODERATOR]
-		let query: ModelQueryBuilderContract<typeof User> = User.query().withScopes((scopes) =>
-			scopes.getByRoleIds(roleTypes),
-		)
+		let query: ModelQueryBuilderContract<typeof User> = User.query().withScopes((scopes) => scopes.getByRoleIds(roleTypes))
 
 		if (filter) query = this.filter(query, filter)
 
@@ -69,10 +64,7 @@ export default class UserService {
 
 	public static async get(id: User['id'], config?: ServiceConfig<User>): Promise<User>
 	public static async get(email: User['email'], config?: ServiceConfig<User>): Promise<User>
-	public static async get(
-		idOrEmail: User['id'] | User['email'],
-		{ relations, aggregates }: ServiceConfig<User> = {},
-	): Promise<User> {
+	public static async get(idOrEmail: User['id'] | User['email'], { relations, aggregates }: ServiceConfig<User> = {}): Promise<User> {
 		let item: User | null
 
 		try {
@@ -118,9 +110,7 @@ export default class UserService {
 		}
 	}
 
-	public static async create(
-		payload: Omit<RegisterValidator['schema']['props'], 'verifyCode'>,
-	): Promise<User> {
+	public static async create(payload: Omit<RegisterValidator['schema']['props'], 'verifyCode'>): Promise<User> {
 		let item: User
 		const roleId: User['roleId'] = RoleNames.USER + 1
 
@@ -138,10 +128,7 @@ export default class UserService {
 		}
 	}
 
-	public static async update(
-		id: User['id'],
-		payload: UserValidator['schema']['props'],
-	): Promise<User> {
+	public static async update(id: User['id'], payload: UserValidator['schema']['props']): Promise<User> {
 		let item: User
 		let avatar: User['avatar'] | undefined = undefined
 
@@ -175,10 +162,7 @@ export default class UserService {
 		}
 	}
 
-	public static async updateEmail(
-		id: User['id'],
-		payload: UpdateEmailValidator['schema']['props'],
-	): Promise<void> {
+	public static async updateEmail(id: User['id'], payload: UpdateEmailValidator['schema']['props']): Promise<void> {
 		let item: User
 
 		try {
@@ -197,10 +181,7 @@ export default class UserService {
 		}
 	}
 
-	public static async updatePassword(
-		id: User['id'],
-		payload: UpdatePasswordValidator['schema']['props'],
-	): Promise<void> {
+	public static async updatePassword(id: User['id'], payload: UpdatePasswordValidator['schema']['props']): Promise<void> {
 		let item: User
 
 		try {
@@ -209,8 +190,7 @@ export default class UserService {
 			throw err
 		}
 
-		if (!(await Hash.verify(item.password, payload.oldPassword)))
-			throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.ERROR } as Err
+		if (!(await Hash.verify(item.password, payload.oldPassword))) throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.ERROR } as Err
 
 		try {
 			await item.merge({ password: payload.password }).save()
@@ -237,10 +217,7 @@ export default class UserService {
 		}
 	}
 
-	public static async blockUntil(
-		id: User['id'],
-		payload: BlockUntilValidator['schema']['props'],
-	): Promise<void> {
+	public static async blockUntil(id: User['id'], payload: BlockUntilValidator['schema']['props']): Promise<void> {
 		let item: User
 
 		try {
@@ -257,9 +234,27 @@ export default class UserService {
 		}
 	}
 
-	public static async emailVerify({
-		email,
-	}: EmailVerifyValidator['schema']['props']): Promise<void> {
+	public static async unblock(id: User['id']): Promise<void> {
+		let item: User
+
+		try {
+			item = await this.get(id)
+		} catch (err: Err | any) {
+			throw err
+		}
+    const payload = {
+			blockedUntil: null,
+			blockDescription: null,
+		}
+		try {
+			await item.merge(payload).save()
+		} catch (err: any) {
+			Logger.error(err)
+			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+		}
+	}
+
+	public static async emailVerify({ email }: EmailVerifyValidator['schema']['props']): Promise<void> {
 		const code: number = getRandom(100000, 999999) // Only 6-digit code
 		const redisKey: RedisKeys = RedisKeys.UPDATE_EMAIL_VERIFY
 
@@ -336,3 +331,4 @@ export default class UserService {
 		return query
 	}
 }
+

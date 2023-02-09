@@ -9,7 +9,7 @@
 <div class="col-lg-12">
 	<div class="card">
 		<div class="card-header">
-			<h4 class="card-title">Причина блокировки</h4>
+			<h4 class="card-title">{{item.isBlocked ? "Объявление заблокировано" : "Объявление не заблокированно" }}</h4>
 
 			<div class="d-flex">
 				@if(item.isArchived)
@@ -59,8 +59,9 @@
 					<div class="form-group">
 						<label class="mb-1">Причина блокировки</label>
 						<textarea id="summernote" class="summernote" name="blockDescription">
-{{ flashMessages.get('blockDescription', item.blockDescription) ?? '' }}</textarea
-						>
+              {{ flashMessages.get('blockDescription', item.blockDescription) ?? '' }}</textarea
+              >
+            {{--  <input type="text" name="blockDescription" value="{{ flashMessages.get('blockDescription', item.blockDescription) ?? '' }}">  --}}
 
 						@if(flashMessages.has('errors.blockDescription'))
 						<div class="invalid-feedback d-block">{{ flashMessages.get('errors.blockDescription')[0] }}</div>
