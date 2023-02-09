@@ -39,7 +39,7 @@ export default class UsersController {
 				payload,
 				titleFromController,
 				roles: ROLE_NAMES,
-        roleEnum: RoleNames,
+				roleEnum: RoleNames,
 				usersTypes: USER_TYPE_NAMES,
 			})
 		} catch (err: Err | any) {
@@ -48,13 +48,7 @@ export default class UsersController {
 		}
 	}
 
-	public async paginateAdminAndModerators({
-		view,
-		session,
-		request,
-		route,
-		response,
-	}: HttpContextContract) {
+	public async paginateAdminAndModerators({ view, session, request, route, response }: HttpContextContract) {
 		let payload: UserFilterValidator['schema']['props'] | undefined = undefined
 		const titleFromController = 'Администраторы и модераторы'
 		const isFiltered: boolean = request.input('isFiltered', false)
@@ -71,16 +65,13 @@ export default class UsersController {
 		}
 
 		try {
-			const users: ModelPaginatorContract<User> = await UserService.paginateAdminsAndModerators(
-				config,
-				payload,
-			)
+			const users: ModelPaginatorContract<User> = await UserService.paginateAdminsAndModerators(config, payload)
 
 			return view.render('pages/user/paginate', {
 				users,
 				payload,
 				titleFromController,
-        roleEnum: RoleNames,
+				roleEnum: RoleNames,
 				roles: ROLE_NAMES,
 				usersTypes: USER_TYPE_NAMES,
 			})
@@ -131,4 +122,19 @@ export default class UsersController {
 
 		return response.redirect().back()
 	}
+
+	public async unblock({  response, params, session }: HttpContextContract) {
+		const id: User['id'] = params.id
+
+		try {
+			await UserService.unblock(id)
+
+			session.flash('success', ResponseMessages.SUCCESS)
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+		}
+
+		return response.redirect().back()
+	}
 }
+

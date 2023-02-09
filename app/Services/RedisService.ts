@@ -33,15 +33,9 @@ export default class RedisService {
 	/**
 	 * @param expiration - In ms js
 	 */
-	public static async set(
-		keyType: RedisKeys,
-		key: string,
-		value: any,
-		config: Config,
-	): Promise<void> {
+	public static async set(keyType: RedisKeys, key: string, value: any, config: Config): Promise<void> {
 		try {
-			if (config.expiration)
-				await Redis.set(this.getKey(keyType, key), value, 'PX', ms(config.expiration))
+			if (config.expiration) await Redis.set(this.getKey(keyType, key), value, 'PX', ms(config.expiration))
 			else await Redis.set(this.getKey(keyType, key), value)
 		} catch (err: any) {
 			Logger.error(err)
@@ -66,3 +60,4 @@ export default class RedisService {
 		return `${REDIS_KEYS[keyType]}/${key}`
 	}
 }
+

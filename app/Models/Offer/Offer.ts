@@ -215,6 +215,15 @@ export default class Offer extends BaseModel {
 		return this.isBanned ? 'Да' : 'Нет'
 	}
 
+  @computed()
+	public get isBlocked(): boolean {
+    let isOfferBlocked = false
+    if(this.blockDescription){
+      isOfferBlocked = true
+    }
+		return isOfferBlocked
+	}
+
 	@computed()
 	public get isVerifiedForUser(): string {
 		return this.isVerified ? 'Да' : 'Нет'
