@@ -8,6 +8,7 @@ import ResponseService from 'App/Services/ResponseService'
 import ExceptionService from 'App/Services/ExceptionService'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 import AdvertisementService from 'App/Services/AdvertisementService'
+import AdvertisementValidator from 'App/Validators/Ads/AdvertisementValidator'
 
 export default class AdvertisementController {
 	public async show({ response }: HttpContextContract) {
@@ -27,4 +28,14 @@ export default class AdvertisementController {
 			throw new ExceptionService(err)
 		}
 	}
+	public async create({ request, response }: HttpContextContract) {
+		const payload = await request.validate(AdvertisementValidator)
+		try {
+			const advertisements = await AdvertisementService.create(payload)
+			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, { advertisements }))
+		} catch (err: Err | any) {
+			throw new ExceptionService(err)
+		}
+	}
 }
+

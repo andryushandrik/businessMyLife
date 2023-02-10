@@ -177,5 +177,7 @@ Route.group(() => {
 
 	Route.group(() => {
 		Route.get('/', 'Api/AdvertisementController.show')
+    // Route.post('/', 'AdvertisementController.create').as('ads.create')
+
 	}).prefix('ads')
 }).prefix('api')

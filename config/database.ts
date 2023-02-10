@@ -60,7 +60,7 @@ const databaseConfig: DatabaseConfig = {
 export default databaseConfig
 
 export const TABLES_NAMES = {
-	ADS: 'ads',
+	ADS: 'advertisements',
 	NEWS: 'news',
 	BANNERS: 'banners',
 	PARTNERS: 'partners',
@@ -182,6 +182,11 @@ export const BANNER_DESCRIPTION_MIN_LENGTH = 10
 export const BANNER_DESCRIPTION_MAX_LENGTH = 2048
 
 export const BANNER_LINK_MAX_LENGTH = 2048
+
+
+export const ADVERTISEMENT_DESCRIPTION_MIN_LENGTH = 10
+export const ADVERTISEMENT_DESCRIPTION_MAX_LENGTH = 2048
+
 
 /**
  * * Offer

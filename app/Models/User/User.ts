@@ -1,3 +1,4 @@
+import Advertisement from 'App/Models/Advertisement'
 // * Types
 import type { DateTime } from 'luxon'
 import type { Err } from 'Contracts/response'
@@ -155,6 +156,9 @@ export default class User extends BaseModel {
 
 	@hasMany(() => Report, { foreignKey: 'toId' })
 	public reportsTo: HasMany<typeof Report>
+
+	@hasMany(() => Advertisement)
+	public advertisements: HasMany<typeof Advertisement>
 
 	@manyToMany(() => Offer, getModelsManyToManyRelationsOptions('FAVORITE_OFFERS'))
 	public favoriteOffers: ManyToMany<typeof Offer>
@@ -339,3 +343,4 @@ export default class User extends BaseModel {
 		return item
 	}
 }
+
