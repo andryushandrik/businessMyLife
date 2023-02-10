@@ -17,13 +17,10 @@ export default class AdvertisementValidator extends IndexValidator {
 		link: schema.string({ trim: true }),
 		image: schema.file(),
 
-
 		/**
 		 * * Optional fields
 		 */
-
 	})
 
 	public messages: CustomMessages = this.messages
 }
-

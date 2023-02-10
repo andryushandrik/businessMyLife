@@ -68,7 +68,7 @@ export const TABLES_NAMES = {
 	PROMO_CODES: 'promoCodes',
 	UPLOAD_TUTORIALS: 'uploadTutorials',
 	EMAIL_SUBSCRIBERS: 'emailSubscribers',
-  OUR_PARTNERS: 'ourPartners',
+	OUR_PARTNERS: 'ourPartners',
 
 	/**
 	 * * Report
@@ -184,10 +184,8 @@ export const BANNER_DESCRIPTION_MAX_LENGTH = 2048
 
 export const BANNER_LINK_MAX_LENGTH = 2048
 
-
 export const ADVERTISEMENT_DESCRIPTION_MIN_LENGTH = 10
 export const ADVERTISEMENT_DESCRIPTION_MAX_LENGTH = 2048
-
 
 /**
  * * Offer

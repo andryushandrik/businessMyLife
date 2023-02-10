@@ -157,7 +157,6 @@ export default class User extends BaseModel {
 	@hasMany(() => Advertisement)
 	public ads: HasMany<typeof Advertisement>
 
-
 	@hasMany(() => Report, { foreignKey: 'toId' })
 	public reportsTo: HasMany<typeof Report>
 
@@ -347,4 +346,3 @@ export default class User extends BaseModel {
 		return item
 	}
 }
-

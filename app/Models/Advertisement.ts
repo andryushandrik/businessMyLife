@@ -87,4 +87,3 @@ export default class Advertisement extends BaseModel {
 		if (item.subsectionImage) await Drive.delete(item.subsectionImage)
 	}
 }
-

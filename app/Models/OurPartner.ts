@@ -1,4 +1,4 @@
-import Drive  from '@ioc:Adonis/Core/Drive';
+import Drive from '@ioc:Adonis/Core/Drive'
 // * Types
 import type { DateTime } from 'luxon'
 // * Types
@@ -49,4 +49,3 @@ export default class OurPartner extends BaseModel {
 		if (item.image) await Drive.delete(item.image)
 	}
 }
-

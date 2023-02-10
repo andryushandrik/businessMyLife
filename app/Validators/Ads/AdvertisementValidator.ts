@@ -20,7 +20,6 @@ export default class AdvertisementValidator extends IndexValidator {
 		placedAt: schema.date.optional({ format: 'dd MMMM, yyyy' }),
 		placedUntill: schema.date({ format: 'dd MMMM, yyyy' }, getAdvertisementPlacedUntilValidator()),
 
-
 		/**
 		 * * Optional fields
 		 */
@@ -31,4 +30,3 @@ export default class AdvertisementValidator extends IndexValidator {
 
 	public messages: CustomMessages = this.messages
 }
-

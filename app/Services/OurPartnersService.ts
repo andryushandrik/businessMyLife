@@ -1,6 +1,5 @@
 import Drive from '@ioc:Adonis/Core/Drive'
 import OurPartner from 'App/Models/OurPartner'
-import Advertisement from 'App/Models/Advertisement'
 // * Types
 import type { Err } from 'Contracts/response'
 // * Types
@@ -115,12 +114,12 @@ export default class OurPartnersService {
 	}
 
 	public static async delete(id: OurPartner['id']): Promise<void> {
-    console.log('in deleting')
+		console.log('in deleting')
 		let item: OurPartner
 
 		try {
 			item = await this.get(id)
-      console.log('получили айтм', item)
+			console.log('получили айтм', item)
 		} catch (err: Err | any) {
 			throw err
 		}

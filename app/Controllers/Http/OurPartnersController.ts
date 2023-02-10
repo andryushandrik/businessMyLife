@@ -1,16 +1,13 @@
-import  OurPartnersValidator  from 'App/Validators/OurPartnersValidator';
+import OurPartnersValidator from 'App/Validators/OurPartnersValidator'
 // * Types
-import type Banner from 'App/Models/Banner'
 import type { Err } from 'Contracts/response'
 import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 // * Types
 
-import BannerService from 'App/Services/BannerService'
-import BannerValidator from 'App/Validators/Banner/BannerValidator'
 import { ResponseMessages } from 'Config/response'
-import OurPartner from 'App/Models/OurPartner';
-import OurPartnersService from 'App/Services/OurPartnersService';
+import OurPartner from 'App/Models/OurPartner'
+import OurPartnersService from 'App/Services/OurPartnersService'
 
 export default class OurPartnersController {
 	public async index({ view, request, response, session, route }: HttpContextContract) {
@@ -34,20 +31,18 @@ export default class OurPartnersController {
 	}
 
 	public async store({ request, response, session }: HttpContextContract) {
-
-    try {
-      const payload = await request.validate(OurPartnersValidator)
-      payload.isVisible = payload.isVisible ?  true : false
+		try {
+			const payload = await request.validate(OurPartnersValidator)
+			payload.isVisible = payload.isVisible ? true : false
 			await OurPartnersService.create(payload)
 			session.flash('success', ResponseMessages.SUCCESS)
 			response.redirect().toRoute('ourpartners.index')
 		} catch (err: Err | any) {
 			session.flash('error', err.message)
-      console.log(err)
+			console.log(err)
 			return response.redirect().back()
 		}
 	}
-
 
 	public async edit({ view, params, response, session }: HttpContextContract) {
 		const id: OurPartner['id'] = params.id
@@ -91,3 +86,4 @@ export default class OurPartnersController {
 		}
 	}
 }
+
