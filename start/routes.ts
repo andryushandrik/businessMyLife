@@ -13,7 +13,9 @@ Route.group(() => {
 
 	Route.resource('/ads', 'AdvertisementController')
 
-  // Route.post('/ads/create', 'AdvertisementController.create').as('ads.create')
+	Route.resource('/ourpartners', 'OurPartnersController')
+
+
 
 	Route.resource('/partners', 'PartnersController')
 	Route.patch('/partners/visible/:id', 'PartnersController.visible').as('partner.visible')

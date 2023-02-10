@@ -1,6 +1,6 @@
 @layout('layouts/index')
 
-@set('title', 'Реклама')
+@set('title', 'Наши партнеры')
 
 @section('styles')
   <link href="/css/ads.css" rel="stylesheet">
@@ -12,7 +12,7 @@
       <div class="card-header">
         <h4 class="card-title">{{ title }}</h4>
 
-        <a href="{{ route('ads.create') }}" class="btn btn-primary btn-sm">Создать</a>
+        <a href="{{ route('ourpartners.create') }}" class="btn btn-primary btn-sm">Создать</a>
       </div>
 
       <div class="card-body">
@@ -22,32 +22,21 @@
             <thead>
               <tr>
                 <th class="width80"><strong>#</strong></th>
-                <th class="width80"><strong>Пользователь</strong></th>
+                <th ><strong>Название</strong></th>
 
 
-                <th><strong>Фото в разделе</strong></th>
-                <th><strong>Фото в объявлениях</strong></th>
-                <th><strong>Дата размещения</strong></th>
-
-                <th><strong>Действует до</strong></th>
-                <th><strong>Статус оплаты</strong></th>
-                <th><strong>Действия</strong></th>
-
+                <th><strong>Изображение</strong></th>
 
               </tr>
             </thead>
             <tbody>
 
-              @each(item in ads)
+              @each(item in ourPartners)
                 <tr>
                   <td><strong>{{ item.id }}</strong></td>
-                  <td>{{ item?.owner?.firstName }} {{ item?.owner?.lastName }} </td>
+                  <td>{{ item.name }}</td>
 
-                  <td><img src="{{ getMedia(item.offerImage) }}" alt="" class="banner_cover_img" style="max-width: 100%"/></td>
-                  <td><img src="{{ getMedia(item.subsectionImage) }}" alt="" class="banner_cover_img" style="max-width: 100%"/></td>
-                  <td>{{ item.placedAtForUser }}</td>
-                  <td>{{ item.placedUntillForUser }}</td>
-                  <td>{{ item.paymentStatus }}</td>
+                  <td><img src="{{ getMedia(item.image) }}" alt="" class="" style="max-width: 100%"/></td>
 
 
                   <td>
@@ -64,9 +53,9 @@
                         </svg>
                       </button>
                       <div class="dropdown-menu" style="">
-                        <a class="dropdown-item" href="{{ route('ads.edit', { id: item.id }) }}">Редактировать</a>
+                        <a class="dropdown-item" href="{{ route('ourpartners.edit', { id: item.id }) }}">Редактировать</a>
 
-                        <form action="{{ route('ads.destroy', { id: item.id }, { qs: { _method: 'DELETE' } }) }}" method="POST">
+                        <form action="{{ route('ourpartners.destroy', { id: item.id }, { qs: { _method: 'DELETE' } }) }}" method="POST">
                           <button type="submit" class="dropdown-item">Удалить</button>
 
                           {{ csrfField() }}
@@ -85,5 +74,5 @@
     </div>
   </div>
 
-  @!component('components/pagination', { obj: ads })
+  @!component('components/pagination', { obj: ourPartners })
 @endsection

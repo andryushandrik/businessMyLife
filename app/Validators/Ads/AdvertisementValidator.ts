@@ -5,9 +5,8 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 import IndexValidator from '../IndexValidator'
 import { schema } from '@ioc:Adonis/Core/Validator'
-import { getBannerDescriptionRules, getBannerFileOptions } from '../Rules/banner'
 import { getUserIdRules } from '../Rules/User/user'
-import { getAdvertisementPlacedUntilValidator } from '../Rules/ads'
+import { getAdsDescriptionRules, getAdsFileOptions, getAdvertisementPlacedUntilValidator } from '../Rules/ads'
 
 export default class AdvertisementValidator extends IndexValidator {
 	constructor(protected ctx: HttpContextContract) {
@@ -15,7 +14,7 @@ export default class AdvertisementValidator extends IndexValidator {
 	}
 
 	public schema = schema.create({
-		description: schema.string({ trim: true }, getBannerDescriptionRules()),
+		description: schema.string({ trim: true }, getAdsDescriptionRules()),
 		paymentStatus: schema.string({ trim: true }),
 		userId: schema.number(getUserIdRules()),
 		placedAt: schema.date.optional({ format: 'dd MMMM, yyyy' }),
@@ -26,8 +25,8 @@ export default class AdvertisementValidator extends IndexValidator {
 		 * * Optional fields
 		 */
 
-		offerImage: schema.file.optional(getBannerFileOptions()),
-		subsectionImage: schema.file.optional(getBannerFileOptions()),
+		offerImage: schema.file.optional(getAdsFileOptions()),
+		subsectionImage: schema.file.optional(getAdsFileOptions()),
 	})
 
 	public messages: CustomMessages = this.messages

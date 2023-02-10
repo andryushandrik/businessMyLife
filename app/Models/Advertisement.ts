@@ -1,10 +1,12 @@
-import { BelongsTo } from '@ioc:Adonis/Lucid/Orm'
+import Drive from '@ioc:Adonis/Core/Drive'
+import { beforeDelete, BelongsTo, computed } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 import type { DateTime } from 'luxon'
 // * Types
 
 import { BaseModel, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import User from './User/User'
+import { GLOBAL_DATETIME_FORMAT } from 'Config/app'
 
 export default class Advertisement extends BaseModel {
 	public static readonly columns = [
@@ -45,7 +47,7 @@ export default class Advertisement extends BaseModel {
 	@column.dateTime({ autoCreate: true, columnName: 'placed_at' })
 	public placedAt: DateTime
 
-	@column.dateTime({ columnName: 'placed_untill'})
+	@column.dateTime({ columnName: 'placed_untill' })
 	public placedUntill: DateTime
 
 	@column.dateTime({ autoCreate: true, columnName: 'created_at' })
@@ -60,6 +62,17 @@ export default class Advertisement extends BaseModel {
 	/**
 	 * * Computed properties
 	 */
+
+	@computed()
+	public get placedAtForUser(): string {
+		return this.placedAt ? this.placedAt.setLocale('ru-RU').toFormat(GLOBAL_DATETIME_FORMAT) : ''
+	}
+
+	@computed()
+	public get placedUntillForUser(): string {
+		return this.placedUntill ? this.placedUntill.setLocale('ru-RU').toFormat(GLOBAL_DATETIME_FORMAT) : ''
+	}
+
 	/**
 	 * * Query scopes
 	 */
@@ -68,9 +81,10 @@ export default class Advertisement extends BaseModel {
 	 * * Hooks
 	 */
 
-	// @beforeDelete()
-	// public static async deleteStoredImage(item: Advertisement) {
-	// 	if (item.image) await Drive.delete(item.image)
-	// }
+	@beforeDelete()
+	public static async deleteStoredImage(item: Advertisement) {
+		if (item.offerImage) await Drive.delete(item.offerImage)
+		if (item.subsectionImage) await Drive.delete(item.subsectionImage)
+	}
 }
 

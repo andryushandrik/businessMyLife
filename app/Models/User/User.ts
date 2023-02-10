@@ -154,6 +154,10 @@ export default class User extends BaseModel {
 	@hasMany(() => Report)
 	public reports: HasMany<typeof Report>
 
+	@hasMany(() => Advertisement)
+	public ads: HasMany<typeof Advertisement>
+
+
 	@hasMany(() => Report, { foreignKey: 'toId' })
 	public reportsTo: HasMany<typeof Report>
 
