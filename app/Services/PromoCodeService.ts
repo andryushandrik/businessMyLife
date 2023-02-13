@@ -42,6 +42,20 @@ export default class PromoCodeService {
 		return item
 	}
 
+
+  public static async getByCode(code: PromoCode['code']): Promise<PromoCode | null> {
+		let item: PromoCode | null
+
+		try {
+			item = await PromoCode.findBy('code', code)
+		} catch (err: any) {
+			Logger.error(err)
+			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+		}
+    return item
+
+	}
+
 	public static async create(payload: PromoCodeValidator['schema']['props']): Promise<void> {
 		try {
 			await PromoCode.create(payload)

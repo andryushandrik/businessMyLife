@@ -158,6 +158,10 @@ export const NEWS_FOLDER_PATH = 'News'
 
 export const BANNER_FOLDER_PATH = 'Banners'
 
+export const ADVERTISEMENT_FOLDER_PATH = 'Ads'
+
+export const OUR_PARTNERS_FOLDER_PATH = 'OurPartners'
+
 export const USER_FOLDER_PATH = 'Users'
 
 export const OFFER_FOLDER_PATH = 'Offers'

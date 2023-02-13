@@ -139,7 +139,6 @@ export default class OffersController {
 				body: err.messages,
 			})
 		}
-		console.log(payload.paybackTime)
 		try {
 			await OfferService.update(id, payload)
 

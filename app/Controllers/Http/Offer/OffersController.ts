@@ -265,4 +265,3 @@ export default class OffersController {
 		return response.redirect().back()
 	}
 }
-

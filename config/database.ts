@@ -60,7 +60,7 @@ const databaseConfig: DatabaseConfig = {
 export default databaseConfig
 
 export const TABLES_NAMES = {
-	ADS: 'ads',
+	ADS: 'advertisements',
 	NEWS: 'news',
 	BANNERS: 'banners',
 	PARTNERS: 'partners',
@@ -68,6 +68,7 @@ export const TABLES_NAMES = {
 	PROMO_CODES: 'promoCodes',
 	UPLOAD_TUTORIALS: 'uploadTutorials',
 	EMAIL_SUBSCRIBERS: 'emailSubscribers',
+	OUR_PARTNERS: 'ourPartners',
 
 	/**
 	 * * Report
@@ -156,7 +157,7 @@ export const FEEDBACK_QUESTION_MAX_LENGTH = 8192
  */
 
 export const MAIN_PAGE_VIDEO_TITLE_MAX_LENGTH = 255
-export const MAIN_PAGE_VIDEO_DESCRIPTION_MAX_LENGTH = 2048
+export const MAIN_PAGE_VIDEO_DESCRIPTION_MAX_LENGTH = 8192
 
 /**
  * * News
@@ -182,6 +183,9 @@ export const BANNER_DESCRIPTION_MIN_LENGTH = 10
 export const BANNER_DESCRIPTION_MAX_LENGTH = 2048
 
 export const BANNER_LINK_MAX_LENGTH = 2048
+
+export const ADVERTISEMENT_DESCRIPTION_MIN_LENGTH = 10
+export const ADVERTISEMENT_DESCRIPTION_MAX_LENGTH = 2048
 
 /**
  * * Offer
