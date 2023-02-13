@@ -16,6 +16,7 @@ export default class PaymentService {
 
 		if (filter) query = this.filter(query, filter)
 
+    query = query.preload('promoCode').preload('user')
 		try {
 			return await query.getViaPaginate(config)
 		} catch (err: any) {
