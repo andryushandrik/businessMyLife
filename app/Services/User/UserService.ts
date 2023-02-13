@@ -66,7 +66,6 @@ export default class UserService {
 	public static async get(email: User['email'], config?: ServiceConfig<User>): Promise<User>
 	public static async get(idOrEmail: User['id'] | User['email'], { relations, aggregates }: ServiceConfig<User> = {}): Promise<User> {
 		let item: User | null
-
 		try {
 			if (typeof idOrEmail === 'number') item = await User.find(idOrEmail)
 			else item = await User.findBy('email', idOrEmail)
@@ -331,3 +330,4 @@ export default class UserService {
 		return query
 	}
 }
+
