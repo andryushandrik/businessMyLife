@@ -69,6 +69,7 @@ export const TABLES_NAMES = {
 	UPLOAD_TUTORIALS: 'uploadTutorials',
 	EMAIL_SUBSCRIBERS: 'emailSubscribers',
 	OUR_PARTNERS: 'ourPartners',
+	PAYMENTS: 'payments',
 
 	/**
 	 * * Report
