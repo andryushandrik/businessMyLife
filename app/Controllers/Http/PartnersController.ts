@@ -19,6 +19,7 @@ export default class PartnersController {
 		const config: PaginateConfig<Partner> = {
 			baseUrl: route!.pattern,
 			page: request.input('page', 1),
+			limit: request.input('limit', 5),
 		}
 
 		if (isFiltered) {

@@ -18,6 +18,7 @@ export default class AreasController {
 		const config: PaginateConfig<Area> = {
 			baseUrl: route!.pattern,
 			page: request.input('page', 1),
+			limit: request.input('limit', 5),
 		}
 
 		if (isFiltered) {

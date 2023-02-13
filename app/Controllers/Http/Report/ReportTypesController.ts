@@ -18,6 +18,7 @@ export default class ReportTypesController {
 		const config: PaginateConfig<ReportType> = {
 			baseUrl: route!.pattern,
 			page: request.input('page', 1),
+			limit: request.input('limit', 5),
 		}
 
 		if (isFiltered) {

@@ -15,10 +15,12 @@ export default class AdvertisementController {
 	public async index({ view, request, response, session, route }: HttpContextContract) {
 		const baseUrl: string = route!.pattern
 		const page: number = request.input('page', 1)
+		const limit: number = request.input('limit', 5)
 
 		try {
 			const ads: ModelPaginatorContract<Advertisement> = await AdvertisementService.paginate({
 				page,
+				limit,
 				baseUrl,
 				relations: ['owner'],
 			})

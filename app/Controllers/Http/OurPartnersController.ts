@@ -13,11 +13,13 @@ export default class OurPartnersController {
 	public async index({ view, request, response, session, route }: HttpContextContract) {
 		const baseUrl: string = route!.pattern
 		const page: number = request.input('page', 1)
+		const limit: number = request.input('limit', 5)
 
 		try {
 			const ourPartners: ModelPaginatorContract<OurPartner> = await OurPartnersService.paginate({
 				page,
 				baseUrl,
+				limit,
 			})
 			return await view.render('pages/ourpartners/index', { ourPartners })
 		} catch (err: Err | any) {

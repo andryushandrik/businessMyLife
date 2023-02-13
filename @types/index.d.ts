@@ -5,4 +5,3 @@ declare module '@ioc:Adonis/Core/Request' {
 		currentUserId: number
 	}
 }
-
