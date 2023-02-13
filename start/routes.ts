@@ -17,6 +17,9 @@ Route.group(() => {
 
 	Route.resource('/balance', 'BalanceController').except(['update'])
 
+	Route.resource('/payments', 'PaymentsController').except(['update'])
+
+
 	Route.patch('/balance/update/:userId', 'BalanceController.update').as('balance.update')
 
 	Route.get('/balance/accrue/:userId', 'BalanceController.accrue').as('balance.accrue')
