@@ -4,7 +4,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 // * Types
 
 import IndexValidator from '../IndexValidator'
-import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import { schema } from '@ioc:Adonis/Core/Validator'
 import { getUserIdRules } from '../Rules/User/user'
 import { getPromoCodeIdRules } from '../Rules/promoCode'
 
