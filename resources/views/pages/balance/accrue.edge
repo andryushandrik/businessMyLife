@@ -51,6 +51,11 @@
             </div>
           @endif
 
+          <div class="form-group">
+            <label class="mb-1">Текущий баланс</label>
+            <input type="string" class="form-control font-weight-bold" value="{{ user.balance ?? '' }}" disabled>
+          </div>
+
         </div>
       </div>
     </div>
@@ -60,17 +65,17 @@
   <div class="col-lg-12">
     <div class="card">
       <div class="card-header">
-        <h4 class="card-title">Добавить </h4>
+        <h4 class="card-title">Начислить </h4>
       </div>
 
       <div class="card-body">
         <div class="basic-form">
 
-          <form action="{{ route('user.block', { id: user.id }, { qs: { _method: 'PATCH' } }) }}" method="POST">
+          <form action="{{ route('balance.update', { userId: user.id }, { qs: { _method: 'PATCH' } }) }}" method="POST">
             {{ csrfField() }}
-            <input type="string" class="form-control mb-1" value="{{ user.balance ?? '' }}" disabled>
+            <input type="number" name="accrue" class="form-control mb-1" value="">
 
-            <button type="submit" class="btn btn-primary btn-sm">Подтвердить</button>
+            <button type="submit" class="btn btn-primary btn-sm">Добавить</button>
           </form>
 
         </div>
@@ -82,14 +87,15 @@
     <div class="card">
       <div class="card-header">
         <h4 class="card-title">Изменить баланс</h4>
+        Действие не может быть отменено!
       </div>
 
       <div class="card-body">
         <div class="basic-form">
 
-          <form action="{{ route('balance.update', { userId: user.id }, { qs: { _method: 'PATCH' } }) }}" method="POST">
+          <form action="{{ route('balance.update', { userId: user.id }, { qs: { _method: 'PATCH' } }) }}" method="POST" onsubmit="return confirm('Вы уверены что хотите изменить баланс для {{user.firstName}} {{user.lastName}} - {{user.email}}?');" >
             {{ csrfField() }}
-            <input type="string" class="form-control mb-1" value="{{ user.balance ?? '' }}">
+            <input type="number" name="balance" class="form-control mb-1" value="{{ user.balance ?? '' }}">
 
             <button type="submit" class="btn btn-warning btn-sm font-weight-bold">Подтвердить</button>
           </form>

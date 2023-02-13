@@ -26,7 +26,7 @@ export default class CheckAccessToken {
 
 			try {
 				const userTokenPayload = TokenService.verifyToken<UserTokenPayload>(token, authConfig.access.key)
-        request.currentUserId = userTokenPayload.id
+				request.currentUserId = userTokenPayload.id
 			} catch (err: Err | any) {
 				throw { code: ResponseCodes.TOKEN_EXPIRED, message: ResponseMessages.TOKEN_ERROR }
 			}

@@ -21,6 +21,7 @@ export default class OffersController {
 			baseUrl: route!.pattern,
 			relations: ['offer', 'user'],
 			page: request.input('page', 1),
+			limit: request.input('limit', 5),
 		}
 
 		if (isFiltered) {
@@ -53,6 +54,7 @@ export default class OffersController {
 			baseUrl: route!.pattern,
 			relations: ['user', 'userTo'],
 			page: request.input('page', 1),
+			limit: request.input('limit', 5),
 		}
 
 		if (isFiltered) {

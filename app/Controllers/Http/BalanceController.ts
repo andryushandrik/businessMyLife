@@ -10,8 +10,6 @@ import UserService from 'App/Services/User/UserService'
 import UserFilterValidator from 'App/Validators/User/UserFilterValidator'
 import { RoleNames, ROLE_NAMES, USER_TYPE_NAMES } from 'Config/user'
 import BalanceService from 'App/Services/BalanceService'
-import ResponseService from 'App/Services/ResponseService'
-import { ResponseMessages } from 'Config/response'
 import ExceptionService from 'App/Services/ExceptionService'
 
 export default class BalanceController {
@@ -22,7 +20,7 @@ export default class BalanceController {
 		const config: PaginateConfig<User> = {
 			baseUrl: route!.pattern,
 			page: request.input('page', 1),
-
+			limit: request.input('limit', 5),
 			aggregates: ['reports'],
 		}
 
@@ -51,14 +49,19 @@ export default class BalanceController {
 	}
 
 	public async update({ request, response, params }: HttpContextContract) {
-		const userId: User['id'] = params.userId
-
-		const newBalance = +request.body().balance
-
 		try {
-			await BalanceService.updateBalanceOfUser(userId, newBalance)
+			const userId: User['id'] = params.userId
+			const newBalance = Number(request.body().balance)
+			const accrue = Number(request.body().accrue)
 
-			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS))
+			if (newBalance) {
+				await BalanceService.updateBalanceOfUser(userId, newBalance)
+			}
+			if (accrue) {
+				await BalanceService.addBalanceToUser(userId, accrue)
+			}
+
+			return response.redirect().back()
 		} catch (err: Err | any) {
 			throw new ExceptionService(err)
 		}
@@ -75,4 +78,3 @@ export default class BalanceController {
 		}
 	}
 }
-

@@ -14,12 +14,13 @@ export default class BannersController {
 	public async index({ view, request, response, session, route }: HttpContextContract) {
 		const baseUrl: string = route!.pattern
 		const page: number = request.input('page', 1)
-
+		const limit: number = request.input('limit', 5)
 		try {
 			const delay: number | undefined = await BannerService.getBannersDelay()
 			const banners: ModelPaginatorContract<Banner> = await BannerService.paginate({
 				page,
 				baseUrl,
+				limit,
 			})
 			return await view.render('pages/banner/index', { banners, delay })
 		} catch (err: Err | any) {

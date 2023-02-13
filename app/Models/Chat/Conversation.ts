@@ -67,7 +67,6 @@ export default class Conversation extends BaseModel {
 		query.where('id', id)
 	})
 
-
 	public static getUserConversations = scope((query, userId: User['id']) => {
 		query.where((query) => {
 			query.where('from_id', userId).orWhere('to_id', userId)

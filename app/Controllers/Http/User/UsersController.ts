@@ -20,7 +20,7 @@ export default class UsersController {
 		const config: PaginateConfig<User> = {
 			baseUrl: route!.pattern,
 			page: request.input('page', 1),
-
+			limit: request.input('limit', 5),
 			aggregates: ['reports'],
 		}
 
@@ -55,6 +55,7 @@ export default class UsersController {
 		const config: PaginateConfig<User> = {
 			baseUrl: route!.pattern,
 			page: request.input('page', 1),
+			limit: request.input('limit', 5),
 		}
 
 		if (isFiltered) {

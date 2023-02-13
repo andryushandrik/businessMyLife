@@ -18,6 +18,7 @@ export default class UploadTutorialsController {
 		const config: PaginateConfig<UploadTutorial> = {
 			baseUrl: route!.pattern,
 			page: request.input('page', 1),
+			limit: request.input('limit', 1),
 		}
 
 		if (isFiltered) {
