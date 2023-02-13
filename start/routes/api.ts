@@ -180,10 +180,7 @@ Route.group(() => {
 		// Route.post('/', 'AdvertisementController.create').as('ads.create')
 	}).prefix('ads')
 
-  Route.group(() => {
+	Route.group(() => {
 		Route.post('/', 'Api/PromocodesController.checkIsValid')
 	}).prefix('promo')
-
-
-
 }).prefix('api')

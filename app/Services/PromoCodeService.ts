@@ -42,8 +42,7 @@ export default class PromoCodeService {
 		return item
 	}
 
-
-  public static async getByCode(code: PromoCode['code']): Promise<PromoCode | null> {
+	public static async getByCode(code: PromoCode['code']): Promise<PromoCode | null> {
 		let item: PromoCode | null
 
 		try {
@@ -52,8 +51,7 @@ export default class PromoCodeService {
 			Logger.error(err)
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
 		}
-    return item
-
+		return item
 	}
 
 	public static async create(payload: PromoCodeValidator['schema']['props']): Promise<void> {
