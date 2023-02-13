@@ -40,6 +40,7 @@ export default class User extends BaseModel {
 		'birthday',
 		'city',
 		'phone',
+    'balance',
 		'avatar',
 		'hobby',
 		'roleId',
@@ -69,6 +70,9 @@ export default class User extends BaseModel {
 
 	@column()
 	public email: string
+
+  @column()
+	public balance: number
 
 	@column({ serializeAs: null })
 	public password: string

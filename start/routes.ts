@@ -15,6 +15,13 @@ Route.group(() => {
 
 	Route.resource('/ourpartners', 'OurPartnersController')
 
+	Route.resource('/balance', 'BalanceController').except(['update'])
+
+  Route.get('/balance/update/:userId','BalanceController.update').as('balance.update')
+
+  Route.get('/balance/accrue/:userId','BalanceController.accrue').as('balance.accrue')
+
+
 	Route.resource('/partners', 'PartnersController')
 	Route.patch('/partners/visible/:id', 'PartnersController.visible').as('partner.visible')
 	Route.delete('/partners/visible/:id', 'PartnersController.invisible').as('partner.invisible')

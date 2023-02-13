@@ -67,9 +67,12 @@
         <a class="has-arrow ai-icon" href="javascript: void()" aria-expanded="false">
           <i class="flaticon-381-briefcase"></i>
           <span class="nav-text">Финансы</span>
+
         </a>
         <ul aria-expanded="false">
           <li><a href="{{ route('promo_codes.index') }}">Промокоды</a></li>
+          <li><a href="{{ route('balance.index') }}">Ручное начисление баланса</a></li>
+
         </ul>
       </li>
 
@@ -91,16 +94,6 @@
         </a>
         <ul aria-expanded="false">
           <li><a href="{{ route('ourpartners.index') }}">Партнеры</a></li>
-        </ul>
-      </li>
-
-      <li>
-        <a class="has-arrow ai-icon" href="javascript: void()" aria-expanded="false">
-          <i class="flaticon-381-division"></i>
-          <span class="nav-text">Банк</span>
-        </a>
-        <ul aria-expanded="false">
-          <li><a href="{{ route('ourpartners.index') }}">Пополнение</a></li>
         </ul>
       </li>
     </ul>

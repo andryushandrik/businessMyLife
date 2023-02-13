@@ -1,0 +1,115 @@
+@layout('layouts/index')
+
+@set('title', titleFromController ?? 'Все пользователи')
+
+@section('body')
+  @!component('components/filter', {
+    payload,
+    columns: [
+      { key: 'id', value: 'ID' },
+      { key: 'type', value: 'Тип профиля' },
+      { key: 'city', value: 'Город' },
+      { key: 'reportsCount', value: 'Кол-во жалоб' },
+      { key: 'blockedUntil', value: 'Бан' },
+    ],
+  })
+
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">{{ title }}</h4>
+      </div>
+
+      <div class="card-body">
+        <div class="table-responsive">
+
+          <table class="table table-responsive-md">
+            <thead>
+              <tr>
+                <th class="width80"><strong>#</strong></th>
+
+                <th><strong>Уровень доступа</strong></th>
+                <th><strong>Тип профиля</strong></th>
+                <th><strong>ФИ</strong></th>
+                <th><strong>Телефон</strong></th>
+                <th><strong>Email</strong></th>
+                <th><strong>Город</strong></th>
+                <th><strong>Кол-во жалоб</strong></th>
+                <th><strong>Бан</strong></th>
+                <th><strong>Дата регистрации</strong></th>
+
+                <th><strong>Действия</strong></th>
+              </tr>
+            </thead>
+            <tbody>
+
+              @each(item in users)
+                <tr>
+                  <td><strong>{{ item.id }}</strong></td>
+                  <td>{{ roles[item.roleId - 1] }}</td>
+                  <td>{{ usersTypes[item.type] }}</td>
+                  <td>{{ item.fullName }}</td>
+                  <td>{{ item.phone }}</td>
+                  <td>{{ item.email }}</td>
+                  <td>{{ item.city }}</td>
+                  <td>{{ item.reportsCount }}</td>
+                  <td>{{ item.blockedUntilForUser }}</td>
+                  <td>{{ item.createdAtForUser }}</td>
+
+                  <td>
+                    <div class="dropdown">
+                      <button type="button" class="btn btn-success light sharp" data-toggle="dropdown"
+                        aria-expanded="false">
+                        <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1">
+                          <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <rect x="0" y="0" width="24" height="24"></rect>
+                            <circle fill="#000000" cx="5" cy="12" r="2"></circle>
+                            <circle fill="#000000" cx="12" cy="12" r="2"></circle>
+                            <circle fill="#000000" cx="19" cy="12" r="2"></circle>
+                          </g>
+                        </svg>
+                      </button>
+                      <div class="dropdown-menu" style="">
+
+
+                        @if((item.roleId - 1) == roleEnum['USER'])
+                          <form action="{{ route('user.role.changeRoleToModerator', { userId: item.id }, { qs: { _method: 'PATCH' } }) }}" method="POST">
+                            {{ csrfField() }}
+
+                            <button type="submit" class="dropdown-item">Сделать модератором</button>
+                          </form>
+                        @else
+                          <form action="{{ route('user.role.changeRoleToUser', { userId: item.id }, { qs: { _method: 'PATCH' } }) }}" method="POST">
+                            {{ csrfField() }}
+                            <button type="submit" class="dropdown-item">Сделать пользователем</button>
+                          </form>
+                        @endif
+
+
+
+                        <a class="dropdown-item" href="{{ route('balance.accrue', { userId: item.id }) }}">Изменить баланс</a>
+                        <a class="dropdown-item" href="{{ route('user.get', { id: item.id }) }}">Показать</a>
+
+                        <a class="dropdown-item" href="https://business-mylife.ru/account/profile/user/{{item.id}}" target="_blank">Открыть на сайте</a>
+
+                        <form action="{{ route('user.delete', { id: item.id }, { qs: { _method: 'DELETE' } }) }}" method="POST">
+                          <button type="submit" class="dropdown-item">Удалить</button>
+
+                          {{ csrfField() }}
+                        </form>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              @endeach
+
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  @!component('components/pagination', { obj: users })
+@endsection
