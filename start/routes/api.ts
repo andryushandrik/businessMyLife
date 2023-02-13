@@ -183,4 +183,9 @@ Route.group(() => {
 	Route.group(() => {
 		Route.post('/', 'Api/PromocodesController.checkIsValid')
 	}).prefix('promo')
+
+  Route.group(() => {
+		Route.get('/', 'Api/ConversationController.hasConversationWithUser')
+	}).prefix('conversation').middleware('CheckAccessToken')
+
 }).prefix('api')

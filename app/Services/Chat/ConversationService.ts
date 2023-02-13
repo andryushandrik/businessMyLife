@@ -57,6 +57,29 @@ export default class ConversationService {
 		return item
 	}
 
+	public static async getByUserId(userId: User['id'], { currentUser }: GetConfig = {}): Promise<Conversation | null> {
+		try {
+			if (currentUser) {
+				const toCurrentUserConvQuery = Conversation.query().withScopes((scopes) => scopes.countNewMessagesForCurrentUser(currentUser))
+				const toCurrentUserConv = await toCurrentUserConvQuery.where('from_id', userId).where('to_id', currentUser).first()
+				if (toCurrentUserConv) {
+					return toCurrentUserConv
+				} else {
+					const fromCurrentUserConvQuery = Conversation.query().withScopes((scopes) => scopes.countNewMessagesForCurrentUser(currentUser))
+					const fromCurrentUserConv = await fromCurrentUserConvQuery.where('from_id', currentUser).where('to_id', userId).first()
+
+					if (fromCurrentUserConv) {
+						return fromCurrentUserConv
+					}
+				}
+			}
+			return null
+		} catch (err: any) {
+			Logger.error(err)
+			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+		}
+	}
+
 	public static async getWithOfferTopic(
 		offerId: Offer['id'],
 		payload: ConversationGetWithoutTopicPayload,
@@ -185,3 +208,4 @@ export default class ConversationService {
 		}
 	}
 }
+
