@@ -120,7 +120,7 @@ export default class OfferValidator extends IndexValidator {
 			rules.unsigned(),
 			// rules.requiredWhen('category', '=', OfferCategories.FRANCHISES),
 		]),
-    isPricePerMonthAbsolute: schema.boolean.optional(),
+		isPricePerMonthAbsolute: schema.boolean.optional(),
 		profit: schema.number.optional([
 			rules.unsigned(),
 			// rules.requiredWhen('category', 'in', [
@@ -143,6 +143,7 @@ export default class OfferValidator extends IndexValidator {
 		]),
 		isArchived: schema.boolean.optional(),
 		isVerified: schema.boolean.optional(),
+		placedForMonths: schema.enum.optional([3, 6] as const),
 	})
 
 	/**
@@ -158,3 +159,4 @@ export default class OfferValidator extends IndexValidator {
 	 */
 	public messages: CustomMessages = this.messages
 }
+

@@ -543,6 +543,7 @@ export default class OfferService {
 
 			userId: payload.userId,
 			subsectionId: payload.subsectionId,
+      placedForMonths: payload.placedForMonths,
 		}
 	}
 

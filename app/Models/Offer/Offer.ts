@@ -48,6 +48,7 @@ export default class Offer extends BaseModel {
 		'branchCount',
 		'soldBranchCount',
 		'blockDescription',
+    'placedForMonths',
 		'userId',
 		'subsectionId',
 		'createdAt',
@@ -159,6 +160,9 @@ export default class Offer extends BaseModel {
 	 * * Timestamps
 	 */
 
+	@column()
+	public placedForMonths: number
+
 	@column.dateTime({ autoCreate: true })
 	public createdAt: DateTime
 
@@ -242,7 +246,7 @@ export default class Offer extends BaseModel {
 
 	@computed()
 	public get archiveExpire(): string {
-		const expireDate: DateTime = this.updatedAt.plus({ days: 90 })
+		const expireDate: DateTime = this.updatedAt.plus({ months: 3 })
 		const archiveExpireInDays: number = expireDate.diff(DateTime.now(), 'days').days
 		const archiveExpireInDaysWithoutFraction: number = Math.floor(archiveExpireInDays)
 
