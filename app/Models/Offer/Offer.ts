@@ -127,6 +127,9 @@ export default class Offer extends BaseModel {
 	@column()
 	public pricePerMonth?: number
 
+	@column({ columnName: 'isPricePerMonthAbsolute' })
+	public isPricePerMonthAbsolute?: boolean
+
 	@column()
 	public profitPerMonth?: number
 
@@ -327,3 +330,4 @@ export default class Offer extends BaseModel {
 		return item
 	}
 }
+
