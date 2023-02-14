@@ -120,7 +120,7 @@ export default class OfferValidator extends IndexValidator {
 			rules.unsigned(),
 			// rules.requiredWhen('category', '=', OfferCategories.FRANCHISES),
 		]),
-
+    isPricePerMonthAbsolute: schema.boolean.optional(),
 		profit: schema.number.optional([
 			rules.unsigned(),
 			// rules.requiredWhen('category', 'in', [
