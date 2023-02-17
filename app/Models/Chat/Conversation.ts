@@ -29,9 +29,6 @@ export default class Conversation extends BaseModel {
 	@column({ columnName: 'to_id' })
 	public toId: User['id']
 
-	@column({ columnName: 'offer_id' })
-	public offerId?: Offer['id']
-
 	/**
 	 * * Timestamps
 	 */
@@ -46,8 +43,7 @@ export default class Conversation extends BaseModel {
 	 * * Relations
 	 */
 
-	@belongsTo(() => Offer)
-	public offer: BelongsTo<typeof Offer>
+
 
 	@hasOne(() => Message, {
 		onQuery(query) {
@@ -94,6 +90,16 @@ export default class Conversation extends BaseModel {
 		})
 	})
 
+	public static getByUsersIds = scope((query, fromId: User['id'], toId: User['id']) => {
+		query
+			// .whereNull('lot_id')
+			.andWhere((query) => {
+				query
+					.whereIn(['from_id', 'to_id'], [[fromId, toId]])
+					.orWhereIn(['from_id', 'to_id'], [[toId, fromId]])
+			})
+	})
+
 	/**
 	 * * Hooks
 	 */
@@ -101,7 +107,7 @@ export default class Conversation extends BaseModel {
 	@beforeFind()
 	@beforeFetch()
 	public static preloadAndAggregateModels(query: ModelQueryBuilderContract<typeof Conversation>) {
-		query.preload('offer').preload('lastMessage')
+		query.preload('lastMessage')
 	}
 
 	/**

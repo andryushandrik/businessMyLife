@@ -13,6 +13,7 @@ import MessageService from 'App/Services/Chat/MessageService'
 import ConversationService from 'App/Services/Chat/ConversationService'
 import { validator } from '@ioc:Adonis/Core/Validator'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
+import ConversationFindPayloadValidator from 'App/Validators/Chat/ConversationFindPayloadValidator'
 
 const apiValidator: ApiValidator = new ApiValidator()
 
@@ -49,10 +50,10 @@ export default class ConversationsController {
 		cb: (response: Err | ResponseService) => void,
 	): Promise<Conversation | void> {
 		try {
-			const item: Conversation = await ConversationService.get(conversationId)
-			const itemForUser: ModelObject = await item.getForUser(currentUserId)
+			const conversation: Conversation = await ConversationService.getById(conversationId)
+			const itemForUser: ModelObject = await conversation.getForUser(currentUserId)
 
-			await MessageService.viewed(item.id, currentUserId)
+			await MessageService.viewed(conversation.id, currentUserId)
 
 			cb(new ResponseService(ResponseMessages.SUCCESS, itemForUser))
 			return itemForUser as Conversation
@@ -61,13 +62,63 @@ export default class ConversationsController {
 		}
 	}
 
-	public static async delete(conversationId: Conversation['id'], cb: (response: Err | ResponseService) => void): Promise<Conversation | void> {
+	public static async getByUsersId(
+		toId: User['id'],
+		currentUserId: User['id'],
+		cb: (response: Err | ResponseService) => void,
+	): Promise<Conversation | void> {
 		try {
-			await ConversationService.delete(conversationId)
+			const item: Conversation = await ConversationService.getByUserIds(currentUserId, toId)
+			const itemForUser: ModelObject = await item.getForUser(currentUserId)
 
-			cb(new ResponseService(ResponseMessages.SUCCESS))
+			// await MessageService.viewed(item.id, currentUserId)
+
+			cb(new ResponseService(ResponseMessages.SUCCESS, itemForUser))
+			return itemForUser as Conversation
+		} catch (HttpError: Err | any) {
+			return cb(HttpError)
+		}
+	}
+
+	public static async find(
+		conversationFindPayload: ConversationFindPayloadValidator['schema']['props'],
+		currentUserId: User['id'],
+	): Promise<Conversation> {
+		let conversation: Conversation
+		const receiverId: User['id'] | undefined = conversationFindPayload.userId
+
+		try {
+			if (receiverId) {
+				conversation = await ConversationService.getByUserIds(receiverId, currentUserId)
+			} else if (conversationFindPayload.conversationId) {
+				conversation = await ConversationService.getById(conversationFindPayload.conversationId)
+			} else {
+				throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.ERROR } as Err
+			}
+			return conversation
 		} catch (err: Err | any) {
-			return cb(err)
+			throw err
+		}
+	}
+
+	public static async delete(
+		currentUserId: number,
+		conversationId: Conversation['id'],
+		cb: (response: Err | ResponseService) => void,
+	): Promise<Conversation | void> {
+		try {
+			const isConvAllowed = await ConversationService.isConversationAllowedForUser(
+				currentUserId,
+				conversationId,
+			)
+			if (isConvAllowed) {
+				await ConversationService.delete(conversationId)
+				cb(new ResponseService(ResponseMessages.SUCCESS))
+			} else {
+				throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.ERROR } as Err
+			}
+		} catch (HttpError: Err | any) {
+			return cb(HttpError)
 		}
 	}
 }

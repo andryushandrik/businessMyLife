@@ -4,7 +4,8 @@ import type Conversation from './Conversation'
 import type { DateTime } from 'luxon'
 // * Types
 
-import { BaseModel, column, scope } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, beforeFetch, beforeFind, belongsTo, BelongsTo, column, ModelQueryBuilderContract, scope } from '@ioc:Adonis/Lucid/Orm'
+import Offer from '../Offer/Offer'
 
 export default class Message extends BaseModel {
 	public static readonly columns = ['id', 'isViewed', 'text', 'userId', 'conversationId', 'createdAt', 'updatedAt'] as const
@@ -32,6 +33,11 @@ export default class Message extends BaseModel {
 	@column({ columnName: 'conversation_id' })
 	public conversationId: Conversation['id']
 
+	@column({ columnName: 'offer_id' })
+	public offerId: Offer['id']
+
+	@belongsTo(() => Offer)
+	public offer: BelongsTo<typeof Offer>
 	/**
 	 * * Timestamps
 	 */
@@ -53,4 +59,14 @@ export default class Message extends BaseModel {
 	public static notCurrentUser = scope((query, userId: User['id']) => {
 		query.whereNot('user_id', userId)
 	})
+
+		/**
+	 * * Hooks
+	 */
+
+		@beforeFind()
+		@beforeFetch()
+		public static preloadAndAggregateModels(query: ModelQueryBuilderContract<typeof Message>) {
+			query.preload('offer')
+		}
 }

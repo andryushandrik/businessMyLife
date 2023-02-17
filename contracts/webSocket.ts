@@ -8,6 +8,7 @@ import type MessageWithoutTopicValidator from 'App/Validators/Message/MessageWit
 import type MessageWithOfferTopicValidator from 'App/Validators/Message/MessageWithOfferTopicValidator'
 import type { Err } from './response'
 import type { SocketId } from 'socket.io-adapter'
+import ConversationFindPayloadValidator from 'App/Validators/Chat/ConversationFindPayloadValidator'
 // * Types
 
 export interface ServerToClientEvents {
@@ -15,7 +16,7 @@ export interface ServerToClientEvents {
 	 * * Conversation
 	 */
 
-	'conversation:countNewMessages': (count: number) => void
+	'conversation:unreadCount': (payload: object) => void
 	'conversation:update': (conversation: Conversation) => void
 
 	/**
@@ -24,6 +25,13 @@ export interface ServerToClientEvents {
 
 	'message:viewed': () => void
 	'message:create': (message: Message) => void
+	'message:unreadCount': ({ count, conversationId }) => void
+
+	/**
+	 * * Friends
+	 */
+
+	'friends:newRequests': (count: number) => void
 }
 
 export interface ClientToServerEvents {
@@ -34,7 +42,7 @@ export interface ClientToServerEvents {
 	'conversation:get': (conversationId: Conversation['id'], cb: (response: Err | ResponseService) => void) => void
 	'conversation:delete': (conversationId: Conversation['id'], cb: (response: Err | ResponseService) => void) => void
 	'conversation:paginate': (payload: ApiValidator['schema']['props'], cb: (response: Err | ResponseService) => void) => void
-
+	'conversation:getByUserId': (userId: User['id'], cb: (response: Err | ResponseService) => void) => void
 	'conversation:close': (conversationId: Conversation['id'], cb: (response: Err | ResponseService) => void) => void
 
 	/**
@@ -53,7 +61,7 @@ export interface ClientToServerEvents {
 		cb: (response: Err | ResponseService) => void,
 	) => void
 
-	'message:viewed': (conversationId: Conversation['id'], userId: User['id'], cb: (response: Err | ResponseService) => void) => void
+	'message:viewed': (findConversationPayload: ConversationFindPayloadValidator['schema']['props'], cb: (response: Err | ResponseService) => void) => void
 	'message:paginate': (conversationId: Conversation['id'], payload: ApiValidator['schema']['props'], cb: (response: Err | ResponseService) => void) => void
 }
 
@@ -65,6 +73,7 @@ export interface SocketData {
 
 export type AllSockets = {
 	sockets: SomeSocket[]
+	getAllUsersSockets: (userId: User['id']) => SomeSocket[] | undefined
 	getSocket: (userId: User['id']) => SomeSocket | undefined
 	addSocket: (socket: SomeSocket) => void
 	removeSocket: (userId: User['id']) => void

@@ -71,6 +71,13 @@ Route.group(() => {
 
 			Route.delete('/', 'Api/User/FriendsController.delete').middleware('CheckAccessToken')
 
+			Route.get('/incoming/count/:currentUserId', 'Api/User/FriendsController.countIncomings')
+			.where('currentUserId', {
+				match: /^[0-9]+$/,
+				cast: (currentUserId) => Number(currentUserId),
+			})
+			.middleware('CheckAccessToken')
+
 			Route.get('/incomings/:currentUserId', 'Api/User/FriendsController.paginateIncomings')
 				.where('currentUserId', {
 					match: /^[0-9]+$/,

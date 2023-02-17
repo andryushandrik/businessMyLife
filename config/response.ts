@@ -1,5 +1,6 @@
 export enum ResponseCodes {
 	SUCCESS = 'SUCCESS',
+	NOT_FOUND = 'NOT_FOUND',
 
 	CLIENT_ERROR = 'CLIENT_ERROR',
 	SERVER_ERROR = 'SERVER_ERROR',
@@ -13,7 +14,13 @@ export enum ResponseCodes {
 export enum ResponseMessages {
 	SUCCESS = 'Успешно!',
 	ERROR = 'Что-то пошло не так, повторите попытку еще раз!',
+	FORBIDDEN = 'Доступ запрещён',
 
+	/**
+	 * * Сhat
+	 */
+
+	CONVERSATION_NOT_FOUND = 'Диалог не найден!',
 	/**
 	 * * Auth
 	 */

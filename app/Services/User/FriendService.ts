@@ -61,6 +61,27 @@ export default class FriendService {
 		}
 	}
 
+	public static async countRequests(
+		id: User['id'],
+	): Promise<number> {
+		let user: User
+
+		try {
+			user = await UserService.get(id)
+		} catch (err: Err | any) {
+			throw err
+		}
+
+		try {
+			const incomings = await Friend.query().where({toId: user.id, isRequest: true}).count('* as total')
+			const incomingsCount = incomings[0].$extras.total
+			return incomingsCount
+		} catch (err: any) {
+			Logger.error(err)
+			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+		}
+	}
+
 	public static async create(payload: FriendValidator['schema']['props']): Promise<void> {
 		let alreadyExistsRequest: Friend | undefined = undefined
 		const friendPayload: Partial<ModelAttributes<Friend>> = {

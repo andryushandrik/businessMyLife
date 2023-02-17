@@ -1,88 +1,65 @@
-// * Types
-import type User from 'App/Models/User/User'
-import type Offer from 'App/Models/Offer/Offer'
-import type { Err } from 'Contracts/response'
-import type { JSONPaginate } from 'Contracts/database'
-import type { ServiceConfig } from 'Contracts/services'
-import type { ConversationGetPayload, ConversationGetWithoutTopicPayload } from 'Contracts/conversation'
-// * Types
-
+import Conversation from "App/Models/Chat/Conversation"
+import User from "App/Models/User/User"
+import ApiValidator from "App/Validators/ApiValidator"
+import { ResponseCodes, ResponseMessages } from "Config/response"
+import { ConversationGetPayload } from "Contracts/conversation"
+import { JSONPaginate } from "Contracts/database"
+import { ServiceConfig } from "Contracts/services"
+import { DateTime } from "luxon"
 import Logger from '@ioc:Adonis/Core/Logger'
-import ApiValidator from 'App/Validators/ApiValidator'
-import Conversation from 'App/Models/Chat/Conversation'
-import { DateTime } from 'luxon'
-import { ResponseCodes, ResponseMessages } from 'Config/response'
+import { Err } from "Contracts/response"
+
 
 type GetConfig = ServiceConfig<Conversation> & {
 	currentUser?: User['id'] | null // For load new messages
 }
 
 export default class ConversationService {
-	public static async paginate(userId: User['id'], config: ApiValidator['schema']['props']): Promise<JSONPaginate> {
+	public static async paginate(
+		userId: User['id'],
+		config: ApiValidator['schema']['props'],
+	): Promise<JSONPaginate> {
 		try {
+			if (!config.orderBy) config.orderBy = 'desc'
+			if (!config.orderByColumn) config.orderByColumn = 'updatedAt'
+
 			const conversations: JSONPaginate = (
 				await Conversation.query()
 					.withScopes((scopes) => scopes.getUserConversations(userId))
 					.withScopes((scopes) => scopes.countNewMessagesForCurrentUser(userId))
 					.getViaPaginate(config)
 			).toJSON()
+			// console.log(conversations.data[0].$extras); //dev
+			// console.log(conversations); //dev
 
-			conversations.data = await Promise.all(conversations.data.map(async (item: Conversation) => item.getForUser(userId)))
+			conversations.data = await Promise.all(
+				conversations.data.map(async (item: Conversation) => item.getForUser(userId)),
+			)
+			// console.log(conversations.data); //dev
 
 			return conversations
-		} catch (err: any) {
-			Logger.error(err)
+		} catch (Err: any) {
+			Logger.error(Err)
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
 		}
 	}
 
-	public static async get(conversationId: Conversation['id'], { trx, currentUser }: GetConfig = {}): Promise<Conversation> {
-		let item: Conversation | null
+	public static async isConversationAllowedForUser(
+		userId: number,
+		conversationId: number,
+	): Promise<boolean> {
+		const query = Conversation.query()
+		const item = await query.withScopes((scopes) => scopes.getById(conversationId)).first()
 
-		try {
-			let query = Conversation.query()
-
-			if (trx) query = query.useTransaction(trx)
-
-			if (currentUser) query = query.withScopes((scopes) => scopes.countNewMessagesForCurrentUser(currentUser))
-
-			item = await query.withScopes((scopes) => scopes.getById(conversationId)).first()
-		} catch (err: any) {
-			Logger.error(err)
-			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+		if (item?.toId == userId || item?.fromId == userId) {
+			return true
 		}
 
-		if (!item) throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.ERROR } as Err
-
-		return item
+		return false
 	}
 
-	public static async getByUserId(userId: User['id'], { currentUser }: GetConfig = {}): Promise<Conversation | null> {
-		try {
-			if (currentUser) {
-				const toCurrentUserConvQuery = Conversation.query().withScopes((scopes) => scopes.countNewMessagesForCurrentUser(currentUser))
-				const toCurrentUserConv = await toCurrentUserConvQuery.where('from_id', userId).where('to_id', currentUser).first()
-				if (toCurrentUserConv) {
-					return toCurrentUserConv
-				} else {
-					const fromCurrentUserConvQuery = Conversation.query().withScopes((scopes) => scopes.countNewMessagesForCurrentUser(currentUser))
-					const fromCurrentUserConv = await fromCurrentUserConvQuery.where('from_id', currentUser).where('to_id', userId).first()
-
-					if (fromCurrentUserConv) {
-						return fromCurrentUserConv
-					}
-				}
-			}
-			return null
-		} catch (err: any) {
-			Logger.error(err)
-			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
-		}
-	}
-
-	public static async getWithOfferTopic(
-		offerId: Offer['id'],
-		payload: ConversationGetWithoutTopicPayload,
+	public static async getById(
+		conversationId: Conversation['id'],
 		{ trx, currentUser }: GetConfig = {},
 	): Promise<Conversation> {
 		let item: Conversation | null
@@ -92,20 +69,26 @@ export default class ConversationService {
 
 			if (trx) query = query.useTransaction(trx)
 
-			if (currentUser) query = query.withScopes((scopes) => scopes.countNewMessagesForCurrentUser(currentUser))
+			if (currentUser)
+				query = query.withScopes((scopes) => scopes.countNewMessagesForCurrentUser(currentUser))
 
-			item = await query.withScopes((scopes) => scopes.getWithOfferTopic(payload.fromId, payload.toId, offerId)).first()
-		} catch (err: any) {
-			Logger.error(err)
+			item = await query.withScopes((scopes) => scopes.getById(conversationId)).first()
+		} catch (Err: any) {
+			Logger.error(Err)
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
 		}
 
-		if (!item) throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.ERROR } as Err
+		if (!item)
+			throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.ERROR } as Err
 
 		return item
 	}
 
-	public static async getWithoutTopic(payload: ConversationGetWithoutTopicPayload, { trx, currentUser }: GetConfig = {}): Promise<Conversation> {
+	public static async getByUserIds(
+		receiverId: User['id'],
+		currentUserId: User['id'],
+		{ trx }: GetConfig = {},
+	): Promise<Conversation> {
 		let item: Conversation | null
 
 		try {
@@ -113,15 +96,53 @@ export default class ConversationService {
 
 			if (trx) query = query.useTransaction(trx)
 
-			if (currentUser) query = query.withScopes((scopes) => scopes.countNewMessagesForCurrentUser(currentUser))
+			query = query.withScopes((scopes) => scopes.countNewMessagesForCurrentUser(currentUserId))
 
-			item = await query.withScopes((scopes) => scopes.getWithoutTopic(payload.fromId, payload.toId)).first()
-		} catch (err: any) {
-			Logger.error(err)
+			item = await query
+				.withScopes((scopes) => scopes.getByUsersIds(receiverId, currentUserId))
+				.first()
+
+		} catch (Err: any) {
+			Logger.error(Err)
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
 		}
 
-		if (!item) throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.ERROR } as Err
+		if (!item)
+			throw {
+				code: ResponseCodes.NOT_FOUND,
+				message: ResponseMessages.CONVERSATION_NOT_FOUND,
+			} as Err
+
+		return item
+	}
+
+	public static async getWithoutTopic(
+		fromId: User['id'],
+		toId: User['id'],
+		{ trx, currentUser }: GetConfig = {},
+	): Promise<Conversation> {
+		let item //: Conversation | null
+
+		try {
+			let query = Conversation.query()
+
+			if (trx) query = query.useTransaction(trx)
+
+			if (currentUser)
+				query = query.withScopes((scopes) => scopes.countNewMessagesForCurrentUser(currentUser))
+
+			item = await query.withScopes((scopes) => scopes.getByUsersIds(fromId, toId)).first()
+			console.log('ConversationsController.getWithoutTopic')
+		} catch (Err: any) {
+			Logger.error(Err)
+			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+		}
+
+		if (!item)
+			throw {
+				code: ResponseCodes.NOT_FOUND,
+				message: ResponseMessages.CONVERSATION_NOT_FOUND,
+			} as Err
 
 		return item
 	}
@@ -131,53 +152,65 @@ export default class ConversationService {
 			const result: { total: number }[] = await Conversation.query()
 				.withScopes((scopes) => scopes.getUserConversations(userId))
 				.whereHas('messages', (query) => {
-					query.withScopes((scopes) => scopes.getNew()).withScopes((scopes) => scopes.notCurrentUser(userId))
+					query
+						.withScopes((scopes) => scopes.getNew())
+						.withScopes((scopes) => scopes.notCurrentUser(userId))
 				})
 				.pojo<{ total: number }>()
 				.count('*', 'total')
 
 			return result[0].total
-		} catch (err: any) {
-			Logger.error(err)
+		} catch (Err: any) {
+			Logger.error(Err)
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
 		}
 	}
 
-	public static async create(payload: ConversationGetPayload, { trx }: ServiceConfig<Conversation> = {}): Promise<Conversation> {
+	public static async create(
+		payload: ConversationGetPayload,
+		{ trx }: ServiceConfig<Conversation> = {},
+	): Promise<Conversation> {
 		let conversationId: Conversation['id']
 		let checkAlreadyExistsConversation: Conversation | null = null
 
 		try {
-			checkAlreadyExistsConversation = await this.getWithoutTopic(payload)
-		} catch (err: Err | any) {}
+			checkAlreadyExistsConversation = await this.getWithoutTopic(payload.fromId, payload.toId)
+		} catch (Err: Err | any) {}
 
-		if (checkAlreadyExistsConversation) throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.ERROR } as Err
+		if (checkAlreadyExistsConversation)
+			throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.ERROR } as Err
 
 		try {
 			conversationId = (await Conversation.create(payload)).id
-		} catch (err: any) {
-			Logger.error(err)
+		} catch (Err: any) {
+			Logger.error(Err)
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
 		}
 
 		try {
-			return await this.get(conversationId, { trx })
-		} catch (err: Err | any) {
-			throw err
+			return await this.getById(conversationId, { trx })
+		} catch (Err: Err | any) {
+			throw Err
 		}
 	}
 
-	public static async updateWhenMessageCreatedOrDeleted(conversation: Conversation, config?: ServiceConfig<Conversation>): Promise<void>
-	public static async updateWhenMessageCreatedOrDeleted(conversationId: Conversation['id'], config?: ServiceConfig<Conversation>): Promise<void>
+	public static async updateWhenMessageCreatedOrDeleted(
+		conversation: Conversation,
+		config?: ServiceConfig<Conversation>,
+	): Promise<void>
+	public static async updateWhenMessageCreatedOrDeleted(
+		conversationId: Conversation['id'],
+		config?: ServiceConfig<Conversation>,
+	): Promise<void>
 	public static async updateWhenMessageCreatedOrDeleted(
 		conversationIdOrItem: Conversation | Conversation['id'],
 		{ trx }: ServiceConfig<Conversation> = {},
 	): Promise<void> {
 		if (typeof conversationIdOrItem !== 'object') {
 			try {
-				conversationIdOrItem = await this.get(conversationIdOrItem, { trx })
-			} catch (err: Err | any) {
-				throw err
+				conversationIdOrItem = await this.getById(conversationIdOrItem, { trx })
+			} catch (Err: Err | any) {
+				throw Err
 			}
 		}
 
@@ -185,8 +218,8 @@ export default class ConversationService {
 			const timestamp: DateTime = DateTime.now()
 
 			await conversationIdOrItem.merge({ updatedAt: timestamp }).save()
-		} catch (err: any) {
-			Logger.error(err)
+		} catch (Err: any) {
+			Logger.error(Err)
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
 		}
 	}
@@ -195,15 +228,15 @@ export default class ConversationService {
 		let item: Conversation
 
 		try {
-			item = await this.get(conversationId)
-		} catch (err: Err | any) {
-			throw err
+			item = await this.getById(conversationId)
+		} catch (Err: Err | any) {
+			throw Err
 		}
 
 		try {
 			await item.delete()
-		} catch (err: any) {
-			Logger.error(err)
+		} catch (Err: any) {
+			Logger.error(Err)
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
 		}
 	}

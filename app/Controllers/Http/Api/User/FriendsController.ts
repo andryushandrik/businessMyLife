@@ -59,6 +59,20 @@ export default class FriendsController {
 		}
 	}
 
+	public async countIncomings({response, params }: HttpContextContract) {
+		const currentUserId: User['id'] = params.currentUserId
+		
+
+		try {
+			const incomingsCount/* : ModelPaginatorContract<User> */ = await FriendService.countRequests(currentUserId)
+			
+			
+			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, incomingsCount))
+		} catch (err: Err | any) {
+			throw new ExceptionService(err)
+		}
+	}
+
 	public async paginateOutgoings({ request, response, params }: HttpContextContract) {
 		const currentUserId: User['id'] = params.currentUserId
 		let payload: ApiValidator['schema']['props']
