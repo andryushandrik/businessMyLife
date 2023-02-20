@@ -1,4 +1,4 @@
-import { BelongsTo, HasOne, hasOne } from '@ioc:Adonis/Lucid/Orm'
+import { BelongsTo, computed, HasOne, hasOne } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 import Offer from './Offer'
 import type { DateTime } from 'luxon'
@@ -6,6 +6,7 @@ import type { DateTime } from 'luxon'
 import { TABLES_NAMES } from 'Config/database'
 import { BaseModel, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import PremiumSlot from './PremiumSlot'
+import { GLOBAL_DATETIME_FORMAT } from 'Config/app'
 
 export default class PremiumFranchise extends BaseModel {
 	public static readonly table: string = TABLES_NAMES.PREMIUM_FRANCHISES
@@ -29,10 +30,10 @@ export default class PremiumFranchise extends BaseModel {
 	 * * Timestamps
 	 */
 
-	@column.dateTime({ autoCreate: true })
+	@column.dateTime({ autoCreate: true, columnName: 'created_at' })
 	public createdAt: DateTime
 
-	@column.dateTime({ autoCreate: true, autoUpdate: true })
+	@column.dateTime({ autoCreate: true, autoUpdate: true, columnName: 'updated_at' })
 	public updatedAt: DateTime
 
 	@belongsTo(() => Offer)
@@ -43,5 +44,13 @@ export default class PremiumFranchise extends BaseModel {
 	/**
 	 * * Hooks
 	 */
+
+	@computed()
+	public get createdAtForUser(): string {
+		if (this.createdAt) {
+			return this.createdAt.setLocale('ru-RU').toFormat(GLOBAL_DATETIME_FORMAT)
+		}
+		return ''
+	}
 }
 

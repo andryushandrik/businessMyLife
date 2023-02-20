@@ -45,13 +45,13 @@
               @each(item in franchises)
                 <tr>
                   <td><strong>{{ item.id }}</strong></td>
-                  <td>{{ item.offer.user.firstName}} {{ item.offer.user.lastName}}</td>
+                  <td><a target="_blank" href="https://business-mylife.ru/account/profile/user/{{ item.offer.user.id}}">{{ item.offer.user.firstName}} {{ item.offer.user.lastName}}</a></td>
                   <td> <a target="_blank" href="https://business-mylife.ru/adv-page/{{item.offer.id}}">{{ item.offer.id }}</a></td>
                   <td>{{ item.premiumSlot?.type }} </td>
                   <td>{{ item.premiumSlot?.title }}</td>
 
 
-                  <td>{{ item.premiumSlot?.employedAtForUser }}</td>
+                  <td>{{ item.createdAtForUser}}</td>
                   <td>{{ item.premiumSlot?.employedUntillForUser }}</td>
 
 
@@ -71,7 +71,7 @@
                         </svg>
                       </button>
                       <div class="dropdown-menu" style="">
-                        <a class="dropdown-item" href="https://business-mylife.ru/account/profile/user/{{item.id}}" target="_blank">Пользователь</a>
+                        <a class="dropdown-item" href="https://business-mylife.ru/account/profile/user/{{ item.offer.user.id}}" target="_blank">Пользователь</a>
 
                       </div>
                     </div>
