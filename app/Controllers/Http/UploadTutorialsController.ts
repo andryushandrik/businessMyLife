@@ -60,7 +60,7 @@ export default class UploadTutorialsController {
 					})
 				}
 			} catch (err: Err | any) {
-				session.flash('error', "Должно быть embed ссылкой")
+				session.flash('error', 'Должно быть embed ссылкой')
 				return response.redirect().back()
 			}
 		}
@@ -117,7 +117,7 @@ export default class UploadTutorialsController {
 					})
 				}
 			} catch (err: Err | any) {
-				session.flash('error', "Должно быть embed ссылкой")
+				session.flash('error', 'Должно быть embed ссылкой')
 				return response.redirect().back()
 			}
 		}
@@ -145,4 +145,3 @@ export default class UploadTutorialsController {
 		}
 	}
 }
-

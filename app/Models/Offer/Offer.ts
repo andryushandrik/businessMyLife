@@ -48,7 +48,7 @@ export default class Offer extends BaseModel {
 		'branchCount',
 		'soldBranchCount',
 		'blockDescription',
-    'placedForMonths',
+		'placedForMonths',
 		'userId',
 		'subsectionId',
 		'createdAt',
@@ -334,4 +334,3 @@ export default class Offer extends BaseModel {
 		return item
 	}
 }
-

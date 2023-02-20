@@ -1,22 +1,20 @@
-// * Types
-import type { Err } from 'Contracts/response'
-import type { PaginateConfig } from 'Contracts/services'
-import type { ModelPaginatorContract, ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
-// * Types
-
 import Logger from '@ioc:Adonis/Core/Logger'
+import { ModelPaginatorContract, ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
+import PremiumSlot from 'App/Models/Offer/PremiumSlots/PremiumSlot'
+import PremiumSlotsFilterValidator from 'App/Validators/PremiumSlots/PremiumSlotsFilterValidator'
+import PremiumSlotsValidator from 'App/Validators/PremiumSlots/PremiumSlotsValidator'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
-import Payment from 'App/Models/Payment'
-import PaymentFilterValidator from 'App/Validators/Payment/PaymentFilterValidator'
-import PaymentValidator from 'App/Validators/Payment/PaymentValidator'
+import { Err } from 'Contracts/response'
+import { PaginateConfig } from 'Contracts/services'
 
-export default class PaymentService {
-	public static async paginate(config: PaginateConfig<Payment>, filter?: PaymentFilterValidator['schema']['props']): Promise<ModelPaginatorContract<Payment>> {
-		let query: ModelQueryBuilderContract<typeof Payment> = Payment.query()
-
+export default class PremiumSlotService {
+	public static async paginate(
+		config: PaginateConfig<PremiumSlot>,
+		filter?: PremiumSlotsFilterValidator['schema']['props'],
+	): Promise<ModelPaginatorContract<PremiumSlot>> {
+		let query: ModelQueryBuilderContract<typeof PremiumSlot> = PremiumSlot.query()
 		if (filter) query = this.filter(query, filter)
 
-		query = query.preload('promoCode').preload('user')
 		try {
 			return await query.getViaPaginate(config)
 		} catch (err: any) {
@@ -25,11 +23,11 @@ export default class PaymentService {
 		}
 	}
 
-	public static async get(id: Payment['id']): Promise<Payment> {
-		let item: Payment | null
+	public static async get(id: PremiumSlot['id']): Promise<PremiumSlot> {
+		let item: PremiumSlot | null
 
 		try {
-			item = await Payment.find(id)
+			item = await PremiumSlot.find(id)
 		} catch (err: any) {
 			Logger.error(err)
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
@@ -40,17 +38,17 @@ export default class PaymentService {
 		return item
 	}
 
-	public static async create(payload: PaymentValidator['schema']['props']): Promise<void> {
+	public static async create(payload: PremiumSlotsValidator['schema']['props']): Promise<void> {
 		try {
-			await Payment.create(payload)
+			await PremiumSlot.create(payload)
 		} catch (err: any) {
 			Logger.error(err)
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
 		}
 	}
 
-	public static async update(id: Payment['id'], payload: PaymentValidator['schema']['props']): Promise<void> {
-		let item: Payment
+	public static async update(id: PremiumSlot['id'], payload: PremiumSlotsValidator['schema']['props']): Promise<void> {
+		let item: PremiumSlot
 
 		try {
 			item = await this.get(id)
@@ -66,8 +64,8 @@ export default class PaymentService {
 		}
 	}
 
-	public static async delete(id: Payment['id']): Promise<void> {
-		let item: Payment
+	public static async delete(id: PremiumSlot['id']): Promise<void> {
+		let item: PremiumSlot
 
 		try {
 			item = await this.get(id)
@@ -88,9 +86,9 @@ export default class PaymentService {
 	 */
 
 	private static filter(
-		query: ModelQueryBuilderContract<typeof Payment>,
-		payload: PaymentFilterValidator['schema']['props'],
-	): ModelQueryBuilderContract<typeof Payment> {
+		query: ModelQueryBuilderContract<typeof PremiumSlot>,
+		payload: PremiumSlotsFilterValidator['schema']['props'],
+	): ModelQueryBuilderContract<typeof PremiumSlot> {
 		for (const key in payload) {
 			if (payload[key]) {
 				switch (key) {
