@@ -9,7 +9,8 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import UploadTutorialService from 'App/Services/UploadTutorialService'
 import UploadTutorialValidator from 'App/Validators/UploadTutorial/UploadTutorialValidator'
 import UploadTutorialFilterValidator from 'App/Validators/UploadTutorial/UploadTutorialFilterValidator'
-import { ResponseMessages } from 'Config/response'
+import { ResponseCodes, ResponseMessages } from 'Config/response'
+import ExceptionService from 'App/Services/ExceptionService'
 
 export default class UploadTutorialsController {
 	public async index({ request, response, route, view, session }: HttpContextContract) {
@@ -18,7 +19,7 @@ export default class UploadTutorialsController {
 		const config: PaginateConfig<UploadTutorial> = {
 			baseUrl: route!.pattern,
 			page: request.input('page', 1),
-			limit: request.input('limit', 1),
+			limit: request.input('limit', 5),
 		}
 
 		if (isFiltered) {
@@ -47,6 +48,22 @@ export default class UploadTutorialsController {
 
 	public async store({ request, session, response }: HttpContextContract) {
 		const payload = await request.validate(UploadTutorialValidator)
+		if (payload.embed) {
+			try {
+				const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
+				const match = payload.embed.match(regExp)
+				if (!match) {
+					throw new ExceptionService({
+						code: ResponseCodes.VALIDATION_ERROR,
+						message: ResponseMessages.VALIDATION_ERROR,
+						body: 'Должно быть embed ссылкой',
+					})
+				}
+			} catch (err: Err | any) {
+				session.flash('error', "Должно быть embed ссылкой")
+				return response.redirect().back()
+			}
+		}
 
 		try {
 			await UploadTutorialService.create(payload)
@@ -88,7 +105,22 @@ export default class UploadTutorialsController {
 	public async update({ params, request, session, response }: HttpContextContract) {
 		const id: UploadTutorial['id'] = params.id
 		const payload = await request.validate(UploadTutorialValidator)
-
+		if (payload.embed) {
+			try {
+				const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
+				const match = payload.embed.match(regExp)
+				if (!match) {
+					throw new ExceptionService({
+						code: ResponseCodes.VALIDATION_ERROR,
+						message: ResponseMessages.VALIDATION_ERROR,
+						body: 'Должно быть embed ссылкой',
+					})
+				}
+			} catch (err: Err | any) {
+				session.flash('error', "Должно быть embed ссылкой")
+				return response.redirect().back()
+			}
+		}
 		try {
 			await UploadTutorialService.update(id, payload)
 
@@ -113,3 +145,4 @@ export default class UploadTutorialsController {
 		}
 	}
 }
+

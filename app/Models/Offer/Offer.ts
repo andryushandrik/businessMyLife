@@ -246,7 +246,7 @@ export default class Offer extends BaseModel {
 
 	@computed()
 	public get archiveExpire(): string {
-		const expireDate: DateTime = this.updatedAt.plus({ months: 3 })
+		const expireDate: DateTime = this.createdAt.plus({ months: this.placedForMonths })
 		const archiveExpireInDays: number = expireDate.diff(DateTime.now(), 'days').days
 		const archiveExpireInDaysWithoutFraction: number = Math.floor(archiveExpireInDays)
 
