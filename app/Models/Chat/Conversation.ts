@@ -1,13 +1,13 @@
 // * Types
 import type User from '../User/User'
 import type { DateTime } from 'luxon'
-import type { BelongsTo, HasMany, HasOne, ModelObject, ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
+import type { HasMany, HasOne, ModelObject, ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 
 import Message from './Message'
 import Offer from '../Offer/Offer'
 import UserService from 'App/Services/User/UserService'
-import { BaseModel, beforeFetch, beforeFind, belongsTo, column, hasMany, hasOne, scope } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, beforeFetch, beforeFind, column, hasMany, hasOne, scope } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Conversation extends BaseModel {
 	public static readonly columns = ['id', 'fromId', 'toId', 'offerId', 'createdAt', 'updatedAt'] as const
@@ -42,8 +42,6 @@ export default class Conversation extends BaseModel {
 	/**
 	 * * Relations
 	 */
-
-
 
 	@hasOne(() => Message, {
 		onQuery(query) {
@@ -94,9 +92,7 @@ export default class Conversation extends BaseModel {
 		query
 			// .whereNull('lot_id')
 			.andWhere((query) => {
-				query
-					.whereIn(['from_id', 'to_id'], [[fromId, toId]])
-					.orWhereIn(['from_id', 'to_id'], [[toId, fromId]])
+				query.whereIn(['from_id', 'to_id'], [[fromId, toId]]).orWhereIn(['from_id', 'to_id'], [[toId, fromId]])
 			})
 	})
 
