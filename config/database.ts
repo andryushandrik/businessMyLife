@@ -70,6 +70,8 @@ export const TABLES_NAMES = {
 	EMAIL_SUBSCRIBERS: 'emailSubscribers',
 	OUR_PARTNERS: 'ourPartners',
 	PAYMENTS: 'payments',
+	PREMIUM_FRANCHISES: 'premium_franchises',
+	PREMIUM_SLOTS: 'premium_slots',
 
 	/**
 	 * * Report

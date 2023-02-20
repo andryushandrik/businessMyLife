@@ -17,7 +17,7 @@ export default class PaymentsController {
 		const config: PaginateConfig<Payment> = {
 			baseUrl: route!.pattern,
 			page: request.input('page', 1),
-			limit: request.input('limit', 5)
+			limit: request.input('limit', 5),
 		}
 
 		if (isFiltered) {
@@ -40,4 +40,3 @@ export default class PaymentsController {
 		}
 	}
 }
-

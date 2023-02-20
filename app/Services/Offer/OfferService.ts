@@ -183,11 +183,11 @@ export default class OfferService {
 	public static async create(payload: OfferValidator['schema']['props']): Promise<Offer> {
 		let item: Offer
 		const trx: TransactionClientContract = await Database.transaction()
-    payload.isPricePerMonthAbsolute = payload.isPricePerMonthAbsolute ? true : false
-    if(!payload.isPricePerMonthAbsolute && payload.profitPerMonth && payload.pricePerMonth){
-      payload.pricePerMonth = Math.floor(0.01 * payload.pricePerMonth * payload.profitPerMonth)
-    }
-    const itemPayload: Partial<ModelAttributes<Offer>> = this.getOfferDataFromPayload(payload)
+		payload.isPricePerMonthAbsolute = payload.isPricePerMonthAbsolute ? true : false
+		if (!payload.isPricePerMonthAbsolute && payload.profitPerMonth && payload.pricePerMonth) {
+			payload.pricePerMonth = Math.floor(0.01 * payload.pricePerMonth * payload.profitPerMonth)
+		}
+		const itemPayload: Partial<ModelAttributes<Offer>> = this.getOfferDataFromPayload(payload)
 		try {
 			item = await Offer.create(itemPayload, { client: trx })
 		} catch (err: any) {
@@ -539,11 +539,11 @@ export default class OfferService {
 
 			price: payload.price,
 			pricePerMonth: payload.pricePerMonth,
-      isPricePerMonthAbsolute: payload.isPricePerMonthAbsolute,
+			isPricePerMonthAbsolute: payload.isPricePerMonthAbsolute,
 
 			userId: payload.userId,
 			subsectionId: payload.subsectionId,
-      placedForMonths: payload.placedForMonths,
+			placedForMonths: payload.placedForMonths,
 		}
 	}
 

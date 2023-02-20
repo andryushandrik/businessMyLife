@@ -17,7 +17,6 @@ export default class OffersArchivesController {
 	public async paginateUserNotArchivedOffers({ request, response, params }: HttpContextContract) {
 		const userId: User['id'] = params.userId
 		let payload: OfferFilterValidator['schema']['props']
-
 		try {
 			payload = await request.validate(OfferFilterValidator)
 		} catch (err: Err | any) {
@@ -34,9 +33,7 @@ export default class OffersArchivesController {
 				limit: payload.limit,
 				orderBy: payload.orderBy,
 				orderByColumn: payload.orderByColumn,
-
 				userId,
-
 				preloadArea: true,
 				isArchived: false,
 			}

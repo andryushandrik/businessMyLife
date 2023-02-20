@@ -159,4 +159,3 @@ export default class OfferValidator extends IndexValidator {
 	 */
 	public messages: CustomMessages = this.messages
 }
-

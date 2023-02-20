@@ -79,7 +79,7 @@
 
             <div class="form-group">
               <label class="mb-1">Embed ссылка на видео (Заполните либо это поле, либо загрузите свое видео)</label>
-              <input type="string" class="form-control" name="embed" placeholder="Вставьте embed ссылку на видео (должно быть с iframe)" value="{{ flashMessages.get('embed', item.isEmbed ? item.media : '') ?? '' }}">
+              <input type="string" class="form-control" name="embed" placeholder="Например, https://www.youtube.com/embed/dQw4w9WgXcQ" value="{{ flashMessages.get('embed', item.isEmbed ? item.media : '') ?? '' }}">
 
               @if(flashMessages.has('errors.embed'))
                 <div class="invalid-feedback d-block">
