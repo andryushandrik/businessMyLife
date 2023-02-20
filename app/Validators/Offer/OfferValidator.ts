@@ -143,7 +143,7 @@ export default class OfferValidator extends IndexValidator {
 		]),
 		isArchived: schema.boolean.optional(),
 		isVerified: schema.boolean.optional(),
-		placedForMonths: schema.enum.optional([3, 6] as const),
+		placedForMonths: schema.enum.optional([3, 6]),
 	})
 
 	/**

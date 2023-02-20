@@ -1,19 +1,25 @@
+import PremiumFranchise from 'App/Models/Offer/PremiumFranchise'
 import Logger from '@ioc:Adonis/Core/Logger'
 import { ModelPaginatorContract, ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
-import PremiumSlot from 'App/Models/Offer/PremiumSlot'
-import PremiumSlotsFilterValidator from 'App/Validators/PremiumSlots/PremiumSlotsFilterValidator'
-import PremiumSlotsValidator from 'App/Validators/PremiumSlots/PremiumSlotsValidator'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 import { Err } from 'Contracts/response'
 import { PaginateConfig } from 'Contracts/services'
+import PremiumFranchiseFilterValidator from 'App/Validators/Offer/PremiumFranchiseFilterValidator'
+import PremiumFranchiseValidator from 'App/Validators/Offer/PremiumFranchiseValidator'
 
-export default class PremiumSlotService {
+export default class PremiumFranchiseService {
 	public static async paginate(
-		config: PaginateConfig<PremiumSlot>,
-		filter?: PremiumSlotsFilterValidator['schema']['props'],
-	): Promise<ModelPaginatorContract<PremiumSlot>> {
-		let query: ModelQueryBuilderContract<typeof PremiumSlot> = PremiumSlot.query()
+		config: PaginateConfig<PremiumFranchise>,
+		filter?: PremiumFranchiseFilterValidator['schema']['props'],
+	): Promise<ModelPaginatorContract<PremiumFranchise>> {
+		let query: ModelQueryBuilderContract<typeof PremiumFranchise> = PremiumFranchise.query()
 		if (filter) query = this.filter(query, filter)
+
+		query
+			.preload('offer', (query) => {
+				query.preload('user')
+			})
+			.preload('premiumSlot')
 
 		try {
 			return await query.getViaPaginate(config)
@@ -23,11 +29,11 @@ export default class PremiumSlotService {
 		}
 	}
 
-	public static async get(id: PremiumSlot['id']): Promise<PremiumSlot> {
-		let item: PremiumSlot | null
+	public static async get(id: PremiumFranchise['id']): Promise<PremiumFranchise> {
+		let item: PremiumFranchise | null
 
 		try {
-			item = await PremiumSlot.find(id)
+			item = await PremiumFranchise.find(id)
 		} catch (err: any) {
 			Logger.error(err)
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
@@ -38,17 +44,17 @@ export default class PremiumSlotService {
 		return item
 	}
 
-	public static async create(payload: PremiumSlotsValidator['schema']['props']): Promise<void> {
+	public static async create(payload: PremiumFranchiseValidator['schema']['props']): Promise<void> {
 		try {
-			await PremiumSlot.create(payload)
+			await PremiumFranchise.create(payload)
 		} catch (err: any) {
 			Logger.error(err)
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
 		}
 	}
 
-	public static async update(id: PremiumSlot['id'], payload: PremiumSlotsValidator['schema']['props']): Promise<void> {
-		let item: PremiumSlot
+	public static async update(id: PremiumFranchise['id'], payload: PremiumFranchiseValidator['schema']['props']): Promise<void> {
+		let item: PremiumFranchise
 
 		try {
 			item = await this.get(id)
@@ -64,8 +70,8 @@ export default class PremiumSlotService {
 		}
 	}
 
-	public static async delete(id: PremiumSlot['id']): Promise<void> {
-		let item: PremiumSlot
+	public static async delete(id: PremiumFranchise['id']): Promise<void> {
+		let item: PremiumFranchise
 
 		try {
 			item = await this.get(id)
@@ -86,9 +92,9 @@ export default class PremiumSlotService {
 	 */
 
 	private static filter(
-		query: ModelQueryBuilderContract<typeof PremiumSlot>,
-		payload: PremiumSlotsFilterValidator['schema']['props'],
-	): ModelQueryBuilderContract<typeof PremiumSlot> {
+		query: ModelQueryBuilderContract<typeof PremiumFranchise>,
+		payload: PremiumFranchiseFilterValidator['schema']['props'],
+	): ModelQueryBuilderContract<typeof PremiumFranchise> {
 		for (const key in payload) {
 			if (payload[key]) {
 				switch (key) {
@@ -100,10 +106,10 @@ export default class PremiumSlotService {
 						break
 					// Skip this api's keys
 
-					case 'query':
-						query = query.withScopes((scopes) => scopes.search(payload[key]!))
+					// case 'query':
+					// 	query = query.withScopes((scopes) => scopes.search(payload[key]!))
 
-						break
+					// 	break
 
 					default:
 						break
@@ -114,3 +120,4 @@ export default class PremiumSlotService {
 		return query
 	}
 }
+
