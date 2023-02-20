@@ -10,6 +10,10 @@ export function getOfferIdRules(table: string = TABLES_NAMES.OFFERS): Rule[] {
 	return [rules.unsigned(), rules.exists({ table, column: 'id' })]
 }
 
+export function getOfferFranchiseRules(table: string = TABLES_NAMES.OFFERS): Rule[] {
+	return [rules.unsigned(), rules.exists({ table, column: 'id' })]
+}
+
 export function getOfferBlockDescriptionRules(): Rule[] {
 	return [rules.maxLength(OFFER_BLOCK_DESCRIPTION_MAX_LENGTH)]
 }

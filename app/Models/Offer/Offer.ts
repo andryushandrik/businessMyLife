@@ -1,6 +1,7 @@
+import PremiumFranchise  from 'App/Models/Offer/PremiumFranchise';
 // * Types
 import type { Err } from 'Contracts/response'
-import type { BelongsTo, HasMany, ModelObject } from '@ioc:Adonis/Lucid/Orm'
+import { BelongsTo, HasMany, HasOne, hasOne, ModelObject } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 
 import User from '../User/User'
@@ -191,6 +192,9 @@ export default class Offer extends BaseModel {
 
 	@hasMany(() => Report)
 	public reports: HasMany<typeof Report>
+
+  @hasOne(() => PremiumFranchise)
+	public premiumFranchise: HasOne<typeof PremiumFranchise>
 
 	/**
 	 * * Computed properties

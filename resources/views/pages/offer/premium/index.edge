@@ -1,0 +1,91 @@
+@layout('layouts/index')
+
+@set('title', 'Премиальные франшизы')
+
+@section('body')
+  @!component('components/filter', {
+    payload,
+    columns: [
+      { key: 'id', value: 'ID' },
+      { key: 'userId', value: 'UserID' },
+      { key: 'amount', value: 'Величина' },
+    ],
+  })
+
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">{{ title }}</h4>
+
+        <a href="{{ route('subsections.create') }}" class="btn btn-primary btn-sm">Создать</a>
+      </div>
+
+      <div class="card-body">
+        <div class="table-responsive">
+
+          <table class="table table-responsive-md">
+            <thead>
+              <tr>
+                <th class="width80"><strong>#</strong></th>
+
+                <th><strong>Пользователь</strong></th>
+                <th><strong>Объявление</strong></th>
+                <th><strong>Тип слота</strong></th>
+
+                <th><strong>Название слота</strong></th>
+                <th><strong>Дата размещения</strong></th>
+                <th><strong>Размещен до</strong></th>
+
+
+
+              </tr>
+            </thead>
+            <tbody>
+
+              @each(item in franchises)
+                <tr>
+                  <td><strong>{{ item.id }}</strong></td>
+                  <td>{{ item.offer.user.firstName}} {{ item.offer.user.lastName}}</td>
+                  <td> <a href="https://business-mylife.ru/adv-page/{{item.offer.id}}">{{ item.offer.id }}</a></td>
+                  <td>{{ item.premiumSlot?.type }} </td>
+                  <td>{{ item.premiumSlot?.title }}</td>
+
+
+                  <td>{{ item.premiumSlot?.employedAtForUser }}</td>
+                  <td>{{ item.premiumSlot?.employedUntillForUser }}</td>
+
+
+
+
+                  <td>
+                    <div class="dropdown">
+                      <button type="button" class="btn btn-success light sharp" data-toggle="dropdown"
+                        aria-expanded="false">
+                        <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1">
+                          <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <rect x="0" y="0" width="24" height="24"></rect>
+                            <circle fill="#000000" cx="5" cy="12" r="2"></circle>
+                            <circle fill="#000000" cx="12" cy="12" r="2"></circle>
+                            <circle fill="#000000" cx="19" cy="12" r="2"></circle>
+                          </g>
+                        </svg>
+                      </button>
+                      <div class="dropdown-menu" style="">
+                        <a class="dropdown-item" href="https://business-mylife.ru/account/profile/user/{{item.id}}" target="_blank">Пользователь</a>
+
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              @endeach
+
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  @!component('components/pagination', { obj: franchises })
+@endsection

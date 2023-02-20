@@ -2,8 +2,9 @@
 import type { DateTime } from 'luxon'
 // * Types
 import { TABLES_NAMES } from 'Config/database'
-import { BaseModel, column, scope } from '@ioc:Adonis/Lucid/Orm'
-import PremiumFranchise from '../PremiumFranchise'
+import { BaseModel, belongsTo, BelongsTo, column, computed, scope } from '@ioc:Adonis/Lucid/Orm'
+import PremiumFranchise from './PremiumFranchise'
+import { GLOBAL_DATETIME_FORMAT } from 'Config/app'
 
 export default class PremiumSlot extends BaseModel {
 	public static readonly table: string = TABLES_NAMES.PREMIUM_SLOTS
@@ -56,23 +57,44 @@ export default class PremiumSlot extends BaseModel {
 	 * * Foreign keys
 	 */
 
+	@belongsTo(() => PremiumFranchise)
+	public premiumFranchise: BelongsTo<typeof PremiumFranchise>
+
 	@column({ columnName: 'franchise_id' })
-	public franchiseId: PremiumFranchise['id']
+	public franchiseId: PremiumFranchise['id'] | null
 
 	/**
 	 * * Timestamps
 	 */
 
-	@column.dateTime({ autoCreate: true })
+	@column.dateTime({ columnName: 'created_at', autoCreate: true })
 	public createdAt: DateTime
 
-	@column.dateTime({ autoCreate: true, autoUpdate: true })
+	@column.dateTime({ columnName: 'updated_at', autoCreate: true, autoUpdate: true })
 	public updatedAt: DateTime
+
+	@computed()
+	public get employedAtForUser(): string {
+		if (this.employedAt) {
+			return this.employedAt.setLocale('ru-RU').toFormat(GLOBAL_DATETIME_FORMAT)
+		}
+    return ''
+	}
+
+	@computed()
+	public get employedUntillForUser(): string  {
+		if (this.employedUntill) {
+			return this.employedUntill.setLocale('ru-RU').toFormat(GLOBAL_DATETIME_FORMAT)
+		}
+    return ''
+	}
 
 	/**
 	 * * Hooks
 	 */
+
 	public static search = scope((query, searchQuery: string) => {
 		query.where('title', 'ILIKE', `%${searchQuery}%`)
 	})
 }
+
