@@ -104,7 +104,6 @@ export default class OffersController {
 	public async create({ request, response }: HttpContextContract) {
 		let payload: OfferValidator['schema']['props']
 		try {
-
 			payload = await request.validate(OfferValidator)
 			payload.isArchived = false
 			payload.isVerified = false

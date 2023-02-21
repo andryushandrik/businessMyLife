@@ -15,7 +15,7 @@ import ConversationService from 'App/Services/Chat/ConversationService'
 import MessageCreatePayloadValidator from 'App/Validators/Chat/MessageCreatePayloadValidator'
 
 const apiValidator: ApiValidator = new ApiValidator()
-const messageCreatePayloadValidator : MessageCreatePayloadValidator = new MessageCreatePayloadValidator()
+const messageCreatePayloadValidator: MessageCreatePayloadValidator = new MessageCreatePayloadValidator()
 const conversationFindPayloadValidator: ConversationFindPayloadValidator = new ConversationFindPayloadValidator()
 export default class MessagesController {
 	public static async paginate(

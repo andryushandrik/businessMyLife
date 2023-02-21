@@ -60,13 +60,13 @@ export default class Message extends BaseModel {
 		query.whereNot('user_id', userId)
 	})
 
-		/**
+	/**
 	 * * Hooks
 	 */
 
-		@beforeFind()
-		@beforeFetch()
-		public static preloadAndAggregateModels(query: ModelQueryBuilderContract<typeof Message>) {
-			query.preload('offer')
-		}
+	@beforeFind()
+	@beforeFetch()
+	public static preloadAndAggregateModels(query: ModelQueryBuilderContract<typeof Message>) {
+		query.preload('offer')
+	}
 }

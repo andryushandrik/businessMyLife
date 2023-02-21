@@ -205,7 +205,6 @@ WebSocketService.io.on('connection', async (socket) => {
 		const userRoomName = getUserRoomName(socket.data.userId!)
 		socket.leave(userRoomName)
 		ALL_SOCKETS.removeSocket(socket.data.userId!)
-		
 	})
 
 	async function checkConnection(): Promise<void> {

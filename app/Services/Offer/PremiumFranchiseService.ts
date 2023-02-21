@@ -19,7 +19,6 @@ export default class PremiumFranchiseService {
 			.preload('offer', (query) => {
 				query.preload('user')
 				query.preload('reports')
-
 			})
 			.preload('premiumSlot')
 
@@ -36,8 +35,7 @@ export default class PremiumFranchiseService {
 
 		try {
 			// item = await PremiumFranchise.find(id)
-			item = await PremiumFranchise.query().where('id',id).preload('offer').first()
-
+			item = await PremiumFranchise.query().where('id', id).preload('offer').first()
 		} catch (err: any) {
 			Logger.error(err)
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
@@ -124,4 +122,3 @@ export default class PremiumFranchiseService {
 		return query
 	}
 }
-

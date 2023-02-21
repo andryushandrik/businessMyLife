@@ -161,7 +161,7 @@ Route.group(() => {
 
 		Route.group(() => {
 			Route.get('/slots', 'Api/Offer/PremiumSlotsController.paginate')
-      Route.post('/slots/employee', 'Api/Offer/PremiumSlotsController.employee')
+			Route.post('/slots/employee', 'Api/Offer/PremiumSlotsController.employee')
 			Route.get('/slots/:id', 'Api/Offer/PremiumSlotsController.get')
 			Route.post('/slots', 'Api/Offer/PremiumSlotsController.create')
 			Route.get('/franchises', 'Api/Offer/PremiumFranchiseController.paginate')
@@ -205,4 +205,3 @@ Route.group(() => {
 		.prefix('conversation')
 		.middleware('CheckAccessToken')
 }).prefix('api')
-

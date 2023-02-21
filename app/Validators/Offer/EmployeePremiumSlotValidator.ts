@@ -34,7 +34,7 @@ export default class EmployeeSlotValidator extends IndexValidator {
 	 */
 	public schema = schema.create({
 		premiumFranchiseId: schema.number(getPremiumFranchiseIdRule()),
-    premiumSlotId: schema.number(getPremiumSlotIdRule())
+		premiumSlotId: schema.number(getPremiumSlotIdRule()),
 	})
 
 	/**
@@ -50,4 +50,3 @@ export default class EmployeeSlotValidator extends IndexValidator {
 	 */
 	public messages: CustomMessages = this.messages
 }
-

@@ -11,10 +11,11 @@ export default class ConversationController {
 	public async hasConversationWithUser({ response, request }: HttpContextContract) {
 		const targetUserId: User['id'] = request.qs().userId
 		try {
-			const item: Conversation | null = await ConversationService.getByUserId(targetUserId, { currentUser: request.currentUserId })
+			const item: Conversation | null = await ConversationService.getByUserIds(targetUserId, request.currentUserId)
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, item))
 		} catch (err: Err | any) {
 			throw new ExceptionService(err)
 		}
 	}
 }
+

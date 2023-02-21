@@ -61,9 +61,7 @@ export default class FriendService {
 		}
 	}
 
-	public static async countRequests(
-		id: User['id'],
-	): Promise<number> {
+	public static async countRequests(id: User['id']): Promise<number> {
 		let user: User
 
 		try {
@@ -73,7 +71,7 @@ export default class FriendService {
 		}
 
 		try {
-			const incomings = await Friend.query().where({toId: user.id, isRequest: true}).count('* as total')
+			const incomings = await Friend.query().where({ toId: user.id, isRequest: true }).count('* as total')
 			const incomingsCount = incomings[0].$extras.total
 			return incomingsCount
 		} catch (err: any) {

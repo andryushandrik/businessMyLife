@@ -44,7 +44,7 @@ export default class PremiumSlotsController {
 		}
 	}
 
-	public async employee({ request,  response }: HttpContextContract) {
+	public async employee({ request, response }: HttpContextContract) {
 		let payload: EmployeeSlotValidator['schema']['props']
 		try {
 			payload = await request.validate(EmployeeSlotValidator)
@@ -79,4 +79,3 @@ export default class PremiumSlotsController {
 	// 	}
 	// }
 }
-

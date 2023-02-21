@@ -78,15 +78,15 @@ export default class PremiumSlot extends BaseModel {
 		if (this.employedAt) {
 			return this.employedAt.setLocale('ru-RU').toFormat(GLOBAL_DATETIME_FORMAT)
 		}
-    return ''
+		return ''
 	}
 
 	@computed()
-	public get employedUntillForUser(): string  {
+	public get employedUntillForUser(): string {
 		if (this.employedUntill) {
 			return this.employedUntill.setLocale('ru-RU').toFormat(GLOBAL_DATETIME_FORMAT)
 		}
-    return ''
+		return ''
 	}
 
 	/**
@@ -97,4 +97,3 @@ export default class PremiumSlot extends BaseModel {
 		query.where('title', 'ILIKE', `%${searchQuery}%`)
 	})
 }
-

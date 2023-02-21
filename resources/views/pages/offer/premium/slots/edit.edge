@@ -1,0 +1,67 @@
+@layout('layouts/index')
+
+@set('title', 'Редактировать премиальный слот')
+
+@section('body')
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">{{ title }}</h4>
+        <a href="{{ route('offer.premium.paginate') }}" class="btn btn-primary btn-sm">Назад</a>
+      </div>
+      <div class="card-body">
+        <div class="basic-form">
+          @if(flashMessages.has('errors.database'))
+            <div class="invalid-feedback d-block">
+              {{ flashMessages.get('error')}}
+            </div>
+          @endif
+
+          <form action="{{ route('offer.premium.slots.update', { id: item.id }, { qs: { _method: 'PATCH' } } ) }}" method="POST" enctype="multipart/form-data">
+
+            <div class="form-group">
+              <label class="mb-1"><strong>Название *</strong></label>
+              <input type="string" class="form-control" name="title" value="{{ flashMessages.get('title') ?? item.title }}">
+            </div>
+
+            <div class="form-group">
+              <label class="mb-1"><strong>Тип *</strong></label>
+              <input type="string" class="form-control" name="type" value="{{ flashMessages.get('type') ?? item.type }}" placeholder="Выберите big или small - баннер и обычное объявление">
+            </div>
+
+            <div class="form-group">
+              <label class="mb-1"><strong>Цена за 3 месяца* </strong></label>
+              <input type="string" class="form-control" name="priceThreeMonths" value="{{ flashMessages.get('priceThreeMonths') ?? item.priceThreeMonths }}">
+            </div>
+
+            <div class="form-group">
+              <label class="mb-1"><strong>Цена за 6 месяцев* </strong></label>
+              <input type="string" class="form-control" name="priceSixMonths" value="{{ flashMessages.get('priceSixMonths') ?? item.priceSixMonths }}">
+            </div>
+
+            <div class="form-group">
+              <label class="mb-1"><strong>Заблокированно?</strong></label>
+              <input type="checkbox" value="true" {{item.isBlocked ? "checked" : null }} name="isBlocked" value="{{ flashMessages.get('isBlocked') ?? '' }}">
+            </div>
+
+            <input type="hidden" name="franchiseId" value="{{item.franchiseId}}">
+            <input type="hidden" name="image" value="{{item.image}}">
+            <input type="hidden" name="employedUntill" value="{{item.employedUntill}}">
+            <input type="hidden" name="employedAt" value="{{item.employedAt}}">
+
+
+
+
+            {{ csrfField() }}
+
+            <div class="text-right">
+              <button type="submit" class="btn btn-primary btn-block">Применить</button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+@endsection
+
