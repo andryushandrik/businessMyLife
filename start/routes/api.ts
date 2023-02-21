@@ -72,11 +72,11 @@ Route.group(() => {
 			Route.delete('/', 'Api/User/FriendsController.delete').middleware('CheckAccessToken')
 
 			Route.get('/incoming/count/:currentUserId', 'Api/User/FriendsController.countIncomings')
-			.where('currentUserId', {
-				match: /^[0-9]+$/,
-				cast: (currentUserId) => Number(currentUserId),
-			})
-			.middleware('CheckAccessToken')
+				.where('currentUserId', {
+					match: /^[0-9]+$/,
+					cast: (currentUserId) => Number(currentUserId),
+				})
+				.middleware('CheckAccessToken')
 
 			Route.get('/incomings/:currentUserId', 'Api/User/FriendsController.paginateIncomings')
 				.where('currentUserId', {
@@ -161,8 +161,10 @@ Route.group(() => {
 
 		Route.group(() => {
 			Route.get('/slots', 'Api/Offer/PremiumSlotsController.paginate')
+      Route.post('/slots/employee', 'Api/Offer/PremiumSlotsController.employee')
+			Route.get('/slots/:id', 'Api/Offer/PremiumSlotsController.get')
 			Route.post('/slots', 'Api/Offer/PremiumSlotsController.create')
-
+			Route.get('/franchises', 'Api/Offer/PremiumFranchiseController.paginate')
 		}).prefix('premium')
 
 		Route.post('/', 'Api/Offer/OffersController.create').middleware('CheckAccessToken')
@@ -203,3 +205,4 @@ Route.group(() => {
 		.prefix('conversation')
 		.middleware('CheckAccessToken')
 }).prefix('api')
+
