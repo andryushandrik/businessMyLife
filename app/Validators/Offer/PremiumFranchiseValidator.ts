@@ -48,4 +48,3 @@ export default class PremiumFranchiseValidator extends IndexValidator {
 	 */
 	public messages: CustomMessages = this.messages
 }
-

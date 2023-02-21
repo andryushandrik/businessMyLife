@@ -1,3 +1,4 @@
+import PremiumSlotsValidator from 'App/Validators/PremiumSlots/PremiumSlotsValidator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import PremiumSlot from 'App/Models/Offer/PremiumSlot'
@@ -32,5 +33,33 @@ export default class PremiumSlotsController {
 			return response.redirect().back()
 		}
 	}
-}
 
+	public async edit({ view, params, response, session }: HttpContextContract) {
+		const id: PremiumSlot['id'] = params.id
+
+		try {
+			const item: PremiumSlot = await PremiumSlotService.get(id)
+
+			return view.render('pages/offer/premium/slots/edit', { item })
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
+
+	public async update({ request, response, session, params }: HttpContextContract) {
+		const id: PremiumSlot['id'] = params.id
+		console.log(request.body())
+		try {
+			const payload = await request.validate(PremiumSlotsValidator)
+			payload.isBlocked = payload.isBlocked ? true : false
+			await PremiumSlotService.update(id, payload)
+
+			session.flash('success', ResponseMessages.SUCCESS)
+			return response.redirect().toRoute('offer.premium.paginate')
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
+}

@@ -45,4 +45,3 @@ export function getModelsManyToManyRelationsOptions<M extends LucidModel>(
 export function getConversationRoomName(id: Conversation['id']): string {
 	return `conversationRoom-${id}`
 }
-

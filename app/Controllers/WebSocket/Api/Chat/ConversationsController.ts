@@ -62,11 +62,7 @@ export default class ConversationsController {
 		}
 	}
 
-	public static async getByUsersId(
-		toId: User['id'],
-		currentUserId: User['id'],
-		cb: (response: Err | ResponseService) => void,
-	): Promise<Conversation | void> {
+	public static async getByUsersId(toId: User['id'], currentUserId: User['id'], cb: (response: Err | ResponseService) => void): Promise<Conversation | void> {
 		try {
 			const item: Conversation = await ConversationService.getByUserIds(currentUserId, toId)
 			const itemForUser: ModelObject = await item.getForUser(currentUserId)
@@ -80,10 +76,7 @@ export default class ConversationsController {
 		}
 	}
 
-	public static async find(
-		conversationFindPayload: ConversationFindPayloadValidator['schema']['props'],
-		currentUserId: User['id'],
-	): Promise<Conversation> {
+	public static async find(conversationFindPayload: ConversationFindPayloadValidator['schema']['props'], currentUserId: User['id']): Promise<Conversation> {
 		let conversation: Conversation
 		const receiverId: User['id'] | undefined = conversationFindPayload.userId
 
@@ -107,10 +100,7 @@ export default class ConversationsController {
 		cb: (response: Err | ResponseService) => void,
 	): Promise<Conversation | void> {
 		try {
-			const isConvAllowed = await ConversationService.isConversationAllowedForUser(
-				currentUserId,
-				conversationId,
-			)
+			const isConvAllowed = await ConversationService.isConversationAllowedForUser(currentUserId, conversationId)
 			if (isConvAllowed) {
 				await ConversationService.delete(conversationId)
 				cb(new ResponseService(ResponseMessages.SUCCESS))

@@ -53,4 +53,3 @@ export default class PremiumFranchiseFranchiseValidator extends ApiValidator {
 	 */
 	public messages: CustomMessages = this.messages
 }
-

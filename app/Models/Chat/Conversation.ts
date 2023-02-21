@@ -118,3 +118,4 @@ export default class Conversation extends BaseModel {
 		return item
 	}
 }
+

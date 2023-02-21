@@ -45,12 +45,31 @@ export default class PremiumSlotService {
 		try {
 			const premiumFranchise: PremiumFranchise = await PremiumFranchiseService.get(payload.premiumFranchiseId)
 			const premiumSlot: PremiumSlot = await PremiumSlotService.get(payload.premiumSlotId)
+			if (premiumSlot.isBlocked) {
+				throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.FORBIDDEN } as Err
+			}
 			const employedUntill = premiumFranchise.offer.createdAt.plus({ months: premiumFranchise.offer.placedForMonths })
 			this.update(payload.premiumSlotId, {
 				...premiumSlot,
 				franchiseId: premiumFranchise.id,
 				employedAt: premiumFranchise.offer.createdAt,
 				employedUntill: employedUntill,
+			})
+		} catch (err: any) {
+			Logger.error(err)
+			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+		}
+	}
+
+	public static async free(premiumSlotId: number): Promise<void> {
+		try {
+			const premiumSlot: PremiumSlot = await PremiumSlotService.get(premiumSlotId)
+
+			this.update(premiumSlotId, {
+				...premiumSlot,
+				franchiseId: null,
+				employedAt: null,
+				employedUntill: null,
 			})
 		} catch (err: any) {
 			Logger.error(err)
@@ -134,4 +153,3 @@ export default class PremiumSlotService {
 		return query
 	}
 }
-

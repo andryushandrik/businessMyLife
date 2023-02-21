@@ -9,14 +9,8 @@ import { getConversationIdRules } from '../Rules/chat'
 
 export default class ConversationFindPayloadValidator extends IndexValidator {
 	protected preParsedSchema = {
-		conversationId: schema.number.optional([
-			...getConversationIdRules(true),
-			rules.requiredIfNotExists('userId'),
-		]),
-		userId: schema.number.optional([
-			...getUserIdRules(),
-			rules.requiredIfNotExists('conversationId'),
-		]), //userId for receiver
+		conversationId: schema.number.optional([...getConversationIdRules(true), rules.requiredIfNotExists('userId')]),
+		userId: schema.number.optional([...getUserIdRules(), rules.requiredIfNotExists('conversationId')]), //userId for receiver
 	}
 
 	constructor() {
@@ -57,5 +51,3 @@ export default class ConversationFindPayloadValidator extends IndexValidator {
 	 */
 	public messages: CustomMessages = this.messages
 }
-
-

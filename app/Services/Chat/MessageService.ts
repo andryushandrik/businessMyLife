@@ -1,18 +1,18 @@
-import Database from "@ioc:Adonis/Lucid/Database"
-import { ModelPaginatorContract } from "@ioc:Adonis/Lucid/Orm"
-import Conversation from "App/Models/Chat/Conversation"
-import Message from "App/Models/Chat/Message"
-import User from "App/Models/User/User"
-import ApiValidator from "App/Validators/ApiValidator"
-import ConversationFindPayloadValidator from "App/Validators/Chat/ConversationFindPayloadValidator"
-import { ResponseCodes, ResponseMessages } from "Config/response"
-import { serializedModel } from "Config/types"
-import { ConversationGetPayload } from "Contracts/conversation"
-import { ReturnMessageCreatePayload } from "Contracts/message"
-import ConversationService from "./ConversationService"
-import { logger as Logger} from "Config/app"
-import { Err } from "Contracts/response"
-import MessageCreatePayloadValidator from "App/Validators/Chat/MessageCreatePayloadValidator"
+import Database from '@ioc:Adonis/Lucid/Database'
+import { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
+import Conversation from 'App/Models/Chat/Conversation'
+import Message from 'App/Models/Chat/Message'
+import User from 'App/Models/User/User'
+import ApiValidator from 'App/Validators/ApiValidator'
+import ConversationFindPayloadValidator from 'App/Validators/Chat/ConversationFindPayloadValidator'
+import { ResponseCodes, ResponseMessages } from 'Config/response'
+import { serializedModel } from 'Config/types'
+import { ConversationGetPayload } from 'Contracts/conversation'
+import { ReturnMessageCreatePayload } from 'Contracts/message'
+import ConversationService from './ConversationService'
+import { logger as Logger } from 'Config/app'
+import { Err } from 'Contracts/response'
+import MessageCreatePayloadValidator from 'App/Validators/Chat/MessageCreatePayloadValidator'
 
 export default class MessageService {
 	public static async paginate(
@@ -38,11 +38,7 @@ export default class MessageService {
 		}
 
 		try {
-			const paginatedMessages: ModelPaginatorContract<Message> = await conversation
-				.related('messages')
-				.query()
-				.preload('offer')
-				.getViaPaginate(config)
+			const paginatedMessages: ModelPaginatorContract<Message> = await conversation.related('messages').query().preload('offer').getViaPaginate(config)
 			const messages: serializedModel = paginatedMessages.serialize({
 				relations: {
 					offer: {
@@ -60,10 +56,7 @@ export default class MessageService {
 		}
 	}
 
-	public static async create(
-		currentUserId: User['id'],
-		payload: MessageCreatePayloadValidator['schema']['props'],
-	): Promise<ReturnMessageCreatePayload> {
+	public static async create(currentUserId: User['id'], payload: MessageCreatePayloadValidator['schema']['props']): Promise<ReturnMessageCreatePayload> {
 		let conversation: Conversation | undefined
 		const trx = await Database.transaction()
 		const receiverId: User['id'] | undefined = payload.userId
@@ -112,19 +105,13 @@ export default class MessageService {
 			if (payload.offerId) {
 				console.log(113)
 				const afterTime = Date.now() - maxInterval
-				const attachOffer: boolean = await MessageService.CheckLastRelatedOfferAfterTime(
-					conversation.id,
-					payload.offerId,
-					new Date(afterTime),
-				)
-				console.log(attachOffer);
-				
+				const attachOffer: boolean = await MessageService.CheckLastRelatedOfferAfterTime(conversation.id, payload.offerId, new Date(afterTime))
+				console.log(attachOffer)
+
 				if (!attachOffer) {
 					payload.offerId = undefined
 				}
 			}
-
-			
 
 			const createdMessage: Message = await Message.create(
 				{
@@ -147,36 +134,29 @@ export default class MessageService {
 		}
 	}
 
-	public static async CheckLastRelatedOfferAfterTime(
-		conversationId: number,
-		offerId: number,
-		maxTime: Date,
-	) {
+	public static async CheckLastRelatedOfferAfterTime(conversationId: number, offerId: number, maxTime: Date) {
 		try {
 			const messages: Message[] | null = await Message.query()
 				.preload('offer')
-				.select().limit(1)
+				.select()
+				.limit(1)
 				.where('conversation_id', conversationId)
-				.where('createdAt', '>', maxTime).whereNotNull('offerId')
+				.where('createdAt', '>', maxTime)
+				.whereNotNull('offerId')
 				.orderBy('createdAt', 'desc')
 			const result = messages[0].offerId != offerId
-			console.log(messages[0].offerId, offerId);
-			
+			console.log(messages[0].offerId, offerId)
+
 			return result
 		} catch (err: Err | any) {
-			console.error(err);
+			console.error(err)
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
 		}
 	}
-	public static async viewed(
-		conversationOrConversationId: Conversation | Conversation['id'],
-		currentUserId: User['id'],
-	): Promise<void> {
+	public static async viewed(conversationOrConversationId: Conversation | Conversation['id'], currentUserId: User['id']): Promise<void> {
 		if (typeof conversationOrConversationId !== 'object') {
 			try {
-				conversationOrConversationId = await ConversationService.getById(
-					conversationOrConversationId,
-				)
+				conversationOrConversationId = await ConversationService.getById(conversationOrConversationId)
 			} catch (err: Err | any) {
 				throw err
 			}

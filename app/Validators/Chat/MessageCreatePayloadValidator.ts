@@ -9,18 +9,11 @@ import { getConversationIdRules } from '../Rules/chat'
 import { getOfferIdRules } from '../Rules/Offer/offer'
 import { getUserIdRules } from '../Rules/User/user'
 
-
 export default class MessageCreatePayloadValidator extends IndexValidator {
 	protected preParsedSchema = {
 		text: schema.string({ trim: true }, [rules.maxLength(MESSAGE_TEXT_MAX_LENGTH)]),
-		conversationId: schema.number.optional([
-			...getConversationIdRules(true),
-			rules.requiredIfNotExists('userId'),
-		]),
-		userId: schema.number.optional([
-			...getUserIdRules(),
-			rules.requiredIfNotExists('conversationId'),
-		]), //userId for receiver
+		conversationId: schema.number.optional([...getConversationIdRules(true), rules.requiredIfNotExists('userId')]),
+		userId: schema.number.optional([...getUserIdRules(), rules.requiredIfNotExists('conversationId')]), //userId for receiver
 		offerId: schema.number.optional(getOfferIdRules()),
 	}
 

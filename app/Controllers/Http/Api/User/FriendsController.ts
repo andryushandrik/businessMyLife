@@ -59,14 +59,12 @@ export default class FriendsController {
 		}
 	}
 
-	public async countIncomings({response, params }: HttpContextContract) {
+	public async countIncomings({ response, params }: HttpContextContract) {
 		const currentUserId: User['id'] = params.currentUserId
-		
 
 		try {
-			const incomingsCount/* : ModelPaginatorContract<User> */ = await FriendService.countRequests(currentUserId)
-			
-			
+			const incomingsCount /* : ModelPaginatorContract<User> */ = await FriendService.countRequests(currentUserId)
+
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, incomingsCount))
 		} catch (err: Err | any) {
 			throw new ExceptionService(err)

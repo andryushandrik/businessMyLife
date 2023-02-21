@@ -17,7 +17,7 @@
       <div class="card-header">
         <h4 class="card-title">{{ title }}</h4>
 
-        <a href="{{ route('subsections.create') }}" class="btn btn-primary btn-sm">Создать</a>
+        {{--  <a href="{{ route('subsections.create') }}" class="btn btn-primary btn-sm">Создать</a>  --}}
       </div>
 
       <div class="card-body">
@@ -47,10 +47,10 @@
               @each(item in franchises)
                 <tr>
                   <td><strong>{{ item.id }}</strong></td>
-                  <td><a target="_blank" href="https://business-mylife.ru/account/profile/user/{{ item.offer.user.id}}">{{ item.offer.user.firstName}} {{ item.offer.user.lastName}}</a></td>
-                  <td> <a target="_blank" href="https://business-mylife.ru/adv-page/{{item.offer.id}}">{{ item.offer.id }} - {{ item.offer.title }}</a></td>
+                  <td><b> <a target="_blank" href="https://business-mylife.ru/account/profile/user/{{ item.offer.user.id}}">{{ item.offer.user.firstName}} {{ item.offer.user.lastName}}</a></b></td>
+                  <td> <b> <a target="_blank" href="https://business-mylife.ru/adv-page/{{item.offer.id}}">{{ item.offer.id }} - {{ item.offer.title }}</a> </b></td>
                   <td>{{ item.premiumSlot?.type }} </td>
-                  <td>{{ item.premiumSlot?.title }}</td>
+                  <td><b><a target="_blank" href="{{ route('offer.premium.slots.edit', { id: item.id }) }}">{{ item.premiumSlot?.title }}</a> </b></td>
 
                   <td>{{ item.offer.reports.length }}</td>
 

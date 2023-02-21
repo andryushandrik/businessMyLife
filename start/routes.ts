@@ -68,9 +68,9 @@ Route.group(() => {
 			.prefix('notVerified')
 			.as('notVerified')
 
-		Route.get('/premium/slots', 'Offer/PremiumFranchiseController.paginate').as('premium.paginate')
-
-
+		Route.get('/premium/franchises', 'Offer/PremiumFranchiseController.paginate').as('premium.paginate')
+		Route.get('/premium/slots/:id', 'Offer/PremiumSlotsController.edit').as('premium.slots.edit')
+		Route.patch('/premium/slots/:id', 'Offer/PremiumSlotsController.update').as('premium.slots.update')
 
 		Route.get('/:id', 'Offer/OffersController.get').as('get')
 		Route.patch('/:id', 'Offer/OffersController.updateBlockDescription').as('updateBlockDescription')

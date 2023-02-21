@@ -12,12 +12,7 @@ export default class extends BaseSchema {
 
 	public async down() {
 		this.schema.alterTable(this.tableName, (table) => {
-			table
-				.integer('offer_id')
-				.unsigned()
-				.nullable()
-				.references(`${TABLES_NAMES.OFFERS}.id`)
-				.onDelete('CASCADE')
+			table.integer('offer_id').unsigned().nullable().references(`${TABLES_NAMES.OFFERS}.id`).onDelete('CASCADE')
 		})
 	}
 }

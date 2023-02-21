@@ -143,7 +143,7 @@ export default class OfferValidator extends IndexValidator {
 		]),
 		isArchived: schema.boolean.optional(),
 		isVerified: schema.boolean.optional(),
-		placedForMonths: schema.number.optional([rules.unsigned(), rules.range(3,6)]),
+		placedForMonths: schema.number.optional([rules.unsigned(), rules.range(3, 6)]),
 	})
 
 	/**
@@ -159,4 +159,3 @@ export default class OfferValidator extends IndexValidator {
 	 */
 	public messages: CustomMessages = this.messages
 }
-
