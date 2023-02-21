@@ -1,11 +1,14 @@
+import PremiumFranchise from 'App/Models/Offer/PremiumFranchise'
 import Logger from '@ioc:Adonis/Core/Logger'
 import { ModelPaginatorContract, ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
 import PremiumSlot from 'App/Models/Offer/PremiumSlot'
+import EmployeeSlotValidator from 'App/Validators/Offer/EmployeePremiumSlotValidator'
 import PremiumSlotsFilterValidator from 'App/Validators/PremiumSlots/PremiumSlotsFilterValidator'
 import PremiumSlotsValidator from 'App/Validators/PremiumSlots/PremiumSlotsValidator'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 import { Err } from 'Contracts/response'
 import { PaginateConfig } from 'Contracts/services'
+import PremiumFranchiseService from './Offer/PremiumFranchiseService'
 
 export default class PremiumSlotService {
 	public static async paginate(
@@ -36,6 +39,23 @@ export default class PremiumSlotService {
 		if (!item) throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.ERROR } as Err
 
 		return item
+	}
+
+	public static async employee(payload: EmployeeSlotValidator['schema']['props']): Promise<void> {
+		try {
+			const premiumFranchise: PremiumFranchise = await PremiumFranchiseService.get(payload.premiumFranchiseId)
+			const premiumSlot: PremiumSlot = await PremiumSlotService.get(payload.premiumSlotId)
+			const employedUntill = premiumFranchise.offer.createdAt.plus({ months: premiumFranchise.offer.placedForMonths })
+			this.update(payload.premiumSlotId, {
+				...premiumSlot,
+				franchiseId: premiumFranchise.id,
+				employedAt: premiumFranchise.offer.createdAt,
+				employedUntill: employedUntill,
+			})
+		} catch (err: any) {
+			Logger.error(err)
+			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+		}
 	}
 
 	public static async create(payload: PremiumSlotsValidator['schema']['props']): Promise<void> {
@@ -114,3 +134,4 @@ export default class PremiumSlotService {
 		return query
 	}
 }
+

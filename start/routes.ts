@@ -71,6 +71,7 @@ Route.group(() => {
 		Route.get('/premium/slots', 'Offer/PremiumFranchiseController.paginate').as('premium.paginate')
 
 
+
 		Route.get('/:id', 'Offer/OffersController.get').as('get')
 		Route.patch('/:id', 'Offer/OffersController.updateBlockDescription').as('updateBlockDescription')
 

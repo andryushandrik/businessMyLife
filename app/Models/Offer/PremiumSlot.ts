@@ -48,10 +48,10 @@ export default class PremiumSlot extends BaseModel {
 	public priceSixMonths: number
 
 	@column.dateTime({ columnName: 'employed_at' })
-	public employedAt: DateTime
+	public employedAt: DateTime | null
 
 	@column.dateTime({ columnName: 'employed_untill' })
-	public employedUntill: DateTime
+	public employedUntill: DateTime | null
 
 	/**
 	 * * Foreign keys

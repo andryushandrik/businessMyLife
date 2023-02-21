@@ -33,6 +33,8 @@
                 <th><strong>Тип слота</strong></th>
 
                 <th><strong>Название слота</strong></th>
+                <th><strong>Репорты</strong></th>
+
                 <th><strong>Дата размещения</strong></th>
                 <th><strong>Размещен до</strong></th>
 
@@ -46,10 +48,11 @@
                 <tr>
                   <td><strong>{{ item.id }}</strong></td>
                   <td><a target="_blank" href="https://business-mylife.ru/account/profile/user/{{ item.offer.user.id}}">{{ item.offer.user.firstName}} {{ item.offer.user.lastName}}</a></td>
-                  <td> <a target="_blank" href="https://business-mylife.ru/adv-page/{{item.offer.id}}">{{ item.offer.id }}</a></td>
+                  <td> <a target="_blank" href="https://business-mylife.ru/adv-page/{{item.offer.id}}">{{ item.offer.id }} - {{ item.offer.title }}</a></td>
                   <td>{{ item.premiumSlot?.type }} </td>
                   <td>{{ item.premiumSlot?.title }}</td>
 
+                  <td>{{ item.offer.reports.length }}</td>
 
                   <td>{{ item.createdAtForUser}}</td>
                   <td>{{ item.premiumSlot?.employedUntillForUser }}</td>
