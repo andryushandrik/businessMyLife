@@ -26,8 +26,8 @@ export default class AdvertisementValidator extends IndexValidator {
 		 */
 
 		image: schema.file.optional(getAdsFileOptions()),
-    place: schema.enum(['offer','category']),
-    subsectionId: schema.number(getSubsectionIdRules())
+		place: schema.enum(['offer', 'category']),
+		subsectionId: schema.number(getSubsectionIdRules()),
 	})
 
 	public messages: CustomMessages = this.messages

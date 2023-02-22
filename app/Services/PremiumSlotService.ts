@@ -17,9 +17,9 @@ export default class PremiumSlotService {
 	): Promise<ModelPaginatorContract<PremiumSlot>> {
 		let query: ModelQueryBuilderContract<typeof PremiumSlot> = PremiumSlot.query()
 		if (filter) query = this.filter(query, filter)
-    query.preload('premiumFranchise', (query)=>{
-      query.preload('offer')
-    })
+		query.preload('premiumFranchise', (query) => {
+			query.preload('offer')
+		})
 		try {
 			return await query.getViaPaginate(config)
 		} catch (err: any) {

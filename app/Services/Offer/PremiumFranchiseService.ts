@@ -107,7 +107,7 @@ export default class PremiumFranchiseService {
 					case 'orderByColumn':
 						break
 					// Skip this api's keys
-          case 'offerId':
+					case 'offerId':
 						query = query.withScopes((scopes) => scopes.getByOfferId(payload[key]!))
 						break
 

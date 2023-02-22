@@ -26,7 +26,7 @@ export default class AdvertisementController {
 			})
 			return await view.render('pages/ads/index', { ads })
 		} catch (err: Err | any) {
-      console.log(err)
+			console.log(err)
 			session.flash('error', err.message)
 			return response.redirect().back()
 		}
@@ -67,7 +67,7 @@ export default class AdvertisementController {
 		}
 	}
 	public async store({ request, response, session }: HttpContextContract) {
-    const payload = await request.validate(AdvertisementValidator)
+		const payload = await request.validate(AdvertisementValidator)
 		try {
 			payload.placedAt = DateTime.now()
 			await AdvertisementService.create(payload)
@@ -93,4 +93,3 @@ export default class AdvertisementController {
 		}
 	}
 }
-
