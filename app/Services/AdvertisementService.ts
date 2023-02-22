@@ -1,3 +1,4 @@
+import AdvertisementFilterValidator from 'App/Validators/Ads/AdvertisementFilterValidator'
 import Drive from '@ioc:Adonis/Core/Drive'
 import Advertisement from 'App/Models/Advertisement'
 // * Types
@@ -39,9 +40,14 @@ export default class AdvertisementService {
 		await trx.commit()
 	}
 
-	public static async paginate(config: PaginateConfig<Advertisement>): Promise<ModelPaginatorContract<Advertisement>> {
+	public static async paginate(
+		config: PaginateConfig<Advertisement>,
+		filter?: AdvertisementFilterValidator['schema']['props'],
+	): Promise<ModelPaginatorContract<Advertisement>> {
 		try {
-			return await Advertisement.query().preload('owner').preload('subsection').getViaPaginate(config)
+			let query: ModelQueryBuilderContract<typeof Advertisement> = Advertisement.query()
+			if (filter) query = this.filter(query, filter)
+			return await query.preload('owner').preload('subsection').getViaPaginate(config)
 		} catch (err: any) {
 			Logger.error(err)
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
@@ -148,4 +154,36 @@ export default class AdvertisementService {
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
 		}
 	}
+	private static filter(
+		query: ModelQueryBuilderContract<typeof Advertisement>,
+		payload: AdvertisementFilterValidator['schema']['props'],
+	): ModelQueryBuilderContract<typeof Advertisement> {
+		for (const key in payload) {
+			if (payload[key]) {
+				switch (key) {
+					// Skip this api's keys
+					case 'page':
+					case 'limit':
+					case 'orderBy':
+					case 'orderByColumn':
+						break
+					// Skip this api's keys
+
+					case 'place':
+						query = query.withScopes((scopes) => scopes.getByPlace(payload[key]!))
+						break
+
+          case 'subsectionId':
+            query = query.withScopes((scopes) => scopes.getBySubsectionId(payload[key]!))
+            break
+
+					default:
+						break
+				}
+			}
+		}
+
+		return query
+	}
 }
+

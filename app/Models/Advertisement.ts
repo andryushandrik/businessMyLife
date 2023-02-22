@@ -1,6 +1,6 @@
 import Subsection from 'App/Models/Offer/Subsection'
 import Drive from '@ioc:Adonis/Core/Drive'
-import { beforeDelete, BelongsTo, computed } from '@ioc:Adonis/Lucid/Orm'
+import { beforeDelete, BelongsTo, computed, scope } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 import type { DateTime } from 'luxon'
 // * Types
@@ -89,6 +89,12 @@ export default class Advertisement extends BaseModel {
 	/**
 	 * * Query scopes
 	 */
+	public static getByPlace = scope((query, place: string) => {
+		query.where('place', place)
+	})
+	public static getBySubsectionId = scope((query, subsectionId: number) => {
+		query.where('subsectionId', subsectionId)
+	})
 
 	/**
 	 * * Hooks
@@ -99,3 +105,4 @@ export default class Advertisement extends BaseModel {
 		if (item.image) await Drive.delete(item.image)
 	}
 }
+

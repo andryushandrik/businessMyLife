@@ -9,11 +9,17 @@ import ExceptionService from 'App/Services/ExceptionService'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 import AdvertisementService from 'App/Services/AdvertisementService'
 import AdvertisementValidator from 'App/Validators/Ads/AdvertisementValidator'
+import { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
+import AdvertisementFilterValidator from 'App/Validators/Ads/AdvertisementFilterValidator'
 
 export default class AdvertisementController {
-	public async show({ response }: HttpContextContract) {
+
+  public async show({ request, response }: HttpContextContract) {
+		let payload: AdvertisementFilterValidator['schema']['props']
+
 		try {
-		} catch (err: Err | any) {
+			payload = await request.validate(AdvertisementFilterValidator)
+		} catch (err: any) {
 			throw new ExceptionService({
 				code: ResponseCodes.VALIDATION_ERROR,
 				message: ResponseMessages.VALIDATION_ERROR,
@@ -22,8 +28,8 @@ export default class AdvertisementController {
 		}
 
 		try {
-			const advertisements: Advertisement[] = await AdvertisementService.getAll(Advertisement)
-			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, advertisements))
+			const news: ModelPaginatorContract<Advertisement> = await AdvertisementService.paginate(payload,payload)
+			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, news))
 		} catch (err: Err | any) {
 			throw new ExceptionService(err)
 		}
