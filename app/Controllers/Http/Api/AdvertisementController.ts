@@ -28,8 +28,10 @@ export default class AdvertisementController {
 			throw new ExceptionService(err)
 		}
 	}
+
 	public async create({ request, response }: HttpContextContract) {
 		const payload = await request.validate(AdvertisementValidator)
+    payload.userId =  request.currentUserId
 		try {
 			const advertisements = await AdvertisementService.create(payload)
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, { advertisements }))

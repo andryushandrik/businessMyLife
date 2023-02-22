@@ -193,7 +193,7 @@ Route.group(() => {
 
 	Route.group(() => {
 		Route.get('/', 'Api/AdvertisementController.show')
-		// Route.post('/', 'AdvertisementController.create').as('ads.create')
+		Route.post('/', 'Api/AdvertisementController.create').middleware('CheckAccessToken')
 	}).prefix('ads')
 
 	Route.group(() => {
