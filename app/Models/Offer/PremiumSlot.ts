@@ -57,7 +57,7 @@ export default class PremiumSlot extends BaseModel {
 	 * * Foreign keys
 	 */
 
-	@belongsTo(() => PremiumFranchise)
+	@belongsTo(() => PremiumFranchise, {foreignKey: "franchiseId"})
 	public premiumFranchise: BelongsTo<typeof PremiumFranchise>
 
 	@column({ columnName: 'franchise_id' })

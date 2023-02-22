@@ -1,0 +1,119 @@
+@layout('layouts/index')
+
+@set('title', 'Слоты для премиального размещения')
+
+@section('body')
+  @!component('components/filter', {
+    payload,
+    columns: [
+      { key: 'id', value: 'ID' },
+
+    ],
+  })
+
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">{{ title }}</h4>
+
+        {{--  <a href="{{ route('subsections.create') }}" class="btn btn-primary btn-sm">Создать</a>  --}}
+      </div>
+
+      <div class="card-body">
+        <div class="table-responsive">
+
+          <table class="table table-responsive-md">
+            <thead>
+              <tr>
+                <th class="width80"><strong>#</strong></th>
+
+                <th><strong>Название</strong></th>
+                <th><strong>Тип слота</strong></th>
+
+                <th><strong>Цена за 3 месяца</strong></th>
+                <th><strong>Цена за 6 месяцев</strong></th>
+
+
+                <th><strong>Занятно франшизой</strong></th>
+                <th><strong>Заблокированно</strong></th>
+
+                <th><strong>Дата занятия Premium</strong></th>
+                <th><strong>Занят до</strong></th>
+
+
+
+              </tr>
+            </thead>
+            <tbody>
+
+              @each(item in slots)
+                <tr>
+                  <td><strong>{{ item.id }}</strong></td>
+                  <td><b><a target="_blank" href="{{ route('offer.premium.slots.edit', { id: item.id }) }}">{{ item.title }}</a> </b></td>
+                  <td>{{ item.type }} </td>
+                  <td>{{ item.priceThreeMonths }} </td>
+                  <td>{{ item.priceSixMonths }} </td>
+
+                  @if(item.premiumFranchise)
+                  <td> <b> <a target="_blank" href="https://business-mylife.ru/adv-page/{{item.premiumFranchise.offer.id}}">{{ item.premiumFranchise.offer.id }} - {{ item.premiumFranchise.offer.title }}</a> </b></td>
+                  @else
+                    <td>-</td>
+                  @endif
+
+
+                  @if(item.isBlocked)
+                    <td style="color:firebrick">Заблокирован </td>
+                  @else
+                    <td style="color:green"> Не заблокирован </td>
+                  @endif
+
+                  @if(item.employedAtForUser)
+                    <td>{{ item.employedAtForUser}} </td>
+                  @else
+                    <td> - </td>
+                  @endif
+
+                  @if(item.employedUntillForUser)
+                    <td>{{ item.employedUntillForUser}} </td>
+                  @else
+                    <td> - </td>
+                  @endif
+
+
+
+
+
+
+
+
+
+
+                  <td>
+                    <div class="dropdown">
+                      <button type="button" class="btn btn-success light sharp" data-toggle="dropdown"
+                        aria-expanded="false">
+                        <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1">
+                          <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <rect x="0" y="0" width="24" height="24"></rect>
+                            <circle fill="#000000" cx="5" cy="12" r="2"></circle>
+                            <circle fill="#000000" cx="12" cy="12" r="2"></circle>
+                            <circle fill="#000000" cx="19" cy="12" r="2"></circle>
+                          </g>
+                        </svg>
+                      </button>
+                      <div class="dropdown-menu" style="">
+                        <a class="dropdown-item" href="{{ route('offer.premium.slots.edit', { id: item.id }) }}" target="_blank">Редактировать</a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              @endeach
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  @!component('components/pagination', { obj: slots })
+@endsection

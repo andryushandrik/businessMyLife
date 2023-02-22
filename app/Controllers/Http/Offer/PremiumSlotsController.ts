@@ -1,19 +1,31 @@
+import PremiumSlotsFilterValidator from 'App/Validators/PremiumSlots/PremiumSlotsFilterValidator'
 import PremiumSlotsValidator from 'App/Validators/PremiumSlots/PremiumSlotsValidator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import PremiumSlot from 'App/Models/Offer/PremiumSlot'
 import ExceptionService from 'App/Services/ExceptionService'
 import PremiumSlotService from 'App/Services/PremiumSlotService'
-import ApiValidator from 'App/Validators/ApiValidator'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 import { Err } from 'Contracts/response'
+import { PaginateConfig } from 'Contracts/services'
 
 export default class PremiumSlotsController {
-	public async paginate({ session, request, view, response }: HttpContextContract) {
-		let payload: ApiValidator['schema']['props']
+	public async paginate({ route, session, request, view, response }: HttpContextContract) {
+		let payload: PremiumSlotsFilterValidator['schema']['props'] | undefined = undefined
+		const isFiltered: boolean = request.input('isFiltered', false)
 
+		const config: PaginateConfig<PremiumSlot> = {
+			baseUrl: route!.pattern,
+			page: request.input('page', 1),
+			limit: request.input('limit', 5),
+		}
 		try {
-			payload = await request.validate(ApiValidator)
+			if (isFiltered) {
+				payload = await request.validate(PremiumSlotsFilterValidator)
+
+				config.orderBy = payload.orderBy
+				config.orderByColumn = payload.orderByColumn
+			}
 		} catch (err: any) {
 			throw new ExceptionService({
 				code: ResponseCodes.VALIDATION_ERROR,
@@ -23,9 +35,8 @@ export default class PremiumSlotsController {
 		}
 
 		try {
-			const slots: ModelPaginatorContract<PremiumSlot> = await PremiumSlotService.paginate(payload)
-
-			return view.render('pages/premium/slots/index', {
+			const slots: ModelPaginatorContract<PremiumSlot> = await PremiumSlotService.paginate(config, payload)
+			return view.render('pages/offer/premium/slots/index', {
 				slots,
 			})
 		} catch (err: Err | any) {
@@ -65,3 +76,4 @@ export default class PremiumSlotsController {
 		}
 	}
 }
+
