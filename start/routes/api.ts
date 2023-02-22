@@ -165,6 +165,8 @@ Route.group(() => {
 			Route.get('/slots/:id', 'Api/Offer/PremiumSlotsController.get')
 			Route.post('/slots', 'Api/Offer/PremiumSlotsController.create')
 			Route.get('/franchises', 'Api/Offer/PremiumFranchiseController.paginate')
+			Route.post('/franchises', 'Api/Offer/PremiumFranchiseController.create')
+
 		}).prefix('premium')
 
 		Route.post('/', 'Api/Offer/OffersController.create').middleware('CheckAccessToken')
