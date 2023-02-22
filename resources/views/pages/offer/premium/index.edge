@@ -7,8 +7,8 @@
     payload,
     columns: [
       { key: 'id', value: 'ID' },
-      { key: 'userId', value: 'UserID' },
-      { key: 'amount', value: 'Величина' },
+      { key: 'offerId', value: 'Id объявления' },
+
     ],
   })
 
@@ -35,7 +35,7 @@
                 <th><strong>Название слота</strong></th>
                 <th><strong>Репорты</strong></th>
 
-                <th><strong>Дата размещения</strong></th>
+                <th><strong>Дата активации Premium</strong></th>
                 <th><strong>Размещен до</strong></th>
 
 
@@ -49,16 +49,30 @@
                   <td><strong>{{ item.id }}</strong></td>
                   <td><b> <a target="_blank" href="https://business-mylife.ru/account/profile/user/{{ item.offer.user.id}}">{{ item.offer.user.firstName}} {{ item.offer.user.lastName}}</a></b></td>
                   <td> <b> <a target="_blank" href="https://business-mylife.ru/adv-page/{{item.offer.id}}">{{ item.offer.id }} - {{ item.offer.title }}</a> </b></td>
-                  <td>{{ item.premiumSlot?.type }} </td>
-                  <td><b><a target="_blank" href="{{ route('offer.premium.slots.edit', { id: item.id }) }}">{{ item.premiumSlot?.title }}</a> </b></td>
+                  @if(item.premiumSlot?.type)
+                    <td>{{ item.premiumSlot?.type }} </td>
+                  @else
+                    <td>-</td>
+                  @endif
+
+                  @if(item.premiumSlot?.title)
+                    <td><b><a target="_blank" href="{{ route('offer.premium.slots.edit', { id: item.id }) }}">{{ item.premiumSlot?.title }}</a> </b></td>
+                  @else
+                    <td>-</td>
+                  @endif
+
 
                   <td>{{ item.offer.reports.length }}</td>
 
                   <td>{{ item.createdAtForUser}}</td>
-                  <td>{{ item.premiumSlot?.employedUntillForUser }}</td>
-
-
-
+                  @if(item.premiumSlot)
+                    <td>
+                      [Слот]
+                      {{ item.premiumSlot?.employedUntillForUser }}</td>
+                  @else
+                    <td> [Объявление]
+                      {{ item.offer.archiveExpire }}</td>
+                  @endif
 
                   <td>
                     <div class="dropdown">
@@ -81,10 +95,8 @@
                   </td>
                 </tr>
               @endeach
-
             </tbody>
           </table>
-
         </div>
       </div>
     </div>

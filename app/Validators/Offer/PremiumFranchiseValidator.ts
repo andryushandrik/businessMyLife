@@ -6,6 +6,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import IndexValidator from '../IndexValidator'
 import { schema } from '@ioc:Adonis/Core/Validator'
 import { getOfferIdRules } from '../Rules/Offer/offer'
+import { TABLES_NAMES } from 'Config/database'
 
 export default class PremiumFranchiseValidator extends IndexValidator {
 	constructor(protected ctx: HttpContextContract) {
@@ -32,7 +33,7 @@ export default class PremiumFranchiseValidator extends IndexValidator {
 	 *    ```
 	 */
 	public schema = schema.create({
-		offerId: schema.number(getOfferIdRules()),
+		offerId: schema.number(getOfferIdRules(TABLES_NAMES.OFFERS, true)),
 	})
 
 	/**
@@ -48,3 +49,4 @@ export default class PremiumFranchiseValidator extends IndexValidator {
 	 */
 	public messages: CustomMessages = this.messages
 }
+

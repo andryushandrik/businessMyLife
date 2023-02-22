@@ -53,6 +53,8 @@ export default class PremiumSlotsController {
 		try {
 			const payload = await request.validate(PremiumSlotsValidator)
 			payload.isBlocked = payload.isBlocked ? true : false
+			payload.image = null
+
 			await PremiumSlotService.update(id, payload)
 
 			session.flash('success', ResponseMessages.SUCCESS)

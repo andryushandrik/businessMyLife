@@ -6,8 +6,12 @@ import { rules } from '@ioc:Adonis/Core/Validator'
 import { OFFER_BLOCK_DESCRIPTION_MAX_LENGTH, TABLES_NAMES } from 'Config/database'
 import { OfferCategories, OfferPaybackTimes, OfferProjectStages } from 'Config/offer'
 
-export function getOfferIdRules(table: string = TABLES_NAMES.OFFERS): Rule[] {
-	return [rules.unsigned(), rules.exists({ table, column: 'id' })]
+export function getOfferIdRules(table: string = TABLES_NAMES.OFFERS, isUnique: boolean = false): Rule[] {
+	const rulesArray = [rules.unsigned(), rules.exists({ table, column: 'id' })]
+	if (isUnique) {
+		rulesArray.push(rules.unique({ table: 'offers', column: 'id' }))
+	}
+	return rulesArray
 }
 
 export function getOfferFranchiseRules(table: string = TABLES_NAMES.OFFERS): Rule[] {
@@ -36,3 +40,4 @@ export function getOfferImageOptions() {
 		extnames: ['jpg', 'jpeg', 'png', 'webp'],
 	}
 }
+
