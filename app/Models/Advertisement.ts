@@ -1,3 +1,4 @@
+import Subsection from 'App/Models/Offer/Subsection'
 import Drive from '@ioc:Adonis/Core/Drive'
 import { beforeDelete, BelongsTo, computed } from '@ioc:Adonis/Lucid/Orm'
 // * Types
@@ -11,9 +12,10 @@ import { GLOBAL_DATETIME_FORMAT } from 'Config/app'
 export default class Advertisement extends BaseModel {
 	public static readonly columns = [
 		'id',
-		'offerImage',
-		'subsectionImage',
+		'image',
 		'paymentStatus',
+		'subsectionId',
+		'place',
 		'userId',
 		'description',
 		'placedAt',
@@ -29,11 +31,14 @@ export default class Advertisement extends BaseModel {
 	@column({ isPrimary: true })
 	public id: number
 
-	@column({ columnName: 'offer_image' })
-	public offerImage: string
+	@column({ columnName: 'image' })
+	public image: string
 
-	@column({ columnName: 'subsection_image' })
-	public subsectionImage: string
+	@column()
+	public place: string
+
+	@column({ columnName: 'subsection_id' })
+	public subsectionId: Subsection['id']
 
 	@column()
 	public description: string
@@ -59,6 +64,9 @@ export default class Advertisement extends BaseModel {
 	@belongsTo(() => User)
 	public owner: BelongsTo<typeof User>
 
+	@belongsTo(() => Subsection)
+	public subsection: BelongsTo<typeof Subsection>
+
 	/**
 	 * * Computed properties
 	 */
@@ -73,6 +81,11 @@ export default class Advertisement extends BaseModel {
 		return this.placedUntill ? this.placedUntill.setLocale('ru-RU').toFormat(GLOBAL_DATETIME_FORMAT) : ''
 	}
 
+  @computed()
+	public get placedUntillForPicker(): string {
+		return this.placedUntill ? this.placedUntill.toFormat('dd MMMM, yyyy') : ''
+	}
+
 	/**
 	 * * Query scopes
 	 */
@@ -83,7 +96,7 @@ export default class Advertisement extends BaseModel {
 
 	@beforeDelete()
 	public static async deleteStoredImage(item: Advertisement) {
-		if (item.offerImage) await Drive.delete(item.offerImage)
-		if (item.subsectionImage) await Drive.delete(item.subsectionImage)
+		if (item.image) await Drive.delete(item.image)
 	}
 }
+

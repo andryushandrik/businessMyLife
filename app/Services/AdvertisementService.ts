@@ -18,17 +18,17 @@ export default class AdvertisementService {
 		let ad: Advertisement
 		const trx: TransactionClientContract = await Database.transaction()
 		try {
-			ad = await Advertisement.create({ ...payload, offerImage: 'tmp', subsectionImage: 'tmp' }, { client: trx })
+			ad = await Advertisement.create({ ...payload, image: 'tmp' }, { client: trx })
 		} catch (err: any) {
 			trx.rollback()
 
 			Logger.error(err)
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
 		}
-		if (payload.offerImage) {
+		if (payload.image) {
 			try {
-				const filePath: string = await this.uploadImage(ad.id, payload.offerImage, 'offer')
-				await ad.merge({ offerImage: filePath }).save()
+				const filePath: string = await this.uploadImage(ad.id, payload.image)
+				await ad.merge({ image: filePath }).save()
 			} catch (err: Err | any) {
 				trx.rollback()
 
@@ -36,24 +36,12 @@ export default class AdvertisementService {
 				throw { code: ResponseCodes.SERVER_ERROR, message: ResponseMessages.ERROR } as Err
 			}
 		}
-		if (payload.subsectionImage) {
-			try {
-				const filePath: string = await this.uploadImage(ad.id, payload.subsectionImage, 'subsection')
-				await ad.merge({ offerImage: filePath }).save()
-			} catch (err: Err | any) {
-				trx.rollback()
-
-				Logger.error(err)
-				throw { code: ResponseCodes.SERVER_ERROR, message: ResponseMessages.ERROR } as Err
-			}
-		}
-
 		await trx.commit()
 	}
 
 	public static async paginate(config: PaginateConfig<Advertisement>): Promise<ModelPaginatorContract<Advertisement>> {
 		try {
-			return await Advertisement.query().preload('owner').getViaPaginate(config)
+			return await Advertisement.query().preload('owner').preload('subsection').getViaPaginate(config)
 		} catch (err: any) {
 			Logger.error(err)
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
@@ -84,7 +72,7 @@ export default class AdvertisementService {
 		const trx: TransactionClientContract = await Database.transaction()
 
 		try {
-			ad = await this.get(id, { trx })
+			ad = await this.get(id)
 		} catch (err: Err | any) {
 			trx.rollback()
 
@@ -92,7 +80,7 @@ export default class AdvertisementService {
 		}
 
 		try {
-			await ad.merge({ ...payload, offerImage: ad.offerImage, subsectionImage: ad.subsectionImage }).save()
+			await ad.merge({ ...payload, image: ad.image }).save()
 		} catch (err: any) {
 			trx.rollback()
 
@@ -100,26 +88,12 @@ export default class AdvertisementService {
 			throw { code: ResponseCodes.SERVER_ERROR, message: ResponseMessages.ERROR } as Err
 		}
 
-		if (payload.offerImage) {
-			if (ad.offerImage) await Drive.delete(ad.offerImage)
+		if (payload.image) {
+			if (ad.image) await Drive.delete(ad.image)
 
 			try {
-				const uploadedFilePath: string = await this.uploadImage(ad.id, payload.offerImage, 'offer')
-				await ad.merge({ offerImage: uploadedFilePath }).save()
-			} catch (err: Err | any) {
-				trx.rollback()
-
-				Logger.error(err)
-				throw { code: ResponseCodes.SERVER_ERROR, message: ResponseMessages.ERROR } as Err
-			}
-		}
-
-		if (payload.subsectionImage) {
-			if (ad.subsectionImage) await Drive.delete(ad.subsectionImage)
-
-			try {
-				const uploadedFilePath: string = await this.uploadImage(ad.id, payload.subsectionImage, 'subsection')
-				await ad.merge({ subsectionImage: uploadedFilePath }).save()
+				const uploadedFilePath: string = await this.uploadImage(ad.id, payload.image)
+				await ad.merge({ image: uploadedFilePath }).save()
 			} catch (err: Err | any) {
 				trx.rollback()
 
@@ -131,22 +105,22 @@ export default class AdvertisementService {
 		await trx.commit()
 	}
 
-	private static async uploadImage(id: Advertisement['id'], image: MultipartFileContract, additionalPath: string): Promise<string> {
+	private static async uploadImage(id: Advertisement['id'], image: MultipartFileContract): Promise<string> {
 		const fileName = `${id}_${image.clientName}`
 
 		try {
-			await image.moveToDisk(ADVERTISEMENT_FOLDER_PATH + '/' + additionalPath + '/', { name: fileName })
-			return `${ADVERTISEMENT_FOLDER_PATH}/${additionalPath}/${fileName}`
+			await image.moveToDisk(ADVERTISEMENT_FOLDER_PATH, { name: fileName })
+			return `${ADVERTISEMENT_FOLDER_PATH}/${fileName}`
 		} catch (err: any) {
 			Logger.error(err)
 			throw { code: ResponseCodes.SERVER_ERROR, message: ResponseMessages.ERROR } as Err
 		}
 	}
-	public static async get(id: Advertisement['id'], { trx }: ServiceConfig<Advertisement> = {}): Promise<Advertisement> {
+	public static async get(id: Advertisement['id']): Promise<Advertisement> {
 		let item: Advertisement | null
 
 		try {
-			item = await Advertisement.find(id, { client: trx })
+			item = await Advertisement.query().where('id', id).preload('owner').preload('subsection').first()
 		} catch (err: any) {
 			Logger.error(err)
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
@@ -174,3 +148,4 @@ export default class AdvertisementService {
 		}
 	}
 }
+
