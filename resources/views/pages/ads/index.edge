@@ -25,9 +25,13 @@
                 <th class="width80"><strong>Пользователь</strong></th>
 
 
-                <th><strong>Фото в разделе</strong></th>
-                <th><strong>Фото в объявлениях</strong></th>
+                <th><strong>Фото </strong></th>
+                <th><strong>Тема</strong></th>
+                <th><strong>Место размещения</strong></th>
+
+
                 <th><strong>Дата размещения</strong></th>
+
 
                 <th><strong>Действует до</strong></th>
                 <th><strong>Статус оплаты</strong></th>
@@ -43,8 +47,10 @@
                   <td><strong>{{ item.id }}</strong></td>
                   <td>{{ item?.owner?.firstName }} {{ item?.owner?.lastName }} </td>
 
-                  <td><img src="{{ getMedia(item.offerImage) }}" alt="" class="banner_cover_img" style="max-width: 100%"/></td>
-                  <td><img src="{{ getMedia(item.subsectionImage) }}" alt="" class="banner_cover_img" style="max-width: 100%"/></td>
+                  <td><img src="{{ getMedia(item.image) }}" alt="" class="banner_cover_img" style="max-width: 100%"/></td>
+                  <td>{{ item.subsection?.name }}</td>
+                  <td>{{ item.place }}</td>
+
                   <td>{{ item.placedAtForUser }}</td>
                   <td>{{ item.placedUntillForUser }}</td>
                   <td>{{ item.paymentStatus }}</td>
