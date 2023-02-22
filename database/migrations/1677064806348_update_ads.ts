@@ -9,7 +9,7 @@ export default class extends BaseSchema {
 			table.renameColumn('offer_image', 'image')
 			table.string('place')
 			table.dropColumn('subsection_image')
-      table.integer('subsection_id').unsigned().nullable().references(`${TABLES_NAMES.SUBSECTIONS}.id`).onDelete('SET NULL')
+			table.integer('subsection_id').unsigned().nullable().references(`${TABLES_NAMES.SUBSECTIONS}.id`).onDelete('SET NULL')
 		})
 	}
 
@@ -22,4 +22,3 @@ export default class extends BaseSchema {
 		})
 	}
 }
-

@@ -7,7 +7,6 @@ import { TABLES_NAMES } from 'Config/database'
 import { BaseModel, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import PremiumSlot from './PremiumSlot'
 import { GLOBAL_DATETIME_FORMAT } from 'Config/app'
-import User from '../User/User'
 
 export default class PremiumFranchise extends BaseModel {
 	public static readonly table: string = TABLES_NAMES.PREMIUM_FRANCHISES
@@ -55,8 +54,4 @@ export default class PremiumFranchise extends BaseModel {
 	}
 
 	public static getByOfferId = scope((query, offerId: Offer['id']) => [query.where('offerId', offerId)])
-
-
-
-
 }

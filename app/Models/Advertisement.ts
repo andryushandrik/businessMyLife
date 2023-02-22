@@ -81,7 +81,7 @@ export default class Advertisement extends BaseModel {
 		return this.placedUntill ? this.placedUntill.setLocale('ru-RU').toFormat(GLOBAL_DATETIME_FORMAT) : ''
 	}
 
-  @computed()
+	@computed()
 	public get placedUntillForPicker(): string {
 		return this.placedUntill ? this.placedUntill.toFormat('dd MMMM, yyyy') : ''
 	}
@@ -99,4 +99,3 @@ export default class Advertisement extends BaseModel {
 		if (item.image) await Drive.delete(item.image)
 	}
 }
-
