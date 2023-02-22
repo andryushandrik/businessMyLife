@@ -54,7 +54,7 @@
 
             <div class="form-group">
               <label class="mb-1"> Изображение *</label>
-              <input type="file" class="form-control" accept="image/png, image/jpeg, image/jpg" name="image" value="{{ flashMessages.get('image') ?? item.subsectionImage  }}">
+              <input type="file" class="form-control" accept="image/png, image/jpeg, image/jpg" name="image" value="{{ flashMessages.get('image') ?? item.image  }}">
 
               @if(flashMessages.has('errors.image'))
                 <div class="invalid-feedback d-block">

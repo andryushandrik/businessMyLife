@@ -116,6 +116,7 @@ export default class AdvertisementService {
 			throw { code: ResponseCodes.SERVER_ERROR, message: ResponseMessages.ERROR } as Err
 		}
 	}
+
 	public static async get(id: Advertisement['id']): Promise<Advertisement> {
 		let item: Advertisement | null
 
