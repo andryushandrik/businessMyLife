@@ -53,6 +53,7 @@ export default class AdvertisementService {
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
 		}
 	}
+
 	public static async getAll<M extends LucidModel>(
 		model: M,
 		config: ServiceConfig<InstanceType<M>> = {},
@@ -111,6 +112,46 @@ export default class AdvertisementService {
 		await trx.commit()
 	}
 
+	public static async verify(id: Advertisement['id']): Promise<void> {
+		let ad: Advertisement
+		const trx: TransactionClientContract = await Database.transaction()
+
+		try {
+			ad = await this.get(id)
+		} catch (err: Err | any) {
+			trx.rollback()
+			throw err
+		}
+		try {
+			await ad.merge({ isVerified: true, image: ad.image }).save()
+		} catch (err: any) {
+			trx.rollback()
+			Logger.error(err)
+			throw { code: ResponseCodes.SERVER_ERROR, message: ResponseMessages.ERROR } as Err
+		}
+		await trx.commit()
+	}
+
+	public static async unverify(id: Advertisement['id']): Promise<void> {
+		let ad: Advertisement
+		const trx: TransactionClientContract = await Database.transaction()
+
+		try {
+			ad = await this.get(id)
+		} catch (err: Err | any) {
+			trx.rollback()
+			throw err
+		}
+		try {
+			await ad.merge({ isVerified: false, image: ad.image }).save()
+		} catch (err: any) {
+			trx.rollback()
+			Logger.error(err)
+			throw { code: ResponseCodes.SERVER_ERROR, message: ResponseMessages.ERROR } as Err
+		}
+		await trx.commit()
+	}
+
 	private static async uploadImage(id: Advertisement['id'], image: MultipartFileContract): Promise<string> {
 		const fileName = `${id}_${image.clientName}`
 
@@ -159,7 +200,7 @@ export default class AdvertisementService {
 		payload: AdvertisementFilterValidator['schema']['props'],
 	): ModelQueryBuilderContract<typeof Advertisement> {
 		for (const key in payload) {
-			if (payload[key]) {
+			if (payload[key] !== undefined) {
 				switch (key) {
 					// Skip this api's keys
 					case 'page':
@@ -173,9 +214,13 @@ export default class AdvertisementService {
 						query = query.withScopes((scopes) => scopes.getByPlace(payload[key]!))
 						break
 
-          case 'subsectionId':
-            query = query.withScopes((scopes) => scopes.getBySubsectionId(payload[key]!))
-            break
+					case 'subsectionId':
+						query = query.withScopes((scopes) => scopes.getBySubsectionId(payload[key]!))
+						break
+
+					case 'isVerified':
+						query = query.withScopes((scopes) => scopes.getByIsVerified(payload[key]!))
+						break
 
 					default:
 						break
@@ -186,4 +231,3 @@ export default class AdvertisementService {
 		return query
 	}
 }
-

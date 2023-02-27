@@ -62,7 +62,7 @@ export default class PremiumSlotsController {
 		const id: PremiumSlot['id'] = params.id
 		console.log(request.body())
 		try {
-      const payload = await request.validate(PremiumSlotsValidator)
+			const payload = await request.validate(PremiumSlotsValidator)
 			payload.isBlocked = payload.isBlocked ? true : false
 			payload.image = null
 
@@ -77,4 +77,3 @@ export default class PremiumSlotsController {
 		}
 	}
 }
-

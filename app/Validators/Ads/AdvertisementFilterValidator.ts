@@ -37,9 +37,9 @@ export default class AdvertisementFilterValidator extends ApiValidator {
 		/**
 		 * * Optional fields
 		 */
-
+		isVerified: schema.boolean.optional(),
 		place: schema.string.optional({ trim: true }),
-    subsectionId: schema.number.optional(getSubsectionIdRules())
+		subsectionId: schema.number.optional(getSubsectionIdRules()),
 	})
 
 	/**

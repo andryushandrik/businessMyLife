@@ -13,8 +13,7 @@ import { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import AdvertisementFilterValidator from 'App/Validators/Ads/AdvertisementFilterValidator'
 
 export default class AdvertisementController {
-
-  public async show({ request, response }: HttpContextContract) {
+	public async show({ request, response }: HttpContextContract) {
 		let payload: AdvertisementFilterValidator['schema']['props']
 
 		try {
@@ -28,8 +27,8 @@ export default class AdvertisementController {
 		}
 
 		try {
-			const news: ModelPaginatorContract<Advertisement> = await AdvertisementService.paginate(payload,payload)
-			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, news))
+			const ads: ModelPaginatorContract<Advertisement> = await AdvertisementService.paginate(payload, payload)
+			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, ads))
 		} catch (err: Err | any) {
 			throw new ExceptionService(err)
 		}
@@ -37,7 +36,7 @@ export default class AdvertisementController {
 
 	public async create({ request, response }: HttpContextContract) {
 		const payload = await request.validate(AdvertisementValidator)
-    payload.userId =  request.currentUserId
+		payload.userId = request.currentUserId
 		try {
 			const advertisements = await AdvertisementService.create(payload)
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, { advertisements }))

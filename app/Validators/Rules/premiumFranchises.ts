@@ -4,4 +4,3 @@ import { TABLES_NAMES } from 'Config/database'
 export function getPremiumFranchiseIdRule(table: string = TABLES_NAMES.PREMIUM_FRANCHISES): Rule[] {
 	return [rules.nullable(), rules.exists({ table, column: 'id' })]
 }
-

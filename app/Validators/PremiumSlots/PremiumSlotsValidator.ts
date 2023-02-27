@@ -56,4 +56,3 @@ export default class PremiumSlotsValidator extends IndexValidator {
 	 */
 	public messages: CustomMessages = this.messages
 }
-
