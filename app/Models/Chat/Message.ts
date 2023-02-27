@@ -1,10 +1,21 @@
 // * Types
-import type User from '../User/User'
+import User from '../User/User'
 import type Conversation from './Conversation'
 import type { DateTime } from 'luxon'
 // * Types
 
-import { BaseModel, beforeFetch, beforeFind, belongsTo, BelongsTo, column, ModelQueryBuilderContract, scope } from '@ioc:Adonis/Lucid/Orm'
+import {
+	BaseModel,
+	beforeFetch,
+	beforeFind,
+	beforePaginate,
+	belongsTo,
+	BelongsTo,
+	column,
+	computed,
+	ModelQueryBuilderContract,
+	scope,
+} from '@ioc:Adonis/Lucid/Orm'
 import Offer from '../Offer/Offer'
 
 export default class Message extends BaseModel {
@@ -36,8 +47,6 @@ export default class Message extends BaseModel {
 	@column({ columnName: 'offer_id' })
 	public offerId: Offer['id']
 
-	@belongsTo(() => Offer)
-	public offer: BelongsTo<typeof Offer>
 	/**
 	 * * Timestamps
 	 */
@@ -47,6 +56,40 @@ export default class Message extends BaseModel {
 
 	@column.dateTime({ autoCreate: true, autoUpdate: true })
 	public updatedAt: DateTime
+
+	/**
+	 * * Relations
+	 */
+	@belongsTo(() => Offer)
+	public offer: BelongsTo<typeof Offer>
+
+	@belongsTo(() => User, { serializeAs: null })
+	public user: BelongsTo<typeof User>
+
+	/**
+	 * * Computed properties
+	 */
+
+	@computed()
+	public get userAvatar(): string {
+		if (!this.user || !this.user.avatar) return ''
+		return this.user.avatar!
+	}
+
+	@computed()
+	public get userName(): string {
+		if (!this.user || !this.user.firstName) return ''
+		return this.user.firstName!
+	}
+
+	@computed()
+	public get offerInfo(): object {
+		if (!this.offer) return {}
+		const title = this.offer.title,
+			price = this.offer.price
+
+		return { title, price }
+	}
 
 	/**
 	 * * Query scopes
@@ -64,9 +107,18 @@ export default class Message extends BaseModel {
 	 * * Hooks
 	 */
 
-	@beforeFind()
 	@beforeFetch()
-	public static preloadAndAggregateModels(query: ModelQueryBuilderContract<typeof Message>) {
+	@beforeFind()
+	public static preloadUser(query: ModelQueryBuilderContract<typeof Message>) {
+		query.preload('user')
 		query.preload('offer')
+	}
+
+	@beforePaginate()
+	public static preloadUsers([countQuery, query]: [ModelQueryBuilderContract<typeof Message>, ModelQueryBuilderContract<typeof Message>]) {
+		query.preload('user')
+		countQuery.preload('user')
+		query.preload('offer')
+		countQuery.preload('offer')
 	}
 }

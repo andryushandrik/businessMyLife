@@ -56,7 +56,7 @@ export default class MessageService {
 		}
 	}
 
-	public static async create(currentUserId: User['id'], payload: MessageCreatePayloadValidator['schema']['props']): Promise<ReturnMessageCreatePayload> {
+	public static async 	create(currentUserId: User['id'], payload: MessageCreatePayloadValidator['schema']['props']): Promise<ReturnMessageCreatePayload> {
 		let conversation: Conversation | undefined
 		const trx = await Database.transaction()
 		const receiverId: User['id'] | undefined = payload.userId
