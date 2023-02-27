@@ -43,11 +43,10 @@
               <label class="mb-1"><strong>Заблокированно?</strong></label>
               <input type="checkbox" value="true" {{item.isBlocked ? "checked" : null }} name="isBlocked" value="{{ flashMessages.get('isBlocked') ?? '' }}">
             </div>
-
-            <input type="hidden" name="franchiseId" value="{{item.franchiseId}}">
-            <input type="hidden" name="image" value="{{item.image}}">
-            <input type="hidden" name="employedUntill" value="{{item.employedUntill}}">
-            <input type="hidden" name="employedAt" value="{{item.employedAt}}">
+            <input type="hidden" name="franchiseId" value={{item.franchiseId ? item.franchiseId: ''}}>
+            <input type="hidden" name="image" value={{item.image ? item.image: ''}}>
+            <input type="hidden" name="employedUntill" value={{item.employedUntill ? item.employedUntill: ''}}>
+            <input type="hidden" name="employedAt" value={{item.employedAt ? item.employedAt: ''}}>
 
 
 

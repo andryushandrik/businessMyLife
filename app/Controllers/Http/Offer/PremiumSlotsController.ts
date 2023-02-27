@@ -62,17 +62,19 @@ export default class PremiumSlotsController {
 		const id: PremiumSlot['id'] = params.id
 		console.log(request.body())
 		try {
-			const payload = await request.validate(PremiumSlotsValidator)
+      const payload = await request.validate(PremiumSlotsValidator)
 			payload.isBlocked = payload.isBlocked ? true : false
 			payload.image = null
 
 			await PremiumSlotService.update(id, payload)
 
 			session.flash('success', ResponseMessages.SUCCESS)
-			return response.redirect().toRoute('offer.premium.paginate')
+			return response.redirect().toRoute('offer.premium.slots.paginate')
 		} catch (err: Err | any) {
+			console.log(err)
 			session.flash('error', err.message)
 			return response.redirect().back()
 		}
 	}
 }
+
