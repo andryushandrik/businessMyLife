@@ -69,8 +69,9 @@ export default class PremiumSlotsController {
 			await PremiumSlotService.update(id, payload)
 
 			session.flash('success', ResponseMessages.SUCCESS)
-			return response.redirect().toRoute('offer.premium.paginate')
+			return response.redirect().toRoute('offer.premium.slots.paginate')
 		} catch (err: Err | any) {
+			console.log(err)
 			session.flash('error', err.message)
 			return response.redirect().back()
 		}

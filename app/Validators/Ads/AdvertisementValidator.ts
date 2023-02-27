@@ -18,15 +18,18 @@ export default class AdvertisementValidator extends IndexValidator {
 		description: schema.string({ trim: true }, getAdsDescriptionRules()),
 		paymentStatus: schema.string({ trim: true }),
 		userId: schema.number(getUserIdRules()),
-		placedAt: schema.date.optional({ format: 'dd MMMM, yyyy' }),
+		place: schema.enum(['offer', 'category']),
+		subsectionId: schema.number(getSubsectionIdRules()),
 		placedUntill: schema.date({ format: 'dd MMMM, yyyy' }, getAdvertisementPlacedUntilValidator()),
 
 		/**
 		 * * Optional fields
 		 */
+		placedAt: schema.date.optional({ format: 'dd MMMM, yyyy' }),
 		image: schema.file.optional(getAdsFileOptions()),
-		place: schema.enum(['offer', 'category']),
-		subsectionId: schema.number(getSubsectionIdRules()),
+
+		isVerified: schema.boolean.optional(),
+		viewsCount: schema.number.optional(),
 	})
 
 	public messages: CustomMessages = this.messages

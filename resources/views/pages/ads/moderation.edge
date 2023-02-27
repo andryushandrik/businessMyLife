@@ -1,6 +1,6 @@
 @layout('layouts/index')
 
-@set('title', 'Опубликованные')
+@set('title', 'Модерация')
 
 @section('styles')
   <link href="/css/ads.css" rel="stylesheet">
@@ -11,7 +11,6 @@
     <div class="card">
       <div class="card-header">
         <h4 class="card-title">{{ title }}</h4>
-
         <a href="{{ route('ads.create') }}" class="btn btn-primary btn-sm">Создать</a>
       </div>
 
@@ -71,13 +70,7 @@
                         </svg>
                       </button>
                       <div class="dropdown-menu" style="">
-                        <a class="dropdown-item" href="{{ route('ads.edit', { id: item.id }) }}">Редактировать</a>
                         <a class="dropdown-item" href="{{ route('ads.show', { id: item.id }) }}">Просмотреть</a>
-                        <form action="{{ route('ads.destroy', { id: item.id }, { qs: { _method: 'DELETE' } }) }}" method="POST">
-                          <button type="submit" class="dropdown-item">Удалить</button>
-
-                          {{ csrfField() }}
-                        </form>
                       </div>
                     </div>
                   </td>

@@ -20,6 +20,8 @@ export default class Advertisement extends BaseModel {
 		'description',
 		'placedAt',
 		'placedUntill',
+		'isVerified',
+		'viewsCount',
 		'createdAt',
 		'updatedAt',
 	] as const
@@ -48,6 +50,12 @@ export default class Advertisement extends BaseModel {
 
 	@column({ columnName: 'user_id' })
 	public userId: User['id']
+
+	@column({ columnName: 'isVerified' })
+	public isVerified: boolean
+
+	@column({ columnName: 'viewsCount' })
+	public viewsCount: number
 
 	@column.dateTime({ autoCreate: true, columnName: 'placed_at' })
 	public placedAt: DateTime
@@ -92,8 +100,13 @@ export default class Advertisement extends BaseModel {
 	public static getByPlace = scope((query, place: string) => {
 		query.where('place', place)
 	})
+
 	public static getBySubsectionId = scope((query, subsectionId: number) => {
 		query.where('subsectionId', subsectionId)
+	})
+
+	public static getByIsVerified = scope((query, isVerified: boolean) => {
+		query.where('isVerified', isVerified)
 	})
 
 	/**
@@ -105,4 +118,3 @@ export default class Advertisement extends BaseModel {
 		if (item.image) await Drive.delete(item.image)
 	}
 }
-
