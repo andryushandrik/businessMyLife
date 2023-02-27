@@ -1,6 +1,6 @@
 import AdvertisementFilterValidator from 'App/Validators/Ads/AdvertisementFilterValidator'
 import Drive from '@ioc:Adonis/Core/Drive'
-import Advertisement from 'App/Models/Advertisement'
+import Advertisement from 'App/Models/Ads/Advertisement'
 // * Types
 import type { Err } from 'Contracts/response'
 import type { PaginateConfig, ServiceConfig } from 'Contracts/services'
@@ -47,7 +47,7 @@ export default class AdvertisementService {
 		try {
 			let query: ModelQueryBuilderContract<typeof Advertisement> = Advertisement.query()
 			if (filter) query = this.filter(query, filter)
-			return await query.preload('owner').preload('subsection').getViaPaginate(config)
+			return await query.preload('owner').preload('subsection').preload('adsType').getViaPaginate(config)
 		} catch (err: any) {
 			Logger.error(err)
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
@@ -209,10 +209,6 @@ export default class AdvertisementService {
 					case 'orderByColumn':
 						break
 					// Skip this api's keys
-
-					case 'place':
-						query = query.withScopes((scopes) => scopes.getByPlace(payload[key]!))
-						break
 
 					case 'subsectionId':
 						query = query.withScopes((scopes) => scopes.getBySubsectionId(payload[key]!))
