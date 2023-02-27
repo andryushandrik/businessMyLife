@@ -217,7 +217,11 @@ export default class AdvertisementService {
 					case 'isVerified':
 						query = query.withScopes((scopes) => scopes.getByIsVerified(payload[key]!))
 						break
-
+					case 'place':
+						query = query.whereHas('adsType', (query) => {
+							query.where('place', payload[key]!)
+						})
+						break
 					default:
 						break
 				}
