@@ -1,4 +1,4 @@
-import Advertisement from 'App/Models/Advertisement'
+import Advertisement from 'App/Models/Ads/Advertisement'
 // * Types
 import type { DateTime } from 'luxon'
 import type { Err } from 'Contracts/response'

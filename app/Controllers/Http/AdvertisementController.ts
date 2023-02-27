@@ -5,7 +5,7 @@ import Subsection from 'App/Models/Offer/Subsection'
 import { DateTime } from 'luxon'
 import AdvertisementValidator from 'App/Validators/Ads/AdvertisementValidator'
 import AdvertisementService from 'App/Services/AdvertisementService'
-import Advertisement from 'App/Models/Advertisement'
+import Advertisement from 'App/Models/Ads/Advertisement'
 // * Types
 import type { Err } from 'Contracts/response'
 import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
@@ -89,7 +89,7 @@ export default class AdvertisementController {
 		try {
 			await AdvertisementService.update(id, payload)
 			session.flash('success', ResponseMessages.SUCCESS)
-			return response.redirect().toRoute('ads.index')
+			return response.redirect().toRoute('ads.moderation')
 		} catch (err: Err | any) {
 			session.flash('error', err.message)
 			return response.redirect().back()

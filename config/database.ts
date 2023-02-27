@@ -61,6 +61,7 @@ export default databaseConfig
 
 export const TABLES_NAMES = {
 	ADS: 'advertisements',
+	ADS_TYPES: 'advertisements_types',
 	NEWS: 'news',
 	BANNERS: 'banners',
 	PARTNERS: 'partners',

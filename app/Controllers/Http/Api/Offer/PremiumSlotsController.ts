@@ -56,26 +56,4 @@ export default class PremiumSlotsController {
 			throw new ExceptionService(err)
 		}
 	}
-
-	// public async create({ request, response }: HttpContextContract) {
-	// 	let payload: PremiumSlotsValidator['schema']['props']
-
-	// 	try {
-	// 		payload = await request.validate(PremiumSlotsValidator)
-	// 	} catch (err: Err | any) {
-	// 		throw new ExceptionService({
-	// 			code: ResponseCodes.VALIDATION_ERROR,
-	// 			message: ResponseMessages.VALIDATION_ERROR,
-	// 			body: err.messages,
-	// 		})
-	// 	}
-
-	// 	try {
-	// 		const item = await PremiumSlot.create(payload)
-	// 		return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, item))
-	// 	} catch (err: Err | any) {
-	// 		console.log(err)
-	// 		throw new ExceptionService(err)
-	// 	}
-	// }
 }

@@ -6,8 +6,9 @@ import type { DateTime } from 'luxon'
 // * Types
 
 import { BaseModel, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
-import User from './User/User'
+import User from '../User/User'
 import { GLOBAL_DATETIME_FORMAT } from 'Config/app'
+import AdvertisementType from './AdvertisementType'
 
 export default class Advertisement extends BaseModel {
 	public static readonly columns = [
@@ -36,8 +37,8 @@ export default class Advertisement extends BaseModel {
 	@column({ columnName: 'image' })
 	public image: string
 
-	@column()
-	public place: string
+	@column({ columnName: 'ads_type_id' })
+	public adsTypeId: number
 
 	@column({ columnName: 'subsection_id' })
 	public subsectionId: Subsection['id']
@@ -75,6 +76,9 @@ export default class Advertisement extends BaseModel {
 	@belongsTo(() => Subsection)
 	public subsection: BelongsTo<typeof Subsection>
 
+	@belongsTo(() => AdvertisementType, { foreignKey: 'adsTypeId' })
+	public adsType: BelongsTo<typeof AdvertisementType>
+
 	/**
 	 * * Computed properties
 	 */
@@ -97,9 +101,6 @@ export default class Advertisement extends BaseModel {
 	/**
 	 * * Query scopes
 	 */
-	public static getByPlace = scope((query, place: string) => {
-		query.where('place', place)
-	})
 
 	public static getBySubsectionId = scope((query, subsectionId: number) => {
 		query.where('subsectionId', subsectionId)
