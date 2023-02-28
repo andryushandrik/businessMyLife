@@ -21,6 +21,27 @@ export default class BalanceService {
 		}
 	}
 
+	public static async buy(userId: User['id'], description: string, price: number): Promise<void> {
+		try {
+			const user: User = await UserService.get(+userId)
+			if (user.balance - price >= 0) {
+				console.log('BALANCE IS GOOD')
+				await PaymentService.create({
+					description,
+					amount: -price,
+					userId: userId,
+					promocodeId: null,
+				})
+				await user.merge({ balance: user.balance - price }).save()
+			} else {
+				throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.NOT_ENOUGH_BALANCE_ERROR } as Err
+			}
+		} catch (err: Err | any) {
+			// throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.NOT_ENOUGH_BALANCE_ERROR } as Err
+			throw err
+		}
+	}
+
 	public static async addBalanceToUser(userId: User['id'], accrue: number): Promise<void> {
 		try {
 			const user: User = await UserService.get(+userId)
@@ -36,3 +57,4 @@ export default class BalanceService {
 		}
 	}
 }
+

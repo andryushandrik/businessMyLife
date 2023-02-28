@@ -1,3 +1,4 @@
+import AdvertisementType from 'App/Models/Ads/AdvertisementType'
 import Logger from '@ioc:Adonis/Core/Logger'
 import SubsectionService from 'App/Services/Offer/SubsectionService'
 import UserService from 'App/Services/User/UserService'
@@ -40,7 +41,7 @@ export default class AdvertisementController {
 			)
 			return await view.render('pages/ads/index', { ads })
 		} catch (err: Err | any) {
-			console.log(err)
+			Logger.error(err)
 			session.flash('error', err.message)
 			return response.redirect().back()
 		}
@@ -70,7 +71,7 @@ export default class AdvertisementController {
 			)
 			return await view.render('pages/ads/moderation', { ads })
 		} catch (err: Err | any) {
-			console.log(err)
+			Logger.error(err)
 			session.flash('error', err.message)
 			return response.redirect().back()
 		}
@@ -84,13 +85,15 @@ export default class AdvertisementController {
 
 	public async update({ request, response, session, params }: HttpContextContract) {
 		const id: Advertisement['id'] = params.id
-		const payload = await request.validate(AdvertisementValidator)
-		payload.placedAt = DateTime.now()
 		try {
+      console.log(request.body())
+			const payload = await request.validate(AdvertisementValidator)
+			payload.placedAt = DateTime.now()
 			await AdvertisementService.update(id, payload)
 			session.flash('success', ResponseMessages.SUCCESS)
 			return response.redirect().toRoute('ads.moderation')
 		} catch (err: Err | any) {
+			Logger.error(err)
 			session.flash('error', err.message)
 			return response.redirect().back()
 		}
@@ -127,11 +130,11 @@ export default class AdvertisementController {
 		try {
 			const users = await User.query()
 			const subsections: Subsection[] = await Subsection.query()
-
+			const adsTypes: AdvertisementType[] = await AdvertisementType.query()
 			const item: Advertisement = await AdvertisementService.get(id)
-
-			return view.render('pages/ads/edit', { item, users, subsections })
+			return view.render('pages/ads/edit', { item, users, subsections, adsTypes })
 		} catch (err: Err | any) {
+			Logger.error(err)
 			session.flash('error', err.message)
 			return response.redirect().back()
 		}
@@ -159,6 +162,7 @@ export default class AdvertisementController {
 			session.flash('success', ResponseMessages.SUCCESS)
 			response.redirect().toRoute('ads.index')
 		} catch (err: Err | any) {
+			Logger.error(err)
 			session.flash('error', err.message)
 			return response.redirect().back()
 		}
@@ -178,3 +182,4 @@ export default class AdvertisementController {
 		}
 	}
 }
+
