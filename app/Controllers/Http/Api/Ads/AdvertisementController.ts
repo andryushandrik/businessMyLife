@@ -37,8 +37,8 @@ export default class AdvertisementController {
 	}
 
 	public async create({ request, response }: HttpContextContract) {
+		const payload = await request.validate(AdvertisementValidator)
 		try {
-			const payload = await request.validate(AdvertisementValidator)
 			payload.userId = request.currentUserId
 			const advertisement: Advertisement = await AdvertisementService.create(payload)
 			const fullAd: Advertisement = await AdvertisementService.get(advertisement.id)
@@ -51,7 +51,7 @@ export default class AdvertisementController {
 			}
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, { fullAd }))
 		} catch (err: Err | any) {
-			Logger.error(err)
+      Logger.error(err)
 			throw new ExceptionService(err)
 		}
 	}

@@ -86,7 +86,6 @@ export default class AdvertisementController {
 	public async update({ request, response, session, params }: HttpContextContract) {
 		const id: Advertisement['id'] = params.id
 		try {
-      console.log(request.body())
 			const payload = await request.validate(AdvertisementValidator)
 			payload.placedAt = DateTime.now()
 			await AdvertisementService.update(id, payload)
