@@ -2,7 +2,7 @@ import Subsection from 'App/Models/Offer/Subsection'
 import Drive from '@ioc:Adonis/Core/Drive'
 import { beforeDelete, BelongsTo, computed, scope } from '@ioc:Adonis/Lucid/Orm'
 // * Types
-import type { DateTime } from 'luxon'
+import { DateTime } from 'luxon'
 // * Types
 
 import { BaseModel, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
@@ -16,11 +16,12 @@ export default class Advertisement extends BaseModel {
 		'image',
 		'paymentStatus',
 		'subsectionId',
-		'place',
+    'link',
+		'adsTypeId',
 		'userId',
 		'description',
 		'placedAt',
-		'placedUntill',
+		'placedForMonths',
 		'isVerified',
 		'viewsCount',
 		'createdAt',
@@ -46,6 +47,9 @@ export default class Advertisement extends BaseModel {
 	@column()
 	public description: string
 
+  @column()
+	public link: string
+
 	@column({ columnName: 'payment_status' })
 	public paymentStatus: string
 
@@ -61,8 +65,8 @@ export default class Advertisement extends BaseModel {
 	@column.dateTime({ autoCreate: true, columnName: 'placed_at' })
 	public placedAt: DateTime
 
-	@column.dateTime({ columnName: 'placed_untill' })
-	public placedUntill: DateTime
+	@column({ columnName: 'placedForMonths' })
+	public placedForMonths: number
 
 	@column.dateTime({ autoCreate: true, columnName: 'created_at' })
 	public createdAt: DateTime
@@ -82,6 +86,14 @@ export default class Advertisement extends BaseModel {
 	/**
 	 * * Computed properties
 	 */
+	@computed()
+	public get placedUntill(): string {
+		const expireDate: DateTime = this.placedAt.plus({ months: this.placedForMonths })
+		//  const archiveExpireInDays: number = expireDate.diff(DateTime.now(), 'days').days
+		//  const archiveExpireInDaysWithoutFraction: number = Math.floor(archiveExpireInDays)
+
+		return `${expireDate.setLocale('ru-RU').toFormat('dd MMMM, yyyy ')}`
+	}
 
 	@computed()
 	public get placedAtForUser(): string {
@@ -90,12 +102,14 @@ export default class Advertisement extends BaseModel {
 
 	@computed()
 	public get placedUntillForUser(): string {
-		return this.placedUntill ? this.placedUntill.setLocale('ru-RU').toFormat(GLOBAL_DATETIME_FORMAT) : ''
+		const expireDate: DateTime = this.placedAt.plus({ months: this.placedForMonths })
+		return this.placedUntill ? expireDate.setLocale('ru-RU').toFormat(GLOBAL_DATETIME_FORMAT) : ''
 	}
 
 	@computed()
 	public get placedUntillForPicker(): string {
-		return this.placedUntill ? this.placedUntill.toFormat('dd MMMM, yyyy') : ''
+		const expireDate: DateTime = this.placedAt.plus({ months: this.placedForMonths })
+		return this.placedUntill ? expireDate.toFormat('dd MMMM, yyyy') : ''
 	}
 
 	/**
@@ -119,3 +133,4 @@ export default class Advertisement extends BaseModel {
 		if (item.image) await Drive.delete(item.image)
 	}
 }
+

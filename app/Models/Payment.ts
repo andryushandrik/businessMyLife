@@ -24,7 +24,7 @@ export default class Payment extends BaseModel {
 	public userId: User['id']
 
 	@column({ columnName: 'promocode_id' })
-	public promoCodeId?: PromoCode['id'] | null
+	public promocodeId?: PromoCode['id'] | null
 
 	@column()
 	public amount: number

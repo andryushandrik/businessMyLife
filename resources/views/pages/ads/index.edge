@@ -27,6 +27,8 @@
 
                 <th><strong>Фото </strong></th>
                 <th><strong>Тема</strong></th>
+                <th><strong>Ссылка</strong></th>
+
                 <th><strong>Место размещения</strong></th>
 
 
@@ -50,7 +52,9 @@
                   <td><img src="{{ getMedia(item.image) }}" alt="" class="banner_cover_img" style="max-width: 100%"/></td>
 
                   <td>{{ item.subsection?.name }}</td>
-                  <td>{{ item.place }}</td>
+                  <td>{{ item.link }}</td>
+
+                  <td>{{ item.adsType.place }}</td>
 
                   <td>{{ item.placedAtForUser }}</td>
                   <td>{{ item.placedUntillForUser }}</td>

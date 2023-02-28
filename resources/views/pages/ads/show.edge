@@ -56,6 +56,11 @@
             </div>
 
             <div class="form-group">
+              <label class="mb-1"><strong>Ссылка</strong></label>
+              <input type="text" name="link" class="form-control" value="{{item.link}}" disabled >
+            </div>
+
+            <div class="form-group">
               <label class="mb-1">Размещено до</label>
               <input class="datepicker-default form-control" name="placedUntill" value="{{ flashMessages.get('placedUntill') ?? item.placedUntillForPicker }}" disabled>
             </div>

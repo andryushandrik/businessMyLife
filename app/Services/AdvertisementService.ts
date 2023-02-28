@@ -15,7 +15,7 @@ import AdvertisementValidator from 'App/Validators/Ads/AdvertisementValidator'
 import { ADVERTISEMENT_FOLDER_PATH } from 'Config/drive'
 
 export default class AdvertisementService {
-	public static async create(payload: AdvertisementValidator['schema']['props']): Promise<void> {
+	public static async create(payload: AdvertisementValidator['schema']['props']): Promise<Advertisement> {
 		let ad: Advertisement
 		const trx: TransactionClientContract = await Database.transaction()
 		try {
@@ -38,6 +38,7 @@ export default class AdvertisementService {
 			}
 		}
 		await trx.commit()
+    return ad
 	}
 
 	public static async paginate(
@@ -168,7 +169,7 @@ export default class AdvertisementService {
 		let item: Advertisement | null
 
 		try {
-			item = await Advertisement.query().where('id', id).preload('owner').preload('subsection').first()
+			item = await Advertisement.query().where('id', id).preload('owner').preload('subsection').preload('adsType').first()
 		} catch (err: any) {
 			Logger.error(err)
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err

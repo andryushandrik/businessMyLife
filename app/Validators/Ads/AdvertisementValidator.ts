@@ -1,12 +1,12 @@
 // * Types
-import type { CustomMessages } from '@ioc:Adonis/Core/Validator'
+import { CustomMessages, rules } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 // * Types
 
 import IndexValidator from '../IndexValidator'
 import { schema } from '@ioc:Adonis/Core/Validator'
 import { getUserIdRules } from '../Rules/User/user'
-import { getAdsDescriptionRules, getAdsFileOptions, getAdvertisementPlacedUntilValidator } from '../Rules/ads'
+import { getAdsDescriptionRules, getAdsFileOptions, getAdvertisementPlacedUntilValidator, getAdvertisementTypesRules } from '../Rules/Ads/ads'
 import { getSubsectionIdRules } from '../Rules/Offer/subsection'
 
 export default class AdvertisementValidator extends IndexValidator {
@@ -18,18 +18,18 @@ export default class AdvertisementValidator extends IndexValidator {
 		description: schema.string({ trim: true }, getAdsDescriptionRules()),
 		paymentStatus: schema.string({ trim: true }),
 		userId: schema.number(getUserIdRules()),
-		place: schema.enum(['offer', 'category']),
+		adsTypeId: schema.number(getAdvertisementTypesRules()),
 		subsectionId: schema.number(getSubsectionIdRules()),
-		placedUntill: schema.date({ format: 'dd MMMM, yyyy' }, getAdvertisementPlacedUntilValidator()),
-
+    link: schema.string(),
 		/**
-		 * * Optional fields
+     * * Optional fields
 		 */
+    placedForMonths: schema.number([rules.unsigned(), rules.range(3, 6)]),
 		placedAt: schema.date.optional({ format: 'dd MMMM, yyyy' }),
 		image: schema.file.optional(getAdsFileOptions()),
-
 		isVerified: schema.boolean.optional(),
 		viewsCount: schema.number.optional(),
+
 	})
 
 	public messages: CustomMessages = this.messages
