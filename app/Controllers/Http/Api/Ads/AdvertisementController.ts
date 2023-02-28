@@ -51,9 +51,8 @@ export default class AdvertisementController {
 			}
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, { fullAd }))
 		} catch (err: Err | any) {
-      Logger.error(err)
+			Logger.error(err)
 			throw new ExceptionService(err)
 		}
 	}
 }
-

@@ -16,7 +16,7 @@ export default class Advertisement extends BaseModel {
 		'image',
 		'paymentStatus',
 		'subsectionId',
-    'link',
+		'link',
 		'adsTypeId',
 		'userId',
 		'description',
@@ -47,7 +47,7 @@ export default class Advertisement extends BaseModel {
 	@column()
 	public description: string
 
-  @column()
+	@column()
 	public link: string
 
 	@column({ columnName: 'payment_status' })
@@ -133,4 +133,3 @@ export default class Advertisement extends BaseModel {
 		if (item.image) await Drive.delete(item.image)
 	}
 }
-

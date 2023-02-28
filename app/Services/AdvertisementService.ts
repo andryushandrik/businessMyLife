@@ -38,7 +38,7 @@ export default class AdvertisementService {
 			}
 		}
 		await trx.commit()
-    return ad
+		return ad
 	}
 
 	public static async paginate(

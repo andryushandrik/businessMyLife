@@ -30,6 +30,6 @@ export enum ResponseMessages {
 	VALIDATION_ERROR = 'Заполните пожалуйста все поля правильно!',
 	TOKEN_ERROR = 'Токен верификации пользователя не найден или просрочен!',
 	MISS_AUTH_HEADERS = 'Не найдены необходимые заголовки для авторизации!',
-  NOT_ENOUGH_BALANCE_ERROR = 'Не хватает средств!',
+	NOT_ENOUGH_BALANCE_ERROR = 'Не хватает средств!',
 	SOCKET_USER_ID_UNDEFINED = 'ID пользователя при соединении не определен!',
 }
