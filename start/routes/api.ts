@@ -192,9 +192,9 @@ Route.group(() => {
 		.middleware('CheckAccessToken')
 
 	Route.group(() => {
+		Route.post('/portions', 'Api/Ads/AdvertisementController.showAdsByPortions')
 		Route.get('/', 'Api/Ads/AdvertisementController.show')
 		Route.get('/types', 'Api/Ads/AdvertisementTypesController.show')
-
 		Route.post('/', 'Api/Ads/AdvertisementController.create').middleware('CheckAccessToken')
 	}).prefix('ads')
 
@@ -208,3 +208,4 @@ Route.group(() => {
 		.prefix('conversation')
 		.middleware('CheckAccessToken')
 }).prefix('api')
+
