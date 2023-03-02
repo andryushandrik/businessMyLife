@@ -23,9 +23,9 @@
               <tr>
                 <th class="width80"><strong>#</strong></th>
                 <th ><strong>Название</strong></th>
-
-
+                <th><strong>Показывается на сайте?</strong></th>
                 <th><strong>Изображение</strong></th>
+
 
               </tr>
             </thead>
@@ -35,6 +35,13 @@
                 <tr>
                   <td><strong>{{ item.id }}</strong></td>
                   <td>{{ item.name }}</td>
+                  @if(item.isVisible)
+                  <td style="color:green"> Да </td>
+                  @else
+                  <td style="color:darkred"> Нет</td>
+
+                  @endif
+
 
                   <td><img src="{{ getMedia(item.image) }}" alt="" class="" style="max-width: 100%"/></td>
 
