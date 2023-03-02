@@ -1,3 +1,4 @@
+import Database from '@ioc:Adonis/Lucid/Database'
 import Logger from '@ioc:Adonis/Core/Logger'
 import BalanceService from 'App/Services/BalanceService'
 import Advertisement from 'App/Models/Ads/Advertisement'
@@ -13,7 +14,8 @@ import AdvertisementService from 'App/Services/AdvertisementService'
 import AdvertisementValidator from 'App/Validators/Ads/AdvertisementValidator'
 import { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import AdvertisementFilterValidator from 'App/Validators/Ads/AdvertisementFilterValidator'
-
+import AdvertisementPortionsValidator from 'App/Validators/Ads/AdvertisementPortionsValidator'
+let pageForUsersAds: number = 1
 export default class AdvertisementController {
 	public async show({ request, response }: HttpContextContract) {
 		let payload: AdvertisementFilterValidator['schema']['props']
@@ -31,6 +33,23 @@ export default class AdvertisementController {
 		try {
 			const ads: ModelPaginatorContract<Advertisement> = await AdvertisementService.paginate(payload, payload)
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, ads))
+		} catch (err: Err | any) {
+			throw new ExceptionService(err)
+		}
+	}
+
+	public async showAdsByPortions({ request, response }: HttpContextContract) {
+		let payload: AdvertisementPortionsValidator['schema']['props']
+
+		payload = await request.validate(AdvertisementPortionsValidator)
+		try {
+			const { rows: countRows } = await Database.rawQuery(`SELECT COUNT(*) FROM advertisements WHERE ads_type_id = ${payload.adsTypeId}`)
+			const countOfRows: number = countRows[0].count
+			let offset = ((pageForUsersAds - 1) * 2) % countOfRows
+			console.log(`Offset ${offset}, pageForUsers ${pageForUsersAds}, countOfRows ${countOfRows}`)
+			const { rows } = await Database.rawQuery(`SELECT * FROM advertisements  WHERE ads_type_id = ${payload.adsTypeId} LIMIT ${payload.limit} OFFSET ${offset}`)
+			pageForUsersAds += 1
+			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, rows))
 		} catch (err: Err | any) {
 			throw new ExceptionService(err)
 		}
@@ -61,3 +80,4 @@ export default class AdvertisementController {
 		}
 	}
 }
+
