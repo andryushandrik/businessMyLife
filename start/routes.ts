@@ -12,6 +12,7 @@ Route.group(() => {
 	Route.post('/banners/updateBannersDelay', 'BannersController.updateBannersDelay').as('banners.updateBannersDelay')
 
 	Route.resource('/ads', 'AdvertisementController').except(['show'])
+	Route.get('/ads/my', 'AdvertisementController.getMyAds').as('ads.my')
 	Route.get('/ads/moderation', 'AdvertisementController.moderation').as('ads.moderation')
 	Route.get('/ads/show/:id', 'AdvertisementController.show').as('ads.show')
 	Route.patch('/ads/verify/:id', 'AdvertisementController.verify').as('ads.verify')

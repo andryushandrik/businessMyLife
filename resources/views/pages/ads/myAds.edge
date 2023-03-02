@@ -1,6 +1,6 @@
 @layout('layouts/index')
 
-@set('title', 'Модерация')
+@set('title', 'Опубликованные')
 
 @section('styles')
   <link href="/css/ads.css" rel="stylesheet">
@@ -11,6 +11,8 @@
     <div class="card">
       <div class="card-header">
         <h4 class="card-title">{{ title }}</h4>
+
+        <a href="{{ route('ads.create') }}" class="btn btn-primary btn-sm">Создать</a>
       </div>
 
       <div class="card-body">
@@ -20,19 +22,13 @@
             <thead>
               <tr>
                 <th class="width80"><strong>#</strong></th>
-                <th class="width80"><strong>Пользователь</strong></th>
-
-
                 <th><strong>Фото </strong></th>
                 <th><strong>Тема</strong></th>
+                <th><strong>Ссылка</strong></th>
+
                 <th><strong>Место размещения</strong></th>
-
-
                 <th><strong>Дата размещения</strong></th>
-
-
                 <th><strong>Действует до</strong></th>
-                <th><strong>Статус оплаты</strong></th>
                 <th><strong>Действия</strong></th>
 
 
@@ -43,16 +39,15 @@
               @each(item in ads)
                 <tr>
                   <td><strong>{{ item.id }}</strong></td>
-                  <td>{{ item?.owner?.firstName }} {{ item?.owner?.lastName }} </td>
-
                   <td><img src="{{ getMedia(item.image) }}" alt="" class="banner_cover_img" style="max-width: 100%"/></td>
 
                   <td>{{ item.subsection?.name }}</td>
+                  <td>{{ item.link }}</td>
+
                   <td>{{ item.adsType.place }}</td>
 
                   <td>{{ item.placedAtForUser }}</td>
                   <td>{{ item.placedUntillForUser }}</td>
-                  <td>{{ item.paymentStatus }}</td>
 
 
                   <td>
@@ -69,7 +64,13 @@
                         </svg>
                       </button>
                       <div class="dropdown-menu" style="">
+                        <a class="dropdown-item" href="{{ route('ads.edit', { id: item.id }) }}">Редактировать</a>
                         <a class="dropdown-item" href="{{ route('ads.show', { id: item.id }) }}">Просмотреть</a>
+                        <form action="{{ route('ads.destroy', { id: item.id }, { qs: { _method: 'DELETE' } }) }}" method="POST">
+                          <button type="submit" class="dropdown-item">Удалить</button>
+
+                          {{ csrfField() }}
+                        </form>
                       </div>
                     </div>
                   </td>

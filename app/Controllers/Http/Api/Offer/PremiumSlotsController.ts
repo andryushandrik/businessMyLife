@@ -1,7 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import PremiumSlot from 'App/Models/Offer/PremiumSlot'
-import BalanceService from 'App/Services/BalanceService'
 import ExceptionService from 'App/Services/ExceptionService'
 import PremiumSlotService from 'App/Services/PremiumSlotService'
 import ResponseService from 'App/Services/ResponseService'
