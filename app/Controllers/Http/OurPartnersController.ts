@@ -62,7 +62,7 @@ export default class OurPartnersController {
 	public async update({ request, response, session, params }: HttpContextContract) {
 		const id: OurPartner['id'] = params.id
 		const payload = await request.validate(OurPartnersValidator)
-
+    payload.isVisible = payload.isVisible ? true : false
 		try {
 			await OurPartnersService.update(id, payload)
 
