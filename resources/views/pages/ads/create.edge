@@ -107,8 +107,8 @@
             <div class="form-group">
               <label class="mb-1"> Длительность размещения *</label>
               <select class="form-control" name="placedForMonths">
-                  <option {{ item.placedForMonths == 3 ? 'selected' : '' }} value="3" >3 месяца</option>
-                  <option {{ item.placedForMonths == 6 ? 'selected' : '' }} value="3" >6 месяцев</option>
+                  <option  value="3" >3 месяца</option>
+                  <option  value="3" >6 месяцев</option>
               </select>
 
               @if(flashMessages.has('errors.placedForMonths'))
@@ -119,8 +119,8 @@
             </div>
 
             <div class="form-group">
-              <label class="mb-1">Статус оплаты </label>
-              <input class="form-control" name="paymentStatus" value="{{ flashMessages.get('paymentStatus') ?? '' }}">
+              {{--  <label class="mb-1">Статус оплаты </label>  --}}
+              <input class="form-control" name="paymentStatus" value="{{ flashMessages.get('paymentStatus') ?? Success }}" hidden>
 
               @if(flashMessages.has('errors.paymentStatus'))
                 <div class="invalid-feedback d-block">

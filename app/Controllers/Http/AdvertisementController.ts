@@ -87,7 +87,6 @@ export default class AdvertisementController {
 		const id: Advertisement['id'] = params.id
 		try {
 			const payload = await request.validate(AdvertisementValidator)
-			payload.placedAt = DateTime.now()
 			await AdvertisementService.update(id, payload)
 			session.flash('success', ResponseMessages.SUCCESS)
 			return response.redirect().toRoute('ads.moderation')
@@ -155,9 +154,7 @@ export default class AdvertisementController {
 	public async store({ request, response, session }: HttpContextContract) {
 		const payload = await request.validate(AdvertisementValidator)
 		try {
-			payload.placedAt = DateTime.now()
 			await AdvertisementService.create(payload)
-
 			session.flash('success', ResponseMessages.SUCCESS)
 			response.redirect().toRoute('ads.index')
 		} catch (err: Err | any) {
