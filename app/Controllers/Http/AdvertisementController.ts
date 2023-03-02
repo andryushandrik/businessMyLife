@@ -1,9 +1,9 @@
+import { PaymentStatuses } from './../../../config/payment'
 import AdvertisementType from 'App/Models/Ads/AdvertisementType'
 import Logger from '@ioc:Adonis/Core/Logger'
 import SubsectionService from 'App/Services/Offer/SubsectionService'
 import UserService from 'App/Services/User/UserService'
 import Subsection from 'App/Models/Offer/Subsection'
-import AdvertisementValidator from 'App/Validators/Ads/AdvertisementValidator'
 import AdvertisementService from 'App/Services/AdvertisementService'
 import Advertisement from 'App/Models/Ads/Advertisement'
 // * Types
@@ -12,8 +12,9 @@ import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 // * Types
 
-import { ResponseMessages } from 'Config/response'
+import { ResponseCodes, ResponseMessages } from 'Config/response'
 import User from 'App/Models/User/User'
+import MyAdvertisementValidator from 'App/Validators/Ads/MyAdvertisementValidator'
 
 export default class AdvertisementController {
 	public async index({ view, request, response, session, route }: HttpContextContract) {
@@ -31,11 +32,7 @@ export default class AdvertisementController {
 				{
 					page,
 					isVerified: true,
-					place: undefined,
-					subsectionId: undefined,
 					limit,
-					orderBy: undefined,
-					orderByColumn: undefined,
 				},
 			)
 			return await view.render('pages/ads/index', { ads })
@@ -61,11 +58,7 @@ export default class AdvertisementController {
 				{
 					page,
 					isVerified: false,
-					place: undefined,
-					subsectionId: undefined,
 					limit,
-					orderBy: undefined,
-					orderByColumn: undefined,
 				},
 			)
 			return await view.render('pages/ads/moderation', { ads })
@@ -76,19 +69,56 @@ export default class AdvertisementController {
 		}
 	}
 
-	public async create({ view }: HttpContextContract) {
-		const users: User[] = await User.query()
-		const subsections: Subsection[] = await Subsection.query()
-		return await view.render('pages/ads/create', { users, subsections })
+	public async getMyAds({ view, request, response, session, route }: HttpContextContract) {
+		const baseUrl: string = route!.pattern
+		const page: number = request.input('page', 1)
+		const limit: number = request.input('limit', 5)
+
+		try {
+			const ads: ModelPaginatorContract<Advertisement> = await AdvertisementService.paginate(
+				{
+					page,
+					limit,
+					baseUrl,
+				},
+				{
+					page,
+					isVerified: true,
+					limit,
+					userId: request.currentUserId,
+				},
+			)
+			return await view.render('pages/ads/myAds', { ads })
+		} catch (err: Err | any) {
+			Logger.error(err)
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
+
+	public async create({ view, session, response }: HttpContextContract) {
+		try {
+			const subsections: Subsection[] = await Subsection.query()
+			const adsTypes: AdvertisementType[] = await AdvertisementType.query()
+			return await view.render('pages/ads/create', { subsections, adsTypes })
+		} catch (error) {
+			Logger.error(error)
+			session.flash('error', error.message)
+			return response.redirect().back()
+		}
 	}
 
 	public async update({ request, response, session, params }: HttpContextContract) {
 		const id: Advertisement['id'] = params.id
 		try {
-			const payload = await request.validate(AdvertisementValidator)
+			const item = await AdvertisementService.get(id)
+			if (item.userId !== request.currentUserId) {
+				throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.FORBIDDEN } as Err
+			}
+			const payload = await request.validate(MyAdvertisementValidator)
 			await AdvertisementService.update(id, payload)
 			session.flash('success', ResponseMessages.SUCCESS)
-			return response.redirect().toRoute('ads.moderation')
+			return response.redirect().toRoute('ads.my')
 		} catch (err: Err | any) {
 			Logger.error(err)
 			session.flash('error', err.message)
@@ -122,13 +152,16 @@ export default class AdvertisementController {
 		}
 	}
 
-	public async edit({ view, params, response, session }: HttpContextContract) {
+	public async edit({ view, params, response, session, request }: HttpContextContract) {
 		const id: Advertisement['id'] = params.id
 		try {
+			const item: Advertisement = await AdvertisementService.get(id)
+			if (item.userId !== request.currentUserId) {
+				throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.FORBIDDEN } as Err
+			}
 			const users = await User.query()
 			const subsections: Subsection[] = await Subsection.query()
 			const adsTypes: AdvertisementType[] = await AdvertisementType.query()
-			const item: Advertisement = await AdvertisementService.get(id)
 			return view.render('pages/ads/edit', { item, users, subsections, adsTypes })
 		} catch (err: Err | any) {
 			Logger.error(err)
@@ -151,11 +184,11 @@ export default class AdvertisementController {
 	}
 
 	public async store({ request, response, session }: HttpContextContract) {
-		const payload = await request.validate(AdvertisementValidator)
+    const payload = await request.validate(MyAdvertisementValidator)
 		try {
-			await AdvertisementService.create(payload)
+			await AdvertisementService.create({ ...payload, userId: request.currentUserId, paymentStatus: PaymentStatuses.SUCCESS, isVerified: true })
 			session.flash('success', ResponseMessages.SUCCESS)
-			response.redirect().toRoute('ads.index')
+			response.redirect().toRoute('ads.my')
 		} catch (err: Err | any) {
 			Logger.error(err)
 			session.flash('error', err.message)
@@ -177,3 +210,4 @@ export default class AdvertisementController {
 		}
 	}
 }
+

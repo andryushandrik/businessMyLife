@@ -124,6 +124,10 @@ export default class Advertisement extends BaseModel {
 		query.where('isVerified', isVerified)
 	})
 
+  public static getByUserId = scope((query, userId: number) => {
+		query.where('userId', userId)
+	})
+
 	/**
 	 * * Hooks
 	 */

@@ -26,6 +26,9 @@ export default class PremiumFranchise extends BaseModel {
 	@column({ columnName: 'offer_id' })
 	public offerId: Offer['id']
 
+  @column({ columnName: 'paymentStatus' })
+	public paymentStatus: string
+
 	/**
 	 * * Timestamps
 	 */

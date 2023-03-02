@@ -44,7 +44,7 @@ export default class AdvertisementService {
 
 	public static async paginate(
 		config: PaginateConfig<Advertisement>,
-		filter?: AdvertisementFilterValidator['schema']['props'],
+		filter?: Partial<AdvertisementFilterValidator['schema']['props']>,
 	): Promise<ModelPaginatorContract<Advertisement>> {
 		try {
 			let query: ModelQueryBuilderContract<typeof Advertisement> = Advertisement.query()
@@ -76,7 +76,7 @@ export default class AdvertisementService {
 		}
 	}
 
-	public static async update(id: Advertisement['id'], payload: AdvertisementValidator['schema']['props']): Promise<void> {
+	public static async update(id: Advertisement['id'], payload: Partial<AdvertisementValidator['schema']['props']>): Promise<void> {
 		let ad: Advertisement
 		const trx: TransactionClientContract = await Database.transaction()
 
@@ -219,7 +219,7 @@ export default class AdvertisementService {
 	}
 	private static filter(
 		query: ModelQueryBuilderContract<typeof Advertisement>,
-		payload: AdvertisementFilterValidator['schema']['props'],
+		payload: Partial<AdvertisementFilterValidator['schema']['props']>,
 	): ModelQueryBuilderContract<typeof Advertisement> {
 		for (const key in payload) {
 			if (payload[key] !== undefined) {
@@ -244,6 +244,10 @@ export default class AdvertisementService {
 							query.where('place', payload[key]!)
 						})
 						break
+          case 'userId':
+            query = query.withScopes((scopes) => scopes.getByUserId(payload[key]!))
+
+            break
 					default:
 						break
 				}

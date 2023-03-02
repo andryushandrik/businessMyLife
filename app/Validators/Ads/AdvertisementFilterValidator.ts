@@ -6,6 +6,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import ApiValidator from '../ApiValidator'
 import { schema } from '@ioc:Adonis/Core/Validator'
 import { getSubsectionIdRules } from '../Rules/Offer/subsection'
+import { getUserIdRules } from '../Rules/User/user'
 
 export default class AdvertisementFilterValidator extends ApiValidator {
 	constructor(protected ctx: HttpContextContract) {
@@ -40,6 +41,7 @@ export default class AdvertisementFilterValidator extends ApiValidator {
 		isVerified: schema.boolean.optional(),
 		place: schema.string.optional({ trim: true }),
 		subsectionId: schema.number.optional(getSubsectionIdRules()),
+    userId: schema.number.optional(getUserIdRules())
 	})
 
 	/**

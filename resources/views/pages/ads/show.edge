@@ -40,8 +40,8 @@
             </div>
 
             <div class="form-group">
-              <label class="mb-1"> Изображение</label>
-              <input type="file" class="form-control" name="image" value="{{ flashMessages.get('image') ?? item.image  }}" disabled>
+              <label class="mb-1"><strong> Изображение </strong></label>
+              <img src="{{ getMedia(item.image) }}" alt=""  style="max-width: 100%"/>
             </div>
 
 

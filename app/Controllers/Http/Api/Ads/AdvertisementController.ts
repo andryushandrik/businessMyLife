@@ -15,6 +15,7 @@ import AdvertisementValidator from 'App/Validators/Ads/AdvertisementValidator'
 import { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import AdvertisementFilterValidator from 'App/Validators/Ads/AdvertisementFilterValidator'
 import AdvertisementPortionsValidator from 'App/Validators/Ads/AdvertisementPortionsValidator'
+import { PaymentStatuses } from 'Config/payment'
 let pageForUsersAds: number = 1
 export default class AdvertisementController {
 	public async show({ request, response }: HttpContextContract) {
@@ -65,7 +66,7 @@ export default class AdvertisementController {
 	public async create({ request, response }: HttpContextContract) {
 		const payload = await request.validate(AdvertisementValidator)
 		try {
-			payload.paymentStatus = 'Pending'
+			payload.paymentStatus = PaymentStatuses.PENDING
 			payload.userId = request.currentUserId
 			const advertisement: Advertisement = await AdvertisementService.create(payload)
 			const fullAd: Advertisement = await AdvertisementService.get(advertisement.id)
@@ -73,12 +74,12 @@ export default class AdvertisementController {
 				const price = fullAd.adsType.priceThreeMonths
 				const paymentDescription = `Пользователь ${request.currentUserId} купил рекламу ${fullAd.id} за ${price} `
 				await BalanceService.buy(request.currentUserId, paymentDescription, price)
-				await AdvertisementService.changePaymentStatus(fullAd.id, 'Sucess')
+				await AdvertisementService.changePaymentStatus(fullAd.id, PaymentStatuses.SUCCESS)
 			} else if (payload.placedForMonths == 6) {
 				const price = fullAd.adsType.priceSixMonths
 				const paymentDescription = `Пользователь ${request.currentUserId} купил рекламу ${fullAd.id} за ${price}`
 				await BalanceService.buy(request.currentUserId, paymentDescription, price)
-				await AdvertisementService.changePaymentStatus(fullAd.id, 'Success')
+				await AdvertisementService.changePaymentStatus(fullAd.id, PaymentStatuses.SUCCESS)
 			}
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, { fullAd }))
 		} catch (err: Err | any) {

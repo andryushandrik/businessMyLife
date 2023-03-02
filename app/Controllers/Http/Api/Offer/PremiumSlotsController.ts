@@ -48,8 +48,7 @@ export default class PremiumSlotsController {
 		let payload: EmployeeSlotValidator['schema']['props']
 		try {
 			payload = await request.validate(EmployeeSlotValidator)
-
-			await PremiumSlotService.employee(payload)
+			await PremiumSlotService.employee(request.currentUserId, payload)
 
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS))
 		} catch (err: Err | any) {

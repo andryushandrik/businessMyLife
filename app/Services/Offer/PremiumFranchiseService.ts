@@ -55,7 +55,7 @@ export default class PremiumFranchiseService {
 		}
 	}
 
-	public static async update(id: PremiumFranchise['id'], payload: PremiumFranchiseValidator['schema']['props']): Promise<void> {
+	public static async update(id: PremiumFranchise['id'], payload: Partial<PremiumFranchiseValidator['schema']['props']>): Promise<void> {
 		let item: PremiumFranchise
 
 		try {
