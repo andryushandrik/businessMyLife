@@ -34,6 +34,7 @@ export default class PremiumFranchiseValidator extends IndexValidator {
 	 */
 	public schema = schema.create({
 		offerId: schema.number(getOfferIdRules(TABLES_NAMES.OFFERS, true)),
+    paymentStatus: schema.string.optional()
 	})
 
 	/**

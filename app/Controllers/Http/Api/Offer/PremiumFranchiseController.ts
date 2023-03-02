@@ -8,6 +8,8 @@ import ResponseService from 'App/Services/ResponseService'
 import ApiValidator from 'App/Validators/ApiValidator'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 import { Err } from 'Contracts/response'
+import BalanceService from 'App/Services/BalanceService'
+import { PaymentStatuses } from 'Config/payment'
 
 export default class PremiumFranchiseController {
 	public async paginate({ request, response }: HttpContextContract) {
@@ -36,6 +38,7 @@ export default class PremiumFranchiseController {
 
 		try {
 			payload = await request.validate(PremiumFranchiseValidator)
+      payload.paymentStatus = PaymentStatuses.PENDING
 		} catch (err: Err | any) {
 			throw new ExceptionService({
 				code: ResponseCodes.VALIDATION_ERROR,
@@ -45,8 +48,10 @@ export default class PremiumFranchiseController {
 		}
 
 		try {
-			const item = await PremiumFranchise.create(payload)
-			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, item))
+      const premiumFranchise = await PremiumFranchise.create(payload)
+      const paymentDescription = `Пользователь ${request.currentUserId} купил премиальное размещение франшизы ${ payload.offerId}. ID премиальной франшизы ${premiumFranchise.id} `
+      await BalanceService.buy(request.currentUserId, paymentDescription, 0)
+			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, premiumFranchise))
 		} catch (err: Err | any) {
 			console.log(err)
 			throw new ExceptionService(err)

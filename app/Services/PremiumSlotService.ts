@@ -1,3 +1,5 @@
+import { PaymentStatuses } from './../../config/payment';
+import User  from 'App/Models/User/User';
 import PremiumFranchise from 'App/Models/Offer/PremiumFranchise'
 import Logger from '@ioc:Adonis/Core/Logger'
 import { ModelPaginatorContract, ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
@@ -9,6 +11,7 @@ import { ResponseCodes, ResponseMessages } from 'Config/response'
 import { Err } from 'Contracts/response'
 import { PaginateConfig } from 'Contracts/services'
 import PremiumFranchiseService from './Offer/PremiumFranchiseService'
+import BalanceService from './BalanceService'
 
 export default class PremiumSlotService {
 	public static async paginate(
@@ -43,7 +46,7 @@ export default class PremiumSlotService {
 		return item
 	}
 
-	public static async employee(payload: EmployeeSlotValidator['schema']['props']): Promise<void> {
+	public static async employee(currentUserId: User['id'], payload: EmployeeSlotValidator['schema']['props']): Promise<void> {
 		try {
 			const premiumFranchise: PremiumFranchise = await PremiumFranchiseService.get(payload.premiumFranchiseId)
 			const premiumSlot: PremiumSlot = await PremiumSlotService.get(payload.premiumSlotId)
@@ -51,12 +54,22 @@ export default class PremiumSlotService {
 				throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.FORBIDDEN } as Err
 			}
 			const employedUntill = premiumFranchise.offer.createdAt.plus({ months: premiumFranchise.offer.placedForMonths })
+      let price = 1000
+      if(premiumFranchise.offer.placedForMonths == 3){
+        price = premiumSlot.priceThreeMonths
+      } else if(premiumFranchise.offer.placedForMonths == 6){
+        price = premiumSlot.priceSixMonths
+      }
+      const paymentDescription = `Пользователь ${currentUserId}  для премиальной франшизы ${ payload.premiumFranchiseId} купил размещение на слоте ${premiumSlot} на ${premiumFranchise.offer.placedForMonths} месяцев за ${price}`
+      await BalanceService.buy(currentUserId, paymentDescription, price)
+
 			this.update(payload.premiumSlotId, {
 				...premiumSlot,
 				franchiseId: premiumFranchise.id,
 				employedAt: premiumFranchise.offer.createdAt,
 				employedUntill: employedUntill,
 			})
+      await PremiumFranchiseService.update(premiumFranchise.id, {paymentStatus: PaymentStatuses.SUCCESS})
 		} catch (err: any) {
 			Logger.error(err)
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
