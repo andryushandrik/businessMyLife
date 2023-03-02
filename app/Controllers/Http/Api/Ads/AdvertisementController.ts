@@ -1,4 +1,3 @@
-import AdvertisementType from 'App/Models/Ads/AdvertisementType'
 import Logger from '@ioc:Adonis/Core/Logger'
 import BalanceService from 'App/Services/BalanceService'
 import Advertisement from 'App/Models/Ads/Advertisement'
@@ -62,4 +61,3 @@ export default class AdvertisementController {
 		}
 	}
 }
-

@@ -125,7 +125,7 @@ export default class AdvertisementService {
 			throw err
 		}
 		try {
-			await ad.merge({ isVerified: true}).save()
+			await ad.merge({ isVerified: true }).save()
 		} catch (err: any) {
 			trx.rollback()
 			Logger.error(err)
@@ -134,7 +134,7 @@ export default class AdvertisementService {
 		await trx.commit()
 	}
 
-  public static async changePaymentStatus(id: Advertisement['id'], paymentStatus: string): Promise<void> {
+	public static async changePaymentStatus(id: Advertisement['id'], paymentStatus: string): Promise<void> {
 		let ad: Advertisement
 		const trx: TransactionClientContract = await Database.transaction()
 
@@ -253,4 +253,3 @@ export default class AdvertisementService {
 		return query
 	}
 }
-
