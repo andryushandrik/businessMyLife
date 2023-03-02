@@ -1,3 +1,4 @@
+import AdvertisementType from 'App/Models/Ads/AdvertisementType'
 import Logger from '@ioc:Adonis/Core/Logger'
 import BalanceService from 'App/Services/BalanceService'
 import Advertisement from 'App/Models/Ads/Advertisement'
@@ -39,15 +40,20 @@ export default class AdvertisementController {
 	public async create({ request, response }: HttpContextContract) {
 		const payload = await request.validate(AdvertisementValidator)
 		try {
+			payload.paymentStatus = 'Pending'
 			payload.userId = request.currentUserId
 			const advertisement: Advertisement = await AdvertisementService.create(payload)
 			const fullAd: Advertisement = await AdvertisementService.get(advertisement.id)
 			if (payload.placedForMonths == 3) {
-				const paymentDescription = `Пользователь купил рекламу ${fullAd.id} за ${fullAd.adsType.priceThreeMonths} `
-				await BalanceService.buy(request.currentUserId, paymentDescription, fullAd.adsType.priceThreeMonths)
+				const price = fullAd.adsType.priceThreeMonths
+				const paymentDescription = `Пользователь ${request.currentUserId} купил рекламу ${fullAd.id} за ${price} `
+				await BalanceService.buy(request.currentUserId, paymentDescription, price)
+				await AdvertisementService.changePaymentStatus(fullAd.id, 'Sucess')
 			} else if (payload.placedForMonths == 6) {
-				const paymentDescription = `Пользователь купил рекламу ${fullAd.id} за ${fullAd.adsType.priceSixMonths}`
-				await BalanceService.buy(request.currentUserId, paymentDescription, fullAd.adsType.priceSixMonths)
+				const price = fullAd.adsType.priceSixMonths
+				const paymentDescription = `Пользователь ${request.currentUserId} купил рекламу ${fullAd.id} за ${price}`
+				await BalanceService.buy(request.currentUserId, paymentDescription, price)
+				await AdvertisementService.changePaymentStatus(fullAd.id, 'Success')
 			}
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, { fullAd }))
 		} catch (err: Err | any) {
@@ -56,3 +62,4 @@ export default class AdvertisementController {
 		}
 	}
 }
+

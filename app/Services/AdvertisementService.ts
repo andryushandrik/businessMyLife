@@ -13,13 +13,14 @@ import { LucidModel, ModelPaginatorContract, ModelQueryBuilderContract } from '@
 import Database, { TransactionClientContract } from '@ioc:Adonis/Lucid/Database'
 import AdvertisementValidator from 'App/Validators/Ads/AdvertisementValidator'
 import { ADVERTISEMENT_FOLDER_PATH } from 'Config/drive'
+import { DateTime } from 'luxon'
 
 export default class AdvertisementService {
 	public static async create(payload: AdvertisementValidator['schema']['props']): Promise<Advertisement> {
 		let ad: Advertisement
 		const trx: TransactionClientContract = await Database.transaction()
 		try {
-			ad = await Advertisement.create({ ...payload, image: 'tmp' }, { client: trx })
+			ad = await Advertisement.create({ ...payload, image: 'tmp', placedAt: DateTime.now() }, { client: trx })
 		} catch (err: any) {
 			trx.rollback()
 
@@ -88,7 +89,7 @@ export default class AdvertisementService {
 		}
 
 		try {
-			await ad.merge({ ...payload, image: ad.image }).save()
+			await ad.merge({ ...payload, image: ad.image, placedAt: DateTime.now() }).save()
 		} catch (err: any) {
 			trx.rollback()
 
@@ -124,7 +125,27 @@ export default class AdvertisementService {
 			throw err
 		}
 		try {
-			await ad.merge({ isVerified: true, image: ad.image }).save()
+			await ad.merge({ isVerified: true}).save()
+		} catch (err: any) {
+			trx.rollback()
+			Logger.error(err)
+			throw { code: ResponseCodes.SERVER_ERROR, message: ResponseMessages.ERROR } as Err
+		}
+		await trx.commit()
+	}
+
+  public static async changePaymentStatus(id: Advertisement['id'], paymentStatus: string): Promise<void> {
+		let ad: Advertisement
+		const trx: TransactionClientContract = await Database.transaction()
+
+		try {
+			ad = await this.get(id)
+		} catch (err: Err | any) {
+			trx.rollback()
+			throw err
+		}
+		try {
+			await ad.merge({ paymentStatus }).save()
 		} catch (err: any) {
 			trx.rollback()
 			Logger.error(err)
@@ -144,7 +165,7 @@ export default class AdvertisementService {
 			throw err
 		}
 		try {
-			await ad.merge({ isVerified: false, image: ad.image }).save()
+			await ad.merge({ isVerified: false }).save()
 		} catch (err: any) {
 			trx.rollback()
 			Logger.error(err)
@@ -232,3 +253,4 @@ export default class AdvertisementService {
 		return query
 	}
 }
+

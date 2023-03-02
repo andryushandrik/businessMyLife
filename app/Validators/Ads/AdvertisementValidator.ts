@@ -16,7 +16,7 @@ export default class AdvertisementValidator extends IndexValidator {
 
 	public schema = schema.create({
 		description: schema.string({ trim: true }, getAdsDescriptionRules()),
-		paymentStatus: schema.string({ trim: true }),
+		paymentStatus: schema.string.optional({ trim: true }),
 		userId: schema.number(getUserIdRules()),
 		adsTypeId: schema.number(getAdvertisementTypesRules()),
 		subsectionId: schema.number(getSubsectionIdRules()),
@@ -25,7 +25,7 @@ export default class AdvertisementValidator extends IndexValidator {
 		 * * Optional fields
 		 */
 		placedForMonths: schema.number([rules.unsigned(), rules.range(3, 6)]),
-		placedAt: schema.date.optional({ format: 'dd MMMM, yyyy' }),
+		// placedAt: schema.date.optional({ format: 'dd MMMM, yyyy' }),
 		image: schema.file.optional(getAdsFileOptions()),
 		isVerified: schema.boolean.optional(),
 		viewsCount: schema.number.optional(),
