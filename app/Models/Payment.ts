@@ -20,6 +20,12 @@ export default class Payment extends BaseModel {
 	@column()
 	public description: string
 
+	@column()
+	public method: string
+
+	@column()
+	public status: string
+
 	@column({ columnName: 'user_id' })
 	public userId: User['id']
 
@@ -28,6 +34,9 @@ export default class Payment extends BaseModel {
 
 	@column()
 	public amount: number
+
+	@column({ columnName: 'payment_target' })
+	public paymentTarget: string
 
 	@column.dateTime({ autoCreate: true, columnName: 'created_at' })
 	public createdAt: DateTime
@@ -55,3 +64,4 @@ export default class Payment extends BaseModel {
 	 * * Hooks
 	 */
 }
+

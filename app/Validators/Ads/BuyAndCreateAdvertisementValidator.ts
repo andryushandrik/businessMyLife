@@ -10,7 +10,7 @@ import { getUserIdRules } from '../Rules/User/user'
 import { getAdsDescriptionRules, getAdsFileOptions, getAdvertisementTypesRules } from '../Rules/Ads/ads'
 import { getSubsectionIdRules } from '../Rules/Offer/subsection'
 
-export default class AdvertisementValidator extends IndexValidator {
+export default class BuyAndCreateAdvertisementValidator extends IndexValidator {
 	constructor(protected ctx: HttpContextContract) {
 		super()
 	}
@@ -20,8 +20,8 @@ export default class AdvertisementValidator extends IndexValidator {
 		userId: schema.number(getUserIdRules()),
 		adsTypeId: schema.number(getAdvertisementTypesRules()),
 		subsectionId: schema.number(getSubsectionIdRules()),
-
 		link: schema.string(),
+    paymentMethod: schema.enum(["INTERNAL","EXTERNAL"]),
 		/**
 		 * * Optional fields
 		 */

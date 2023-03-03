@@ -32,4 +32,9 @@ export enum ResponseMessages {
 	MISS_AUTH_HEADERS = 'Не найдены необходимые заголовки для авторизации!',
 	NOT_ENOUGH_BALANCE_ERROR = 'Не хватает средств!',
 	SOCKET_USER_ID_UNDEFINED = 'ID пользователя при соединении не определен!',
+
+  /**
+   * BANK
+   */
+  BANK_SERVICE_ERROR = 'Сервис банка в данный момент недоступен'
 }

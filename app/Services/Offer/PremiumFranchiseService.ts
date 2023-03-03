@@ -6,6 +6,9 @@ import { Err } from 'Contracts/response'
 import { PaginateConfig } from 'Contracts/services'
 import PremiumFranchiseFilterValidator from 'App/Validators/Offer/PremiumFranchiseFilterValidator'
 import PremiumFranchiseValidator from 'App/Validators/Offer/PremiumFranchiseValidator'
+import PremiumSlotService from '../PremiumSlotService'
+import User from 'App/Models/User/User'
+import { PaymentMethods } from 'Config/payment'
 
 export default class PremiumFranchiseService {
 	public static async paginate(
@@ -20,7 +23,7 @@ export default class PremiumFranchiseService {
 				query.preload('user')
 				query.preload('reports')
 			})
-			.preload('premiumSlot')
+			.preload('premiumSlots')
 
 		try {
 			return await query.getViaPaginate(config)
@@ -46,12 +49,35 @@ export default class PremiumFranchiseService {
 		return item
 	}
 
-	public static async create(payload: PremiumFranchiseValidator['schema']['props']): Promise<void> {
+	public static async create(
+		currentUserId: User['id'],
+		paymentMethod: PaymentMethods,
+		payload: PremiumFranchiseValidator['schema']['props'],
+	): Promise<PremiumFranchise> {
 		try {
-			await PremiumFranchise.create(payload)
-		} catch (err: any) {
+      const candidate = await PremiumFranchise.findBy('offer_id', payload.offerId)
+      if(candidate){
+        throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.VALIDATION_ERROR } as Err
+      }
+			const premiumFranchise = await PremiumFranchise.create({ offerId: payload.offerId, placedForMonths: payload.placedForMonths })
+			// вероятно, можно и не ждать, вряд ли пользователь успеет сделать запрос с только что занятым слотом
+			try {
+				await Promise.all(
+					payload.slots.map(async (slotId) => {
+						return await PremiumSlotService.employee(currentUserId, paymentMethod, {
+							premiumFranchiseId: premiumFranchise.id,
+							premiumSlotId: slotId,
+						})
+					}),
+				)
+			} catch (error) {
+				throw error
+			}
+
+			return premiumFranchise
+		} catch (err: any | Err) {
 			Logger.error(err)
-			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+			throw { code: err.code, message: err.message } as Err
 		}
 	}
 
@@ -120,3 +146,4 @@ export default class PremiumFranchiseService {
 		return query
 	}
 }
+

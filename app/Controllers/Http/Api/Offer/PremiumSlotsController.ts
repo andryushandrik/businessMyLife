@@ -5,7 +5,6 @@ import ExceptionService from 'App/Services/ExceptionService'
 import PremiumSlotService from 'App/Services/PremiumSlotService'
 import ResponseService from 'App/Services/ResponseService'
 import ApiValidator from 'App/Validators/ApiValidator'
-import EmployeeSlotValidator from 'App/Validators/Offer/EmployeePremiumSlotValidator'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 import { Err } from 'Contracts/response'
 
@@ -44,15 +43,26 @@ export default class PremiumSlotsController {
 		}
 	}
 
-	public async employee({ request, response }: HttpContextContract) {
-		let payload: EmployeeSlotValidator['schema']['props']
-		try {
-			payload = await request.validate(EmployeeSlotValidator)
-			await PremiumSlotService.employee(request.currentUserId, payload)
+	// public async employee({ request, response }: HttpContextContract) {
+	// 	let payload: EmployeeSlotValidator['schema']['props']
 
-			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS))
-		} catch (err: Err | any) {
-			throw new ExceptionService(err)
-		}
-	}
+	// 	try {
+	// 		payload = await request.validate(EmployeeSlotValidator)
+	// 	} catch (err: Err | any) {
+	// 		throw new ExceptionService({
+	// 			code: ResponseCodes.VALIDATION_ERROR,
+	// 			message: ResponseMessages.VALIDATION_ERROR,
+	// 			body: err.messages,
+	// 		})
+	// 	}
+
+	// 	try {
+	// 		await PremiumSlotService.employee(request.currentUserId, payload)
+
+	// 		return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS))
+	// 	} catch (err: Err | any) {
+	// 		throw new ExceptionService(err)
+	// 	}
+	// }
 }
+

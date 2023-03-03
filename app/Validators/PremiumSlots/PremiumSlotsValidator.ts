@@ -39,8 +39,6 @@ export default class PremiumSlotsValidator extends IndexValidator {
 		priceThreeMonths: schema.number(),
 		priceSixMonths: schema.number(),
 		image: schema.string.nullableAndOptional(),
-		employedAt: schema.date.nullableAndOptional(),
-		employedUntill: schema.date.nullableAndOptional(),
 	})
 
 	/**
@@ -56,3 +54,4 @@ export default class PremiumSlotsValidator extends IndexValidator {
 	 */
 	public messages: CustomMessages = this.messages
 }
+

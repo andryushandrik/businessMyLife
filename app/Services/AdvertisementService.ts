@@ -17,7 +17,7 @@ import { DateTime } from 'luxon'
 import AdvertisementPortionsValidator from 'App/Validators/Ads/AdvertisementPortionsValidator'
 
 export default class AdvertisementService {
-	public static async create(payload: AdvertisementValidator['schema']['props']): Promise<Advertisement> {
+	public static async create(payload: Omit<AdvertisementValidator['schema']['props'], 'paymentMethod'>): Promise<Advertisement> {
 		let ad: Advertisement
 		const trx: TransactionClientContract = await Database.transaction()
 		try {
@@ -143,26 +143,6 @@ export default class AdvertisementService {
 		}
 		try {
 			await ad.merge({ isVerified: true }).save()
-		} catch (err: any) {
-			trx.rollback()
-			Logger.error(err)
-			throw { code: ResponseCodes.SERVER_ERROR, message: ResponseMessages.ERROR } as Err
-		}
-		await trx.commit()
-	}
-
-	public static async changePaymentStatus(id: Advertisement['id'], paymentStatus: string): Promise<void> {
-		let ad: Advertisement
-		const trx: TransactionClientContract = await Database.transaction()
-
-		try {
-			ad = await this.get(id)
-		} catch (err: Err | any) {
-			trx.rollback()
-			throw err
-		}
-		try {
-			await ad.merge({ paymentStatus }).save()
 		} catch (err: any) {
 			trx.rollback()
 			Logger.error(err)
