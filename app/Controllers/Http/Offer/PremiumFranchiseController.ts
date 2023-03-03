@@ -43,4 +43,39 @@ export default class PremiumFranchiseController {
 			return response.redirect().back()
 		}
 	}
+
+  public async public({ route, session, request, view, response }: HttpContextContract) {
+		let payload: PremiumFranchiseFilterValidator['schema']['props'] | undefined = undefined
+		const isFiltered: boolean = request.input('isFiltered', false)
+
+		const config: PaginateConfig<PremiumFranchise> = {
+			baseUrl: route!.pattern,
+			page: request.input('page', 1),
+			limit: request.input('limit', 5),
+		}
+		try {
+			if (isFiltered) {
+				payload = await request.validate(PremiumFranchiseFilterValidator)
+
+				config.orderBy = payload.orderBy
+				config.orderByColumn = payload.orderByColumn
+			}
+		} catch (err: any) {
+			throw new ExceptionService({
+				code: ResponseCodes.VALIDATION_ERROR,
+				message: ResponseMessages.VALIDATION_ERROR,
+				body: err.messages,
+			})
+		}
+
+		try {
+			const franchises: ModelPaginatorContract<PremiumFranchise> = await PremiumFranchiseService.paginate(config, payload)
+			return view.render('pages/offer/premium/public', {
+				franchises,
+			})
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
 }

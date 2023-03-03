@@ -77,6 +77,8 @@ Route.group(() => {
 		Route.get('/premium/slots', 'Offer/PremiumSlotsController.paginate').as('premium.slots.paginate')
 		Route.get('/premium/slots/:id', 'Offer/PremiumSlotsController.edit').as('premium.slots.edit')
 		Route.patch('/premium/slots/:id', 'Offer/PremiumSlotsController.update').as('premium.slots.update')
+	  Route.get('/premium/public', 'Offer/PremiumFranchiseController.public').as('premium.public')
+
 
 		Route.get('/:id', 'Offer/OffersController.get').as('get')
 		Route.patch('/:id', 'Offer/OffersController.updateBlockDescription').as('updateBlockDescription')
