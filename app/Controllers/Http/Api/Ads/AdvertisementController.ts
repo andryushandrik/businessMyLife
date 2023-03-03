@@ -21,8 +21,8 @@ export default class AdvertisementController {
 	public async show({ request, response }: HttpContextContract) {
 		let payload: AdvertisementFilterValidator['schema']['props']
 		try {
-      payload = await request.validate(AdvertisementFilterValidator)
-      payload.isVerified = false
+			payload = await request.validate(AdvertisementFilterValidator)
+			payload.isVerified = false
 		} catch (err: any) {
 			throw new ExceptionService({
 				code: ResponseCodes.VALIDATION_ERROR,
@@ -41,21 +41,9 @@ export default class AdvertisementController {
 
 	public async showAdsByPortions({ request, response }: HttpContextContract) {
 		let payload: AdvertisementPortionsValidator['schema']['props']
-
 		payload = await request.validate(AdvertisementPortionsValidator)
 		try {
-			const { rows: countRows } = await Database.rawQuery(`SELECT COUNT(*) FROM advertisements WHERE ads_type_id = ${payload.adsTypeId}`)
-			const countOfRows: number = countRows[0].count
-			let offset = ((pageForUsersAds - 1) * payload.limit) % countOfRows
-			let { rows }: { rows: Advertisement[] } = await Database.rawQuery(
-				`SELECT * FROM advertisements  WHERE ads_type_id = ${payload.adsTypeId}  LIMIT ${payload.limit} OFFSET ${offset}`,
-			)
-			if (rows.length < payload.limit) {
-				const { rows: additinalRows } = await Database.rawQuery(
-					`SELECT * FROM advertisements  WHERE ads_type_id = ${payload.adsTypeId}  LIMIT ${payload.limit - rows.length} `,
-				)
-				rows = [...rows, ...additinalRows]
-			}
+			const rows = await AdvertisementService.getByPortions(payload, pageForUsersAds)
 			pageForUsersAds += 1
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, rows))
 		} catch (err: Err | any) {

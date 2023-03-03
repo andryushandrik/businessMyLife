@@ -14,6 +14,7 @@ import Database, { TransactionClientContract } from '@ioc:Adonis/Lucid/Database'
 import AdvertisementValidator from 'App/Validators/Ads/AdvertisementValidator'
 import { ADVERTISEMENT_FOLDER_PATH } from 'Config/drive'
 import { DateTime } from 'luxon'
+import AdvertisementPortionsValidator from 'App/Validators/Ads/AdvertisementPortionsValidator'
 
 export default class AdvertisementService {
 	public static async create(payload: AdvertisementValidator['schema']['props']): Promise<Advertisement> {
@@ -74,6 +75,22 @@ export default class AdvertisementService {
 			Logger.error(err)
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
 		}
+	}
+
+	public static async getByPortions(payload: AdvertisementPortionsValidator['schema']['props'], pageForUsersAds: number) {
+		const { rows: countRows } = await Database.rawQuery(`SELECT COUNT(*) FROM advertisements WHERE ads_type_id = ${payload.adsTypeId} AND "isVerified" = true`)
+		const countOfRows: number = countRows[0].count
+		let offset = ((pageForUsersAds - 1) * payload.limit) % countOfRows
+		let { rows }: { rows: Advertisement[] } = await Database.rawQuery(
+			`SELECT * FROM advertisements  WHERE ads_type_id = ${payload.adsTypeId} AND "isVerified" = true LIMIT ${payload.limit} OFFSET ${offset}`,
+		)
+		if (rows.length < payload.limit) {
+			const { rows: additinalRows } = await Database.rawQuery(
+				`SELECT * FROM advertisements  WHERE ads_type_id = ${payload.adsTypeId} AND "isVerified" = true  LIMIT ${payload.limit - rows.length} `,
+			)
+			rows = [...rows, ...additinalRows]
+		}
+    return rows
 	}
 
 	public static async update(id: Advertisement['id'], payload: Partial<AdvertisementValidator['schema']['props']>): Promise<void> {
@@ -244,10 +261,10 @@ export default class AdvertisementService {
 							query.where('place', payload[key]!)
 						})
 						break
-          case 'userId':
-            query = query.withScopes((scopes) => scopes.getByUserId(payload[key]!))
+					case 'userId':
+						query = query.withScopes((scopes) => scopes.getByUserId(payload[key]!))
 
-            break
+						break
 					default:
 						break
 				}
@@ -257,3 +274,4 @@ export default class AdvertisementService {
 		return query
 	}
 }
+
