@@ -1,4 +1,3 @@
-import Database from '@ioc:Adonis/Lucid/Database'
 import Logger from '@ioc:Adonis/Core/Logger'
 import BalanceService from 'App/Services/BalanceService'
 import Advertisement from 'App/Models/Ads/Advertisement'
