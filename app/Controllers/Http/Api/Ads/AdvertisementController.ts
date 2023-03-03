@@ -20,9 +20,9 @@ let pageForUsersAds: number = 1
 export default class AdvertisementController {
 	public async show({ request, response }: HttpContextContract) {
 		let payload: AdvertisementFilterValidator['schema']['props']
-
 		try {
-			payload = await request.validate(AdvertisementFilterValidator)
+      payload = await request.validate(AdvertisementFilterValidator)
+      payload.isVerified = false
 		} catch (err: any) {
 			throw new ExceptionService({
 				code: ResponseCodes.VALIDATION_ERROR,
