@@ -44,7 +44,7 @@ export default class PremiumFranchiseController {
 		}
 	}
 
-  public async public({ route, session, request, view, response }: HttpContextContract) {
+	public async public({ route, session, request, view, response }: HttpContextContract) {
 		let payload: PremiumFranchiseFilterValidator['schema']['props'] | undefined = undefined
 		const isFiltered: boolean = request.input('isFiltered', false)
 

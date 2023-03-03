@@ -33,8 +33,8 @@ export enum ResponseMessages {
 	NOT_ENOUGH_BALANCE_ERROR = 'Не хватает средств!',
 	SOCKET_USER_ID_UNDEFINED = 'ID пользователя при соединении не определен!',
 
-  /**
-   * BANK
-   */
-  BANK_SERVICE_ERROR = 'Сервис банка в данный момент недоступен'
+	/**
+	 * BANK
+	 */
+	BANK_SERVICE_ERROR = 'Сервис банка в данный момент недоступен',
 }

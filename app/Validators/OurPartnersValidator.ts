@@ -15,7 +15,7 @@ export default class AdvertisementValidator extends IndexValidator {
 		name: schema.string({ trim: true }),
 		isVisible: schema.boolean.optional(),
 		link: schema.string({ trim: true }),
-		image: schema.file.optional()
+		image: schema.file.optional(),
 
 		/**
 		 * * Optional fields

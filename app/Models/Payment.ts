@@ -64,4 +64,3 @@ export default class Payment extends BaseModel {
 	 * * Hooks
 	 */
 }
-

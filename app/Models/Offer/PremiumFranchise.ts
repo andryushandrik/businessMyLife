@@ -1,4 +1,4 @@
-import { BelongsTo, computed, HasMany, hasMany, HasOne,  scope } from '@ioc:Adonis/Lucid/Orm'
+import { BelongsTo, computed, HasMany, hasMany, HasOne, scope } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 import Offer from './Offer'
 import { DateTime } from 'luxon'
@@ -19,7 +19,7 @@ export default class PremiumFranchise extends BaseModel {
 	@column({ isPrimary: true })
 	public id: number
 
-  @column({ columnName: "placedForMonths" })
+	@column({ columnName: 'placedForMonths' })
 	public placedForMonths: number
 	/**
 	 * * Foreign keys
@@ -55,7 +55,7 @@ export default class PremiumFranchise extends BaseModel {
 		return ''
 	}
 
-  @computed()
+	@computed()
 	public get archiveExpire(): string {
 		const expireDate: DateTime = this.createdAt.plus({ months: this.placedForMonths })
 		const archiveExpireInDays: number = expireDate.diff(DateTime.now(), 'days').days

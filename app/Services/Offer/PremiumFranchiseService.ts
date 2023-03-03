@@ -55,13 +55,29 @@ export default class PremiumFranchiseService {
 		payload: PremiumFranchiseValidator['schema']['props'],
 	): Promise<PremiumFranchise> {
 		try {
-      const candidate = await PremiumFranchise.findBy('offer_id', payload.offerId)
-      if(candidate){
-        throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.VALIDATION_ERROR } as Err
-      }
-			const premiumFranchise = await PremiumFranchise.create({ offerId: payload.offerId, placedForMonths: payload.placedForMonths })
-			// вероятно, можно и не ждать, вряд ли пользователь успеет сделать запрос с только что занятым слотом
+			const candidate = await PremiumFranchise.findBy('offer_id', payload.offerId)
+			if (candidate) {
+				throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.VALIDATION_ERROR } as Err
+			}
+
 			try {
+				await Promise.all(
+					payload.slots.map(async (slotId) => {
+						const premiumSlot = await PremiumSlotService.get(slotId)
+						if (premiumSlot.isBlocked) {
+							throw { code: ResponseCodes.CLIENT_ERROR, message: `Слот ${premiumSlot.id} заблокирован, пожалуйста, выберите другой` }
+						}
+					}),
+				).catch((err: Err) => {
+					throw err
+				})
+			} catch (error) {
+				throw error
+			}
+
+			const premiumFranchise = await PremiumFranchise.create({ offerId: payload.offerId, placedForMonths: payload.placedForMonths })
+			try {
+				// вероятно, можно и не ждать, вряд ли пользователь успеет сделать запрос с только что занятым слотом
 				await Promise.all(
 					payload.slots.map(async (slotId) => {
 						return await PremiumSlotService.employee(currentUserId, paymentMethod, {
@@ -146,4 +162,3 @@ export default class PremiumFranchiseService {
 		return query
 	}
 }
-

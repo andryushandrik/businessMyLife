@@ -35,8 +35,8 @@ export default class PremiumFranchiseValidator extends IndexValidator {
 	 */
 	public schema = schema.create({
 		offerId: schema.number(getOfferIdRules(TABLES_NAMES.OFFERS)),
-    placedForMonths: schema.number([rules.unsigned(), rules.range(3, 6)]),
-    slots: schema.array().members(schema.number(getPremiumSlotIdRule()))
+		placedForMonths: schema.number([rules.unsigned(), rules.range(3, 6)]),
+		slots: schema.array().members(schema.number(getPremiumSlotIdRule())),
 	})
 
 	/**

@@ -15,7 +15,7 @@ import { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import AdvertisementFilterValidator from 'App/Validators/Ads/AdvertisementFilterValidator'
 import AdvertisementPortionsValidator from 'App/Validators/Ads/AdvertisementPortionsValidator'
 import { PaymentMethods } from 'Config/payment'
-let pageForUsersAds: number = 1
+let pageForUsersAds = 1
 export default class AdvertisementController {
 	public async show({ request, response }: HttpContextContract) {
 		let payload: AdvertisementFilterValidator['schema']['props']
@@ -102,4 +102,3 @@ export default class AdvertisementController {
 		}
 	}
 }
-

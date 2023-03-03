@@ -56,8 +56,6 @@ export default class PremiumSlotService {
 				throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.FORBIDDEN } as Err
 			}
 
-			const employedUntill = premiumFranchise.createdAt.plus({ months: premiumFranchise.placedForMonths })
-
 			let price = premiumSlot.priceThreeMonths
 
 			if (premiumFranchise.offer.placedForMonths == 3) {
@@ -66,7 +64,7 @@ export default class PremiumSlotService {
 				price = premiumSlot.priceSixMonths
 			}
 
-			const paymentDescription = `Пользователь ${currentUserId} купил для премиальной франшизы ${payload.premiumFranchiseId}  размещение на слоте ${premiumSlot.id} на ${premiumFranchise.placedForMonths} месяцев за ${price}`
+			const paymentDescription = `Пользователь ${currentUserId} купил размещение на слоте ${premiumSlot.id} для премиальной франшизы ${payload.premiumFranchiseId} на ${premiumFranchise.placedForMonths} месяцев за ${price}`
 			await BalanceService.buy(currentUserId, PremiumSlot, premiumSlot.id, paymentDescription, price, paymentMethod)
 			this.update(payload.premiumSlotId, {
 				...premiumSlot,
@@ -168,4 +166,3 @@ export default class PremiumSlotService {
 		return query
 	}
 }
-

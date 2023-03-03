@@ -19,9 +19,9 @@ export default class MyAdvertisementValidator extends IndexValidator {
 		subsectionId: schema.number(getSubsectionIdRules()),
 		link: schema.string(),
 		/**
-     * * Optional fields
+		 * * Optional fields
 		 */
-    placedForMonths: schema.number([rules.unsigned(), rules.range(3, 6)]),
+		placedForMonths: schema.number([rules.unsigned(), rules.range(3, 6)]),
 		image: schema.file.optional(getAdsFileOptions()),
 		isVerified: schema.boolean.optional(),
 		viewsCount: schema.number.optional(),

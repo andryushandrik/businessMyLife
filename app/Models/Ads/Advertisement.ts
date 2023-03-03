@@ -49,8 +49,6 @@ export default class Advertisement extends BaseModel {
 	@column()
 	public link: string
 
-
-
 	@column({ columnName: 'user_id' })
 	public userId: User['id']
 
@@ -122,7 +120,7 @@ export default class Advertisement extends BaseModel {
 		query.where('isVerified', isVerified)
 	})
 
-  public static getByUserId = scope((query, userId: number) => {
+	public static getByUserId = scope((query, userId: number) => {
 		query.where('userId', userId)
 	})
 

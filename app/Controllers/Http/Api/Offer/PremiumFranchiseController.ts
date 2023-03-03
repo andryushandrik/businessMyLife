@@ -37,7 +37,7 @@ export default class PremiumFranchiseController {
 	public async create({ request, response }: HttpContextContract) {
 		let payload: PremiumFranchiseValidator['schema']['props']
 
-    const currentUserId = request.currentUserId
+		const currentUserId = request.currentUserId
 
 		const paymentMethod = request.body().paymentMethod ? PaymentMethods[request.body().paymentMethod] : PaymentMethods.EXTERNAL
 		try {
@@ -51,7 +51,7 @@ export default class PremiumFranchiseController {
 		}
 
 		try {
-			const premiumFranchise: PremiumFranchise = await PremiumFranchiseService.create(currentUserId,paymentMethod, payload)
+			const premiumFranchise: PremiumFranchise = await PremiumFranchiseService.create(currentUserId, paymentMethod, payload)
 
 			const paymentDescription = `Пользователь ${currentUserId} купил премиальное размещение франшизы ${payload.offerId}. ID премиальной франшизы ${premiumFranchise.id} `
 
@@ -64,4 +64,3 @@ export default class PremiumFranchiseController {
 		}
 	}
 }
-

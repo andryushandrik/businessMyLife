@@ -2,22 +2,12 @@
 import type { DateTime } from 'luxon'
 // * Types
 import { TABLES_NAMES } from 'Config/database'
-import { BaseModel, belongsTo, BelongsTo, column,  scope } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, belongsTo, BelongsTo, column, scope } from '@ioc:Adonis/Lucid/Orm'
 import PremiumFranchise from './PremiumFranchise'
 
 export default class PremiumSlot extends BaseModel {
 	public static readonly table: string = TABLES_NAMES.PREMIUM_SLOTS
-	public static readonly columns = [
-		'id',
-		'title',
-		'type',
-		'isBlocked',
-		'priceThreeMonths',
-		'priceSixMonths',
-		'franchiseId',
-		'createdAt',
-		'updatedAt',
-	] as const
+	public static readonly columns = ['id', 'title', 'type', 'isBlocked', 'priceThreeMonths', 'priceSixMonths', 'franchiseId', 'createdAt', 'updatedAt'] as const
 
 	/**
 	 * * Columns
@@ -49,7 +39,7 @@ export default class PremiumSlot extends BaseModel {
 	 */
 
 	@belongsTo(() => PremiumFranchise, { foreignKey: 'franchiseId' })
-	public premiumFranchise: BelongsTo <typeof PremiumFranchise>
+	public premiumFranchise: BelongsTo<typeof PremiumFranchise>
 
 	@column({ columnName: 'franchise_id' })
 	public franchiseId: PremiumFranchise['id'] | null

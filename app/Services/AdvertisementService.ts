@@ -80,7 +80,7 @@ export default class AdvertisementService {
 	public static async getByPortions(payload: AdvertisementPortionsValidator['schema']['props'], pageForUsersAds: number) {
 		const { rows: countRows } = await Database.rawQuery(`SELECT COUNT(*) FROM advertisements WHERE ads_type_id = ${payload.adsTypeId} AND "isVerified" = true`)
 		const countOfRows: number = countRows[0].count
-		let offset = ((pageForUsersAds - 1) * payload.limit) % countOfRows
+		const offset = ((pageForUsersAds - 1) * payload.limit) % countOfRows
 		let { rows }: { rows: Advertisement[] } = await Database.rawQuery(
 			`SELECT * FROM advertisements  WHERE ads_type_id = ${payload.adsTypeId} AND "isVerified" = true LIMIT ${payload.limit} OFFSET ${offset}`,
 		)
@@ -90,7 +90,7 @@ export default class AdvertisementService {
 			)
 			rows = [...rows, ...additinalRows]
 		}
-    return rows
+		return rows
 	}
 
 	public static async update(id: Advertisement['id'], payload: Partial<AdvertisementValidator['schema']['props']>): Promise<void> {
@@ -254,4 +254,3 @@ export default class AdvertisementService {
 		return query
 	}
 }
-

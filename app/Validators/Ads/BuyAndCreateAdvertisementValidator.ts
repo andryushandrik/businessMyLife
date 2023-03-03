@@ -1,4 +1,3 @@
-import { PaymentMethods } from './../../../config/payment';
 // * Types
 import { CustomMessages, rules } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
@@ -21,7 +20,7 @@ export default class BuyAndCreateAdvertisementValidator extends IndexValidator {
 		adsTypeId: schema.number(getAdvertisementTypesRules()),
 		subsectionId: schema.number(getSubsectionIdRules()),
 		link: schema.string(),
-    paymentMethod: schema.enum(["INTERNAL","EXTERNAL"]),
+		paymentMethod: schema.enum(['INTERNAL', 'EXTERNAL']),
 		/**
 		 * * Optional fields
 		 */
