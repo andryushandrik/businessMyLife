@@ -28,8 +28,6 @@ export default class MessageService {
 				conversation = await ConversationService.getByUserIds(receiverId, currentUserId)
 			} else if (conversationFindPayload.conversationId) {
 				conversation = await ConversationService.getById(conversationFindPayload.conversationId)
-
-				await ConversationService.updateWhenMessageCreatedOrDeleted(conversation)
 			} else {
 				throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.ERROR } as Err
 			}
