@@ -78,4 +78,16 @@ export default class PremiumFranchiseController {
 			return response.redirect().back()
 		}
 	}
+  public async get({ view, params, response, session }: HttpContextContract) {
+		const id: PremiumFranchise['id'] = params.id
+
+		try {
+			const item: PremiumFranchise = await PremiumFranchiseService.get(id)
+			return view.render('pages/offer/premium/get', { item })
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
+
 }

@@ -30,15 +30,11 @@
 
                 <th><strong>Пользователь</strong></th>
                 <th><strong>Объявление</strong></th>
-                <th><strong>Тип слота</strong></th>
 
-                <th><strong>Название слота</strong></th>
                 <th><strong>Репорты</strong></th>
 
                 <th><strong>Дата активации Premium</strong></th>
-                <th><strong>Размещен до</strong></th>
-
-
+                <th><strong>Окончание Premium</strong></th>
 
               </tr>
             </thead>
@@ -65,14 +61,9 @@
                   <td>{{ item.offer.reports.length }}</td>
 
                   <td>{{ item.createdAtForUser}}</td>
-                  @if(item.premiumSlot)
                     <td>
-                      [Слот]
-                      {{ item.premiumSlot?.employedUntillForUser }}</td>
-                  @else
-                    <td> [Объявление]
-                      {{ item.offer.archiveExpire }}</td>
-                  @endif
+                      {{ item.archiveExpire }}
+                    </td>
 
                   <td>
                     <div class="dropdown">
@@ -87,6 +78,11 @@
                           </g>
                         </svg>
                       </button>
+
+                      <div class="dropdown-menu" style="">
+                        <a class="dropdown-item" href="{{ route('offer.premium.get', { id: item.id }) }}" target="_blank">Просмотреть</a>
+                      </div>
+
                       <div class="dropdown-menu" style="">
                         <a class="dropdown-item" href="https://business-mylife.ru/account/profile/user/{{ item.offer.user.id}}" target="_blank">Пользователь</a>
 

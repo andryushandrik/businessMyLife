@@ -1,4 +1,4 @@
-import { BelongsTo, computed, HasMany, hasMany, HasOne, scope } from '@ioc:Adonis/Lucid/Orm'
+import { BelongsTo, computed, HasOne, hasOne, scope } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 import Offer from './Offer'
 import { DateTime } from 'luxon'
@@ -41,8 +41,8 @@ export default class PremiumFranchise extends BaseModel {
 	@belongsTo(() => Offer)
 	public offer: BelongsTo<typeof Offer>
 
-	@hasMany(() => PremiumSlot, { foreignKey: 'franchiseId' })
-	public premiumSlots: HasMany<typeof PremiumSlot>
+	@hasOne(() => PremiumSlot, { foreignKey: 'franchiseId' })
+	public premiumSlot: HasOne<typeof PremiumSlot>
 	/**
 	 * * Hooks
 	 */

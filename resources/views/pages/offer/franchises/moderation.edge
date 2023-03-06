@@ -1,30 +1,19 @@
 @layout('layouts/index')
 
-@set('title', titleFromController ?? 'Опубликованные объявления')
+@set('title', titleFromController ?? 'Франшизы')
 
 @section('body')
   @component('components/filter', {
     payload,
     columns: [
       { key: 'id', value: 'ID' },
+      { key: 'isArchived', value: 'Архивирован' },
       { key: 'isBanned', value: 'Забанен' },
       { key: 'title', value: 'Название' },
       { key: 'city', value: 'Город' },
       { key: 'reportsCount', value: 'Кол-во жалоб' },
     ],
   })
-    <div class="col-6">
-      <div class="dropdown bootstrap-select form-control form-control-lg dropup">
-        <select class="form-control form-control-lg" name="category" tabindex="-98">
-          <option value="">Категория</option>
-
-          @each((item, index) in categories)
-            <option value="{{ index }}" {{ payload?.category == index ? 'selected' : '' }}>{{ item }}</option>
-          @endeach
-        </select>
-      </div>
-    </div>
-
     <div class="col-6">
       <div class="dropdown bootstrap-select form-control form-control-lg dropup">
         <select class="form-control form-control-lg" name="areaId" tabindex="-98">
@@ -42,10 +31,13 @@
     <div class="card">
       <div class="card-header">
         <h4 class="card-title">{{ title }}</h4>
+
+        @if (isModeratePage)
           <form action="{{ route('offer.notVerified.verifyAll', {}, { qs: { _method: 'PATCH' } }) }}" method="POST">
             {{ csrfField() }}
             <button type="submit" class="btn btn-primary btn-sm">Опубликовать все</button>
           </form>
+        @endif
       </div>
 
       <div class="card-body">
@@ -55,40 +47,72 @@
             <thead>
               <tr>
                 <th class="width80"><strong>#</strong></th>
-
-                <th><strong>Категория</strong></th>
-                <th><strong>Название</strong></th>
-                <th><strong>Город</strong></th>
-                <th><strong>Обложка</strong></th>
                 <th><strong>Пользователь</strong></th>
+                <th><strong>Название</strong></th>
+                <th><strong>Обложка</strong></th>
+                <th><strong>Город</strong></th>
                 <th><strong>Подраздел</strong></th>
-                <th><strong>Кол-во жалоб</strong></th>
-                <th><strong>Дней до архивации</strong></th>
                 <th><strong>Дата создания</strong></th>
+                <th><strong>Дней до архивации</strong></th>
+                <th><strong>Кол-во жалоб</strong></th>
+
+                <th><strong>Забанен</strong></th>
 
                 <th><strong>Действия</strong></th>
               </tr>
             </thead>
             <tbody>
 
-              @each(item in offers)
+              @each(item in franchises)
                 <tr>
-                  <td><strong>{{ item.id }}</strong></td>
-                  <td>{{ item.categoryForUser }}</td>
-                  <td>{{ item.title }}</td>
-                  <td>{{ item.city }}</td>
                   <td>
-                    <img src="{{ getMedia(item.image) }}" width="300" height="200" alt="">
+                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center">
+                      @if(item.premiumFranchise)
+                      <div>
+                        <a href="{{ route('offer.premium.get', { id: item.premiumFranchise.id }) }}">
+                          <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                            viewBox="0 0 491.5 491.5" width="40px">
+                              <ellipse style="fill:#E56353;" cx="245.76" cy="289.774" rx="174.336" ry="102.707"/>
+                              <path style="fill:#F6C358;" d="M427.392,402.452H245.76V94.456c0,0,14.005,87.609,65.338,151.954
+                              c29.694,37.221,89.246,37.368,119.454,0.508c18.297-22.327,29.411-51.504,35.936-85.54"/>
+                              <g>
+                              <path style="fill:#FCD462;" d="M64.128,402.452H245.76V94.456c0,0-14.005,87.609-65.338,151.954
+                              c-29.694,37.221-89.246,37.368-119.455,0.508c-18.297-22.327-29.41-51.504-35.935-85.54"/>
+                              <rect x="52.306" y="402.465" style="fill:#FCD462;" width="386.918" height="23.316"/>
+                              </g>
+                              <g>
+                              <circle style="fill:#E56353;" cx="245.76" cy="94.728" r="29.01"/>
+                              <circle style="fill:#E56353;" cx="462.49" cy="176.755" r="29.01"/>
+                              <circle style="fill:#E56353;" cx="29.01" cy="176.755" r="29.01"/>
+                              </g>
+                              <ellipse style="fill:#44C4A1;" cx="245.76" cy="307.489" rx="39.68" ry="59.023"/>
+                            </svg>
+                          </a>
+                        </div>
+                      @endif
+                      <strong >{{ item.id }}</strong>
+
+                    </div>
                   </td>
+
                   <td>
                     <a href="{{ route('user.get', { id: item.user.id }) }}" class="text-primary">{{ item.user.fullName }}</a>
                   </td>
+                  <td>{{ item.title }}</td>
+                  <td>
+                    <img src="{{ getMedia(item.image) }}" width="300" height="200" alt="">
+                  </td>
+                  <td>{{ item.city }}</td>
                   <td>
                     <a href="{{ route('subsections.edit', { id: item.subsection.id }) }}" class="text-primary">{{ item.subsection.name }}</a>
                   </td>
-                  <td>{{ item.reportsCount }}</td>
-                  <td>{{ item.archiveExpire }}</td>
                   <td>{{ item.createdAtForUser }}</td>
+                  <td>{{ item.archiveExpire }}</td>
+                  <td>{{ item.reportsCount }}</td>
+
+
+                  <td>{{ item.isBannedForUser }}</td>
+
 
                   <td>
                     <div class="dropdown">
@@ -122,5 +146,5 @@
     </div>
   </div>
 
-  @!component('components/pagination', { obj: offers })
+  @!component('components/pagination', { obj: franchises })
 @endsection
