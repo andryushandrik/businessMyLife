@@ -27,8 +27,8 @@ export default class OffersController {
 			aggregates: ['reports'],
 			relations: ['user', 'subsection'],
 			isVerified: true,
-      isArchived: false,
-      isBanned: false
+			isArchived: false,
+			isBanned: false,
 		}
 
 		if (isFiltered) {
@@ -97,7 +97,7 @@ export default class OffersController {
 		const config: OfferServicePaginateConfig = {
 			baseUrl: route!.pattern,
 			page: request.input('page', 1),
-      limit: request.input('limit', 5),
+			limit: request.input('limit', 5),
 
 			isVerified: false,
 
@@ -105,7 +105,6 @@ export default class OffersController {
 		}
 
 		if (isFiltered) {
-
 			payload = await request.validate(OfferFilterValidator)
 
 			config.orderBy = payload.orderBy

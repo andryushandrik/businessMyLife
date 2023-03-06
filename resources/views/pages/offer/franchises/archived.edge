@@ -52,7 +52,6 @@
                 <th><strong>Город</strong></th>
                 <th><strong>Подраздел</strong></th>
                 <th><strong>Дата создания</strong></th>
-                <th><strong>Дней до архивации</strong></th>
                 <th><strong>Кол-во жалоб</strong></th>
 
                 <th><strong>Забанен</strong></th>
@@ -106,7 +105,6 @@
                     <a href="{{ route('subsections.edit', { id: item.subsection.id }) }}" class="text-primary">{{ item.subsection.name }}</a>
                   </td>
                   <td>{{ item.createdAtForUser }}</td>
-                  <td>{{ item.archiveExpire }}</td>
                   <td>{{ item.reportsCount }}</td>
 
 

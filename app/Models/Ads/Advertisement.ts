@@ -144,7 +144,6 @@ export default class Advertisement extends BaseModel {
 			const expiresInMilliseconds: number = expireDate.diff(DateTime.now()).milliseconds
 			if (expiresInMilliseconds < 0) {
 				advertisement.delete()
-
 			}
 		})
 	}

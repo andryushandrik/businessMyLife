@@ -73,14 +73,13 @@ Route.group(() => {
 			.prefix('notVerified')
 			.as('notVerified')
 
-
-    Route.group(()=>{
-      Route.get('/','Offer/FranchiseController.paginate').as('paginate')
-      Route.get('/moderation','Offer/FranchiseController.moderation').as('moderation')
-      Route.get('/archived','Offer/FranchiseController.archived').as('archived')
-
-
-    }).prefix('franchises').as('franchises')
+		Route.group(() => {
+			Route.get('/', 'Offer/FranchiseController.paginate').as('paginate')
+			Route.get('/moderation', 'Offer/FranchiseController.moderation').as('moderation')
+			Route.get('/archived', 'Offer/FranchiseController.archived').as('archived')
+		})
+			.prefix('franchises')
+			.as('franchises')
 
 		Route.get('/premium/franchises', 'Offer/PremiumFranchiseController.paginate').as('premium.paginate')
 		Route.get('/premium/get/:id', 'Offer/PremiumFranchiseController.get').as('premium.get')
