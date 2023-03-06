@@ -30,14 +30,15 @@
 
                 <th><strong>Пользователь</strong></th>
                 <th><strong>Объявление</strong></th>
-                <th><strong>Тип слота</strong></th>
-
-                <th><strong>Название слота</strong></th>
-                <th><strong>Репорты</strong></th>
 
                 <th><strong>Дата активации Premium</strong></th>
-                <th><strong>Размещен до</strong></th>
+                <th><strong>Окончание Premium</strong></th>
 
+
+                <th><strong>Занят слот</strong></th>
+
+
+                <th><strong>Жалобы</strong></th>
 
 
               </tr>
@@ -49,31 +50,21 @@
                   <td><strong>{{ item.id }}</strong></td>
                   <td><b> <a target="_blank" href="https://business-mylife.ru/account/profile/user/{{ item.offer.user.id}}">{{ item.offer.user.firstName}} {{ item.offer.user.lastName}}</a></b></td>
                   <td> <b> <a target="_blank" href="https://business-mylife.ru/adv-page/{{item.offer.id}}">{{ item.offer.id }} - {{ item.offer.title }}</a> </b></td>
-                  @if(item.premiumSlot?.type)
-                    <td>{{ item.premiumSlot?.type == 'small' ? 'Объявление' : 'Баннер' }} </td>
-                  @else
-                    <td>-</td>
-                  @endif
 
-                  @if(item.premiumSlot?.title)
-                    <td><b><a target="_blank" href="{{ route('offer.premium.slots.edit', { id: item.id }) }}">{{ item.premiumSlot?.title }}</a> </b></td>
-                  @else
-                    <td>-</td>
-                  @endif
-
-
-                  <td>{{ item.offer.reports.length }}</td>
 
                   <td>{{ item.createdAtForUser}}</td>
-                  @if(item.premiumSlot)
-                    <td>
-                      [Слот]
-                      {{ item.premiumSlot?.employedUntillForUser }}</td>
+
+                  <td>
+                    {{ item.archiveExpire }}
+                  </td>
+
+                  @if(item.premiumSlot?.title)
+                    <td><b><a target="_blank" href="{{ route('offer.premium.slots.edit', { id: item.id }) }}">{{ item.premiumSlot?.id }} - {{ item.premiumSlot?.title }}</a> </b></td>
                   @else
-                    <td> [Объявление]
-                      {{ item.offer.archiveExpire }}</td>
+                    <td>-</td>
                   @endif
 
+                  <td>{{ item.offer.reports.length }}</td>
                   <td>
                     <div class="dropdown">
                       <button type="button" class="btn btn-success light sharp" data-toggle="dropdown"
@@ -87,6 +78,9 @@
                           </g>
                         </svg>
                       </button>
+                      <div class="dropdown-menu" style="">
+                        <a class="dropdown-item" href="{{ route('offer.premium.get', { id: item.id }) }}" target="_blank">Просмотреть</a>
+                      </div>
                       <div class="dropdown-menu" style="">
                         <a class="dropdown-item" href="https://business-mylife.ru/account/profile/user/{{ item.offer.user.id}}" target="_blank">Пользователь</a>
 
