@@ -16,6 +16,8 @@ import { ADVERTISEMENT_FOLDER_PATH } from 'Config/drive'
 import { DateTime } from 'luxon'
 import AdvertisementPortionsValidator from 'App/Validators/Ads/AdvertisementPortionsValidator'
 
+let pageForUsersAds = 1
+
 export default class AdvertisementService {
 	public static async create(payload: Omit<AdvertisementValidator['schema']['props'], 'paymentMethod'>): Promise<Advertisement> {
 		let ad: Advertisement
@@ -77,7 +79,7 @@ export default class AdvertisementService {
 		}
 	}
 
-	public static async getByPortions(payload: AdvertisementPortionsValidator['schema']['props'], pageForUsersAds: number) {
+	public static async getByPortions(payload: AdvertisementPortionsValidator['schema']['props']) {
 		const { rows: countRows } = await Database.rawQuery(`SELECT COUNT(*) FROM advertisements WHERE ads_type_id = ${payload.adsTypeId} AND "isVerified" = true`)
 		const countOfRows: number = countRows[0].count
 		const offset = ((pageForUsersAds - 1) * payload.limit) % countOfRows
@@ -89,6 +91,12 @@ export default class AdvertisementService {
 				`SELECT * FROM advertisements  WHERE ads_type_id = ${payload.adsTypeId} AND "isVerified" = true  LIMIT ${payload.limit - rows.length} `,
 			)
 			rows = [...rows, ...additinalRows]
+		}
+
+		pageForUsersAds += 1
+		
+		if (pageForUsersAds >= countOfRows) {
+			pageForUsersAds -= countOfRows
 		}
 		return rows
 	}
