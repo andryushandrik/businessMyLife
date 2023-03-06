@@ -254,7 +254,7 @@ export default class Offer extends BaseModel {
 		const archiveExpireInDays: number = expireDate.diff(DateTime.now(), 'days').days
 		const archiveExpireInDaysWithoutFraction: number = Math.floor(archiveExpireInDays)
 
-		return `Осталось ${archiveExpireInDaysWithoutFraction} дней - до ${expireDate.setLocale('ru-RU').toFormat('dd MMMM')}`
+		return `Осталось ${archiveExpireInDaysWithoutFraction} дней - до ${expireDate.setLocale('ru-RU').toFormat('dd MMMM, yyyy')}`
 	}
 
 	/**

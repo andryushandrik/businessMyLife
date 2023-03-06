@@ -2,25 +2,12 @@
 import type { DateTime } from 'luxon'
 // * Types
 import { TABLES_NAMES } from 'Config/database'
-import { BaseModel, belongsTo, BelongsTo, column, computed, scope } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, belongsTo, BelongsTo, column, scope } from '@ioc:Adonis/Lucid/Orm'
 import PremiumFranchise from './PremiumFranchise'
-import { GLOBAL_DATETIME_FORMAT } from 'Config/app'
 
 export default class PremiumSlot extends BaseModel {
 	public static readonly table: string = TABLES_NAMES.PREMIUM_SLOTS
-	public static readonly columns = [
-		'id',
-		'title',
-		'type',
-		'isBlocked',
-		'priceThreeMonths',
-		'priceSixMonths',
-		'franchiseId',
-		'employedAt',
-		'employedUntill',
-		'createdAt',
-		'updatedAt',
-	] as const
+	public static readonly columns = ['id', 'title', 'type', 'isBlocked', 'priceThreeMonths', 'priceSixMonths', 'franchiseId', 'createdAt', 'updatedAt'] as const
 
 	/**
 	 * * Columns
@@ -47,12 +34,6 @@ export default class PremiumSlot extends BaseModel {
 	@column()
 	public priceSixMonths: number
 
-	@column.dateTime({ columnName: 'employed_at' })
-	public employedAt: DateTime | null
-
-	@column.dateTime({ columnName: 'employed_untill' })
-	public employedUntill: DateTime | null
-
 	/**
 	 * * Foreign keys
 	 */
@@ -73,21 +54,21 @@ export default class PremiumSlot extends BaseModel {
 	@column.dateTime({ columnName: 'updated_at', autoCreate: true, autoUpdate: true })
 	public updatedAt: DateTime
 
-	@computed()
-	public get employedAtForUser(): string {
-		if (this.employedAt) {
-			return this.employedAt.setLocale('ru-RU').toFormat(GLOBAL_DATETIME_FORMAT)
-		}
-		return ''
-	}
+	// @computed()
+	// public get employedAtForUser(): string {
+	// 	if (this.employedAt) {
+	// 		return this.employedAt.setLocale('ru-RU').toFormat(GLOBAL_DATETIME_FORMAT)
+	// 	}
+	// 	return ''
+	// }
 
-	@computed()
-	public get employedUntillForUser(): string {
-		if (this.employedUntill) {
-			return this.employedUntill.setLocale('ru-RU').toFormat(GLOBAL_DATETIME_FORMAT)
-		}
-		return ''
-	}
+	// @computed()
+	// public get employedUntillForUser(): string {
+	// 	if (this.employedUntill) {
+	// 		return this.employedUntill.setLocale('ru-RU').toFormat(GLOBAL_DATETIME_FORMAT)
+	// 	}
+	// 	return ''
+	// }
 
 	/**
 	 * * Hooks

@@ -36,7 +36,10 @@ export default class PaymentValidator extends IndexValidator {
 		description: schema.string.optional({ trim: true }),
 		userId: schema.number(getUserIdRules()),
 		amount: schema.number(),
+		method: schema.string(),
+		status: schema.string(),
 		promocodeId: schema.number.nullableAndOptional(getPromoCodeIdRules()),
+		paymentTarget: schema.string(),
 	})
 
 	/**

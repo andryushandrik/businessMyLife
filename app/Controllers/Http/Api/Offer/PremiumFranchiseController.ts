@@ -1,3 +1,5 @@
+import Logger from '@ioc:Adonis/Core/Logger'
+import { PaymentMethods } from './../../../../../config/payment'
 import PremiumFranchiseValidator from 'App/Validators/Offer/PremiumFranchiseValidator'
 import PremiumFranchise from 'App/Models/Offer/PremiumFranchise'
 import PremiumFranchiseService from 'App/Services/Offer/PremiumFranchiseService'
@@ -9,7 +11,6 @@ import ApiValidator from 'App/Validators/ApiValidator'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 import { Err } from 'Contracts/response'
 import BalanceService from 'App/Services/BalanceService'
-import { PaymentStatuses } from 'Config/payment'
 
 export default class PremiumFranchiseController {
 	public async paginate({ request, response }: HttpContextContract) {
@@ -36,9 +37,11 @@ export default class PremiumFranchiseController {
 	public async create({ request, response }: HttpContextContract) {
 		let payload: PremiumFranchiseValidator['schema']['props']
 
+		const currentUserId = request.currentUserId
+
+		const paymentMethod = request.body().paymentMethod ? PaymentMethods[request.body().paymentMethod] : PaymentMethods.EXTERNAL
 		try {
 			payload = await request.validate(PremiumFranchiseValidator)
-      payload.paymentStatus = PaymentStatuses.PENDING
 		} catch (err: Err | any) {
 			throw new ExceptionService({
 				code: ResponseCodes.VALIDATION_ERROR,
@@ -48,12 +51,15 @@ export default class PremiumFranchiseController {
 		}
 
 		try {
-      const premiumFranchise = await PremiumFranchise.create(payload)
-      const paymentDescription = `Пользователь ${request.currentUserId} купил премиальное размещение франшизы ${ payload.offerId}. ID премиальной франшизы ${premiumFranchise.id} `
-      await BalanceService.buy(request.currentUserId, paymentDescription, 0)
+			const premiumFranchise: PremiumFranchise = await PremiumFranchiseService.create(currentUserId, paymentMethod, payload)
+
+			const paymentDescription = `Пользователь ${currentUserId} купил премиальное размещение франшизы ${payload.offerId}. ID премиальной франшизы ${premiumFranchise.id} `
+
+			await BalanceService.buy(currentUserId, PremiumFranchise, premiumFranchise.id, paymentDescription, 0, paymentMethod)
+
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, premiumFranchise))
 		} catch (err: Err | any) {
-			console.log(err)
+			Logger.error(err)
 			throw new ExceptionService(err)
 		}
 	}

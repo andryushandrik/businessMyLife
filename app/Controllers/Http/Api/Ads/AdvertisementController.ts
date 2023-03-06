@@ -14,13 +14,21 @@ import AdvertisementValidator from 'App/Validators/Ads/AdvertisementValidator'
 import { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import AdvertisementFilterValidator from 'App/Validators/Ads/AdvertisementFilterValidator'
 import AdvertisementPortionsValidator from 'App/Validators/Ads/AdvertisementPortionsValidator'
-import { PaymentStatuses } from 'Config/payment'
-let pageForUsersAds: number = 1
+import { PaymentMethods } from 'Config/payment'
+let pageForUsersAds = 1
 export default class AdvertisementController {
 	public async show({ request, response }: HttpContextContract) {
 		let payload: AdvertisementFilterValidator['schema']['props']
 		try {
 			payload = await request.validate(AdvertisementFilterValidator)
+		} catch (err: Err | any) {
+			throw new ExceptionService({
+				code: ResponseCodes.VALIDATION_ERROR,
+				message: ResponseMessages.VALIDATION_ERROR,
+				body: err.messages,
+			})
+		}
+		try {
 			payload.isVerified = false
 		} catch (err: any) {
 			throw new ExceptionService({
@@ -40,7 +48,15 @@ export default class AdvertisementController {
 
 	public async showAdsByPortions({ request, response }: HttpContextContract) {
 		let payload: AdvertisementPortionsValidator['schema']['props']
-		payload = await request.validate(AdvertisementPortionsValidator)
+		try {
+			payload = await request.validate(AdvertisementPortionsValidator)
+		} catch (err: Err | any) {
+			throw new ExceptionService({
+				code: ResponseCodes.VALIDATION_ERROR,
+				message: ResponseMessages.VALIDATION_ERROR,
+				body: err.messages,
+			})
+		}
 		try {
 			const rows = await AdvertisementService.getByPortions(payload, pageForUsersAds)
 			pageForUsersAds += 1
@@ -51,23 +67,34 @@ export default class AdvertisementController {
 	}
 
 	public async create({ request, response }: HttpContextContract) {
-		const payload = await request.validate(AdvertisementValidator)
+		let payload: AdvertisementValidator['schema']['props']
 		try {
-			payload.paymentStatus = PaymentStatuses.PENDING
+			payload = await request.validate(AdvertisementValidator)
+		} catch (err: Err | any) {
+			throw new ExceptionService({
+				code: ResponseCodes.VALIDATION_ERROR,
+				message: ResponseMessages.VALIDATION_ERROR,
+				body: err.messages,
+			})
+		}
+
+		const paymentMethod = request.body().paymentMethod ? PaymentMethods[request.body().paymentMethod] : PaymentMethods['INTERNAL']
+		try {
 			payload.userId = request.currentUserId
-			const advertisement: Advertisement = await AdvertisementService.create(payload)
+			const advertisement: Advertisement = await AdvertisementService.create({ ...payload })
 			const fullAd: Advertisement = await AdvertisementService.get(advertisement.id)
+
+			let price = fullAd.adsType.priceThreeMonths
+
 			if (payload.placedForMonths == 3) {
-				const price = fullAd.adsType.priceThreeMonths
-				const paymentDescription = `Пользователь ${request.currentUserId} купил рекламу ${fullAd.id} за ${price} `
-				await BalanceService.buy(request.currentUserId, paymentDescription, price)
-				await AdvertisementService.changePaymentStatus(fullAd.id, PaymentStatuses.SUCCESS)
+				price = fullAd.adsType.priceThreeMonths
 			} else if (payload.placedForMonths == 6) {
-				const price = fullAd.adsType.priceSixMonths
-				const paymentDescription = `Пользователь ${request.currentUserId} купил рекламу ${fullAd.id} за ${price}`
-				await BalanceService.buy(request.currentUserId, paymentDescription, price)
-				await AdvertisementService.changePaymentStatus(fullAd.id, PaymentStatuses.SUCCESS)
+				price = fullAd.adsType.priceSixMonths
 			}
+
+			const paymentDescription = `Пользователь ${request.currentUserId} купил рекламу ${fullAd.id} за ${price}`
+			await BalanceService.buy(request.currentUserId, Advertisement, fullAd.id, paymentDescription, price, paymentMethod)
+
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, { fullAd }))
 		} catch (err: Err | any) {
 			Logger.error(err)
@@ -75,4 +102,3 @@ export default class AdvertisementController {
 		}
 	}
 }
-

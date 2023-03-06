@@ -1,7 +1,7 @@
-import { BelongsTo, computed, HasOne, hasOne, scope } from '@ioc:Adonis/Lucid/Orm'
+import { BelongsTo, computed, HasMany, hasMany, HasOne, scope } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 import Offer from './Offer'
-import type { DateTime } from 'luxon'
+import { DateTime } from 'luxon'
 // * Types
 import { TABLES_NAMES } from 'Config/database'
 import { BaseModel, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
@@ -19,15 +19,14 @@ export default class PremiumFranchise extends BaseModel {
 	@column({ isPrimary: true })
 	public id: number
 
+	@column({ columnName: 'placedForMonths' })
+	public placedForMonths: number
 	/**
 	 * * Foreign keys
 	 */
 
 	@column({ columnName: 'offer_id' })
 	public offerId: Offer['id']
-
-  @column({ columnName: 'paymentStatus' })
-	public paymentStatus: string
 
 	/**
 	 * * Timestamps
@@ -42,8 +41,8 @@ export default class PremiumFranchise extends BaseModel {
 	@belongsTo(() => Offer)
 	public offer: BelongsTo<typeof Offer>
 
-	@hasOne(() => PremiumSlot, { foreignKey: 'franchiseId' })
-	public premiumSlot: HasOne<typeof PremiumSlot>
+	@hasMany(() => PremiumSlot, { foreignKey: 'franchiseId' })
+	public premiumSlots: HasMany<typeof PremiumSlot>
 	/**
 	 * * Hooks
 	 */
@@ -54,6 +53,15 @@ export default class PremiumFranchise extends BaseModel {
 			return this.createdAt.setLocale('ru-RU').toFormat(GLOBAL_DATETIME_FORMAT)
 		}
 		return ''
+	}
+
+	@computed()
+	public get archiveExpire(): string {
+		const expireDate: DateTime = this.createdAt.plus({ months: this.placedForMonths })
+		const archiveExpireInDays: number = expireDate.diff(DateTime.now(), 'days').days
+		const archiveExpireInDaysWithoutFraction: number = Math.floor(archiveExpireInDays)
+
+		return `Осталось ${archiveExpireInDaysWithoutFraction} дней - до ${expireDate.setLocale('ru-RU').toFormat('dd MMMM, yyyy')}`
 	}
 
 	public static getByOfferId = scope((query, offerId: Offer['id']) => [query.where('offerId', offerId)])

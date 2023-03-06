@@ -15,7 +15,6 @@ export default class AdvertisementPortionsValidator extends IndexValidator {
 	public schema = schema.create({
 		limit: schema.number(),
 		adsTypeId: schema.number(getAdvertisementTypesRules()),
-
 	})
 
 	public messages: CustomMessages = this.messages

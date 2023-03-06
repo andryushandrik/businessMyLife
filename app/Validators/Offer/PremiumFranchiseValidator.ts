@@ -1,5 +1,5 @@
 // * Types
-import type { CustomMessages } from '@ioc:Adonis/Core/Validator'
+import { CustomMessages, rules } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 // * Types
 
@@ -7,6 +7,7 @@ import IndexValidator from '../IndexValidator'
 import { schema } from '@ioc:Adonis/Core/Validator'
 import { getOfferIdRules } from '../Rules/Offer/offer'
 import { TABLES_NAMES } from 'Config/database'
+import { getPremiumSlotIdRule } from '../Rules/premiumSlots'
 
 export default class PremiumFranchiseValidator extends IndexValidator {
 	constructor(protected ctx: HttpContextContract) {
@@ -33,8 +34,9 @@ export default class PremiumFranchiseValidator extends IndexValidator {
 	 *    ```
 	 */
 	public schema = schema.create({
-		offerId: schema.number(getOfferIdRules(TABLES_NAMES.OFFERS, true)),
-    paymentStatus: schema.string.optional()
+		offerId: schema.number(getOfferIdRules(TABLES_NAMES.OFFERS)),
+		placedForMonths: schema.number([rules.unsigned(), rules.range(3, 6)]),
+		slots: schema.array().members(schema.number(getPremiumSlotIdRule())),
 	})
 
 	/**

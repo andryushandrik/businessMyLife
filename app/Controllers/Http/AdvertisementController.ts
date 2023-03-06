@@ -1,4 +1,3 @@
-import { PaymentStatuses } from './../../../config/payment'
 import AdvertisementType from 'App/Models/Ads/AdvertisementType'
 import Logger from '@ioc:Adonis/Core/Logger'
 import SubsectionService from 'App/Services/Offer/SubsectionService'
@@ -15,6 +14,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 import User from 'App/Models/User/User'
 import MyAdvertisementValidator from 'App/Validators/Ads/MyAdvertisementValidator'
+import ExceptionService from 'App/Services/ExceptionService'
 
 export default class AdvertisementController {
 	public async index({ view, request, response, session, route }: HttpContextContract) {
@@ -110,12 +110,23 @@ export default class AdvertisementController {
 
 	public async update({ request, response, session, params }: HttpContextContract) {
 		const id: Advertisement['id'] = params.id
+		let payload: MyAdvertisementValidator['schema']['props']
+
+		try {
+			payload = await request.validate(MyAdvertisementValidator)
+		} catch (err: Err | any) {
+			throw new ExceptionService({
+				code: ResponseCodes.VALIDATION_ERROR,
+				message: ResponseMessages.VALIDATION_ERROR,
+				body: err.messages,
+			})
+		}
+
 		try {
 			const item = await AdvertisementService.get(id)
 			if (item.userId !== request.currentUserId) {
 				throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.FORBIDDEN } as Err
 			}
-			const payload = await request.validate(MyAdvertisementValidator)
 			await AdvertisementService.update(id, payload)
 			session.flash('success', ResponseMessages.SUCCESS)
 			return response.redirect().toRoute('ads.my')
@@ -184,9 +195,19 @@ export default class AdvertisementController {
 	}
 
 	public async store({ request, response, session }: HttpContextContract) {
-    const payload = await request.validate(MyAdvertisementValidator)
+		let payload: MyAdvertisementValidator['schema']['props']
+
 		try {
-			await AdvertisementService.create({ ...payload, userId: request.currentUserId, paymentStatus: PaymentStatuses.SUCCESS, isVerified: true })
+			payload = await request.validate(MyAdvertisementValidator)
+		} catch (err: Err | any) {
+			throw new ExceptionService({
+				code: ResponseCodes.VALIDATION_ERROR,
+				message: ResponseMessages.VALIDATION_ERROR,
+				body: err.messages,
+			})
+		}
+		try {
+			await AdvertisementService.create({ ...payload, userId: request.currentUserId, isVerified: true })
 			session.flash('success', ResponseMessages.SUCCESS)
 			response.redirect().toRoute('ads.my')
 		} catch (err: Err | any) {
@@ -210,4 +231,3 @@ export default class AdvertisementController {
 		}
 	}
 }
-

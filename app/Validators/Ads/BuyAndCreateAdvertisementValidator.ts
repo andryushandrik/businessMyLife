@@ -5,23 +5,27 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 import IndexValidator from '../IndexValidator'
 import { schema } from '@ioc:Adonis/Core/Validator'
+import { getUserIdRules } from '../Rules/User/user'
 import { getAdsDescriptionRules, getAdsFileOptions, getAdvertisementTypesRules } from '../Rules/Ads/ads'
 import { getSubsectionIdRules } from '../Rules/Offer/subsection'
 
-export default class MyAdvertisementValidator extends IndexValidator {
+export default class BuyAndCreateAdvertisementValidator extends IndexValidator {
 	constructor(protected ctx: HttpContextContract) {
 		super()
 	}
 
 	public schema = schema.create({
 		description: schema.string({ trim: true }, getAdsDescriptionRules()),
+		userId: schema.number(getUserIdRules()),
 		adsTypeId: schema.number(getAdvertisementTypesRules()),
 		subsectionId: schema.number(getSubsectionIdRules()),
 		link: schema.string(),
+		paymentMethod: schema.enum(['INTERNAL', 'EXTERNAL']),
 		/**
 		 * * Optional fields
 		 */
 		placedForMonths: schema.number([rules.unsigned(), rules.range(3, 6)]),
+		// placedAt: schema.date.optional({ format: 'dd MMMM, yyyy' }),
 		image: schema.file.optional(getAdsFileOptions()),
 		isVerified: schema.boolean.optional(),
 		viewsCount: schema.number.optional(),

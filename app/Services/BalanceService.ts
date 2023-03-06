@@ -4,6 +4,8 @@ import { Err } from 'Contracts/response'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
 import PaymentService from './PaymentService'
 import UserService from './User/UserService'
+import { PaymentMethods, PaymentStatuses } from 'Config/payment'
+import { LucidModel } from '@ioc:Adonis/Lucid/Orm'
 
 export default class BalanceService {
 	public static async updateBalanceOfUser(userId: User['id'], balance: number): Promise<void> {
@@ -13,6 +15,9 @@ export default class BalanceService {
 				description: `Администратор установил баланс для пользователя ${userId} равный ${balance} `,
 				amount: balance,
 				userId: userId,
+				method: PaymentMethods.INTERNAL,
+				paymentTarget: `${User.table}_${userId}`,
+				status: PaymentStatuses.SUCCESS,
 				promocodeId: null,
 			})
 			await user.merge({ balance: balance }).save()
@@ -21,23 +26,39 @@ export default class BalanceService {
 		}
 	}
 
-	public static async buy(userId: User['id'], description: string, price: number): Promise<void> {
+	public static async buy(userId: User['id'], model: LucidModel, targetId: number, description: string, price: number, method: PaymentMethods): Promise<void> {
 		try {
-			const user: User = await UserService.get(+userId)
-			if (user.balance - price >= 0) {
-				console.log('BALANCE IS GOOD')
+			console.log(userId)
+
+			if (method === PaymentMethods.INTERNAL) {
+				const user: User = await UserService.get(+userId)
+				if (user.balance - price >= 0) {
+					await PaymentService.create({
+						description,
+						amount: -price,
+						userId: userId,
+						promocodeId: null,
+						method,
+						paymentTarget: `${model.table}_${targetId}`,
+						status: PaymentStatuses.SUCCESS,
+					})
+					await user.merge({ balance: user.balance - price }).save()
+				} else {
+					throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.NOT_ENOUGH_BALANCE_ERROR } as Err
+				}
+			} else if (method === PaymentMethods.EXTERNAL) {
 				await PaymentService.create({
 					description,
 					amount: -price,
 					userId: userId,
 					promocodeId: null,
+					method,
+					paymentTarget: `${model.table}_${targetId}`,
+					status: PaymentStatuses.REJECTED,
 				})
-				await user.merge({ balance: user.balance - price }).save()
-			} else {
-				throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.NOT_ENOUGH_BALANCE_ERROR } as Err
+				throw { code: ResponseCodes.SERVER_ERROR, message: ResponseMessages.BANK_SERVICE_ERROR } as Err
 			}
 		} catch (err: Err | any) {
-			// throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.NOT_ENOUGH_BALANCE_ERROR } as Err
 			throw err
 		}
 	}
@@ -50,6 +71,9 @@ export default class BalanceService {
 				amount: accrue,
 				userId: userId,
 				promocodeId: null,
+				method: PaymentMethods.INTERNAL,
+				paymentTarget: `${User.table}_${userId}`,
+				status: PaymentStatuses.SUCCESS,
 			})
 			await user.merge({ balance: user.balance + accrue }).save()
 		} catch (err: Err | any) {

@@ -16,7 +16,7 @@ export default class CheckAdminPanelAccess {
 			if (!currentUser) throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.USER_NOT_FOUND } as Err
 
 			await AuthService.checkAdminAccess(currentUser.id)
-      request.currentUserId = currentUser.id
+			request.currentUserId = currentUser.id
 		} catch (err: Err | any) {
 			session.forget(SESSION_AUTH_KEY)
 

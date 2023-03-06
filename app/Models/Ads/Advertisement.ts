@@ -14,7 +14,6 @@ export default class Advertisement extends BaseModel {
 	public static readonly columns = [
 		'id',
 		'image',
-		'paymentStatus',
 		'subsectionId',
 		'link',
 		'adsTypeId',
@@ -49,9 +48,6 @@ export default class Advertisement extends BaseModel {
 
 	@column()
 	public link: string
-
-	@column({ columnName: 'payment_status' })
-	public paymentStatus: string
 
 	@column({ columnName: 'user_id' })
 	public userId: User['id']
@@ -124,7 +120,7 @@ export default class Advertisement extends BaseModel {
 		query.where('isVerified', isVerified)
 	})
 
-  public static getByUserId = scope((query, userId: number) => {
+	public static getByUserId = scope((query, userId: number) => {
 		query.where('userId', userId)
 	})
 
