@@ -144,8 +144,8 @@ export default class MessageService {
 				.where('createdAt', '>', maxTime)
 				.whereNotNull('offerId')
 				.orderBy('createdAt', 'desc')
-			const result = messages[0].offerId != offerId
-			console.log(messages[0].offerId, offerId)
+			const result = messages[0]?.offerId != offerId
+			console.log(messages[0]?.offerId, offerId)
 
 			return result
 		} catch (err: Err | any) {
