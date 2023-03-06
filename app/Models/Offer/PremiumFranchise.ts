@@ -1,5 +1,5 @@
 
-import { BelongsTo, computed, HasOne, hasOne, scope } from '@ioc:Adonis/Lucid/Orm'
+import { afterFetch, afterFind, BelongsTo, computed, HasOne, hasOne,  scope } from '@ioc:Adonis/Lucid/Orm'
 
 // * Types
 import Offer from './Offer'
@@ -48,6 +48,27 @@ export default class PremiumFranchise extends BaseModel {
 	/**
 	 * * Hooks
 	 */
+
+	@afterFind()
+	public static afterFindHook(premiumFranchise: PremiumFranchise) {
+		const expireDate: DateTime = premiumFranchise.createdAt.plus({ months: premiumFranchise.placedForMonths })
+		const expiresInMilliseconds: number = expireDate.diff(DateTime.now()).milliseconds
+		if (expiresInMilliseconds < 0) {
+			premiumFranchise.delete()
+		}
+	}
+
+	@afterFetch()
+	public static afterFetchHook(premiumFranchises: PremiumFranchise[]) {
+		premiumFranchises.map((premiumFranchise) => {
+			const expireDate: DateTime = premiumFranchise.createdAt.plus({ months: premiumFranchise.placedForMonths })
+			const expiresInMilliseconds: number = expireDate.diff(DateTime.now()).milliseconds
+			if (expiresInMilliseconds < 0) {
+				premiumFranchise.delete()
+
+			}
+		})
+	}
 
 	@computed()
 	public get createdAtForUser(): string {
