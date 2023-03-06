@@ -39,7 +39,6 @@ WebSocketService.boot()
 
 WebSocketService.io.on('connection', async (socket) => {
 	await checkConnection()
-	sendUnreadConversationsCountToSender(socket)
 
 	/**
 	 * * Conversation
@@ -241,6 +240,9 @@ WebSocketService.io.on('connection', async (socket) => {
 
 		const userRoomName = getUserRoomName(socket.data.userId)
 		socket.join(userRoomName)
+
+		sendUnreadConversationsCountToSender(socket)
+
 		// on sucessfully connection actions end
 	}
 

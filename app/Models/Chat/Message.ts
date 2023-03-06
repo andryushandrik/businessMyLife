@@ -60,7 +60,7 @@ export default class Message extends BaseModel {
 	/**
 	 * * Relations
 	 */
-	@belongsTo(() => Offer)
+	@belongsTo(() => Offer, { serializeAs: null })
 	public offer: BelongsTo<typeof Offer>
 
 	@belongsTo(() => User, { serializeAs: null })
@@ -83,8 +83,8 @@ export default class Message extends BaseModel {
 	}
 
 	@computed()
-	public get offerInfo(): object {
-		if (!this.offer) return {}
+	public get offerInfo(): object | null {
+		if (!this.offer) return null
 		const title = this.offer.title,
 			price = this.offer.price
 

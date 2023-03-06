@@ -56,7 +56,7 @@ export default class MessageService {
 		}
 	}
 
-	public static async 	create(currentUserId: User['id'], payload: MessageCreatePayloadValidator['schema']['props']): Promise<ReturnMessageCreatePayload> {
+	public static async create(currentUserId: User['id'], payload: MessageCreatePayloadValidator['schema']['props']): Promise<ReturnMessageCreatePayload> {
 		let conversation: Conversation | undefined
 		const trx = await Database.transaction()
 		const receiverId: User['id'] | undefined = payload.userId
@@ -70,8 +70,6 @@ export default class MessageService {
 		} else if (payload.conversationId) {
 			try {
 				conversation = await ConversationService.getById(payload.conversationId, { trx })
-
-				await ConversationService.updateWhenMessageCreatedOrDeleted(conversation, { trx })
 			} catch (err: Err | any) {
 				await trx.rollback()
 				console.log('??')
@@ -122,6 +120,7 @@ export default class MessageService {
 				},
 				{ client: trx },
 			)
+			await ConversationService.updateWhenMessageCreatedOrDeleted(conversation, { trx })
 
 			await trx.commit()
 			const message: Message = await Message.findOrFail(createdMessage.id)
