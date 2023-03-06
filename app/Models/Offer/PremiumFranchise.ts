@@ -1,4 +1,4 @@
-import { afterFetch, afterFind, BelongsTo, computed, HasOne, hasOne,  scope } from '@ioc:Adonis/Lucid/Orm'
+import { afterFetch, afterFind, BelongsTo, computed, HasOne, hasOne, scope } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 import Offer from './Offer'
 import { DateTime } from 'luxon'
@@ -63,7 +63,6 @@ export default class PremiumFranchise extends BaseModel {
 			const expiresInMilliseconds: number = expireDate.diff(DateTime.now()).milliseconds
 			if (expiresInMilliseconds < 0) {
 				premiumFranchise.delete()
-
 			}
 		})
 	}
@@ -77,12 +76,12 @@ export default class PremiumFranchise extends BaseModel {
 	}
 
 	@computed()
-	public get archiveExpire(): string {
+	public get timeBeforeArchive(): string {
 		const expireDate: DateTime = this.createdAt.plus({ months: this.placedForMonths })
-		const archiveExpireInDays: number = expireDate.diff(DateTime.now(), 'days').days
-		const archiveExpireInDaysWithoutFraction: number = Math.floor(archiveExpireInDays)
+		const daysBeforeArchive: number = expireDate.diff(DateTime.now(), 'days').days
+		const daysBeforeArchiveWithoutFraction: number = Math.floor(daysBeforeArchive)
 
-		return `Осталось ${archiveExpireInDaysWithoutFraction} дней - до ${expireDate.setLocale('ru-RU').toFormat('dd MMMM, yyyy')}`
+		return `Осталось ${daysBeforeArchiveWithoutFraction} дней - до ${expireDate.setLocale('ru-RU').toFormat('dd MMMM, yyyy')}`
 	}
 
 	public static getByOfferId = scope((query, offerId: Offer['id']) => [query.where('offerId', offerId)])

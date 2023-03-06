@@ -78,7 +78,7 @@ export default class PremiumFranchiseController {
 			return response.redirect().back()
 		}
 	}
-  public async get({ view, params, response, session }: HttpContextContract) {
+	public async get({ view, params, response, session }: HttpContextContract) {
 		const id: PremiumFranchise['id'] = params.id
 
 		try {
@@ -89,5 +89,4 @@ export default class PremiumFranchiseController {
 			return response.redirect().back()
 		}
 	}
-
 }

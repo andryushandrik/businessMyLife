@@ -24,17 +24,17 @@ export default class FranchiseController {
 			relations: ['user', 'subsection', 'premiumFranchise'],
 
 			isVerified: true,
-      isArchived: false,
-      isBanned: false,
+			isArchived: false,
+			isBanned: false,
 		}
 		if (isFiltered) {
-      payload = await request.validate(OfferFilterValidator)
+			payload = await request.validate(OfferFilterValidator)
 			config.orderBy = payload.orderBy
 			config.orderByColumn = payload.orderByColumn
 		}
 		try {
 			const areas: Area[] = await AreaService.getAll()
-      const franchises: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload, 4)
+			const franchises: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload, 4)
 
 			return view.render('pages/offer/franchises/index', {
 				areas,
@@ -47,26 +47,26 @@ export default class FranchiseController {
 			return response.redirect().back()
 		}
 	}
-  public async moderation({ request, response, route, view, session }: HttpContextContract) {
+	public async moderation({ request, response, route, view, session }: HttpContextContract) {
 		let payload: OfferFilterValidator['schema']['props'] | undefined = undefined
 		const isFiltered: boolean = request.input('isFiltered', false)
 		const config: OfferServicePaginateConfig = {
 			baseUrl: route!.pattern,
 			page: request.input('page', 1),
 			limit: request.input('limit', 5),
-      isVerified: false,
+			isVerified: false,
 			aggregates: ['reports'],
 			relations: ['user', 'subsection', 'premiumFranchise'],
 		}
 
 		if (isFiltered) {
-      payload = await request.validate(OfferFilterValidator)
+			payload = await request.validate(OfferFilterValidator)
 			config.orderBy = payload.orderBy
 			config.orderByColumn = payload.orderByColumn
 		}
 		try {
 			const areas: Area[] = await AreaService.getAll()
-      const franchises: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload, 4)
+			const franchises: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload, 4)
 
 			return view.render('pages/offer/franchises/moderation', {
 				areas,
@@ -79,26 +79,26 @@ export default class FranchiseController {
 			return response.redirect().back()
 		}
 	}
-  public async archived({ request, response, route, view, session }: HttpContextContract) {
+	public async archived({ request, response, route, view, session }: HttpContextContract) {
 		let payload: OfferFilterValidator['schema']['props'] | undefined = undefined
 		const isFiltered: boolean = request.input('isFiltered', false)
 		const config: OfferServicePaginateConfig = {
 			baseUrl: route!.pattern,
 			page: request.input('page', 1),
 			limit: request.input('limit', 5),
-      isArchived: true,
+			isArchived: true,
 			aggregates: ['reports'],
 			relations: ['user', 'subsection', 'premiumFranchise'],
 		}
 
 		if (isFiltered) {
-      payload = await request.validate(OfferFilterValidator)
+			payload = await request.validate(OfferFilterValidator)
 			config.orderBy = payload.orderBy
 			config.orderByColumn = payload.orderByColumn
 		}
 		try {
 			const areas: Area[] = await AreaService.getAll()
-      const franchises: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload, 4)
+			const franchises: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload, 4)
 
 			return view.render('pages/offer/franchises/archived', {
 				areas,
@@ -112,4 +112,3 @@ export default class FranchiseController {
 		}
 	}
 }
-
