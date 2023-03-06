@@ -70,8 +70,6 @@ export default class MessageService {
 		} else if (payload.conversationId) {
 			try {
 				conversation = await ConversationService.getById(payload.conversationId, { trx })
-
-				await ConversationService.updateWhenMessageCreatedOrDeleted(conversation, { trx })
 			} catch (err: Err | any) {
 				await trx.rollback()
 				console.log('??')
@@ -122,6 +120,7 @@ export default class MessageService {
 				},
 				{ client: trx },
 			)
+			await ConversationService.updateWhenMessageCreatedOrDeleted(conversation, { trx })
 
 			await trx.commit()
 			const message: Message = await Message.findOrFail(createdMessage.id)
@@ -144,8 +143,8 @@ export default class MessageService {
 				.where('createdAt', '>', maxTime)
 				.whereNotNull('offerId')
 				.orderBy('createdAt', 'desc')
-			const result = messages[0].offerId != offerId
-			console.log(messages[0].offerId, offerId)
+			const result = messages[0]?.offerId != offerId
+			console.log(messages[0]?.offerId, offerId)
 
 			return result
 		} catch (err: Err | any) {

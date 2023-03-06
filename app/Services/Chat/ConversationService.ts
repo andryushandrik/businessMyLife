@@ -175,7 +175,8 @@ export default class ConversationService {
 				throw Err
 			}
 		}
-
+		console.log('updating...');
+		
 		try {
 			const timestamp: DateTime = DateTime.now()
 

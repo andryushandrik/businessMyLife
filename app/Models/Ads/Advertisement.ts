@@ -1,6 +1,6 @@
 import Subsection from 'App/Models/Offer/Subsection'
 import Drive from '@ioc:Adonis/Core/Drive'
-import { beforeDelete, BelongsTo, computed, scope } from '@ioc:Adonis/Lucid/Orm'
+import { afterFetch, afterFind, beforeDelete, BelongsTo, computed, scope } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 import { DateTime } from 'luxon'
 // * Types
@@ -127,6 +127,27 @@ export default class Advertisement extends BaseModel {
 	/**
 	 * * Hooks
 	 */
+
+	@afterFind()
+	public static afterFindHook(advertisement: Advertisement) {
+		const expireDate: DateTime = advertisement.createdAt.plus({ months: advertisement.placedForMonths })
+		const expiresInMilliseconds: number = expireDate.diff(DateTime.now()).milliseconds
+		if (expiresInMilliseconds < 0) {
+			advertisement.delete()
+		}
+	}
+
+	@afterFetch()
+	public static afterFetchHook(advertisements: Advertisement[]) {
+		advertisements.map((advertisement) => {
+			const expireDate: DateTime = advertisement.createdAt.plus({ months: advertisement.placedForMonths })
+			const expiresInMilliseconds: number = expireDate.diff(DateTime.now()).milliseconds
+			if (expiresInMilliseconds < 0) {
+				advertisement.delete()
+
+			}
+		})
+	}
 
 	@beforeDelete()
 	public static async deleteStoredImage(item: Advertisement) {
