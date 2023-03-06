@@ -1,4 +1,6 @@
+
 import { BelongsTo, computed, HasOne, hasOne, scope } from '@ioc:Adonis/Lucid/Orm'
+
 // * Types
 import Offer from './Offer'
 import { DateTime } from 'luxon'

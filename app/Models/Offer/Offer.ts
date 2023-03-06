@@ -1,7 +1,7 @@
 import PremiumFranchise from 'App/Models/Offer/PremiumFranchise'
 // * Types
 import type { Err } from 'Contracts/response'
-import { BelongsTo, HasMany, HasOne, hasOne, ModelObject } from '@ioc:Adonis/Lucid/Orm'
+import { afterFetch, afterFind, BelongsTo, HasMany, HasOne, hasOne, ModelObject } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 
 import User from '../User/User'
@@ -317,6 +317,28 @@ export default class Offer extends BaseModel {
 	@beforeDelete()
 	public static async deleteStoredImage(item: Offer) {
 		if (item.image) await Drive.delete(item.image)
+	}
+
+	@afterFind()
+	public static afterFindHook(offer: Offer) {
+		const expireDate: DateTime = offer.createdAt.plus({ months: offer.placedForMonths })
+		const expiresInMilliseconds: number = expireDate.diff(DateTime.now()).milliseconds
+		if (expiresInMilliseconds < 0) {
+			offer.isArchived = true
+			offer.save()
+		}
+	}
+
+	@afterFetch()
+	public static afterFetchHook(offers: Offer[]) {
+		offers.map((offer) => {
+			const expireDate: DateTime = offer.createdAt.plus({ months: offer.placedForMonths })
+			const expiresInMilliseconds: number = expireDate.diff(DateTime.now()).milliseconds
+			if (expiresInMilliseconds < 0) {
+				offer.isArchived = true
+				offer.save()
+			}
+		})
 	}
 
 	/**
