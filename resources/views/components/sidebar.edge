@@ -46,11 +46,39 @@
         </a>
         <ul aria-expanded="false">
           <li><a href="{{ route('offer.notVerified.paginate') }}">Модерация</a></li>
-          <li><a href="{{ route('offer.paginate') }}">Объявления</a></li>
+          <li><a href="{{ route('offer.paginate') }}">Опубликованные</a></li>
           <li><a href="{{ route('offer.paginateCurrentUserOffers') }}">Мои объявления</a></li>
           <li><a href="{{ route('report.paginateOffersReports') }}">Жалобы на объявления</a></li>
         </ul>
       </li>
+
+
+      <li>
+        <a class="has-arrow ai-icon" href="javascript: void()" aria-expanded="false">
+          <i class="flaticon-381-star-1"></i>
+          <span class="nav-text">Франшизы</span>
+        </a>
+        <ul aria-expanded="false">
+          <li><a href="{{ route('offer.franchises.moderation') }}">На модерации</a></li>
+          <li><a href="{{ route('offer.franchises.paginate') }}">Опубликованные</a></li>
+          <li><a href="{{ route('offer.franchises.archived') }}">Архив</a></li>
+
+        </ul>
+      </li>
+
+      <li>
+        <a class="has-arrow ai-icon" href="javascript: void()" aria-expanded="false">
+          <i class="flaticon-381-star-1"></i>
+          <span class="nav-text">Премиальное размещение</span>
+        </a>
+        <ul aria-expanded="false">
+          <li><a href="{{ route('offer.premium.public') }}">Опубликованные</a></li>
+          <li><a href="{{ route('offer.premium.paginate') }}">Премиально размещенные франшизы</a></li>
+          <li><a href="{{ route('offer.premium.slots.paginate') }}">Места для премиального размещения</a></li>
+
+        </ul>
+      </li>
+
 
       <li>
         <a class="has-arrow ai-icon" href="javascript: void()" aria-expanded="false">
@@ -78,18 +106,7 @@
       </li>
 
 
-      <li>
-        <a class="has-arrow ai-icon" href="javascript: void()" aria-expanded="false">
-          <i class="flaticon-381-star-1"></i>
-          <span class="nav-text">Премиальное размещение</span>
-        </a>
-        <ul aria-expanded="false">
-          <li><a href="{{ route('offer.premium.public') }}">Опубликованные</a></li>
-          <li><a href="{{ route('offer.premium.paginate') }}">Премиально размещенные франшизы</a></li>
-          <li><a href="{{ route('offer.premium.slots.paginate') }}">Места для премиального размещения</a></li>
 
-        </ul>
-      </li>
 
       <li>
         <a class="has-arrow ai-icon" href="javascript: void()" aria-expanded="false">

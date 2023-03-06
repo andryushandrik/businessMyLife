@@ -26,13 +26,13 @@ export default class OffersController {
 			limit: request.input('limit', 5),
 			aggregates: ['reports'],
 			relations: ['user', 'subsection'],
-
 			isVerified: true,
+      isArchived: false,
+      isBanned: false
 		}
 
 		if (isFiltered) {
 			payload = await request.validate(OfferFilterValidator)
-
 			config.orderBy = payload.orderBy
 			config.orderByColumn = payload.orderByColumn
 		}
@@ -97,6 +97,7 @@ export default class OffersController {
 		const config: OfferServicePaginateConfig = {
 			baseUrl: route!.pattern,
 			page: request.input('page', 1),
+      limit: request.input('limit', 5),
 
 			isVerified: false,
 
@@ -104,6 +105,7 @@ export default class OffersController {
 		}
 
 		if (isFiltered) {
+
 			payload = await request.validate(OfferFilterValidator)
 
 			config.orderBy = payload.orderBy
@@ -114,7 +116,7 @@ export default class OffersController {
 			const areas: Area[] = await AreaService.getAll()
 			const offers: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload)
 
-			return view.render('pages/offer/paginate', {
+			return view.render('pages/offer/moderation', {
 				areas,
 				offers,
 				payload,
@@ -185,7 +187,6 @@ export default class OffersController {
 		} catch (err: Err | any) {
 			session.flash('error', err.message)
 		}
-
 		return response.redirect().back()
 	}
 

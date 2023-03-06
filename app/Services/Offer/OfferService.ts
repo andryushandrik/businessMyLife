@@ -33,7 +33,11 @@ type OfferConfig = ServiceConfig<Offer> & {
 }
 
 export default class OfferService {
-	public static async paginate(config: OfferServicePaginateConfig, filter?: OfferFilterValidator['schema']['props']): Promise<ModelPaginatorContract<Offer>> {
+	public static async paginate(
+		config: OfferServicePaginateConfig,
+		filter?: OfferFilterValidator['schema']['props'],
+		categoryId?: number,
+	): Promise<ModelPaginatorContract<Offer>> {
 		let query: ModelQueryBuilderContract<typeof Offer, ModelObject> | ManyToManyQueryBuilderContract<typeof Offer, ModelObject> = Offer.query()
 
 		if (config.userIdForFavorites) {
@@ -44,7 +48,9 @@ export default class OfferService {
 				throw err
 			}
 		}
-
+		if (categoryId) {
+			query = query.withScopes((scopes) => scopes.getByCategories([categoryId]))
+		}
 		if (config.isArchived !== undefined) query = query.withScopes((scopes) => scopes.getByArchived(config.isArchived!))
 
 		if (config.isVerified !== undefined) query = query.withScopes((scopes) => scopes.getByVerified(config.isVerified!))
@@ -559,3 +565,4 @@ export default class OfferService {
 		}
 	}
 }
+

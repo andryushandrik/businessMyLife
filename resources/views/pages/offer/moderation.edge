@@ -42,10 +42,13 @@
     <div class="card">
       <div class="card-header">
         <h4 class="card-title">{{ title }}</h4>
+
+        @if (isModeratePage)
           <form action="{{ route('offer.notVerified.verifyAll', {}, { qs: { _method: 'PATCH' } }) }}" method="POST">
             {{ csrfField() }}
             <button type="submit" class="btn btn-primary btn-sm">Опубликовать все</button>
           </form>
+        @endif
       </div>
 
       <div class="card-body">

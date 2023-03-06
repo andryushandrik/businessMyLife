@@ -23,7 +23,7 @@ export default class PremiumFranchiseService {
 				query.preload('user')
 				query.preload('reports')
 			})
-			.preload('premiumSlots')
+			.preload('premiumSlot')
 
 		try {
 			return await query.getViaPaginate(config)
@@ -38,7 +38,13 @@ export default class PremiumFranchiseService {
 
 		try {
 			// item = await PremiumFranchise.find(id)
-			item = await PremiumFranchise.query().where('id', id).preload('offer').first()
+			item = await PremiumFranchise.query()
+				.where('id', id)
+				.preload('offer', (query) => {
+					query.preload('user').preload('reports')
+				})
+				.preload('premiumSlot')
+				.first()
 		} catch (err: any) {
 			Logger.error(err)
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
@@ -61,31 +67,20 @@ export default class PremiumFranchiseService {
 			}
 
 			try {
-				await Promise.all(
-					payload.slots.map(async (slotId) => {
-						const premiumSlot = await PremiumSlotService.get(slotId)
-						if (premiumSlot.isBlocked) {
-							throw { code: ResponseCodes.CLIENT_ERROR, message: `Слот ${premiumSlot.id} заблокирован, пожалуйста, выберите другой` }
-						}
-					}),
-				).catch((err: Err) => {
-					throw err
-				})
+				const premiumSlot = await PremiumSlotService.get(payload.slot)
+				if (premiumSlot.isBlocked) {
+					throw { code: ResponseCodes.CLIENT_ERROR, message: `Слот ${premiumSlot.id} заблокирован, пожалуйста, выберите другой` }
+				}
 			} catch (error) {
 				throw error
 			}
 
 			const premiumFranchise = await PremiumFranchise.create({ offerId: payload.offerId, placedForMonths: payload.placedForMonths })
 			try {
-				// вероятно, можно и не ждать, вряд ли пользователь успеет сделать запрос с только что занятым слотом
-				await Promise.all(
-					payload.slots.map(async (slotId) => {
-						return await PremiumSlotService.employee(currentUserId, paymentMethod, {
-							premiumFranchiseId: premiumFranchise.id,
-							premiumSlotId: slotId,
-						})
-					}),
-				)
+				await PremiumSlotService.employee(currentUserId, paymentMethod, {
+					premiumFranchiseId: premiumFranchise.id,
+					premiumSlotId: payload.slot,
+				})
 			} catch (error) {
 				throw error
 			}
@@ -162,3 +157,4 @@ export default class PremiumFranchiseService {
 		return query
 	}
 }
+
