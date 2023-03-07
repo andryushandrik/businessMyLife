@@ -15,7 +15,7 @@ export default class AdvertisementValidator extends IndexValidator {
 	}
 
 	public schema = schema.create({
-		description: schema.string({ trim: true }, getAdsDescriptionRules()),
+		description: schema.string.optional({ trim: true }, getAdsDescriptionRules()),
 		userId: schema.number(getUserIdRules()),
 		adsTypeId: schema.number(getAdvertisementTypesRules()),
 		subsectionId: schema.number(getSubsectionIdRules()),
