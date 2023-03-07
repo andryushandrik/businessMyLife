@@ -15,7 +15,6 @@ import { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import AdvertisementFilterValidator from 'App/Validators/Ads/AdvertisementFilterValidator'
 import AdvertisementPortionsValidator from 'App/Validators/Ads/AdvertisementPortionsValidator'
 import { PaymentMethods } from 'Config/payment'
-let pageForUsersAds = 1
 export default class AdvertisementController {
 	public async show({ request, response }: HttpContextContract) {
 		let payload: AdvertisementFilterValidator['schema']['props']
@@ -58,8 +57,8 @@ export default class AdvertisementController {
 			})
 		}
 		try {
-			const rows = await AdvertisementService.getByPortions(payload, pageForUsersAds)
-			pageForUsersAds += 1
+			const rows = await AdvertisementService.getByPortions(payload)
+			
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, rows))
 		} catch (err: Err | any) {
 			throw new ExceptionService(err)
