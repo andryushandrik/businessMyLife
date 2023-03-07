@@ -58,7 +58,7 @@ export default class AdvertisementController {
 		}
 		try {
 			const rows = await AdvertisementService.getByPortions(payload)
-			
+
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, rows))
 		} catch (err: Err | any) {
 			throw new ExceptionService(err)
