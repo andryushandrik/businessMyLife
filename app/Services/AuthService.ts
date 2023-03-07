@@ -189,7 +189,6 @@ export default class AuthService {
 			if (!(await Hash.verify(user.password, payload.password))) {
 				throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.USER_NOT_FOUND } as Err
 			}
-
 			return user
 		} catch (err: Err | any) {
 			throw err

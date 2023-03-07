@@ -132,4 +132,3 @@ export default class PaymentService {
 		return query
 	}
 }
-

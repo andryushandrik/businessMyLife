@@ -48,7 +48,7 @@ export default class OfferService {
 				throw err
 			}
 		}
-    // query = query.withScopes((scopes)=> scopes.getPayloadInfo())
+		// query = query.withScopes((scopes)=> scopes.getPayloadInfo())
 		if (categoryId) {
 			query = query.withScopes((scopes) => scopes.getByCategories([categoryId]))
 		}
@@ -62,9 +62,11 @@ export default class OfferService {
 		if (config.userId !== undefined) query = query.withScopes((scopes) => scopes.getByUserId(config.userId!))
 
 		if (config.preloadArea) {
-			query = query.preload('subsection', (subsection) => {
-				subsection.preload('area')
-			})
+			query = query
+				.preload('subsection', (subsection) => {
+					subsection.preload('area')
+				})
+				.preload('premiumFranchise')
 		}
 
 		if (config.relations) {
