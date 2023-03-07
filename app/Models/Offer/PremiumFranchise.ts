@@ -43,6 +43,15 @@ export default class PremiumFranchise extends BaseModel {
 
 	@hasOne(() => PremiumSlot, { foreignKey: 'franchiseId' })
 	public premiumSlot: HasOne<typeof PremiumSlot>
+
+	public static getPayloadInfo = scope((query) => {
+		const joinQuery = query.join('payments', (query) => {
+			query.on(`${this.table}.id`, `payments.target_id`).andOnVal(`payments.target_table`, `${this.table}`)
+		})
+    // .orderBy(`${this.table}.id`)
+		return [joinQuery]
+	})
+
 	/**
 	 * * Hooks
 	 */
@@ -86,3 +95,4 @@ export default class PremiumFranchise extends BaseModel {
 
 	public static getByOfferId = scope((query, offerId: Offer['id']) => [query.where('offerId', offerId)])
 }
+

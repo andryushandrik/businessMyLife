@@ -1,3 +1,4 @@
+import Payment from 'App/Models/Payment'
 import PremiumFranchise from 'App/Models/Offer/PremiumFranchise'
 // * Types
 import type { Err } from 'Contracts/response'
@@ -264,6 +265,17 @@ export default class Offer extends BaseModel {
 	 * * Query scopes
 	 */
 
+	public static getPayloadInfo = scope((query) => {
+    // WHERE payment_target LIKE '%${Offer.table}%'
+    // const joinQuery = query.joinRaw(`JOIN payments
+    // ON ${this.table}.id = substring(payments.payment_target from '[0-9]+$')::int AND payment_target LIKE '%${this.table}%`)
+    const joinQuery = query.join('payments',(query)=>{
+      query.on(`${this.table}.id`,`payments.target_id`).andOn(`${this.table}`,`payments.target_table`)
+    })
+
+		return [joinQuery]
+	})
+
 	public static getByArchived = scope((query, isArchived: Offer['isArchived']) => [query.where('isArchived', isArchived)])
 
 	public static getByCategories = scope((query, categories: OfferCategories[]) => [query.whereIn('category', categories)])
@@ -363,3 +375,4 @@ export default class Offer extends BaseModel {
 		return item
 	}
 }
+

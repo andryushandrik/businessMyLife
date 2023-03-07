@@ -48,9 +48,11 @@ export default class OfferService {
 				throw err
 			}
 		}
+    // query = query.withScopes((scopes)=> scopes.getPayloadInfo())
 		if (categoryId) {
 			query = query.withScopes((scopes) => scopes.getByCategories([categoryId]))
 		}
+
 		if (config.isArchived !== undefined) query = query.withScopes((scopes) => scopes.getByArchived(config.isArchived!))
 
 		if (config.isVerified !== undefined) query = query.withScopes((scopes) => scopes.getByVerified(config.isVerified!))

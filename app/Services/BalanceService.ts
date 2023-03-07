@@ -16,7 +16,8 @@ export default class BalanceService {
 				amount: balance,
 				userId: userId,
 				method: PaymentMethods.INTERNAL,
-				paymentTarget: `${User.table}_${userId}`,
+				targetTable: `${User.table}`,
+				targetId: userId,
 				status: PaymentStatuses.SUCCESS,
 				promocodeId: null,
 			})
@@ -39,7 +40,8 @@ export default class BalanceService {
 						userId: userId,
 						promocodeId: null,
 						method,
-						paymentTarget: `${model.table}_${targetId}`,
+						targetTable: `${model.table}`,
+						targetId,
 						status: PaymentStatuses.SUCCESS,
 					})
 					await user.merge({ balance: user.balance - price }).save()
@@ -53,7 +55,8 @@ export default class BalanceService {
 					userId: userId,
 					promocodeId: null,
 					method,
-					paymentTarget: `${model.table}_${targetId}`,
+					targetTable: `${model.table}`,
+					targetId,
 					status: PaymentStatuses.REJECTED,
 				})
 				throw { code: ResponseCodes.SERVER_ERROR, message: ResponseMessages.BANK_SERVICE_ERROR } as Err
@@ -72,7 +75,8 @@ export default class BalanceService {
 				userId: userId,
 				promocodeId: null,
 				method: PaymentMethods.INTERNAL,
-				paymentTarget: `${User.table}_${userId}`,
+				targetTable: `${User.table}`,
+				targetId: userId,
 				status: PaymentStatuses.SUCCESS,
 			})
 			await user.merge({ balance: user.balance + accrue }).save()
@@ -81,3 +85,4 @@ export default class BalanceService {
 		}
 	}
 }
+
