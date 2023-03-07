@@ -1,4 +1,3 @@
-import Payment from 'App/Models/Payment'
 import PremiumFranchise from 'App/Models/Offer/PremiumFranchise'
 // * Types
 import type { Err } from 'Contracts/response'
