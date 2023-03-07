@@ -48,6 +48,7 @@ export default class OfferService {
 				throw err
 			}
 		}
+    // query = query.withScopes((scopes)=> scopes.getPayloadInfo())
 		if (categoryId) {
 			query = query.withScopes((scopes) => scopes.getByCategories([categoryId]))
 		}

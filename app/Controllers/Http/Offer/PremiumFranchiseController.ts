@@ -21,9 +21,8 @@ export default class PremiumFranchiseController {
 		try {
 			if (isFiltered) {
 				payload = await request.validate(PremiumFranchiseFilterValidator)
-
 				config.orderBy = payload.orderBy
-				config.orderByColumn = payload.orderByColumn
+				config.orderByColumn = `${PremiumFranchise.table}.` + payload.orderByColumn
 			}
 		} catch (err: any) {
 			throw new ExceptionService({
@@ -90,3 +89,4 @@ export default class PremiumFranchiseController {
 		}
 	}
 }
+

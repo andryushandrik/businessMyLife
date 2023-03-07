@@ -96,7 +96,9 @@
                   <td>
                     <a href="{{ route('user.get', { id: item.user.id }) }}" class="text-primary">{{ item.user.fullName }}</a>
                   </td>
-                  <td>{{ item.title }}</td>
+                  <td>
+                    <a class="text-primary" href="https://business-mylife.ru/adv-page/{{item.id}}">{{ item.title }}</a>
+                    </td>
                   <td>
                     <img src="{{ getMedia(item.image) }}" width="300" height="200" alt="">
                   </td>

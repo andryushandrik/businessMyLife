@@ -1,5 +1,5 @@
 import PromoCode from 'App/Models/PromoCode'
-import { BelongsTo, scope } from '@ioc:Adonis/Lucid/Orm'
+import { BelongsTo, LucidModel, scope } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 import type { DateTime } from 'luxon'
 // * Types
@@ -8,7 +8,7 @@ import { BaseModel, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import User from './User/User'
 
 export default class Payment extends BaseModel {
-	public static readonly columns = ['id', 'amount', 'description', 'promocodeId', 'createdAt', 'updatedAt'] as const
+	public static readonly columns = ['id', 'amount', 'description', 'promocodeId', 'target_table', 'target_id', 'createdAt', 'updatedAt'] as const
 
 	/**
 	 * * Columns
@@ -35,8 +35,11 @@ export default class Payment extends BaseModel {
 	@column()
 	public amount: number
 
-	@column({ columnName: 'payment_target' })
-	public paymentTarget: string
+	@column({ columnName: 'target_table' })
+	public targetTable: string
+
+  @column({ columnName: 'target_id' })
+	public targetId: number
 
 	@column.dateTime({ autoCreate: true, columnName: 'created_at' })
 	public createdAt: DateTime
@@ -60,7 +63,12 @@ export default class Payment extends BaseModel {
 	public static search = scope((query, searchQuery: string) => {
 		query.where('description', 'ILIKE', `%${searchQuery}%`)
 	})
+
+	public static getByPaymentTarget = scope((query, model: LucidModel, id: number) => {
+		query.where('target_table', `${model.table}`).andWhere('target_id',`${id}`)
+	})
 	/**
 	 * * Hooks
 	 */
 }
+

@@ -39,7 +39,8 @@ export default class PaymentValidator extends IndexValidator {
 		method: schema.string(),
 		status: schema.string(),
 		promocodeId: schema.number.nullableAndOptional(getPromoCodeIdRules()),
-		paymentTarget: schema.string(),
+		targetTable: schema.string(),
+		targetId: schema.number(),
 	})
 
 	/**
@@ -55,3 +56,4 @@ export default class PaymentValidator extends IndexValidator {
 	 */
 	public messages: CustomMessages = this.messages
 }
+

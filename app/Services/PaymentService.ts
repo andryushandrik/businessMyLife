@@ -1,3 +1,4 @@
+import { LucidModel } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 import type { Err } from 'Contracts/response'
 import type { PaginateConfig } from 'Contracts/services'
@@ -30,6 +31,21 @@ export default class PaymentService {
 
 		try {
 			item = await Payment.find(id)
+		} catch (err: any) {
+			Logger.error(err)
+			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+		}
+
+		if (!item) throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.ERROR } as Err
+
+		return item
+	}
+
+	public static async getByPaymentTarget(model: LucidModel, targetId: number): Promise<Payment> {
+		let item: Payment | null
+
+		try {
+			item = await Payment.findBy('payment_target', `${model.table}_${targetId}`)
 		} catch (err: any) {
 			Logger.error(err)
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
@@ -116,3 +132,4 @@ export default class PaymentService {
 		return query
 	}
 }
+
