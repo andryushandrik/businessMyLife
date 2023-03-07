@@ -56,4 +56,3 @@ export default class PaymentValidator extends IndexValidator {
 	 */
 	public messages: CustomMessages = this.messages
 }
-

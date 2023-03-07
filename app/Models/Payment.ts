@@ -38,7 +38,7 @@ export default class Payment extends BaseModel {
 	@column({ columnName: 'target_table' })
 	public targetTable: string
 
-  @column({ columnName: 'target_id' })
+	@column({ columnName: 'target_id' })
 	public targetId: number
 
 	@column.dateTime({ autoCreate: true, columnName: 'created_at' })
@@ -65,10 +65,9 @@ export default class Payment extends BaseModel {
 	})
 
 	public static getByPaymentTarget = scope((query, model: LucidModel, id: number) => {
-		query.where('target_table', `${model.table}`).andWhere('target_id',`${id}`)
+		query.where('target_table', `${model.table}`).andWhere('target_id', `${id}`)
 	})
 	/**
 	 * * Hooks
 	 */
 }
-

@@ -30,7 +30,7 @@ export default class FranchiseController {
 		if (isFiltered) {
 			payload = await request.validate(OfferFilterValidator)
 			config.orderBy = payload.orderBy
-			config.orderByColumn =  payload.orderByColumn
+			config.orderByColumn = payload.orderByColumn
 		}
 		try {
 			const areas: Area[] = await AreaService.getAll()

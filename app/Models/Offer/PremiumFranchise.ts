@@ -48,7 +48,7 @@ export default class PremiumFranchise extends BaseModel {
 		const joinQuery = query.join('payments', (query) => {
 			query.on(`${this.table}.id`, `payments.target_id`).andOnVal(`payments.target_table`, `${this.table}`)
 		})
-    // .orderBy(`${this.table}.id`)
+		// .orderBy(`${this.table}.id`)
 		return [joinQuery]
 	})
 
@@ -95,4 +95,3 @@ export default class PremiumFranchise extends BaseModel {
 
 	public static getByOfferId = scope((query, offerId: Offer['id']) => [query.where('offerId', offerId)])
 }
-

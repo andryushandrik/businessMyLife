@@ -265,12 +265,12 @@ export default class Offer extends BaseModel {
 	 */
 
 	public static getPayloadInfo = scope((query) => {
-    // WHERE payment_target LIKE '%${Offer.table}%'
-    // const joinQuery = query.joinRaw(`JOIN payments
-    // ON ${this.table}.id = substring(payments.payment_target from '[0-9]+$')::int AND payment_target LIKE '%${this.table}%`)
-    const joinQuery = query.join('payments',(query)=>{
-      query.on(`${this.table}.id`,`payments.target_id`).andOn(`${this.table}`,`payments.target_table`)
-    })
+		// WHERE payment_target LIKE '%${Offer.table}%'
+		// const joinQuery = query.joinRaw(`JOIN payments
+		// ON ${this.table}.id = substring(payments.payment_target from '[0-9]+$')::int AND payment_target LIKE '%${this.table}%`)
+		const joinQuery = query.join('payments', (query) => {
+			query.on(`${this.table}.id`, `payments.target_id`).andOn(`${this.table}`, `payments.target_table`)
+		})
 
 		return [joinQuery]
 	})
@@ -374,4 +374,3 @@ export default class Offer extends BaseModel {
 		return item
 	}
 }
-

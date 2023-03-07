@@ -263,4 +263,3 @@ export default class AdvertisementService {
 		return query
 	}
 }
-

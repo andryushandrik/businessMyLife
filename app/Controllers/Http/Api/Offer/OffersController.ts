@@ -1,7 +1,8 @@
+import { PaymentMethods } from './../../../../../config/payment'
 // * Types
 import type User from 'App/Models/User/User'
 import type Area from 'App/Models/Offer/Area'
-import type Offer from 'App/Models/Offer/Offer'
+import Offer from 'App/Models/Offer/Offer'
 import type Subsection from 'App/Models/Offer/Subsection'
 import type OfferImage from 'App/Models/Offer/OfferImage'
 import type { Err } from 'Contracts/response'
@@ -20,6 +21,7 @@ import SubsectionService from 'App/Services/Offer/SubsectionService'
 import OfferImageService from 'App/Services/Offer/OfferImageService'
 import OfferFilterValidator from 'App/Validators/Offer/OfferFilterValidator'
 import { ResponseCodes, ResponseMessages } from 'Config/response'
+import BalanceService from 'App/Services/BalanceService'
 
 export default class OffersController {
 	public async paginate({ request, response, params }: HttpContextContract) {
@@ -102,7 +104,9 @@ export default class OffersController {
 	}
 
 	public async create({ request, response }: HttpContextContract) {
+		const currentUserId = request.currentUserId
 		let payload: OfferValidator['schema']['props']
+		const paymentMethod = request.body().paymentMethod ? request.body().paymentMethod : PaymentMethods.INTERNAL
 		try {
 			payload = await request.validate(OfferValidator)
 			payload.isArchived = false
@@ -117,6 +121,17 @@ export default class OffersController {
 
 		try {
 			const offer: Offer = await OfferService.create(payload)
+			if (offer.category == 4) {
+				const paymentDescription = `Пользователь ${currentUserId} купил размещение франшизы ${offer.id}.`
+				let price = 6000
+				if (offer.placedForMonths == 3) {
+					price = 6000
+				} else if (offer.placedForMonths == 6) {
+					price = 11000
+				}
+				await BalanceService.buy(currentUserId, Offer, offer.id, paymentDescription, price, paymentMethod)
+			}
+
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, offer))
 		} catch (err: Err | any) {
 			throw new ExceptionService(err)
