@@ -250,7 +250,7 @@ export default class Offer extends BaseModel {
 
 	@computed()
 	public get timeBeforeArchive(): string {
-		const expireDate: DateTime = this.createdAt.plus({ months: this.placedForMonths })
+		const expireDate: DateTime = this.createdAt.plus({ months: this.placedForMonths }).plus({days: 1})
 		if (this.isArchived) {
 			return ` Архивирован ${expireDate.setLocale('ru-RU').toFormat('dd MMMM, yyyy')}`
 		}
@@ -264,14 +264,11 @@ export default class Offer extends BaseModel {
 	 * * Query scopes
 	 */
 
-	public static getPayloadInfo = scope((query) => {
-		// WHERE payment_target LIKE '%${Offer.table}%'
-		// const joinQuery = query.joinRaw(`JOIN payments
-		// ON ${this.table}.id = substring(payments.payment_target from '[0-9]+$')::int AND payment_target LIKE '%${this.table}%`)
+	public static getPaymentInfo = scope((query) => {
 		const joinQuery = query.join('payments', (query) => {
-			query.on(`${this.table}.id`, `payments.target_id`).andOn(`${this.table}`, `payments.target_table`)
+			query.on(`${this.table}.id`, `payments.target_id`).andOnVal(`payments.target_table`, `${this.table}`)
 		})
-
+		// .orderBy(`${this.table}.id`, 'asc')
 		return [joinQuery]
 	})
 
@@ -335,7 +332,7 @@ export default class Offer extends BaseModel {
 
 	@afterFind()
 	public static afterFindHook(offer: Offer) {
-		const expireDate: DateTime = offer.createdAt.plus({ months: offer.placedForMonths })
+		const expireDate: DateTime = offer.createdAt.plus({ months: offer.placedForMonths }).plus({ days: 1 })
 		const expiresInMilliseconds: number = expireDate.diff(DateTime.now()).milliseconds
 		if (expiresInMilliseconds < 0) {
 			offer.isArchived = true
@@ -346,7 +343,7 @@ export default class Offer extends BaseModel {
 	@afterFetch()
 	public static afterFetchHook(offers: Offer[]) {
 		offers.map((offer) => {
-			const expireDate: DateTime = offer.createdAt.plus({ months: offer.placedForMonths })
+			const expireDate: DateTime = offer.createdAt.plus({ months: offer.placedForMonths }).plus({ days: 1 })
 			const expiresInMilliseconds: number = expireDate.diff(DateTime.now()).milliseconds
 			if (expiresInMilliseconds < 0) {
 				offer.isArchived = true
@@ -374,3 +371,4 @@ export default class Offer extends BaseModel {
 		return item
 	}
 }
+

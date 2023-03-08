@@ -98,9 +98,8 @@
                     <a href="{{ route('user.get', { id: item.user.id }) }}" class="text-primary">{{ item.user.fullName }}</a>
                   </td>
 
-                  <td>
-                    -
-                  </td>
+                  <td> {{item.$extras.status}} </td>
+
 
                   <td>
                     <a class="text-primary" href="https://business-mylife.ru/adv-page/{{item.id}}">{{ item.title }}</a>

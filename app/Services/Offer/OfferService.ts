@@ -37,6 +37,7 @@ export default class OfferService {
 		config: OfferServicePaginateConfig,
 		filter?: OfferFilterValidator['schema']['props'],
 		categoryId?: number,
+		isHavingPaymentInfo: boolean = false,
 	): Promise<ModelPaginatorContract<Offer>> {
 		let query: ModelQueryBuilderContract<typeof Offer, ModelObject> | ManyToManyQueryBuilderContract<typeof Offer, ModelObject> = Offer.query()
 
@@ -48,7 +49,9 @@ export default class OfferService {
 				throw err
 			}
 		}
-		// query = query.withScopes((scopes)=> scopes.getPayloadInfo())
+		if (isHavingPaymentInfo) {
+			query = query.withScopes((scopes) => scopes.getPaymentInfo())
+		}
 		if (categoryId) {
 			query = query.withScopes((scopes) => scopes.getByCategories([categoryId]))
 		}
@@ -352,9 +355,9 @@ export default class OfferService {
 	 * * Actions
 	 */
 	public static async removeFromFavorites(offerId: Offer['id']): Promise<void> {
-    try {
-      await Database.rawQuery(`DELETE FROM "favoriteOffers" WHERE offer_id = ${offerId}`)
-    } catch (err: Err | any) {
+		try {
+			await Database.rawQuery(`DELETE FROM "favoriteOffers" WHERE offer_id = ${offerId}`)
+		} catch (err: Err | any) {
 			throw err
 		}
 	}

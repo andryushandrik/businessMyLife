@@ -1,3 +1,4 @@
+import PremiumFranchise  from 'App/Models/Offer/PremiumFranchise';
 import Logger from '@ioc:Adonis/Core/Logger'
 // * Types
 import type Area from 'App/Models/Offer/Area'
@@ -27,6 +28,10 @@ export default class FranchiseController {
 			isArchived: false,
 			isBanned: false,
 		}
+
+    config.orderBy = 'asc'
+    config.orderByColumn = `${PremiumFranchise.table}.id`
+
 		if (isFiltered) {
 			payload = await request.validate(OfferFilterValidator)
 			config.orderBy = payload.orderBy
@@ -34,7 +39,7 @@ export default class FranchiseController {
 		}
 		try {
 			const areas: Area[] = await AreaService.getAll()
-			const franchises: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload, 4)
+			const franchises: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload, 4, true)
 			return view.render('pages/offer/franchises/index', {
 				areas,
 				franchises,
@@ -58,6 +63,9 @@ export default class FranchiseController {
 			relations: ['user', 'subsection', 'premiumFranchise'],
 		}
 
+    config.orderBy = 'asc'
+    config.orderByColumn = `${PremiumFranchise.table}.id`
+
 		if (isFiltered) {
 			payload = await request.validate(OfferFilterValidator)
 			config.orderBy = payload.orderBy
@@ -65,7 +73,7 @@ export default class FranchiseController {
 		}
 		try {
 			const areas: Area[] = await AreaService.getAll()
-			const franchises: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload, 4)
+			const franchises: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload, 4, true)
 
 			return view.render('pages/offer/franchises/moderation', {
 				areas,
@@ -90,6 +98,9 @@ export default class FranchiseController {
 			relations: ['user', 'subsection', 'premiumFranchise'],
 		}
 
+    config.orderBy = 'asc'
+    config.orderByColumn = `${PremiumFranchise.table}.id`
+
 		if (isFiltered) {
 			payload = await request.validate(OfferFilterValidator)
 			config.orderBy = payload.orderBy
@@ -97,7 +108,7 @@ export default class FranchiseController {
 		}
 		try {
 			const areas: Area[] = await AreaService.getAll()
-			const franchises: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload, 4)
+			const franchises: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload, 4, true)
 
 			return view.render('pages/offer/franchises/archived', {
 				areas,

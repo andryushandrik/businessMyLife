@@ -48,6 +48,7 @@
               <tr>
                 <th class="width80"><strong>#</strong></th>
                 <th><strong>Пользователь</strong></th>
+                <th><strong>Статус оплаты</strong></th>
                 <th><strong>Название</strong></th>
                 <th><strong>Обложка</strong></th>
                 <th><strong>Город</strong></th>
@@ -98,6 +99,9 @@
                   <td>
                     <a href="{{ route('user.get', { id: item.user.id }) }}" class="text-primary">{{ item.user.fullName }}</a>
                   </td>
+
+                  <td> {{item.$extras.status}} </td>
+
                   <td>{{ item.title }}</td>
                   <td>
                     <img src="{{ getMedia(item.image) }}" width="300" height="200" alt="">
