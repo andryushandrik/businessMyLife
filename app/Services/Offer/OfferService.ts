@@ -352,7 +352,11 @@ export default class OfferService {
 	 * * Actions
 	 */
 	public static async removeFromFavorites(offerId: Offer['id']): Promise<void> {
-		Database.rawQuery(`DELETE FROM "favoriteOffers" WHERE offer_id = '${offerId}'`)
+    try {
+      await Database.rawQuery(`DELETE FROM "favoriteOffers" WHERE offer_id = ${offerId}`)
+    } catch (err: Err | any) {
+			throw err
+		}
 	}
 
 	public static async actions(id: Offer['id'], actionType: 'archive' | 'ban' | 'verify', actionValue: boolean): Promise<void> {
