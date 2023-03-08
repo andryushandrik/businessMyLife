@@ -53,6 +53,42 @@ export default class OffersController {
 		}
 	}
 
+  public async archived({ request, response, route, view, session }: HttpContextContract) {
+		let payload: OfferFilterValidator['schema']['props'] | undefined = undefined
+		const isFiltered: boolean = request.input('isFiltered', false)
+		const config: OfferServicePaginateConfig = {
+			baseUrl: route!.pattern,
+			page: request.input('page', 1),
+			limit: request.input('limit', 5),
+			aggregates: ['reports'],
+			relations: ['user', 'subsection'],
+			isArchived: true,
+		}
+
+		if (isFiltered) {
+			payload = await request.validate(OfferFilterValidator)
+			config.orderBy = payload.orderBy
+			config.orderByColumn = payload.orderByColumn
+		}
+
+		try {
+			const areas: Area[] = await AreaService.getAll()
+			const offers: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload)
+
+			return view.render('pages/offer/archived', {
+				areas,
+				offers,
+				payload,
+				categories: OFFER_CATEGORIES,
+			})
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
+
+
+
 	public async paginateCurrentUserOffers({ request, response, route, view, session }: HttpContextContract) {
 		let payload: OfferFilterValidator['schema']['props'] | undefined = undefined
 		const titleFromController = 'Мои объявления'
