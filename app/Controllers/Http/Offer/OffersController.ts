@@ -53,7 +53,7 @@ export default class OffersController {
 		}
 	}
 
-  public async archived({ request, response, route, view, session }: HttpContextContract) {
+	public async archived({ request, response, route, view, session }: HttpContextContract) {
 		let payload: OfferFilterValidator['schema']['props'] | undefined = undefined
 		const isFiltered: boolean = request.input('isFiltered', false)
 		const config: OfferServicePaginateConfig = {
@@ -86,8 +86,6 @@ export default class OffersController {
 			return response.redirect().back()
 		}
 	}
-
-
 
 	public async paginateCurrentUserOffers({ request, response, route, view, session }: HttpContextContract) {
 		let payload: OfferFilterValidator['schema']['props'] | undefined = undefined
@@ -200,10 +198,9 @@ export default class OffersController {
 
 	public async archive({ params, response, session }: HttpContextContract) {
 		const id: Offer['id'] = params.id
-
 		try {
 			await OfferService.actions(id, 'archive', true)
-
+      await OfferService.removeFromFavorites(id)
 			session.flash('success', ResponseMessages.SUCCESS)
 		} catch (err: Err | any) {
 			session.flash('error', err.message)
@@ -234,7 +231,7 @@ export default class OffersController {
 
 		try {
 			await OfferService.actions(id, 'ban', true)
-
+      await OfferService.removeFromFavorites(id)
 			session.flash('success', ResponseMessages.SUCCESS)
 		} catch (err: Err | any) {
 			session.flash('error', err.message)
@@ -292,7 +289,7 @@ export default class OffersController {
 
 		try {
 			await OfferService.actions(id, 'verify', false)
-
+      await OfferService.removeFromFavorites(id)
 			session.flash('success', ResponseMessages.SUCCESS)
 		} catch (err: Err | any) {
 			session.flash('error', err.message)
