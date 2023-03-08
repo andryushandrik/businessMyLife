@@ -29,6 +29,8 @@
                 <th class="width80"><strong>#</strong></th>
 
                 <th><strong>Пользователь</strong></th>
+                <th><strong>Статус оплаты Premium</strong></th>
+
                 <th><strong>Объявление</strong></th>
 
                 <th><strong>Репорты</strong></th>
@@ -44,6 +46,9 @@
                 <tr>
                   <td><strong>{{ item.id }}</strong></td>
                   <td><b> <a target="_blank" href="https://business-mylife.ru/account/profile/user/{{ item.offer.user.id}}">{{ item.offer.user.firstName}} {{ item.offer.user.lastName}}</a></b></td>
+
+                  <td>{{item.$extras.status}}</td>
+
                   <td> <b> <a target="_blank" href="https://business-mylife.ru/adv-page/{{item.offer.id}}">{{ item.offer.id }} - {{ item.offer.title }}</a> </b></td>
                   @if(item.premiumSlot?.type)
                     <td>{{ item.premiumSlot?.type == 'small' ? 'Объявление' : 'Баннер' }} </td>

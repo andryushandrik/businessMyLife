@@ -17,7 +17,7 @@ export default class PremiumFranchiseService {
 	): Promise<ModelPaginatorContract<PremiumFranchise>> {
 		let query: ModelQueryBuilderContract<typeof PremiumFranchise> = PremiumFranchise.query()
 		if (filter) query = this.filter(query, filter)
-		query = query.withScopes((scopes) => scopes.getPayloadInfo())
+		query = query.withScopes((scopes) => scopes.getPaymentInfo())
 		query
 			.preload('offer', (query) => {
 				query.preload('user')

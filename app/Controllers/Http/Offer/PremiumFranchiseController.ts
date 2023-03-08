@@ -18,6 +18,10 @@ export default class PremiumFranchiseController {
 			page: request.input('page', 1),
 			limit: request.input('limit', 5),
 		}
+
+    config.orderBy = 'asc'
+		config.orderByColumn = `${PremiumFranchise.table}.id`
+
 		try {
 			if (isFiltered) {
 				payload = await request.validate(PremiumFranchiseFilterValidator)
@@ -52,6 +56,10 @@ export default class PremiumFranchiseController {
 			page: request.input('page', 1),
 			limit: request.input('limit', 5),
 		}
+
+    config.orderBy = 'asc'
+		config.orderByColumn = `${PremiumFranchise.table}.id`
+
 		try {
 			if (isFiltered) {
 				payload = await request.validate(PremiumFranchiseFilterValidator)

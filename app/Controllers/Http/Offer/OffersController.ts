@@ -1,7 +1,7 @@
 // * Types
 import type User from 'App/Models/User/User'
 import type Area from 'App/Models/Offer/Area'
-import type Offer from 'App/Models/Offer/Offer'
+import Offer from 'App/Models/Offer/Offer'
 import type { Err } from 'Contracts/response'
 import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import type { OfferServicePaginateConfig } from 'Contracts/services'
@@ -30,6 +30,7 @@ export default class OffersController {
 			isArchived: false,
 			isBanned: false,
 		}
+
 
 		if (isFiltered) {
 			payload = await request.validate(OfferFilterValidator)
@@ -74,7 +75,6 @@ export default class OffersController {
 		try {
 			const areas: Area[] = await AreaService.getAll()
 			const offers: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload)
-
 			return view.render('pages/offer/archived', {
 				areas,
 				offers,
@@ -137,6 +137,8 @@ export default class OffersController {
 
 			relations: ['user', 'subsection'],
 		}
+
+
 
 		if (isFiltered) {
 			payload = await request.validate(OfferFilterValidator)
