@@ -7,7 +7,7 @@
     payload,
     columns: [
       { key: 'id', value: 'ID' },
-      { key: 'isBanned', value: 'Забанен' },
+      // { key: 'isBanned', value: 'Забанен' },
       { key: 'title', value: 'Название' },
       { key: 'city', value: 'Город' },
       { key: 'reportsCount', value: 'Кол-во жалоб' },
@@ -40,14 +40,6 @@
 
   <div class="col-lg-12">
     <div class="card">
-      <div class="card-header">
-        <h4 class="card-title">{{ title }}</h4>
-          <form action="{{ route('offer.notVerified.verifyAll', {}, { qs: { _method: 'PATCH' } }) }}" method="POST">
-            {{ csrfField() }}
-            <button type="submit" class="btn btn-primary btn-sm">Опубликовать все</button>
-          </form>
-      </div>
-
       <div class="card-body">
         <div class="table-responsive">
 
@@ -55,16 +47,15 @@
             <thead>
               <tr>
                 <th class="width80"><strong>#</strong></th>
-
+                <th><strong>Пользователь</strong></th>
                 <th><strong>Категория</strong></th>
                 <th><strong>Название</strong></th>
-                <th><strong>Город</strong></th>
                 <th><strong>Обложка</strong></th>
-                <th><strong>Пользователь</strong></th>
+                <th><strong>Город</strong></th>
                 <th><strong>Подраздел</strong></th>
                 <th><strong>Кол-во жалоб</strong></th>
-                <th><strong>Дней до архивации</strong></th>
                 <th><strong>Дата создания</strong></th>
+                <th><strong>Дней до архивации</strong></th>
 
                 <th><strong>Действия</strong></th>
               </tr>
@@ -74,21 +65,21 @@
               @each(item in offers)
                 <tr>
                   <td><strong>{{ item.id }}</strong></td>
-                  <td>{{ item.categoryForUser }}</td>
-                  <td>{{ item.title }}</td>
-                  <td>{{ item.city }}</td>
-                  <td>
-                    <img src="{{ getMedia(item.image) }}" width="300" height="200" alt="">
-                  </td>
                   <td>
                     <a href="{{ route('user.get', { id: item.user.id }) }}" class="text-primary">{{ item.user.fullName }}</a>
                   </td>
+                  <td>{{ item.categoryForUser }}</td>
+                  <td>{{ item.title }}</td>
+                  <td>
+                    <img src="{{ getMedia(item.image) }}" width="300" height="200" alt="">
+                  </td>
+                  <td>{{ item.city }}</td>
                   <td>
                     <a href="{{ route('subsections.edit', { id: item.subsection.id }) }}" class="text-primary">{{ item.subsection.name }}</a>
                   </td>
                   <td>{{ item.reportsCount }}</td>
-                  <td>{{ item.timeBeforeArchive }}</td>
                   <td>{{ item.createdAtForUser }}</td>
+                  <td>{{ item.timeBeforeArchive }}</td>
 
                   <td>
                     <div class="dropdown">
