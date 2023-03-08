@@ -152,6 +152,9 @@ export default class User extends BaseModel {
 	@hasMany(() => UserImage)
 	public images: HasMany<typeof UserImage>
 
+  @manyToMany(() => Offer, getModelsManyToManyRelationsOptions('FAVORITE_OFFERS'))
+	public favoriteOffers: ManyToMany<typeof Offer>
+
 	@hasMany(() => Offer)
 	public offers: HasMany<typeof Offer>
 
@@ -167,8 +170,7 @@ export default class User extends BaseModel {
 	@hasMany(() => Advertisement)
 	public advertisements: HasMany<typeof Advertisement>
 
-	@manyToMany(() => Offer, getModelsManyToManyRelationsOptions('FAVORITE_OFFERS'))
-	public favoriteOffers: ManyToMany<typeof Offer>
+
 
 	@manyToMany(() => User, {
 		...getModelsManyToManyRelationsOptions('FRIENDS', 'to_id', 'from_id'),

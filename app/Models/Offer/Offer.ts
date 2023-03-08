@@ -250,7 +250,7 @@ export default class Offer extends BaseModel {
 
 	@computed()
 	public get timeBeforeArchive(): string {
-    const expireDate: DateTime = this.createdAt.plus({ months: this.placedForMonths })
+		const expireDate: DateTime = this.createdAt.plus({ months: this.placedForMonths })
 		if (this.isArchived) {
 			return ` Архивирован ${expireDate.setLocale('ru-RU').toFormat('dd MMMM, yyyy')}`
 		}

@@ -1,5 +1,5 @@
 // * Types
-import type User from 'App/Models/User/User'
+import User from 'App/Models/User/User'
 import type Subsection from 'App/Models/Offer/Subsection'
 import type OfferValidator from 'App/Validators/Offer/OfferValidator'
 import type OfferFilterValidator from 'App/Validators/Offer/OfferFilterValidator'
@@ -351,6 +351,9 @@ export default class OfferService {
 	/**
 	 * * Actions
 	 */
+	public static async removeFromFavorites(offerId: Offer['id']): Promise<void> {
+		Database.rawQuery(`DELETE FROM "favoriteOffers" WHERE offer_id = '${offerId}'`)
+	}
 
 	public static async actions(id: Offer['id'], actionType: 'archive' | 'ban' | 'verify', actionValue: boolean): Promise<void> {
 		let item: Offer
@@ -569,3 +572,4 @@ export default class OfferService {
 		}
 	}
 }
+

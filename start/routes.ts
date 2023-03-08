@@ -62,7 +62,6 @@ Route.group(() => {
 		Route.get('/', 'Offer/OffersController.paginate').as('paginate')
 		Route.get('/archived', 'Offer/OffersController.archived').as('archived')
 
-
 		Route.get('/currentUser', 'Offer/OffersController.paginateCurrentUserOffers').as('paginateCurrentUserOffers')
 
 		Route.group(() => {
