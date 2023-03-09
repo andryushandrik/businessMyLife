@@ -29,9 +29,13 @@
                 <th class="width80"><strong>#</strong></th>
 
                 <th><strong>Пользователь</strong></th>
-                <th><strong>Статус оплаты Premium</strong></th>
 
                 <th><strong>Объявление</strong></th>
+
+                <th><strong>Занятый слот</strong></th>
+
+                <th><strong>Название слота</strong></th>
+
 
                 <th><strong>Репорты</strong></th>
 
@@ -47,7 +51,6 @@
                   <td><strong>{{ item.id }}</strong></td>
                   <td><b> <a target="_blank" href="https://business-mylife.ru/account/profile/user/{{ item.offer.user.id}}">{{ item.offer.user.firstName}} {{ item.offer.user.lastName}}</a></b></td>
 
-                  <td>{{item.$extras.status}}</td>
 
                   <td> <b> <a target="_blank" href="https://business-mylife.ru/adv-page/{{item.offer.id}}">{{ item.offer.id }} - {{ item.offer.title }}</a> </b></td>
                   @if(item.premiumSlot?.type)
@@ -84,9 +87,9 @@
                         </svg>
                       </button>
 
-                      <div class="dropdown-menu" style="">
+                      {{--  <div class="dropdown-menu" style="">
                         <a class="dropdown-item" href="{{ route('offer.premium.get', { id: item.id }) }}" target="_blank">Просмотреть</a>
-                      </div>
+                      </div>  --}}
 
                       <div class="dropdown-menu" style="">
                         <a class="dropdown-item" href="https://business-mylife.ru/account/profile/user/{{ item.offer.user.id}}" target="_blank">Пользователь</a>

@@ -1,8 +1,7 @@
-import PremiumFranchise  from 'App/Models/Offer/PremiumFranchise';
 import Logger from '@ioc:Adonis/Core/Logger'
 // * Types
 import type Area from 'App/Models/Offer/Area'
-import type Offer from 'App/Models/Offer/Offer'
+import Offer from 'App/Models/Offer/Offer'
 import type { Err } from 'Contracts/response'
 import type { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import type { OfferServicePaginateConfig } from 'Contracts/services'
@@ -29,8 +28,8 @@ export default class FranchiseController {
 			isBanned: false,
 		}
 
-    config.orderBy = 'asc'
-    config.orderByColumn = `${PremiumFranchise.table}.id`
+		config.orderBy = 'asc'
+		config.orderByColumn = `${Offer.table}.id`
 
 		if (isFiltered) {
 			payload = await request.validate(OfferFilterValidator)
@@ -51,6 +50,7 @@ export default class FranchiseController {
 			return response.redirect().back()
 		}
 	}
+
 	public async moderation({ request, response, route, view, session }: HttpContextContract) {
 		let payload: OfferFilterValidator['schema']['props'] | undefined = undefined
 		const isFiltered: boolean = request.input('isFiltered', false)
@@ -63,8 +63,8 @@ export default class FranchiseController {
 			relations: ['user', 'subsection', 'premiumFranchise'],
 		}
 
-    config.orderBy = 'asc'
-    config.orderByColumn = `${PremiumFranchise.table}.id`
+		config.orderBy = 'asc'
+		config.orderByColumn = `${Offer.table}.id`
 
 		if (isFiltered) {
 			payload = await request.validate(OfferFilterValidator)
@@ -74,7 +74,6 @@ export default class FranchiseController {
 		try {
 			const areas: Area[] = await AreaService.getAll()
 			const franchises: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload, 4, true)
-
 			return view.render('pages/offer/franchises/moderation', {
 				areas,
 				franchises,
@@ -86,6 +85,7 @@ export default class FranchiseController {
 			return response.redirect().back()
 		}
 	}
+
 	public async archived({ request, response, route, view, session }: HttpContextContract) {
 		let payload: OfferFilterValidator['schema']['props'] | undefined = undefined
 		const isFiltered: boolean = request.input('isFiltered', false)
@@ -98,8 +98,8 @@ export default class FranchiseController {
 			relations: ['user', 'subsection', 'premiumFranchise'],
 		}
 
-    config.orderBy = 'asc'
-    config.orderByColumn = `${PremiumFranchise.table}.id`
+		config.orderBy = 'asc'
+		config.orderByColumn = `${Offer.table}.id`
 
 		if (isFiltered) {
 			payload = await request.validate(OfferFilterValidator)
@@ -109,6 +109,7 @@ export default class FranchiseController {
 		try {
 			const areas: Area[] = await AreaService.getAll()
 			const franchises: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload, 4, true)
+      console.log(franchises[0])
 
 			return view.render('pages/offer/franchises/archived', {
 				areas,
@@ -122,3 +123,4 @@ export default class FranchiseController {
 		}
 	}
 }
+

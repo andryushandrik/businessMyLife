@@ -265,10 +265,10 @@ export default class Offer extends BaseModel {
 	 */
 
 	public static getPaymentInfo = scope((query) => {
-		const joinQuery = query.join('payments', (query) => {
-			query.on(`${this.table}.id`, `payments.target_id`).andOnVal(`payments.target_table`, `${this.table}`)
+		const joinQuery = query.leftJoin('payments', (query) => {
+			query.on(`${this.table}.id`, `payments.target_id`)
+      .andOnVal(`payments.target_table`, `${this.table}`)
 		})
-		// .orderBy(`${this.table}.id`, 'asc')
 		return [joinQuery]
 	})
 

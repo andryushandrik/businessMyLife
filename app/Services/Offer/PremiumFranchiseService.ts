@@ -16,8 +16,11 @@ export default class PremiumFranchiseService {
 		filter?: PremiumFranchiseFilterValidator['schema']['props'],
 	): Promise<ModelPaginatorContract<PremiumFranchise>> {
 		let query: ModelQueryBuilderContract<typeof PremiumFranchise> = PremiumFranchise.query()
-		if (filter) query = this.filter(query, filter)
-		query = query.withScopes((scopes) => scopes.getPaymentInfo())
+		// query = query.select(['payments.status', 'premium_franchises.id', 'premium_franchises.offer_id', 'premium_franchises.created_at', 'premium_franchises.placedForMonths']).withScopes((scopes) => scopes.getPaymentInfo())
+
+		if (filter) {
+			query = this.filter(query, filter)
+		}
 		query
 			.preload('offer', (query) => {
 				query.preload('user')
@@ -26,7 +29,11 @@ export default class PremiumFranchiseService {
 			.preload('premiumSlot')
 
 		try {
-			return await query.getViaPaginate(config)
+			const result = await query.getViaPaginate(config)
+			// const result = await query
+			// console.log(result.rows)
+
+			return result
 		} catch (err: any) {
 			Logger.error(err)
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
@@ -157,3 +164,4 @@ export default class PremiumFranchiseService {
 		return query
 	}
 }
+
