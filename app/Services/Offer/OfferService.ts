@@ -49,9 +49,25 @@ export default class OfferService {
 				throw err
 			}
 		}
+
 		if (isHavingPaymentInfo) {
-			query = query.withScopes((scopes) => scopes.getPaymentInfo())
+			query = query
+				.select([
+					'payments.status',
+					'offers.id',
+					'offers.createdAt',
+					'offers.placedForMonths',
+					'offers.user_id',
+					'offers.title',
+					'offers.image',
+					'offers.image',
+					'offers.city',
+					'offers.subsection_id',
+					'offers.isBanned',
+				])
+				.withScopes((scopes) => scopes.getPaymentInfo())
 		}
+
 		if (categoryId) {
 			query = query.withScopes((scopes) => scopes.getByCategories([categoryId]))
 		}
@@ -259,7 +275,6 @@ export default class OfferService {
 		}
 
 		try {
-			console.log(itemPayload)
 			await item.merge(itemPayload).save()
 		} catch (err: any) {
 			await trx.rollback()

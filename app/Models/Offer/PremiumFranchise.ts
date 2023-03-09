@@ -79,19 +79,19 @@ export default class PremiumFranchise extends BaseModel {
 	@computed()
 	public get timeBeforeArchive(): string {
 		const expireDate: DateTime = this.createdAt.plus({ months: this.placedForMonths })
-		const daysBeforeArchive: number = expireDate.diff(DateTime.now(), 'days').days
+		const daysBeforeArchive: number = expireDate?.diff(DateTime.now(), 'days').days
 		const daysBeforeArchiveWithoutFraction: number = Math.floor(daysBeforeArchive)
 
-		return `Осталось ${daysBeforeArchiveWithoutFraction} дней - до ${expireDate.setLocale('ru-RU').toFormat('dd MMMM, yyyy')}`
+		return `Осталось ${daysBeforeArchiveWithoutFraction} дней - до ${expireDate?.setLocale('ru-RU').toFormat('dd MMMM, yyyy')}`
 	}
 
 	public static getByOfferId = scope((query, offerId: Offer['id']) => [query.where('offerId', offerId)])
 
-  public static getPaymentInfo = scope((query) => {
-		const joinQuery = query.join('payments', (query) => {
-			query.on(`${this.table}.id`, `payments.target_id`).andOnVal(`payments.target_table`, `${this.table}`)
+	public static getPaymentInfo = scope((query) => {
+		const joinQuery = query.leftJoin('payments', (query) => {
+			query.on(`${this.table}.id`, `payments.target_id`).andOnVal(`payments.target_table`, '=', 'premium_franchises')
 		})
 		return [joinQuery]
 	})
-
 }
+
