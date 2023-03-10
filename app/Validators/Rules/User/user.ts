@@ -43,7 +43,6 @@ export function getUserEmailRules(
 export function getUserPasswordRules(isWithConfirm = false): Rule[] {
 	const rulesArr: Rule[] = [
 		rules.containNumber(),
-		rules.containUppercase(),
 		rules.minLength(USER_PASSWORD_MIN_LENGTH),
 		rules.maxLength(USER_PASSWORD_MAX_LENGTH),
 	]
