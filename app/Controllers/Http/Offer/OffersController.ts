@@ -31,7 +31,6 @@ export default class OffersController {
 			isBanned: false,
 		}
 
-
 		if (isFiltered) {
 			payload = await request.validate(OfferFilterValidator)
 			config.orderBy = payload.orderBy
@@ -138,8 +137,6 @@ export default class OffersController {
 			relations: ['user', 'subsection'],
 		}
 
-
-
 		if (isFiltered) {
 			payload = await request.validate(OfferFilterValidator)
 
@@ -202,7 +199,7 @@ export default class OffersController {
 		const id: Offer['id'] = params.id
 		try {
 			await OfferService.actions(id, 'archive', true)
-      await OfferService.removeFromFavorites(id)
+			await OfferService.removeFromFavorites(id)
 			session.flash('success', ResponseMessages.SUCCESS)
 		} catch (err: Err | any) {
 			session.flash('error', err.message)
@@ -233,7 +230,7 @@ export default class OffersController {
 
 		try {
 			await OfferService.actions(id, 'ban', true)
-      await OfferService.removeFromFavorites(id)
+			await OfferService.removeFromFavorites(id)
 			session.flash('success', ResponseMessages.SUCCESS)
 		} catch (err: Err | any) {
 			session.flash('error', err.message)
@@ -291,7 +288,7 @@ export default class OffersController {
 
 		try {
 			await OfferService.actions(id, 'verify', false)
-      await OfferService.removeFromFavorites(id)
+			await OfferService.removeFromFavorites(id)
 			session.flash('success', ResponseMessages.SUCCESS)
 		} catch (err: Err | any) {
 			session.flash('error', err.message)
