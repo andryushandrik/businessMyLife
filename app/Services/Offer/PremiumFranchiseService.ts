@@ -164,4 +164,3 @@ export default class PremiumFranchiseService {
 		return query
 	}
 }
-

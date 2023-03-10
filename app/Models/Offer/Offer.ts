@@ -250,7 +250,7 @@ export default class Offer extends BaseModel {
 
 	@computed()
 	public get timeBeforeArchive(): string {
-		const expireDate: DateTime = this.createdAt.plus({ months: this.placedForMonths }).plus({days: 1})
+		const expireDate: DateTime = this.createdAt.plus({ months: this.placedForMonths }).plus({ days: 1 })
 		if (this.isArchived) {
 			return ` Архивирован ${expireDate.setLocale('ru-RU').toFormat('dd MMMM, yyyy')}`
 		}
@@ -266,8 +266,7 @@ export default class Offer extends BaseModel {
 
 	public static getPaymentInfo = scope((query) => {
 		const joinQuery = query.leftJoin('payments', (query) => {
-			query.on(`${this.table}.id`, `payments.target_id`)
-      .andOnVal(`payments.target_table`, `${this.table}`)
+			query.on(`${this.table}.id`, `payments.target_id`).andOnVal(`payments.target_table`, `${this.table}`)
 		})
 		return [joinQuery]
 	})
@@ -371,4 +370,3 @@ export default class Offer extends BaseModel {
 		return item
 	}
 }
-

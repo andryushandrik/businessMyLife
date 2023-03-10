@@ -37,7 +37,7 @@ export default class OfferService {
 		config: OfferServicePaginateConfig,
 		filter?: OfferFilterValidator['schema']['props'],
 		categoryId?: number,
-		isHavingPaymentInfo: boolean = false,
+		isHavingPaymentInfo = false,
 	): Promise<ModelPaginatorContract<Offer>> {
 		let query: ModelQueryBuilderContract<typeof Offer, ModelObject> | ManyToManyQueryBuilderContract<typeof Offer, ModelObject> = Offer.query()
 
@@ -212,18 +212,28 @@ export default class OfferService {
 	public static async create(payload: OfferValidator['schema']['props']): Promise<Offer> {
 		let item: Offer
 		const trx: TransactionClientContract = await Database.transaction()
-		payload.isPricePerMonthAbsolute = payload.isPricePerMonthAbsolute ? true : false
-		if (!payload.isPricePerMonthAbsolute && payload.profitPerMonth && payload.pricePerMonth) {
-			payload.pricePerMonth = Math.floor(0.01 * payload.pricePerMonth * payload.profitPerMonth)
-		}
-		const itemPayload: Partial<ModelAttributes<Offer>> = this.getOfferDataFromPayload(payload)
+		const isProfitSane =
+			(payload.profitPerMonth && payload.isPricePerMonthAbsolute && payload.profitPerMonth > 2000) ||
+			(payload.profitPerMonth && payload.pricePerMonth && !payload.isPricePerMonthAbsolute && payload.profitPerMonth > payload.pricePerMonth * 20)
+
 		try {
+			payload.isPricePerMonthAbsolute = payload.isPricePerMonthAbsolute ? true : false
+
+			if (isProfitSane) {
+				throw { code: ResponseCodes.VALIDATION_ERROR, message: 'Прибыль не может быть больше 2000% в месяц' }
+			}
+			if (!payload.isPricePerMonthAbsolute && payload.profitPerMonth && payload.pricePerMonth) {
+				payload.pricePerMonth = Math.floor(0.01 * payload.pricePerMonth * payload.profitPerMonth)
+			}
+
+			const itemPayload: Partial<ModelAttributes<Offer>> = this.getOfferDataFromPayload(payload)
+
 			item = await Offer.create(itemPayload, { client: trx })
 		} catch (err: any) {
 			await trx.rollback()
 
 			Logger.error(err)
-			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+			throw err
 		}
 
 		if (payload.image) {
@@ -594,4 +604,3 @@ export default class OfferService {
 		}
 	}
 }
-

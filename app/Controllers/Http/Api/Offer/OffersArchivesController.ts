@@ -84,7 +84,7 @@ export default class OffersArchivesController {
 
 		try {
 			await OfferService.actions(id, 'archive', true)
-      await OfferService.removeFromFavorites(id)
+			await OfferService.removeFromFavorites(id)
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS))
 		} catch (err: Err | any) {
 			throw new ExceptionService(err)

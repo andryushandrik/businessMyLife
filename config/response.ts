@@ -37,4 +37,7 @@ export enum ResponseMessages {
 	 * BANK
 	 */
 	BANK_SERVICE_ERROR = 'Сервис банка в данный момент недоступен',
+	/**
+	 * Offer
+	 */
 }

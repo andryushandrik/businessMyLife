@@ -94,4 +94,3 @@ export default class PremiumFranchise extends BaseModel {
 		return [joinQuery]
 	})
 }
-
