@@ -109,7 +109,6 @@ export default class FranchiseController {
 		try {
 			const areas: Area[] = await AreaService.getAll()
 			const franchises: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload, 4, true)
-      console.log(franchises[0])
 
 			return view.render('pages/offer/franchises/archived', {
 				areas,
