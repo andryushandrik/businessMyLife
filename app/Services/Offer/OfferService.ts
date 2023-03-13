@@ -214,11 +214,11 @@ export default class OfferService {
 		const trx: TransactionClientContract = await Database.transaction()
 
 		try {
-			payload.isPricePerMonthAbsolute = payload.isPricePerMonthAbsolute ? true : false
+			payload.isPricePerMonthAbsolute = payload.isPricePerMonthAbsolute
 
 			const isRoyaltySane =
 				(payload.pricePerMonth && !payload.isPricePerMonthAbsolute && payload.pricePerMonth <= 100) ||
-				(payload.profitPerMonth && payload.pricePerMonth && payload.isPricePerMonthAbsolute && payload.profitPerMonth >= payload.pricePerMonth)
+				// (payload.profitPerMonth && payload.pricePerMonth && payload.isPricePerMonthAbsolute && payload.profitPerMonth >= payload.pricePerMonth)
 
 			if (!isRoyaltySane) {
 				throw { code: ResponseCodes.VALIDATION_ERROR, message: 'Роялти не может быть больше прибыли' }
