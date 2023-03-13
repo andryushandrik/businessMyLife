@@ -217,11 +217,11 @@ export default class OfferService {
 			payload.isPricePerMonthAbsolute = payload.isPricePerMonthAbsolute ? true : false
 
 			const isRoyaltySane =
-				(payload.pricePerMonth && payload.isPricePerMonthAbsolute && payload.pricePerMonth <= 100) ||
-				(payload.profitPerMonth && payload.pricePerMonth && !payload.isPricePerMonthAbsolute && payload.profitPerMonth >= payload.pricePerMonth)
+				(payload.pricePerMonth && !payload.isPricePerMonthAbsolute && payload.pricePerMonth <= 100) ||
+				(payload.profitPerMonth && payload.pricePerMonth && payload.isPricePerMonthAbsolute && payload.profitPerMonth >= payload.pricePerMonth)
 
 			if (isRoyaltySane) {
-				throw { code: ResponseCodes.VALIDATION_ERROR, message: 'Рояли не может быть больше прибыли' }
+				throw { code: ResponseCodes.VALIDATION_ERROR, message: 'Роялти не может быть больше прибыли' }
 			}
 			if (!payload.isPricePerMonthAbsolute && payload.profitPerMonth && payload.pricePerMonth) {
 				payload.pricePerMonth = Math.floor(0.01 * payload.pricePerMonth * payload.profitPerMonth)
