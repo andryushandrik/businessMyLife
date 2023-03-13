@@ -220,7 +220,7 @@ export default class OfferService {
 				(payload.pricePerMonth && !payload.isPricePerMonthAbsolute && payload.pricePerMonth <= 100) ||
 				(payload.profitPerMonth && payload.pricePerMonth && payload.isPricePerMonthAbsolute && payload.profitPerMonth >= payload.pricePerMonth)
 
-			if (isRoyaltySane) {
+			if (!isRoyaltySane) {
 				throw { code: ResponseCodes.VALIDATION_ERROR, message: 'Роялти не может быть больше прибыли' }
 			}
 			if (!payload.isPricePerMonthAbsolute && payload.profitPerMonth && payload.pricePerMonth) {
