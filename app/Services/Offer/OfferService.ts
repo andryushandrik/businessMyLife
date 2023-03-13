@@ -212,15 +212,16 @@ export default class OfferService {
 	public static async create(payload: OfferValidator['schema']['props']): Promise<Offer> {
 		let item: Offer
 		const trx: TransactionClientContract = await Database.transaction()
-		const isProfitSane =
-			(payload.profitPerMonth && payload.isPricePerMonthAbsolute && payload.profitPerMonth > 2000) ||
-			(payload.profitPerMonth && payload.pricePerMonth && !payload.isPricePerMonthAbsolute && payload.profitPerMonth > payload.pricePerMonth * 20)
 
 		try {
 			payload.isPricePerMonthAbsolute = payload.isPricePerMonthAbsolute ? true : false
 
-			if (isProfitSane) {
-				throw { code: ResponseCodes.VALIDATION_ERROR, message: 'Прибыль не может быть больше 2000% в месяц' }
+			const isRoyaltySane =
+				(payload.pricePerMonth && payload.isPricePerMonthAbsolute && payload.pricePerMonth <= 100) ||
+				(payload.profitPerMonth && payload.pricePerMonth && !payload.isPricePerMonthAbsolute && payload.profitPerMonth >= payload.pricePerMonth)
+
+			if (isRoyaltySane) {
+				throw { code: ResponseCodes.VALIDATION_ERROR, message: 'Рояли не может быть больше прибыли' }
 			}
 			if (!payload.isPricePerMonthAbsolute && payload.profitPerMonth && payload.pricePerMonth) {
 				payload.pricePerMonth = Math.floor(0.01 * payload.pricePerMonth * payload.profitPerMonth)
@@ -604,3 +605,4 @@ export default class OfferService {
 		}
 	}
 }
+
