@@ -36,6 +36,7 @@ export default class OffersArchivesController {
 				userId,
 				preloadArea: true,
 				isArchived: false,
+        isVerified: true
 			}
 			const offers: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload)
 
@@ -67,7 +68,6 @@ export default class OffersArchivesController {
 				orderByColumn: payload.orderByColumn,
 
 				userId,
-        isVerified: true,
 				preloadArea: true,
 				isArchived: true,
 			}
