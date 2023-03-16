@@ -27,16 +27,49 @@ export default class AdvertisementController {
 				body: err.messages,
 			})
 		}
+
 		try {
-			payload.isVerified = false
-		} catch (err: any) {
+			const ads: ModelPaginatorContract<Advertisement> = await AdvertisementService.paginate(payload, payload)
+			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, ads))
+		} catch (err: Err | any) {
+			throw new ExceptionService(err)
+		}
+	}
+
+	public async getMyPublicAds({ request, response }: HttpContextContract) {
+		let payload: AdvertisementFilterValidator['schema']['props']
+		try {
+			payload = await request.validate(AdvertisementFilterValidator)
+		} catch (err: Err | any) {
 			throw new ExceptionService({
 				code: ResponseCodes.VALIDATION_ERROR,
 				message: ResponseMessages.VALIDATION_ERROR,
 				body: err.messages,
 			})
 		}
+		payload.userId = request.currentUserId
+    payload.isVerified = true
+		try {
+			const ads: ModelPaginatorContract<Advertisement> = await AdvertisementService.paginate(payload, payload)
+			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, ads))
+		} catch (err: Err | any) {
+			throw new ExceptionService(err)
+		}
+	}
 
+  public async getMyOnModerationAds({ request, response }: HttpContextContract) {
+		let payload: AdvertisementFilterValidator['schema']['props']
+		try {
+			payload = await request.validate(AdvertisementFilterValidator)
+		} catch (err: Err | any) {
+			throw new ExceptionService({
+				code: ResponseCodes.VALIDATION_ERROR,
+				message: ResponseMessages.VALIDATION_ERROR,
+				body: err.messages,
+			})
+		}
+		payload.userId = request.currentUserId
+    payload.isVerified = false
 		try {
 			const ads: ModelPaginatorContract<Advertisement> = await AdvertisementService.paginate(payload, payload)
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, ads))
@@ -101,3 +134,4 @@ export default class AdvertisementController {
 		}
 	}
 }
+

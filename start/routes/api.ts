@@ -202,6 +202,10 @@ Route.group(() => {
 		Route.get('/', 'Api/Ads/AdvertisementController.show')
 		Route.get('/types', 'Api/Ads/AdvertisementTypesController.show')
 		Route.post('/', 'Api/Ads/AdvertisementController.create').middleware('CheckAccessToken')
+
+		Route.get('/my/public', 'Api/Ads/AdvertisementController.getMyPublicAds').middleware('CheckAccessToken')
+		Route.get('/my/moderation', 'Api/Ads/AdvertisementController.getMyOnModerationAds').middleware('CheckAccessToken')
+
 	}).prefix('ads')
 
 	Route.group(() => {
