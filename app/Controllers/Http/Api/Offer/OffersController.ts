@@ -62,6 +62,39 @@ export default class OffersController {
 		}
 	}
 
+  public async paginateUserModeratedOffers({ request, response, params }: HttpContextContract) {
+		const userId: User['id'] = params.userId
+		let payload: OfferFilterValidator['schema']['props']
+		try {
+			payload = await request.validate(OfferFilterValidator)
+		} catch (err: Err | any) {
+			throw new ExceptionService({
+				code: ResponseCodes.VALIDATION_ERROR,
+				message: ResponseMessages.VALIDATION_ERROR,
+				body: err.messages,
+			})
+		}
+
+		try {
+			const config: OfferServicePaginateConfig = {
+				page: payload.page,
+				limit: payload.limit,
+				orderBy: payload.orderBy,
+				orderByColumn: payload.orderByColumn,
+				userId,
+				preloadArea: true,
+				isArchived: false,
+        isVerified: false
+			}
+			const offers: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload)
+
+			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, offers))
+		} catch (err: Err | any) {
+			throw new ExceptionService(err)
+		}
+	}
+
+
 	public async get({ response, params }: HttpContextContract) {
 		const id: Offer['id'] = params.id
 		const currentUserId: User['id'] | undefined = params.currentUserId
