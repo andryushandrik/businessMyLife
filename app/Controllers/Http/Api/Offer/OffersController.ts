@@ -62,7 +62,7 @@ export default class OffersController {
 		}
 	}
 
-  public async paginateUserOnModerationffers({ request, response, params }: HttpContextContract) {
+  public async paginateUserOnModerationOffers({ request, response, params }: HttpContextContract) {
 		const userId: User['id'] = params.userId
 		let payload: OfferFilterValidator['schema']['props']
 		try {
