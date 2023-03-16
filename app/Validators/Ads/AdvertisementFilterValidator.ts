@@ -42,6 +42,8 @@ export default class AdvertisementFilterValidator extends ApiValidator {
 		place: schema.string.optional({ trim: true }),
 		subsectionId: schema.number.optional(getSubsectionIdRules()),
 		userId: schema.number.optional(getUserIdRules()),
+		query: schema.string.optional({ trim: true }),
+
 	})
 
 	/**

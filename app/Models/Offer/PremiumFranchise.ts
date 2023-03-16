@@ -87,6 +87,9 @@ export default class PremiumFranchise extends BaseModel {
 
 	public static getByOfferId = scope((query, offerId: Offer['id']) => [query.where('offerId', offerId)])
 
+  public static getByQuery = scope((query, searchString: string) => [query.where('offerId',searchString)])
+
+
 	public static getPaymentInfo = scope((query) => {
 		const joinQuery = query.leftJoin('payments', (query) => {
 			query.on(`${this.table}.id`, `payments.target_id`).andOnVal(`payments.target_table`, '=', 'premium_franchises')

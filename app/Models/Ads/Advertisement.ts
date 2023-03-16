@@ -123,6 +123,9 @@ export default class Advertisement extends BaseModel {
 	public static getByUserId = scope((query, userId: number) => {
 		query.where('userId', userId)
 	})
+	public static getByQuery = scope((query, searchString: string) => {
+		query.where('description', 'ILIKE', `%${searchString}%`)
+	})
 
 	/**
 	 * * Hooks
@@ -153,3 +156,4 @@ export default class Advertisement extends BaseModel {
 		if (item.image) await Drive.delete(item.image)
 	}
 }
+
