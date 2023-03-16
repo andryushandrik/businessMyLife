@@ -19,7 +19,7 @@ export default class PremiumFranchiseController {
 			limit: request.input('limit', 5),
 		}
 
-		config.orderBy = 'asc'
+		config.orderBy = 'desc'
 		config.orderByColumn = `${PremiumFranchise.table}.id`
 
 		try {
@@ -57,7 +57,7 @@ export default class PremiumFranchiseController {
 			limit: request.input('limit', 5),
 		}
 
-		config.orderBy = 'asc'
+		config.orderBy = 'desc'
 		config.orderByColumn = `${PremiumFranchise.table}.id`
 
 		try {

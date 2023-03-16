@@ -28,6 +28,8 @@ export default class AdvertisementController {
 					page,
 					limit,
 					baseUrl,
+					orderByColumn: 'id',
+					orderBy: 'desc',
 				},
 				{
 					page,
@@ -54,6 +56,8 @@ export default class AdvertisementController {
 					page,
 					limit,
 					baseUrl,
+          orderByColumn: 'id',
+					orderBy: 'desc',
 				},
 				{
 					page,
@@ -80,6 +84,8 @@ export default class AdvertisementController {
 					page,
 					limit,
 					baseUrl,
+          orderByColumn: 'id',
+					orderBy: 'desc',
 				},
 				{
 					page,
@@ -231,3 +237,4 @@ export default class AdvertisementController {
 		}
 	}
 }
+

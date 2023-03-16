@@ -97,7 +97,7 @@ export default class OffersArchivesController {
 
 		try {
 			await OfferService.actions(id, 'archive', false)
-
+      await OfferService.actions(id, 'verify', false)
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS))
 		} catch (err: Err | any) {
 			throw new ExceptionService(err)

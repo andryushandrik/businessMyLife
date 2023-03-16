@@ -28,7 +28,7 @@ export default class FranchiseController {
 			isBanned: false,
 		}
 
-		config.orderBy = 'asc'
+		config.orderBy = 'desc'
 		config.orderByColumn = `${Offer.table}.id`
 
 		if (isFiltered) {
@@ -63,7 +63,7 @@ export default class FranchiseController {
 			relations: ['user', 'subsection', 'premiumFranchise'],
 		}
 
-		config.orderBy = 'asc'
+		config.orderBy = 'desc'
 		config.orderByColumn = `${Offer.table}.id`
 
 		if (isFiltered) {
@@ -98,7 +98,7 @@ export default class FranchiseController {
 			relations: ['user', 'subsection', 'premiumFranchise'],
 		}
 
-		config.orderBy = 'asc'
+		config.orderBy = 'desc'
 		config.orderByColumn = `${Offer.table}.id`
 
 		if (isFiltered) {
