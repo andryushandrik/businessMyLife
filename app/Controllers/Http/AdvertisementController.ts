@@ -15,28 +15,26 @@ import { ResponseCodes, ResponseMessages } from 'Config/response'
 import User from 'App/Models/User/User'
 import MyAdvertisementValidator from 'App/Validators/Ads/MyAdvertisementValidator'
 import ExceptionService from 'App/Services/ExceptionService'
+import AdvertisementFilterValidator from 'App/Validators/Ads/AdvertisementFilterValidator'
 
 export default class AdvertisementController {
 	public async index({ view, request, response, session, route }: HttpContextContract) {
-		const baseUrl: string = route!.pattern
-		const page: number = request.input('page', 1)
-		const limit: number = request.input('limit', 5)
-
+		let filter: Partial<AdvertisementFilterValidator['schema']['props'] | undefined> = undefined
+		const isFiltered: boolean = request.input('isFiltered', false)
+		const page = request.input('page', 1)
+		const limit = request.input('limit', 5)
+		let paginationConfig = {
+			baseUrl: route!.pattern,
+			page,
+			limit,
+		}
+		if (isFiltered) {
+			filter = await request.validate(AdvertisementFilterValidator)
+			paginationConfig['orderByColumn'] = filter.orderByColumn ?? 'id'
+			paginationConfig['orderBy'] = filter.orderBy ?? 'desc'
+		}
 		try {
-			const ads: ModelPaginatorContract<Advertisement> = await AdvertisementService.paginate(
-				{
-					page,
-					limit,
-					baseUrl,
-					orderByColumn: 'id',
-					orderBy: 'desc',
-				},
-				{
-					page,
-					isVerified: true,
-					limit,
-				},
-			)
+			const ads: ModelPaginatorContract<Advertisement> = await AdvertisementService.paginate(paginationConfig, filter)
 			return await view.render('pages/ads/index', { ads })
 		} catch (err: Err | any) {
 			Logger.error(err)
@@ -56,7 +54,7 @@ export default class AdvertisementController {
 					page,
 					limit,
 					baseUrl,
-          orderByColumn: 'id',
+					orderByColumn: 'id',
 					orderBy: 'desc',
 				},
 				{
@@ -84,7 +82,7 @@ export default class AdvertisementController {
 					page,
 					limit,
 					baseUrl,
-          orderByColumn: 'id',
+					orderByColumn: 'id',
 					orderBy: 'desc',
 				},
 				{
