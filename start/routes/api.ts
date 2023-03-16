@@ -136,7 +136,7 @@ Route.group(() => {
 		Route.delete('/deleteImage/:offerImageId', 'Api/Offer/OffersController.deleteImage').middleware('CheckAccessToken')
 
 		Route.group(() => {
-      Route.get('/moderation/:userId', 'Api/Offer/OffersController.paginateUserModeratedOffers').middleware('CheckAccessToken').middleware('CheckAccessToken')
+      Route.get('/moderation/:userId', 'Api/Offer/OffersController.paginateUserOnModerationOffers').middleware('CheckAccessToken').middleware('CheckAccessToken')
 
 
 			Route.group(() => {
