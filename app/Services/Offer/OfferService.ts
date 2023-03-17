@@ -55,6 +55,9 @@ export default class OfferService {
 				.select([
 					'payments.status',
 					'offers.id',
+					'offers.isArchived',
+					'offers.isBanned',
+					'offers.isVerified',
 					'offers.createdAt',
 					'offers.placedForMonths',
 					'offers.user_id',
