@@ -182,7 +182,9 @@ export default class OffersController {
 
 		try {
 			await OfferService.updateBlockDescription(id, payload)
-
+			if (payload.blockDescription) {
+				await OfferService.actions(id, 'archive', true)
+			}
 			session.flash('success', ResponseMessages.SUCCESS)
 		} catch (err: Err | any) {
 			session.flash('error', err.message)
@@ -297,3 +299,4 @@ export default class OffersController {
 		return response.redirect().back()
 	}
 }
+

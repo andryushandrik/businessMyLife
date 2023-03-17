@@ -30,6 +30,8 @@
 
                 <th><strong>Пользователь</strong></th>
                 <th><strong>Объявление</strong></th>
+                <th><strong>Обложка</strong></th>
+
 
                 <th><strong>Дата активации Premium</strong></th>
                 <th><strong>Окончание Premium</strong></th>
@@ -48,9 +50,10 @@
               @each(item in franchises)
                 <tr>
                   <td><strong>{{ item.id }}</strong></td>
-                  <td><b> <a target="_blank" href="https://business-mylife.ru/account/profile/user/{{ item.offer.user.id}}">{{ item.offer.user.firstName}} {{ item.offer.user.lastName}}</a></b></td>
-                  <td> <b> <a target="_blank" href="https://business-mylife.ru/adv-page/{{item.offer.id}}">{{ item.offer.id }} - {{ item.offer.title }}</a> </b></td>
+                  <td> <a class="text-primary" target="_blank" href="https://business-mylife.ru/account/profile/user/{{ item.offer.user.id}}">{{ item.offer.user.firstName}} {{ item.offer.user.lastName}}</a></td>
+                  <td>  <a class="text-primary" target="_blank" href="https://business-mylife.ru/adv-page/{{item.offer.id}}">{{ item.offer.id }} - {{ item.offer.title }}</a></td>
 
+                  <td> <img src="{{ getMedia(item.offer.image) }}" width="200" height="100" alt=""></td>
 
                   <td>{{ item.createdAtForUser}}</td>
 
