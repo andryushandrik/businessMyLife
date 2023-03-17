@@ -36,7 +36,9 @@ export default class OffersArchivesController {
 				userId,
 				preloadArea: true,
 				isArchived: false,
-        isVerified: true
+        isVerified: true,
+        isBanned: false
+
 			}
 			const offers: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload)
 
@@ -70,6 +72,8 @@ export default class OffersArchivesController {
 				userId,
 				preloadArea: true,
 				isArchived: true,
+        isBanned: false
+
 			}
 			const offers: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload)
 

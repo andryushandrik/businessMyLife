@@ -136,8 +136,9 @@ Route.group(() => {
 		Route.delete('/deleteImage/:offerImageId', 'Api/Offer/OffersController.deleteImage').middleware('CheckAccessToken')
 
 		Route.group(() => {
-      Route.get('/moderation/:userId', 'Api/Offer/OffersController.paginateUserOnModerationOffers').middleware('CheckAccessToken').middleware('CheckAccessToken')
+			Route.get('/moderation/:userId', 'Api/Offer/OffersController.paginateUserOnModerationOffers').middleware('CheckAccessToken')
 
+			Route.get('/banned/:userId', 'Api/Offer/OffersController.paginateUserBannedOffers').middleware('CheckAccessToken')
 
 			Route.group(() => {
 				Route.get('/notArchived/:userId', 'Api/Offer/OffersArchivesController.paginateUserNotArchivedOffers')
@@ -150,7 +151,6 @@ Route.group(() => {
 			}).prefix('archive')
 
 			Route.group(() => {
-
 				Route.get('/:userId', 'Api/Offer/OffersFavoritesController.paginate').where('userId', {
 					match: /^[0-9]+$/,
 					cast: (userId) => Number(userId),
@@ -205,7 +205,6 @@ Route.group(() => {
 
 		Route.get('/my/public', 'Api/Ads/AdvertisementController.getMyPublicAds').middleware('CheckAccessToken')
 		Route.get('/my/moderation', 'Api/Ads/AdvertisementController.getMyOnModerationAds').middleware('CheckAccessToken')
-
 	}).prefix('ads')
 
 	Route.group(() => {

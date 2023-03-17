@@ -102,7 +102,7 @@
 
                   <td> {{item.$extras.status}} </td>
 
-                  <td>{{ item.title }}</td>
+                  <td> <a class="text-primary" target="_blank" href="{{ route('offer.get', { id: item.id }) }}">{{ item.title }}</a></td>
                   <td>
                     <img src="{{ getMedia(item.image) }}" width="300" height="200" alt="">
                   </td>

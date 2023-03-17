@@ -86,11 +86,6 @@
                       </button>
                       <div class="dropdown-menu" style="">
                         <a class="dropdown-item" href="{{ route('ads.show', { id: item.id }) }}">Просмотреть</a>
-                        <form action="{{ route('ads.destroy', { id: item.id }, { qs: { _method: 'DELETE' } }) }}" method="POST">
-                          <button type="submit" class="dropdown-item">Удалить</button>
-
-                          {{ csrfField() }}
-                        </form>
                       </div>
                     </div>
                   </td>
