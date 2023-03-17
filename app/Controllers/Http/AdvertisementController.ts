@@ -211,7 +211,7 @@ export default class AdvertisementController {
 			})
 		}
 		try {
-			await AdvertisementService.create({ ...payload, userId: request.currentUserId, isVerified: true })
+			await AdvertisementService.create({ ...payload, userId: request.currentUserId, isVerified: true, isArchived: false })
 			session.flash('success', ResponseMessages.SUCCESS)
 			response.redirect().toRoute('ads.my')
 		} catch (err: Err | any) {
