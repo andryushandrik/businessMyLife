@@ -5,7 +5,16 @@
 @section('styles')
   <link href="/css/ads.css" rel="stylesheet">
 @endsection
-
+@component('components/filter', {
+  payload,
+  columns: [
+    { key: 'id', value: 'ID' },
+    { key: 'place', value: 'Место размещения' },
+    { key : 'subsectionId', value: 'ID категории' },
+    { key : 'userId', value: 'ID пользователя' }
+  ],
+})
+@end
 @section('body')
   <div class="col-lg-12">
     <div class="card">

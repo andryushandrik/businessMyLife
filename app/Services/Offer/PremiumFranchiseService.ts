@@ -154,7 +154,9 @@ export default class PremiumFranchiseService {
 					case 'offerId':
 						query = query.withScopes((scopes) => scopes.getByOfferId(payload[key]!))
 						break
-
+            case 'query':
+              query = query.withScopes((scopes) => scopes.getByQuery(payload[key]!))
+              break
 					default:
 						break
 				}
