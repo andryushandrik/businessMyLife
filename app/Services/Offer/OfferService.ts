@@ -220,7 +220,13 @@ export default class OfferService {
 			if (payload.category == 4) {
 				payload.isPricePerMonthAbsolute = payload.isPricePerMonthAbsolute
 
-				const isRoyaltySane = payload.pricePerMonth && !payload.isPricePerMonthAbsolute && payload.pricePerMonth <= 100
+				let isRoyaltySane: boolean = true
+				if (payload.pricePerMonth) {
+					if (!payload.isPricePerMonthAbsolute) {
+						isRoyaltySane = payload.pricePerMonth <= 100
+					}
+				}
+
 				// (payload.profitPerMonth && payload.pricePerMonth && payload.isPricePerMonthAbsolute && payload.profitPerMonth >= payload.pricePerMonth)
 
 				if (!isRoyaltySane) {
@@ -609,3 +615,4 @@ export default class OfferService {
 		}
 	}
 }
+
