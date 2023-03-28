@@ -55,6 +55,9 @@ export default class Advertisement extends BaseModel {
 	@column({ columnName: 'isVerified' })
 	public isVerified: boolean
 
+  @column({ columnName: 'isArchived' })
+	public isArchived: boolean
+
 	@column({ columnName: 'viewsCount' })
 	public viewsCount: number
 
@@ -130,6 +133,8 @@ export default class Advertisement extends BaseModel {
 	/**
 	 * * Hooks
 	 */
+
+
 
 	@afterFind()
 	public static afterFindHook(advertisement: Advertisement) {

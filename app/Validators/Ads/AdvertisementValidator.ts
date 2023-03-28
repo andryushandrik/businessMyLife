@@ -28,6 +28,7 @@ export default class AdvertisementValidator extends IndexValidator {
 		// placedAt: schema.date.optional({ format: 'dd MMMM, yyyy' }),
 		image: schema.file.optional(getAdsFileOptions()),
 		isVerified: schema.boolean.optional(),
+    isArchived: schema.boolean.optional(),
 		viewsCount: schema.number.optional(),
 	})
 
