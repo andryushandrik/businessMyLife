@@ -18,9 +18,11 @@ export default class PartnerWithVideoValidator extends IndexValidator {
 		mediaType: schema.boolean(),
 
 		/**
-		 * * Optional fields
+     * * Optional fields
 		 */
 
+    link: schema.string.optional(),
+		isVisible: schema.boolean.optional(),
 		isTitleLink: schema.boolean.optional(),
 	})
 

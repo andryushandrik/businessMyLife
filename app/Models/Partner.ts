@@ -24,6 +24,9 @@ export default class Partner extends BaseModel {
 	@column()
 	public title: string
 
+  @column()
+	public link: string
+
 	@column()
 	public media: string
 

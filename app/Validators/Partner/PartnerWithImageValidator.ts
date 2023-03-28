@@ -23,8 +23,13 @@ export default class PartnerWithImageValidator extends IndexValidator {
 		 */
 
 		isTitleLink: schema.boolean.optional(),
+		link: schema.string.optional(),
+
+		isVisible: schema.boolean.optional(),
+
 		media: this.isUpdating ? schema.file.optional(getPartnerImageOptions()) : schema.file(getPartnerImageOptions()),
 	})
 
 	public messages: CustomMessages = this.messages
 }
+
