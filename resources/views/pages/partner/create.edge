@@ -32,6 +32,7 @@
               @endif
             </div>
 
+
             <div class="form-group">
               <div class="custom-control custom-checkbox mb-3 checkbox-success">
                 <input type="checkbox" name="isTitleLink" class="custom-control-input" id="isTitleLink">
@@ -43,6 +44,18 @@
                   </div>
                 @endif
               </div>
+            </div>
+
+
+            <div class="form-group">
+              <label class="mb-1"><strong>Ссылка</strong></label>
+              <input type="string" class="form-control" name="link" value="{{ flashMessages.get('link') ?? '' }}">
+
+              @if(flashMessages.has('errors.link'))
+                <div class="invalid-feedback d-block">
+                  {{ flashMessages.get('errors.link')[0] }}
+                </div>
+              @endif
             </div>
 
             <div class="form-group">
@@ -57,6 +70,18 @@
               @if(flashMessages.has('errors.media'))
                 <div class="invalid-feedback d-block">
                   {{ flashMessages.get('errors.media')[0] }}
+                </div>
+              @endif
+            </div>
+
+
+            <div class="custom-control custom-checkbox mb-3 checkbox-success">
+              <input type="checkbox" name="isVisible" class="custom-control-input" id="isVisible">
+              <label class="custom-control-label" for="isVisible">Видимость (Есть / нету)</label>
+
+              @if(flashMessages.has('errors.isVisible'))
+                <div class="invalid-feedback d-block">
+                  {{ flashMessages.get('errors.isVisible')[0] }}
                 </div>
               @endif
             </div>
