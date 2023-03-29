@@ -24,6 +24,18 @@
       </select>
     </div>
   </div>
+
+  <div class="col-6">
+    <div class="dropdown bootstrap-select form-control form-control-lg dropup">
+      <select class="form-control form-control-lg" name="city" tabindex="-98">
+        <option value=""> [ Город ] </option>
+
+        @each((item, index) in cities)
+          <option value="{{ item.city }}" {{ payload?.city == item ? 'selected' : '' }}>{{ item.city }}</option>
+        @endeach
+      </select>
+    </div>
+  </div>
   @end
 
   <div class="col-lg-12">

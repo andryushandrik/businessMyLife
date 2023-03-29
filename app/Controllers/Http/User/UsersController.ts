@@ -1,3 +1,4 @@
+import Database from '@ioc:Adonis/Lucid/Database';
 // * Types
 import type User from 'App/Models/User/User'
 import type { Err } from 'Contracts/response'
@@ -33,13 +34,14 @@ export default class UsersController {
 
 		try {
 			const users: ModelPaginatorContract<User> = await UserService.paginate(config, payload)
-
+      const cities = await Database.rawQuery('select distinct city from users')
 			return view.render('pages/user/paginate', {
 				users,
 				payload,
 				titleFromController,
 				roles: ROLE_NAMES,
 				roleEnum: RoleNames,
+        cities: cities.rows,
 				usersTypes: USER_TYPE_NAMES,
 			})
 		} catch (err: Err | any) {

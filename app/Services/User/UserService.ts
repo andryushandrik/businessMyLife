@@ -322,8 +322,11 @@ export default class UserService {
 						break
 
 					case 'profileTypeId':
-            console.log(+payload[key]!);
 						query = query.withScopes((scopes) => scopes.getByTypeId(+payload[key]!))
+						break
+
+					case 'city':
+						query = query.withScopes((scopes) => scopes.getByCity(payload[key]!))
 						break
 
 					default:
@@ -335,3 +338,4 @@ export default class UserService {
 		return query
 	}
 }
+

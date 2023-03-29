@@ -283,6 +283,10 @@ export default class User extends BaseModel {
 		query.where('type', userType)
 	})
 
+  public static getByCity = scope((query: ModelQueryBuilderContract<typeof User>, city: string) => {
+		query.where('city', city)
+	})
+
 	public static search = scope((query, searchQuery: string) => {
 		const parts: string[] = searchQuery.split(' ')
 
