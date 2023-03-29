@@ -62,6 +62,7 @@ export default class AdvertisementController {
 					isVerified: false,
 					limit,
 				},
+        true
 			)
 			return await view.render('pages/ads/moderation', { ads })
 		} catch (err: Err | any) {

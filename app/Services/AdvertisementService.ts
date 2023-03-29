@@ -48,10 +48,34 @@ export default class AdvertisementService {
 	public static async paginate(
 		config: PaginateConfig<Advertisement>,
 		filter?: Partial<AdvertisementFilterValidator['schema']['props']>,
+		isHavingPaymentInfo: boolean = true,
 	): Promise<ModelPaginatorContract<Advertisement>> {
 		try {
 			let query: ModelQueryBuilderContract<typeof Advertisement> = Advertisement.query()
 			if (filter) query = this.filter(query, filter)
+
+			if (isHavingPaymentInfo) {
+				query = query
+					.select([
+						'payments.status',
+						'advertisements.id',
+						'advertisements.user_id',
+						'advertisements.image',
+						'advertisements.description',
+						'advertisements.created_at',
+						'advertisements.updated_at',
+						'advertisements.placed_at',
+						'advertisements.subsection_id',
+						'advertisements.isVerified',
+						'advertisements.viewsCount',
+						'advertisements.ads_type_id',
+						'advertisements.placedForMonths',
+						'advertisements.link',
+						'advertisements.isArchived',
+					])
+					.withScopes((scopes) => scopes.getPaymentInfo())
+			}
+
 			return await query.preload('owner').preload('subsection').preload('adsType').getViaPaginate(config)
 		} catch (err: any) {
 			Logger.error(err)
