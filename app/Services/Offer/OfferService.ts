@@ -38,6 +38,7 @@ export default class OfferService {
 		filter?: OfferFilterValidator['schema']['props'],
 		categoryId?: number,
 		isHavingPaymentInfo = false,
+    isShowingPremium = true,
 	): Promise<ModelPaginatorContract<Offer>> {
 		let query: ModelQueryBuilderContract<typeof Offer, ModelObject> | ManyToManyQueryBuilderContract<typeof Offer, ModelObject> = Offer.query()
 
@@ -73,6 +74,10 @@ export default class OfferService {
 
 		if (categoryId) {
 			query = query.withScopes((scopes) => scopes.getByCategories([categoryId]))
+		}
+
+    if (!isShowingPremium) {
+			query = query.doesntHave('premiumFranchise')
 		}
 
 		if (config.isArchived !== undefined) query = query.withScopes((scopes) => scopes.getByArchived(config.isArchived!))

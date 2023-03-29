@@ -42,7 +42,6 @@
     <div class="card">
       <div class="card-body">
         <div class="table-responsive">
-
           <table class="table table-responsive-md">
             <thead>
               <tr>
@@ -69,7 +68,10 @@
                     <a href="{{ route('user.get', { id: item.user.id }) }}" class="text-primary">{{ item.user.fullName }}</a>
                   </td>
                   <td>{{ item.categoryForUser }}</td>
-                  <td>{{ item.title }}</td>
+                  <td>
+
+                    <a class="text-primary" href="{{ route('offer.get', { id: item.id }) }}">{{ item.title }}</a>
+                    </td>
                   <td>
                     <img src="{{ getMedia(item.image) }}" width="300" height="200" alt="">
                   </td>

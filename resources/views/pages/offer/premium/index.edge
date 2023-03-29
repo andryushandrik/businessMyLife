@@ -60,7 +60,7 @@
                   @endif
 
                   @if(item.premiumSlot?.title)
-                    <td><b><a target="_blank" href="{{ route('offer.premium.slots.edit', { id: item.id }) }}">{{ item.premiumSlot?.title }}</a> </b></td>
+                    <td><b><a target="_blank" href="{{ route('offer.premium.slots.edit', { id: item.premiumSlot.id }) }}">{{ item.premiumSlot?.title }}</a> </b></td>
                   @else
                     <td>-</td>
                   @endif
