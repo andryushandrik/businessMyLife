@@ -1,5 +1,5 @@
 import PromoCode from 'App/Models/PromoCode'
-import { BelongsTo, LucidModel, scope } from '@ioc:Adonis/Lucid/Orm'
+import { BelongsTo, computed, LucidModel, scope } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 import type { DateTime } from 'luxon'
 // * Types
@@ -67,6 +67,11 @@ export default class Payment extends BaseModel {
 	public static getByPaymentTarget = scope((query, model: LucidModel, id: number) => {
 		query.where('target_table', `${model.table}`).andWhere('target_id', `${id}`)
 	})
+
+  @computed()
+	public get createdAtForUser(): string {
+		return this.createdAt.setLocale('ru-RU').toFormat('dd.LL.yyyy, HH:mm.ss')
+	}
 	/**
 	 * * Hooks
 	 */
