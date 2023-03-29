@@ -55,7 +55,7 @@ export default class Advertisement extends BaseModel {
 	@column({ columnName: 'isVerified' })
 	public isVerified: boolean
 
-  @column({ columnName: 'isArchived' })
+	@column({ columnName: 'isArchived' })
 	public isArchived: boolean
 
 	@column({ columnName: 'viewsCount' })
@@ -130,11 +130,16 @@ export default class Advertisement extends BaseModel {
 		query.where('description', 'ILIKE', `%${searchString}%`)
 	})
 
+	public static getPaymentInfo = scope((query) => {
+		const joinQuery = query.leftJoin('payments', (query) => {
+			query.on(`${this.table}.id`, `payments.target_id`).andOnVal(`payments.target_table`, `${this.table}`)
+		})
+		return [joinQuery]
+	})
+
 	/**
 	 * * Hooks
 	 */
-
-
 
 	@afterFind()
 	public static afterFindHook(advertisement: Advertisement) {

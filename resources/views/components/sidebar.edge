@@ -11,9 +11,7 @@
           <li><a href="{{ route('user.paginateAdminsAndModerators') }}">Администраторы и модераторы</a></li>
           <li><a href="{{ route('feedback.paginate') }}">Форма обратной связи</a></li>
           <li><a href="{{ route('user.paginate') }}">Пользователи</a></li>
-          <li><a href="{{ route('report.paginateUsersReports') }}">Жалобы на пользователей</a></li>
           <li><a href="{{ route('news.index') }}">Статьи</a></li>
-          <li><a href="{{ route('report_types.index') }}">Типы жалоб</a></li>
         </ul>
       </li>
 
@@ -50,7 +48,20 @@
           <li><a href="{{ route('offer.archived') }}">Архивированные</a></li>
 
           <li><a href="{{ route('offer.paginateCurrentUserOffers') }}">Мои объявления</a></li>
+        </ul>
+      </li>
+
+      <li>
+        <a class="has-arrow ai-icon" href="javascript: void()" aria-expanded="false">
+          <i class="flaticon-381-book"></i>
+          <span class="nav-text">Жалобы</span>
+        </a>
+        <ul aria-expanded="false">
           <li><a href="{{ route('report.paginateOffersReports') }}">Жалобы на объявления</a></li>
+          <li><a href="{{ route('report.paginateUsersReports') }}">Жалобы на пользователей</a></li>
+          <li><a href="{{ route('report_types.index') }}">Типы жалоб</a></li>
+
+
         </ul>
       </li>
 
@@ -74,8 +85,8 @@
           <span class="nav-text">Премиальное размещение</span>
         </a>
         <ul aria-expanded="false">
-          <li><a href="{{ route('offer.premium.public') }}">Опубликованные</a></li>
-          {{--  <li><a href="{{ route('offer.premium.paginate') }}">Премиально размещенные франшизы</a></li>  --}}
+          <li><a href="{{ route('offer.premium.public') }}">Размещенные</a></li>
+          <li><a href="{{ route('offer.premium.moderation') }}">Модерация</a></li>
           <li><a href="{{ route('offer.premium.slots.paginate') }}">Места для премиального размещения</a></li>
 
         </ul>

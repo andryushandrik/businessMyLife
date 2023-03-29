@@ -19,7 +19,7 @@
           <div class="col-6">
             <div class="dropdown bootstrap-select form-control form-control-lg dropup">
               <select class="form-control form-control-lg" name="orderByColumn" tabindex="-98">
-                <option value="id">Сортировка колонки</option>
+                <option value="id">[ Сортировка колонки ]</option>
 
                 @each(item in columns)
                   <option value="{{ item.key }}" {{ payload?.orderByColumn == item.key ? 'selected' : '' }}>{{ item.value }}</option>
@@ -31,7 +31,7 @@
           <div class="col-6">
             <div class="dropdown bootstrap-select form-control form-control-lg dropup">
               <select class="form-control form-control-lg" name="orderBy" tabindex="-98">
-                <option value="asc">Порядок</option>
+                <option value="asc">[ Порядок ]</option>
                 <option value="asc" {{ payload?.orderBy == 'asc' ? 'selected' : '' }}>По позрастанию</option>
                 <option value="desc" {{ payload?.orderBy == 'desc' ? 'selected' : '' }}>По убыванию</option>
               </select>

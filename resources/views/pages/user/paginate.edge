@@ -3,7 +3,7 @@
 @set('title', titleFromController ?? 'Все пользователи')
 
 @section('body')
-  @!component('components/filter', {
+  @component('components/filter', {
     payload,
     columns: [
       { key: 'id', value: 'ID' },
@@ -13,6 +13,30 @@
       { key: 'blockedUntil', value: 'Бан' },
     ],
   })
+  <div class="col-6">
+    <div class="dropdown bootstrap-select form-control form-control-lg dropup">
+      <select class="form-control form-control-lg" name="profileTypeId" tabindex="-98">
+        <option value=""> [ Тип профиля ] </option>
+
+        @each((item, index) in usersTypes)
+          <option value="{{ index }}" {{ payload?.profileTypeId == index ? 'selected' : '' }}>{{ item }}</option>
+        @endeach
+      </select>
+    </div>
+  </div>
+
+  <div class="col-6">
+    <div class="dropdown bootstrap-select form-control form-control-lg dropup">
+      <select class="form-control form-control-lg" name="city" tabindex="-98">
+        <option value=""> [ Город ] </option>
+
+        @each((item, index) in cities)
+          <option value="{{ item.city }}" {{ payload?.city == item ? 'selected' : '' }}>{{ item.city }}</option>
+        @endeach
+      </select>
+    </div>
+  </div>
+  @end
 
   <div class="col-lg-12">
     <div class="card">
@@ -47,7 +71,7 @@
                   <td><strong>{{ item.id }}</strong></td>
                   <td>{{ roles[item.roleId - 1] }}</td>
                   <td>{{ usersTypes[item.type] }}</td>
-                  <td>{{ item.fullName }}</td>
+                  <td> <a class="text-primary" href="https://business-mylife.ru/account/profile/user/{{item.id}}" target="_blank">{{ item.fullName }}</a></td>
                   <td>{{ item.phone }}</td>
                   <td>{{ item.email }}</td>
                   <td>{{ item.city }}</td>

@@ -9,7 +9,7 @@ import PremiumFranchiseService from 'App/Services/Offer/PremiumFranchiseService'
 import { PaginateConfig } from 'Contracts/services'
 
 export default class PremiumFranchiseController {
-	public async paginate({ route, session, request, view, response }: HttpContextContract) {
+	public async moderation({ route, session, request, view, response }: HttpContextContract) {
 		let payload: PremiumFranchiseFilterValidator['schema']['props'] | undefined = undefined
 		const isFiltered: boolean = request.input('isFiltered', false)
 
@@ -38,7 +38,7 @@ export default class PremiumFranchiseController {
 
 		try {
 			const franchises: ModelPaginatorContract<PremiumFranchise> = await PremiumFranchiseService.paginate(config, payload)
-			return view.render('pages/offer/premium/index', {
+			return view.render('pages/offer/premium/moderation', {
 				franchises,
 			})
 		} catch (err: Err | any) {

@@ -1,6 +1,6 @@
 @layout('layouts/index')
 
-@set('title', 'Премиальные франшизы')
+@set('title', 'Премиальные франшизы на модерации')
 
 @section('body')
   @!component('components/filter', {
@@ -29,19 +29,18 @@
                 <th class="width80"><strong>#</strong></th>
 
                 <th><strong>Пользователь</strong></th>
+
                 <th><strong>Объявление</strong></th>
 
-                <th><strong> Тип размещения</strong></th>
+                <th><strong>Тип размещения</strong></th>
 
-                <th><strong> Занятый слот</strong></th>
+                <th><strong>Название слота</strong></th>
 
-
-                <th><strong>Дата размещения (Обычной франшизы)</strong></th>
-                <th><strong>Срок размещения (Обычной франшизы)</strong></th>
+                <th><strong>Дата активации Premium</strong></th>
 
                 <th><strong>Окончание Premium</strong></th>
 
-                <th><strong>Жалобы</strong></th>
+                <th><strong>Статус оплаты</strong></th>
 
 
               </tr>
@@ -51,11 +50,10 @@
               @each(item in franchises)
                 <tr>
                   <td><strong>{{ item.id }}</strong></td>
-                  <td> <a class="text-primary" target="_blank" href="https://business-mylife.ru/account/profile/user/{{ item.offer.user.id}}">{{ item.offer.user.firstName}} {{ item.offer.user.lastName}}</a></td>
-                  <td>  <a class="text-primary" target="_blank" href="https://business-mylife.ru/adv-page/{{item.offer.id}}">{{ item.offer.id }} - {{ item.offer.title }}</a></td>
+                  <td><b> <a target="_blank" href="https://business-mylife.ru/account/profile/user/{{ item.offer.user.id}}">{{ item.offer.user.firstName}} {{ item.offer.user.lastName}}</a></b></td>
 
-                  {{--  <td> <img src="{{ getMedia(item.offer.image) }}" width="200" height="100" alt=""></td>  --}}
 
+                  <td> <b> <a target="_blank" href="https://business-mylife.ru/adv-page/{{item.offer.id}}">{{ item.offer.id }} - {{ item.offer.title }}</a> </b></td>
                   @if(item.premiumSlot?.type)
                     <td>{{ item.premiumSlot?.type == 'small' ? 'Объявление' : 'Баннер' }} </td>
                   @else
@@ -68,15 +66,11 @@
                     <td>-</td>
                   @endif
 
-                  <td>{{ item.offer.createdAtForUser}}</td>
 
-                  <td>{{ item.offer.placedForMonths}} месяцев</td>
 
-                  <td>
-                    {{ item.timeBeforeArchive }}
-                  </td>
-
-                  <td>{{ item.offer.reports.length }}</td>
+                  <td>{{ item.createdAtForUser}}</td>
+                  <td> {{ item.timeBeforeArchive }} </td>
+                  <td> {{item.$extras.status}} </td>
                   <td>
                     <div class="dropdown">
                       <button type="button" class="btn btn-success light sharp" data-toggle="dropdown"
@@ -90,9 +84,11 @@
                           </g>
                         </svg>
                       </button>
-                      <div class="dropdown-menu" style="">
+
+                      {{--  <div class="dropdown-menu" style="">
                         <a class="dropdown-item" href="{{ route('offer.premium.get', { id: item.id }) }}" target="_blank">Просмотреть</a>
-                      </div>
+                      </div>  --}}
+
                       <div class="dropdown-menu" style="">
                         <a class="dropdown-item" href="https://business-mylife.ru/account/profile/user/{{ item.offer.user.id}}" target="_blank">Пользователь</a>
 

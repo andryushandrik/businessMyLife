@@ -38,6 +38,7 @@ export default class OfferService {
 		filter?: OfferFilterValidator['schema']['props'],
 		categoryId?: number,
 		isHavingPaymentInfo = false,
+		isShowingPremium = true,
 	): Promise<ModelPaginatorContract<Offer>> {
 		let query: ModelQueryBuilderContract<typeof Offer, ModelObject> | ManyToManyQueryBuilderContract<typeof Offer, ModelObject> = Offer.query()
 
@@ -73,6 +74,10 @@ export default class OfferService {
 
 		if (categoryId) {
 			query = query.withScopes((scopes) => scopes.getByCategories([categoryId]))
+		}
+
+		if (!isShowingPremium) {
+			query = query.doesntHave('premiumFranchise')
 		}
 
 		if (config.isArchived !== undefined) query = query.withScopes((scopes) => scopes.getByArchived(config.isArchived!))
@@ -220,7 +225,13 @@ export default class OfferService {
 			if (payload.category == 4) {
 				payload.isPricePerMonthAbsolute = payload.isPricePerMonthAbsolute
 
-				const isRoyaltySane = payload.pricePerMonth && !payload.isPricePerMonthAbsolute && payload.pricePerMonth <= 100
+				let isRoyaltySane: boolean = true
+				if (payload.pricePerMonth) {
+					if (!payload.isPricePerMonthAbsolute) {
+						isRoyaltySane = payload.pricePerMonth <= 100
+					}
+				}
+
 				// (payload.profitPerMonth && payload.pricePerMonth && payload.isPricePerMonthAbsolute && payload.profitPerMonth >= payload.pricePerMonth)
 
 				if (!isRoyaltySane) {
@@ -547,6 +558,10 @@ export default class OfferService {
 
 						break
 
+					case 'daysRemains':
+						query = query.withScopes((scopes) => scopes.getByDaysRemains(payload[key]!))
+						break
+
 					default:
 						break
 				}
@@ -609,3 +624,4 @@ export default class OfferService {
 		}
 	}
 }
+
