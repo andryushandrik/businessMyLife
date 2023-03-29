@@ -251,16 +251,14 @@ export default class Offer extends BaseModel {
 	@computed()
 	public get timeBeforeArchive(): string {
 		const expireDate: DateTime = this.createdAt.plus({ months: this.placedForMonths }).plus({ days: 1 })
-    const daysBeforeArchive: number = expireDate.diff(DateTime.now(), 'days').days
+		const daysBeforeArchive: number = expireDate.diff(DateTime.now(), 'days').days
 		if (this.isArchived) {
-      if(daysBeforeArchive > 0){
-        return 'На доработке у пользователя'
-      }
+			if (daysBeforeArchive > 0) {
+				return 'На доработке у пользователя'
+			}
 			return ` Архивирован ${expireDate.setLocale('ru-RU').toFormat('dd MMMM, yyyy')}`
 		}
 		const daysBeforeArchiveWithoutFraction: number = Math.floor(daysBeforeArchive)
-
-
 
 		return `Осталось ${daysBeforeArchiveWithoutFraction} дней - до ${expireDate.setLocale('ru-RU').toFormat('dd MMMM, yyyy')}`
 	}
@@ -310,6 +308,14 @@ export default class Offer extends BaseModel {
 
 	public static getBySubsectionsIds = scope((query, subsectionsIds: Subsection['id'][]) => {
 		query.whereIn('subsection_id', subsectionsIds)
+	})
+	public static getByDaysRemains = scope((query, daysRemains: number) => {
+		query.whereRaw(
+			`"createdAt"::date <
+    now()::date + '1 day'::interval * ? - '1 month'::interval * "placedForMonths"
+    AND "createdAt"::date > now()::date - '1 month'::interval * "placedForMonths"`,
+			[daysRemains],
+		)
 	})
 
 	public static search = scope((query, searchQuery: string) => {
@@ -375,3 +381,4 @@ export default class Offer extends BaseModel {
 		return item
 	}
 }
+

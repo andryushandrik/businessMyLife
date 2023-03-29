@@ -306,7 +306,7 @@ export default class UserService {
 		payload: UserFilterValidator['schema']['props'],
 	): ModelQueryBuilderContract<typeof User> {
 		for (const key in payload) {
-			if (payload[key]) {
+			if (payload[key] != undefined) {
 				switch (key) {
 					// Skip this api's keys
 					case 'page':
@@ -319,6 +319,11 @@ export default class UserService {
 					case 'query':
 						query = query.withScopes((scopes) => scopes.search(payload[key]!))
 
+						break
+
+					case 'profileTypeId':
+            console.log(+payload[key]!);
+						query = query.withScopes((scopes) => scopes.getByTypeId(+payload[key]!))
 						break
 
 					default:

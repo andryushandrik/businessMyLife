@@ -27,6 +27,13 @@
 
     <div class="col-6">
       <div class="dropdown bootstrap-select form-control form-control-lg dropup">
+          <label value="">Дней до архивации не более</label>
+            <input value={{payload?.daysRemains}} class="form-control form-control-lg" name="daysRemains" tabindex="-98"type="text">
+      </div>
+    </div>
+
+    <div class="col-6">
+      <div class="dropdown bootstrap-select form-control form-control-lg dropup">
         <select class="form-control form-control-lg" name="areaId" tabindex="-98">
           <option value="">Сфера</option>
 

@@ -36,7 +36,7 @@ export default class UserFilterValidator extends ApiValidator {
 		/**
 		 * * Optional fields
 		 */
-
+		profileTypeId: schema.number.optional(),
 		query: schema.string.optional({ trim: true }),
 	})
 
@@ -53,3 +53,4 @@ export default class UserFilterValidator extends ApiValidator {
 	 */
 	public messages: CustomMessages = this.messages
 }
+
