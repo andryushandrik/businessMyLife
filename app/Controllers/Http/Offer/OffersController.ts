@@ -133,7 +133,7 @@ export default class OffersController {
 			limit: request.input('limit', 5),
 
 			isVerified: false,
-
+      aggregates: ['reports'],
 			relations: ['user', 'subsection'],
 		}
 
