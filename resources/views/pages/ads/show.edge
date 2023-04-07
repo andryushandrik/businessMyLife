@@ -67,7 +67,7 @@
 
             <div class="form-group">
               <label class="mb-1">Статус оплаты </label>
-              <input class="form-control" name="paymentStatus" value="{{ flashMessages.get('paymentStatus') ?? item.paymentStatus }}" disabled>
+              <input class="form-control" name="paymentStatus" value="{{ flashMessages.get('paymentStatus') ?? item.$extras.status }}" disabled>
             </div>
         </div>
       </div>
