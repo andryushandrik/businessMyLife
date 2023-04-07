@@ -72,31 +72,11 @@
                         </svg>
                       </button>
                       <div class="dropdown-menu" style="">
-
-
-                        @if((item.roleId - 1) == roleEnum['USER'])
-                          <form action="{{ route('user.role.changeRoleToModerator', { userId: item.id }, { qs: { _method: 'PATCH' } }) }}" method="POST">
-                            {{ csrfField() }}
-
-                            <button type="submit" class="dropdown-item">Сделать модератором</button>
-                          </form>
-                        @else
-                          <form action="{{ route('user.role.changeRoleToUser', { userId: item.id }, { qs: { _method: 'PATCH' } }) }}" method="POST">
-                            {{ csrfField() }}
-                            <button type="submit" class="dropdown-item">Сделать пользователем</button>
-                          </form>
-                        @endif
-
                         <a class="dropdown-item" href="{{ route('balance.accrue', { userId: item.id }) }}">Изменить баланс</a>
                         <a class="dropdown-item" href="{{ route('user.get', { id: item.id }) }}">Показать</a>
 
                         <a class="dropdown-item" href="https://business-mylife.ru/account/profile/user/{{item.id}}" target="_blank">Открыть на сайте</a>
 
-                        <form action="{{ route('user.delete', { id: item.id }, { qs: { _method: 'DELETE' } }) }}" method="POST">
-                          <button type="submit" class="dropdown-item">Удалить</button>
-
-                          {{ csrfField() }}
-                        </form>
                       </div>
                     </div>
                   </td>
