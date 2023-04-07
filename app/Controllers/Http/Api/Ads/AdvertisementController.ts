@@ -27,10 +27,9 @@ export default class AdvertisementController {
 				body: err.messages,
 			})
 		}
-		payload.queryString = request.qs()
 
 		try {
-			const ads: ModelPaginatorContract<Advertisement> = await AdvertisementService.paginate(payload, payload)
+			const ads: ModelPaginatorContract<Advertisement> = await AdvertisementService.paginate({ ...payload, queryString: request.qs() }, payload)
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, ads))
 		} catch (err: Err | any) {
 			throw new ExceptionService(err)
@@ -50,10 +49,9 @@ export default class AdvertisementController {
 		}
 		payload.userId = request.currentUserId
 		payload.isVerified = true
-		payload.queryString = request.qs()
 
 		try {
-			const ads: ModelPaginatorContract<Advertisement> = await AdvertisementService.paginate(payload, payload)
+			const ads: ModelPaginatorContract<Advertisement> = await AdvertisementService.paginate({ ...payload, queryString: request.qs() }, payload)
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, ads))
 		} catch (err: Err | any) {
 			throw new ExceptionService(err)
@@ -73,9 +71,8 @@ export default class AdvertisementController {
 		}
 		payload.userId = request.currentUserId
 		payload.isVerified = false
-		payload.queryString = request.qs()
 		try {
-			const ads: ModelPaginatorContract<Advertisement> = await AdvertisementService.paginate(payload, payload)
+			const ads: ModelPaginatorContract<Advertisement> = await AdvertisementService.paginate({ ...payload, queryString: request.qs() }, payload)
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, ads))
 		} catch (err: Err | any) {
 			throw new ExceptionService(err)

@@ -18,6 +18,7 @@ export default class FeedbacksController {
 			baseUrl: route!.pattern,
 			page: request.input('page', 1),
 			limit: request.input('limit', 5),
+      queryString: request.qs()
 		}
 
 		if (isFiltered) {

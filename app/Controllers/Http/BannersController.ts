@@ -21,6 +21,7 @@ export default class BannersController {
 				page,
 				baseUrl,
 				limit,
+        queryString: request.qs()
 			})
 			return await view.render('pages/banner/index', { banners, delay })
 		} catch (err: Err | any) {

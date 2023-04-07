@@ -75,7 +75,7 @@ export default class IndexController {
 		}
 
 		try {
-			const tutorials = await UploadTutorialService.paginate(payload)
+			const tutorials = await UploadTutorialService.paginate({ ...payload, queryString: request.qs() })
 
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, tutorials))
 		} catch (err: Err | any) {
@@ -83,3 +83,4 @@ export default class IndexController {
 		}
 	}
 }
+

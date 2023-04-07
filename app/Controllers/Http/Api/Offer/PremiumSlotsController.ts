@@ -13,7 +13,6 @@ export default class PremiumSlotsController {
 		let payload: ApiValidator['schema']['props']
 		try {
 			payload = await request.validate(ApiValidator)
-
 		} catch (err: any) {
 			throw new ExceptionService({
 				code: ResponseCodes.VALIDATION_ERROR,
@@ -21,9 +20,8 @@ export default class PremiumSlotsController {
 				body: err.messages,
 			})
 		}
-    payload.queryString = request.qs()
 		try {
-			const slots: ModelPaginatorContract<PremiumSlot> = await PremiumSlotService.paginate(payload)
+			const slots: ModelPaginatorContract<PremiumSlot> = await PremiumSlotService.paginate({ ...payload, queryString: request.qs() })
 
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, slots))
 		} catch (err: Err | any) {

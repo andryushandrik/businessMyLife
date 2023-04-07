@@ -28,7 +28,7 @@ export default class FriendsController {
 		}
 
 		try {
-			const friends: ModelPaginatorContract<User> = await FriendService.paginate(id, payload)
+			const friends: ModelPaginatorContract<User> = await FriendService.paginate(id, { ...payload, queryString: request.qs() })
 
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, friends))
 		} catch (err: Err | any) {
@@ -51,7 +51,7 @@ export default class FriendsController {
 		}
 
 		try {
-			const incomings: ModelPaginatorContract<User> = await FriendService.paginateRequests(currentUserId, payload, 'incomings')
+			const incomings: ModelPaginatorContract<User> = await FriendService.paginateRequests(currentUserId, { ...payload, queryString: request.qs() }, 'incomings')
 
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, incomings))
 		} catch (err: Err | any) {
@@ -86,7 +86,7 @@ export default class FriendsController {
 		}
 
 		try {
-			const outgoings: ModelPaginatorContract<User> = await FriendService.paginateRequests(currentUserId, payload, 'outgoings')
+			const outgoings: ModelPaginatorContract<User> = await FriendService.paginateRequests(currentUserId, { ...payload, queryString: request.qs() }, 'outgoings')
 
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, outgoings))
 		} catch (err: Err | any) {

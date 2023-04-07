@@ -14,7 +14,6 @@ import { ResponseCodes, ResponseMessages } from 'Config/response'
 export default class NewsController {
 	public async paginate({ request, response }: HttpContextContract) {
 		let payload: ApiValidator['schema']['props']
-
 		try {
 			payload = await request.validate(ApiValidator)
 		} catch (err: any) {
@@ -26,7 +25,7 @@ export default class NewsController {
 		}
 
 		try {
-			const news: ModelPaginatorContract<News> = await NewsService.paginate(payload)
+			const news: ModelPaginatorContract<News> = await NewsService.paginate({ ...payload, queryString: request.qs() })
 
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, news))
 		} catch (err: Err | any) {
@@ -46,3 +45,4 @@ export default class NewsController {
 		}
 	}
 }
+

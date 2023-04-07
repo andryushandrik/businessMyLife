@@ -6,7 +6,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import IndexValidator from '../IndexValidator'
 import { schema } from '@ioc:Adonis/Core/Validator'
 import { getPartnersTitleRules } from '../Rules/partners'
-import { getUploadTutorialEmbedRules, getUploadTutorialVideoOptions } from '../Rules/uploadTutorial'
+import {  getUploadTutorialVideoOptions } from '../Rules/uploadTutorial'
 
 export default class PartnerWithVideoValidator extends IndexValidator {
 	private readonly isUpdating: boolean = this.ctx.request.method() === 'PATCH'

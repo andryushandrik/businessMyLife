@@ -16,6 +16,7 @@ export default class PaymentsController {
 		const isFiltered: boolean = request.input('isFiltered', false)
 		const config: PaginateConfig<Payment> = {
 			baseUrl: route!.pattern,
+      queryString: request.qs(),
 			page: request.input('page', 1),
 			limit: request.input('limit', 5),
 		}
