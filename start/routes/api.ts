@@ -207,6 +207,10 @@ Route.group(() => {
 		Route.get('/my/moderation', 'Api/Ads/AdvertisementController.getMyOnModerationAds').middleware('CheckAccessToken')
 	}).prefix('ads')
 
+  Route.group(() => {
+		Route.get('/', 'Api/OurPartnersController.paginate')
+	}).prefix('ourPartners')
+
 	Route.group(() => {
 		Route.post('/', 'Api/PromocodesController.checkIsValid')
 	}).prefix('promo')
