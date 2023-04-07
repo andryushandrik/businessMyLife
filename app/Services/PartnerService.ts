@@ -48,9 +48,9 @@ export default class PartnerService {
 		let item: Partner
 		let media: string = payload.media?.fileName as string
 		let trx: TransactionClientContract | undefined = undefined
+    trx = await Database.transaction()
 
 		if (!payload.mediaType) {
-			trx = await Database.transaction()
 			media = 'tmp'
 		}
 
@@ -70,10 +70,9 @@ export default class PartnerService {
 				const filePath: string = await this.uploadImage(item.id, payload.media as MultipartFileContract)
 				await item.merge({ media: filePath }).save()
 
-				await trx!.commit()
+				await trx.commit()
 			} catch (err: any) {
-				trx!.rollback()
-
+				trx.rollback()
 				throw new Error('Произошла ошибка во время загрузки файла')
 			}
 		}
@@ -81,11 +80,12 @@ export default class PartnerService {
 
 	public static async update(id: Partner['id'], payload: (PartnerWithImageValidator | PartnerWithVideoValidator)['schema']['props']): Promise<void> {
 		let item: Partner
-		let media: string = payload.media?.fileName as string
+		let media: string = payload.media?.clientName as string
+    console.log(media, payload.mediaType)
 		let trx: TransactionClientContract | undefined = undefined
+    trx = await Database.transaction()
 
 		if (!payload.mediaType) {
-			trx = await Database.transaction()
 			media = 'tmp'
 		}
 
@@ -104,7 +104,7 @@ export default class PartnerService {
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
 		}
 
-		if (!payload.mediaType) {
+		if (payload.media) {
 			try {
 				await Drive.delete(item.media)
 			} catch (err: any) {

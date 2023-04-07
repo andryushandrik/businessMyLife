@@ -22,6 +22,7 @@ export default class OffersController {
 		const isFiltered: boolean = request.input('isFiltered', false)
 		const config: OfferServicePaginateConfig = {
 			baseUrl: route!.pattern,
+      queryString: request.qs(),
 			page: request.input('page', 1),
 			limit: request.input('limit', 5),
 			aggregates: ['reports'],
@@ -58,6 +59,7 @@ export default class OffersController {
 		const isFiltered: boolean = request.input('isFiltered', false)
 		const config: OfferServicePaginateConfig = {
 			baseUrl: route!.pattern,
+      queryString: request.qs(),
 			page: request.input('page', 1),
 			limit: request.input('limit', 5),
 			aggregates: ['reports'],
@@ -94,7 +96,7 @@ export default class OffersController {
 		const config: OfferServicePaginateConfig = {
 			baseUrl: route!.pattern,
 			page: request.input('page', 1),
-
+      queryString: request.qs(),
 			userId: currentUserId,
 
 			relations: ['user', 'subsection'],
@@ -131,7 +133,7 @@ export default class OffersController {
 			baseUrl: route!.pattern,
 			page: request.input('page', 1),
 			limit: request.input('limit', 5),
-
+      queryString: request.qs(),
 			isVerified: false,
       aggregates: ['reports'],
 			relations: ['user', 'subsection'],
@@ -147,7 +149,6 @@ export default class OffersController {
 		try {
 			const areas: Area[] = await AreaService.getAll()
 			const offers: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload)
-
 			return view.render('pages/offer/moderation', {
 				areas,
 				offers,
@@ -156,6 +157,7 @@ export default class OffersController {
 				categories: OFFER_CATEGORIES,
 				titleFromController: 'Модерация',
 			})
+
 		} catch (err: Err | any) {
 			session.flash('error', err.message)
 			return response.redirect().back()

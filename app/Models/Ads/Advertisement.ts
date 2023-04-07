@@ -124,7 +124,7 @@ export default class Advertisement extends BaseModel {
 	})
 
 	public static getByUserId = scope((query, userId: number) => {
-		query.where('userId', userId)
+		query.where('advertisements.user_id', userId)
 	})
 	public static getByQuery = scope((query, searchString: string) => {
 		query.where('description', 'ILIKE', `%${searchString}%`)

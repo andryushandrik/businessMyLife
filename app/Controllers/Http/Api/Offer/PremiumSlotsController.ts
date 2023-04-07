@@ -11,9 +11,9 @@ import { Err } from 'Contracts/response'
 export default class PremiumSlotsController {
 	public async paginate({ request, response }: HttpContextContract) {
 		let payload: ApiValidator['schema']['props']
-
 		try {
 			payload = await request.validate(ApiValidator)
+
 		} catch (err: any) {
 			throw new ExceptionService({
 				code: ResponseCodes.VALIDATION_ERROR,
@@ -21,7 +21,7 @@ export default class PremiumSlotsController {
 				body: err.messages,
 			})
 		}
-
+    payload.queryString = request.qs()
 		try {
 			const slots: ModelPaginatorContract<PremiumSlot> = await PremiumSlotService.paginate(payload)
 
@@ -65,3 +65,4 @@ export default class PremiumSlotsController {
 	// 	}
 	// }
 }
+

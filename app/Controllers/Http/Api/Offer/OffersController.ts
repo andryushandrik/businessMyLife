@@ -41,6 +41,7 @@ export default class OffersController {
 		try {
 			const config: OfferServicePaginateConfig = {
 				page: payload.page,
+        queryString: request.qs(),
 				limit: payload.limit,
 				orderBy: payload.orderBy,
 				orderByColumn: payload.orderByColumn,
@@ -78,6 +79,7 @@ export default class OffersController {
 		try {
 			const config: OfferServicePaginateConfig = {
 				page: payload.page,
+        queryString: request.qs(),
 				limit: payload.limit,
 				orderBy: payload.orderBy,
 				orderByColumn: payload.orderByColumn,
@@ -111,6 +113,7 @@ export default class OffersController {
 		try {
 			const config: OfferServicePaginateConfig = {
 				page: payload.page,
+        queryString: request.qs(),
 				limit: payload.limit,
 				orderBy: payload.orderBy,
 				orderByColumn: payload.orderByColumn,
