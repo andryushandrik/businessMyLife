@@ -71,10 +71,10 @@ export default class UserService {
 			else item = await User.findBy('email', idOrEmail)
 		} catch (err: any) {
 			Logger.error(err)
-			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.USER_NOT_FOUND } as Err
 		}
 
-		if (!item) throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.ERROR } as Err
+		if (!item) throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.USER_NOT_FOUND } as Err
 
 		try {
 			if (relations) {
@@ -92,7 +92,7 @@ export default class UserService {
 			return item
 		} catch (err: any) {
 			Logger.error(err)
-			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR_WITH_RELATIONS } as Err
 		}
 	}
 

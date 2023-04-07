@@ -15,6 +15,9 @@ export enum ResponseMessages {
 	SUCCESS = 'Успешно!',
 	ERROR = 'Что-то пошло не так, повторите попытку еще раз!',
 	FORBIDDEN = 'Доступ запрещён',
+  USER_WAS_BANNED = 'Данный пользователь заблокирован',
+  WRONG_PASSWORD = 'Неверный пароль',
+  ERROR_WITH_RELATIONS = 'Не удалось загрузить связанные сущности',
 
 	/**
 	 * * Сhat

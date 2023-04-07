@@ -39,7 +39,6 @@ export default class AuthController {
 
 		try {
 			const data = await AuthService.loginViaAPI(payload, headers)
-
 			response.cookie(COOKIE_REFRESH_TOKEN_KEY, data.tokens.refresh, COOKIE_REFRESH_TOKEN_CONFIG)
 
 			return response.status(200).send(
@@ -50,7 +49,6 @@ export default class AuthController {
 			)
 		} catch (err: Err | any) {
 			response.clearCookie(COOKIE_REFRESH_TOKEN_KEY)
-
 			throw new ExceptionService(err)
 		}
 	}

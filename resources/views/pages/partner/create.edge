@@ -60,8 +60,19 @@
 
             <div class="form-group">
               @if(mediaType === 'true')
-                <label class="mb-1"><strong>Embed ссылка на видео*</strong></label>
-                <input type="string" class="form-control" name="media" placeholder="Вставьте embed ссылку на видео (должно быть с iframe)" value="{{ flashMessages.get('media') ?? '' }}">
+                <label class="mb-1"><strong>Embed ссылка на видео</strong></label>
+                <input type="string" class="form-control" name="embed" placeholder="Вставьте embed ссылку на видео (должно быть с iframe)" value="{{ flashMessages.get('media') ?? '' }}">
+
+                <div class="form-group">
+                  <label class="mb-1">Видео</label>
+                  <input type="file" class="form-control" name="media" value="{{ flashMessages.get('video') ?? '' }}">
+
+                  @if(flashMessages.has('errors.video'))
+                    <div class="invalid-feedback d-block">
+                      {{ flashMessages.get('errors.video')[0] }}
+                    </div>
+                  @endif
+                </div>
               @else
                 <label class="mb-1"><strong>Изображение *</strong></label>
                 <input type="file" class="form-control" accept="image/png, image/jpeg, image/jpg" name="media" value="{{ flashMessages.get('media') ?? '' }}">
