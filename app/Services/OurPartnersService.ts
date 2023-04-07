@@ -23,6 +23,15 @@ export default class OurPartnersService {
 		}
 	}
 
+  public static async getAll(): Promise<OurPartner[]> {
+		try {
+			return await OurPartner.query().select()
+		} catch (err: any) {
+			Logger.error(err)
+			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+		}
+	}
+
 	public static async get(id: OurPartner['id'], { trx }: ServiceConfig<OurPartner> = {}): Promise<OurPartner> {
 		let item: OurPartner | null
 

@@ -208,7 +208,7 @@ Route.group(() => {
 	}).prefix('ads')
 
   Route.group(() => {
-		Route.get('/', 'Api/OurPartnersController.paginate')
+		Route.get('/', 'Api/OurPartnersController.getAll')
 	}).prefix('ourPartners')
 
 	Route.group(() => {
