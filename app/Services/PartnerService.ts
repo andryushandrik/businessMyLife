@@ -46,7 +46,7 @@ export default class PartnerService {
 
 	public static async create(payload: (PartnerWithImageValidator | PartnerWithVideoValidator)['schema']['props']): Promise<void> {
 		let item: Partner
-		let media: string = payload.media as string
+		let media: string = payload.media?.fileName as string
 		let trx: TransactionClientContract | undefined = undefined
 
 		if (!payload.mediaType) {
@@ -81,7 +81,7 @@ export default class PartnerService {
 
 	public static async update(id: Partner['id'], payload: (PartnerWithImageValidator | PartnerWithVideoValidator)['schema']['props']): Promise<void> {
 		let item: Partner
-		let media: string = payload.media as string
+		let media: string = payload.media?.fileName as string
 		let trx: TransactionClientContract | undefined = undefined
 
 		if (!payload.mediaType) {
