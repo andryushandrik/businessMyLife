@@ -8,7 +8,7 @@ import { BaseModel, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import User from './User/User'
 
 export default class Payment extends BaseModel {
-	public static readonly columns = ['id', 'amount', 'description', 'promocodeId', 'target_table', 'target_id', 'createdAt', 'updatedAt'] as const
+	public static readonly columns = ['id', 'amount', 'description', 'promoCodeId', 'target_table', 'target_id', 'createdAt', 'updatedAt'] as const
 
 	/**
 	 * * Columns

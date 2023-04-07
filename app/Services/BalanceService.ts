@@ -19,7 +19,7 @@ export default class BalanceService {
 				targetTable: `${User.table}`,
 				targetId: userId,
 				status: PaymentStatuses.SUCCESS,
-				promocodeId: null,
+				promoCodeId: null,
 			})
 			await user.merge({ balance: balance }).save()
 		} catch (err: Err | any) {
@@ -38,7 +38,7 @@ export default class BalanceService {
 						description,
 						amount: -price,
 						userId: userId,
-						promocodeId: null,
+						promoCodeId: null,
 						method,
 						targetTable: `${model.table}`,
 						targetId,
@@ -53,7 +53,7 @@ export default class BalanceService {
 					description,
 					amount: -price,
 					userId: userId,
-					promocodeId: null,
+					promoCodeId: null,
 					method,
 					targetTable: `${model.table}`,
 					targetId,
@@ -73,7 +73,7 @@ export default class BalanceService {
 				description: `Администратор изменил баланс для пользователя ${userId} на ${accrue}`,
 				amount: accrue,
 				userId: userId,
-				promocodeId: null,
+				promoCodeId: null,
 				method: PaymentMethods.INTERNAL,
 				targetTable: `${User.table}`,
 				targetId: userId,

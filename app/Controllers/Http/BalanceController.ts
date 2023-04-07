@@ -15,7 +15,7 @@ import ExceptionService from 'App/Services/ExceptionService'
 export default class BalanceController {
 	public async index({ view, session, request, route, response }: HttpContextContract) {
 		let payload: UserFilterValidator['schema']['props'] | undefined = undefined
-		const titleFromController = 'Все пользователи'
+		const titleFromController = 'Ручное начисление баланса'
 		const isFiltered: boolean = request.input('isFiltered', false)
 		const config: PaginateConfig<User> = {
 			baseUrl: route!.pattern,
