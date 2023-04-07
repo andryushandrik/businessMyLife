@@ -23,9 +23,9 @@ export default class OurPartnersService {
 		}
 	}
 
-  public static async getAll(): Promise<OurPartner[]> {
+	public static async getAll(): Promise<OurPartner[]> {
 		try {
-			return await OurPartner.query().select()
+			return await OurPartner.query().select().where('isVisible', true)
 		} catch (err: any) {
 			Logger.error(err)
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
@@ -141,3 +141,4 @@ export default class OurPartnersService {
 		}
 	}
 }
+
