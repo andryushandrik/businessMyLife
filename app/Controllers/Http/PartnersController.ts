@@ -38,6 +38,7 @@ export default class PartnersController {
 			})
 		} catch (err: Err | any) {
 			session.flash('error', err.message)
+      console.log(err)
 			return response.redirect().back()
 		}
 	}
@@ -53,9 +54,9 @@ export default class PartnersController {
 	public async store({ request, response, session }: HttpContextContract) {
 		const mediaType: boolean = request.input('mediaType') === 'true'
 		let payload: (PartnerWithImageValidator | PartnerWithVideoValidator)['schema']['props']
+    console.log(request.body())
 		if (mediaType) payload = await request.validate(PartnerWithVideoValidator)
 		else payload = await request.validate(PartnerWithImageValidator)
-
 		payload.isVisible = payload.isVisible ? true : false
 		try {
 			await PartnerService.create(payload)
@@ -64,6 +65,7 @@ export default class PartnersController {
 			return response.redirect().toRoute('partners.index')
 		} catch (err: Err | any) {
 			session.flash('error', err.message)
+      console.log(err)
 			return response.redirect().back()
 		}
 	}

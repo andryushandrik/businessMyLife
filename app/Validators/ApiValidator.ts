@@ -10,9 +10,9 @@ export default class ApiValidator extends IndexValidator {
 		page: schema.number([rules.unsigned()]),
 
 		/**
-		 * * Optional fields
+     * * Optional fields
 		 */
-
+    queryString: schema.object.optional().anyMembers(),
 		limit: schema.number.optional([rules.unsigned()]),
 		orderBy: schema.enum.optional(['asc', 'desc'] as const),
 		orderByColumn: schema.string.optional({ trim: true }),

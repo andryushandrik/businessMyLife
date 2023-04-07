@@ -14,6 +14,7 @@ export type PaginationConfig = {
 	page: number
 	baseUrl?: string
 	limit?: number
+  queryString?: Record<string, any>
 	orderByColumn?: string
 	orderBy?: 'asc' | 'desc'
 }

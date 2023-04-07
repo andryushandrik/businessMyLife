@@ -25,6 +25,7 @@ export default class AdvertisementController {
 		const limit = request.input('limit', 5)
 		let paginationConfig = {
 			baseUrl: route!.pattern,
+      queryString: request.qs(),
 			page,
 			limit,
 		}
@@ -56,6 +57,7 @@ export default class AdvertisementController {
 					baseUrl,
 					orderByColumn: 'id',
 					orderBy: 'desc',
+          queryString: request.qs(),
 				},
 				{
 					page,
@@ -85,6 +87,7 @@ export default class AdvertisementController {
 					baseUrl,
 					orderByColumn: 'id',
 					orderBy: 'desc',
+          queryString: request.qs(),
 				},
 				{
 					page,

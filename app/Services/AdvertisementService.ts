@@ -218,9 +218,30 @@ export default class AdvertisementService {
 
 	public static async get(id: Advertisement['id']): Promise<Advertisement> {
 		let item: Advertisement | null
-
+    let query: ModelQueryBuilderContract<typeof Advertisement> = Advertisement.query()
 		try {
-			item = await Advertisement.query().where('id', id).preload('owner').preload('subsection').preload('adsType').first()
+			query = query.where(Advertisement.table+'.id', id)
+
+      item = await query
+      .select([
+        'payments.status',
+        'advertisements.id',
+        'advertisements.user_id',
+        'advertisements.image',
+        'advertisements.description',
+        'advertisements.created_at',
+        'advertisements.updated_at',
+        'advertisements.placed_at',
+        'advertisements.subsection_id',
+        'advertisements.isVerified',
+        'advertisements.viewsCount',
+        'advertisements.ads_type_id',
+        'advertisements.placedForMonths',
+        'advertisements.link',
+        'advertisements.isArchived',
+      ])
+      .withScopes((scopes) => scopes.getPaymentInfo()).preload('owner').preload('subsection').preload('adsType').first()
+
 		} catch (err: any) {
 			Logger.error(err)
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err

@@ -6,7 +6,7 @@ import Drive from '@ioc:Adonis/Core/Drive'
 import { BaseModel, column, beforeDelete, scope, computed } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Partner extends BaseModel {
-	public static readonly columns = ['id', 'isVisible', 'isTitleLink', 'title', 'media', 'mediaType', 'createdAt', 'updatedAt'] as const
+	public static readonly columns = ['id', 'isVisible', 'isTitleLink', 'title', 'media', 'embed', 'mediaType', 'createdAt', 'updatedAt'] as const
 
 	/**
 	 * * Columns
@@ -24,11 +24,14 @@ export default class Partner extends BaseModel {
 	@column()
 	public title: string
 
-  @column()
+	@column()
 	public link: string
 
 	@column()
 	public media: string
+
+	@column()
+	public embed: string
 
 	@column()
 	public mediaType: boolean
@@ -65,3 +68,4 @@ export default class Partner extends BaseModel {
 		if (item.media) await Drive.delete(item.media)
 	}
 }
+

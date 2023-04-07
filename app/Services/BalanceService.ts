@@ -30,7 +30,6 @@ export default class BalanceService {
 	public static async buy(userId: User['id'], model: LucidModel, targetId: number, description: string, price: number, method: PaymentMethods): Promise<void> {
 		try {
 			console.log(userId)
-
 			if (method === PaymentMethods.INTERNAL) {
 				const user: User = await UserService.get(+userId)
 				if (user.balance - price >= 0) {

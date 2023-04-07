@@ -32,6 +32,7 @@ export default class OffersArchivesController {
 				page: payload.page,
 				limit: payload.limit,
 				orderBy: payload.orderBy,
+        queryString: request.qs(),
 				orderByColumn: payload.orderByColumn,
 				userId,
 				preloadArea: true,
@@ -67,6 +68,7 @@ export default class OffersArchivesController {
 				page: payload.page,
 				limit: payload.limit,
 				orderBy: payload.orderBy,
+        queryString: request.qs(),
 				orderByColumn: payload.orderByColumn,
 
 				userId,

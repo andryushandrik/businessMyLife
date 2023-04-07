@@ -11,7 +11,7 @@ export type PaginateConfig<M extends LucidRow> = {
 	limit?: number
 	orderBy?: 'asc' | 'desc'
 	orderByColumn?: string
-
+  queryString?: Record<string, any>
 	relations?: ExtractModelRelations<M>[]
 	aggregates?: ExtractModelRelations<M>[]
 }

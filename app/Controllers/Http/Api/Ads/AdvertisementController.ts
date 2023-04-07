@@ -27,6 +27,7 @@ export default class AdvertisementController {
 				body: err.messages,
 			})
 		}
+		payload.queryString = request.qs()
 
 		try {
 			const ads: ModelPaginatorContract<Advertisement> = await AdvertisementService.paginate(payload, payload)
@@ -48,7 +49,9 @@ export default class AdvertisementController {
 			})
 		}
 		payload.userId = request.currentUserId
-    payload.isVerified = true
+		payload.isVerified = true
+		payload.queryString = request.qs()
+
 		try {
 			const ads: ModelPaginatorContract<Advertisement> = await AdvertisementService.paginate(payload, payload)
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, ads))
@@ -57,7 +60,7 @@ export default class AdvertisementController {
 		}
 	}
 
-  public async getMyOnModerationAds({ request, response }: HttpContextContract) {
+	public async getMyOnModerationAds({ request, response }: HttpContextContract) {
 		let payload: AdvertisementFilterValidator['schema']['props']
 		try {
 			payload = await request.validate(AdvertisementFilterValidator)
@@ -69,7 +72,8 @@ export default class AdvertisementController {
 			})
 		}
 		payload.userId = request.currentUserId
-    payload.isVerified = false
+		payload.isVerified = false
+		payload.queryString = request.qs()
 		try {
 			const ads: ModelPaginatorContract<Advertisement> = await AdvertisementService.paginate(payload, payload)
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, ads))

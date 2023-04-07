@@ -42,11 +42,11 @@
                 <td><strong>{{ item.id }}</strong></td>
                 <td><strong>{{ item.isVisibleForUser }}</strong></td>
                 <td><strong>{{ item.title }}</strong></td>
-                <td>
+                <td style="max-width: 10%;">
                   @if (item.isEmbed)
-                    {{{ item.media }}}
+                    {{ item.media.slice(0,35) }}...
                   @else
-                    <video src="{{ getMedia(item.media) }}" height="400" controls />
+                    <video src="{{ getMedia(item.media) }}"  controls />
                   @endif
                 </td>
                 <td>

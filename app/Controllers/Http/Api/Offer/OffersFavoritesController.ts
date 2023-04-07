@@ -32,6 +32,7 @@ export default class OffersFavoriteController {
 		try {
 			const config: OfferServicePaginateConfig = {
 				page: payload.page,
+        queryString: request.qs(),
 				limit: payload.limit,
 				orderBy: payload.orderBy,
 				orderByColumn: payload.orderByColumn,

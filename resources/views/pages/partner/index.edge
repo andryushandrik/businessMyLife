@@ -30,7 +30,7 @@
                 <th><strong>Видимость</strong></th>
                 <th><strong>Название</strong></th>
                 <th><strong>Медиа</strong></th>
-
+                <th><strong>Embed ссылка</strong></th>
                 <th><strong>Действия</strong></th>
               </tr>
             </thead>
@@ -50,9 +50,18 @@
 
                 <td>
                   @if (item.mediaType)
-                    {{{ item.media }}}
+                    <video src="{{ getMedia(item.media) }}" width="150"  controls />
+
                   @else
                     <img src="{{ getMedia(item.media) }}" alt="" width="150" height="150" />
+                  @endif
+                </td>
+
+                <td>
+                  @if (item.mediaType)
+                    {{{ item.embed.slice(0,35) }}}...
+                  @else
+                    -
                   @endif
                 </td>
                 <td>
