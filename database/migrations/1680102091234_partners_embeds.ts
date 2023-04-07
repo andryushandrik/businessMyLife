@@ -7,6 +7,7 @@ export default class extends BaseSchema {
 	public async up() {
 		this.schema.alterTable(this.tableName, (table) => {
 			table.string('embed')
+			table.setNullable('media')
 		})
 	}
 

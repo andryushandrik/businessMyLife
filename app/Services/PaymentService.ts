@@ -1,3 +1,4 @@
+import Database  from '@ioc:Adonis/Lucid/Database';
 import { LucidModel } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 import type { Err } from 'Contracts/response'
@@ -93,6 +94,16 @@ export default class PaymentService {
 
 		try {
 			await item.delete()
+		} catch (err: any) {
+			Logger.error(err)
+			throw { code: ResponseCodes.SERVER_ERROR, message: ResponseMessages.ERROR } as Err
+		}
+	}
+
+
+  public static async truncate(): Promise<void> {
+		try {
+			await Database.rawQuery('TRUNCATE payments RESTART IDENTITY;')
 		} catch (err: any) {
 			Logger.error(err)
 			throw { code: ResponseCodes.SERVER_ERROR, message: ResponseMessages.ERROR } as Err

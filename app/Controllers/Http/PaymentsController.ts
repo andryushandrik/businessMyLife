@@ -39,4 +39,14 @@ export default class PaymentsController {
 			return response.redirect().back()
 		}
 	}
+
+  public async truncate({  session, response }: HttpContextContract) {
+		try {
+			await PaymentService.truncate()
+			return response.redirect('/payments')
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
 }

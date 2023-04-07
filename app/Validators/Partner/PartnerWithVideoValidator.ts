@@ -18,14 +18,14 @@ export default class PartnerWithVideoValidator extends IndexValidator {
 		title: schema.string({ trim: true }, getPartnersTitleRules()),
 		// media: schema.string({ trim: true }, getPartnerVideoRules()),
 		mediaType: schema.boolean(),
+    embed: schema.string.optional({ trim: true }),
 
 		media: this.isUpdating
 			? schema.file.optional(getUploadTutorialVideoOptions(), [rules.requiredIfNotExists('embed')])
-			: schema.file(getUploadTutorialVideoOptions(), [rules.requiredIfNotExists('embed')]),
+			: schema.file.optional(getUploadTutorialVideoOptions(), [rules.requiredIfNotExists('embed')]),
 		/**
 		 * * Optional fields
 		 */
-		embed: schema.string.optional({ trim: true }, [...getUploadTutorialEmbedRules(), rules.requiredIfNotExists('media')]),
 		link: schema.string.optional(),
 		isVisible: schema.boolean.optional(),
 		isTitleLink: schema.boolean.optional(),

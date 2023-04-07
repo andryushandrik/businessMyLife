@@ -1,6 +1,6 @@
 @layout('layouts/index')
 
-@set('title', 'Подразделы')
+@set('title', 'История пополнений')
 
 @section('body')
   @!component('components/filter', {
@@ -16,8 +16,13 @@
     <div class="card">
       <div class="card-header">
         <h4 class="card-title">{{ title }}</h4>
+        <form action="{{ route('payments.truncate', { qs: { _method: 'DELETE' } }) }}" method="POST" onsubmit="return confirm('Вы уверены что хотите очистить историю пополнений?')">
+          <button type="submit" class="btn btn-warning ml-3">Очистить</button>
 
-        <a href="{{ route('subsections.create') }}" class="btn btn-primary btn-sm">Создать</a>
+
+          {{ csrfField() }}
+        </form>
+
       </div>
 
       <div class="card-body">
