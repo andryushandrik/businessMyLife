@@ -48,7 +48,6 @@ export default class AuthService {
 			let checkIsBlockedUser = false
 			user = await UserService.get(payload.email, { aggregates: ['favoriteOffers'] })
 
-
 			if (user.blockedUntil) {
 				checkIsBlockedUser = DateTime.now().toMillis() <= user.blockedUntil.toMillis()
 				if (checkIsBlockedUser) {
@@ -109,6 +108,7 @@ export default class AuthService {
 	public static async emailVerify({ email }: EmailVerifyValidator['schema']['props'], isForForgotPassword = false): Promise<void> {
 		const code: number = getRandom(100000, 999999) // Only 6-digit code
 		const redisKey: RedisKeys = isForForgotPassword ? RedisKeys.FORGOT_PASSWORD_USER_VERIFY : RedisKeys.EMAIL_VERIFY
+    console.log(code)
 		try {
 			await RedisService.set(redisKey, email, code, {
 				expiration: authConfig.userVerifyExpire,
@@ -124,16 +124,22 @@ export default class AuthService {
 
 	public static async codeVerify(payload: CodeVerifyValidator['schema']['props'], isForForgotPassword = false): Promise<void> {
 		const redisKey: RedisKeys = isForForgotPassword ? RedisKeys.FORGOT_PASSWORD_USER_VERIFY : RedisKeys.EMAIL_VERIFY
-
 		try {
-			const candidateCode: string = await RedisService.get(redisKey, payload.email)
-
-			if (Number(candidateCode) != payload.verifyCode)
+			try {
+				const candidateCode: string = await RedisService.get(redisKey, payload.email)
+				if (Number(candidateCode) != payload.verifyCode)
+					throw {
+						code: ResponseCodes.CLIENT_ERROR,
+						message: ResponseMessages.CODE_VERIFICATION_NOT_FOUND,
+					} as Err
+			} catch (error) {
 				throw {
 					code: ResponseCodes.CLIENT_ERROR,
 					message: ResponseMessages.CODE_VERIFICATION_NOT_FOUND,
 				} as Err
+			}
 		} catch (err: Err | any) {
+			console.log(err)
 			throw err
 		}
 	}
@@ -176,6 +182,7 @@ export default class AuthService {
 
 		try {
 			await this.codeVerify(payload)
+
 			await RedisService.remove(RedisKeys.EMAIL_VERIFY, payload.email)
 
 			const user: User = await UserService.create(userPayload)
