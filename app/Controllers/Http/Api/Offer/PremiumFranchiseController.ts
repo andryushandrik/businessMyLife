@@ -27,7 +27,7 @@ export default class PremiumFranchiseController {
 		}
 
 		try {
-			const franchises: ModelPaginatorContract<PremiumFranchise> = await PremiumFranchiseService.paginate(payload)
+			const franchises: ModelPaginatorContract<PremiumFranchise> = await PremiumFranchiseService.paginate({ ...payload, queryString: request.qs() })
 
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, franchises))
 		} catch (err: Err | any) {
@@ -64,3 +64,4 @@ export default class PremiumFranchiseController {
 		}
 	}
 }
+

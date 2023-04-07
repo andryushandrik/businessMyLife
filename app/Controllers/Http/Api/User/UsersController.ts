@@ -35,6 +35,7 @@ export default class UsersController {
 				page: payload.page,
 				limit: payload.limit,
 				orderBy: payload.orderBy,
+        queryString: request.qs(),
 				orderByColumn: payload.orderByColumn,
 			}
 			const offers: ModelPaginatorContract<User> = await UserService.paginate(config, payload)

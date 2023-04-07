@@ -20,6 +20,7 @@ export default class OurPartnersController {
 				page,
 				baseUrl,
 				limit,
+				queryString: request.qs(),
 			})
 			return await view.render('pages/ourpartners/index', { ourPartners })
 		} catch (err: Err | any) {

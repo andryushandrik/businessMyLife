@@ -20,9 +20,9 @@ export default class FranchiseController {
 			baseUrl: route!.pattern,
 			page: request.input('page', 1),
 			limit: request.input('limit', 5),
+			queryString: request.qs(),
 			aggregates: ['reports'],
 			relations: ['user', 'subsection', 'premiumFranchise'],
-
 			isVerified: true,
 			isArchived: false,
 			isBanned: false,
@@ -58,6 +58,7 @@ export default class FranchiseController {
 			baseUrl: route!.pattern,
 			page: request.input('page', 1),
 			limit: request.input('limit', 5),
+      queryString: request.qs(),
 			isVerified: false,
 			aggregates: ['reports'],
 			relations: ['user', 'subsection', 'premiumFranchise'],
@@ -93,6 +94,7 @@ export default class FranchiseController {
 			baseUrl: route!.pattern,
 			page: request.input('page', 1),
 			limit: request.input('limit', 5),
+      queryString: request.qs(),
 			isArchived: true,
 			aggregates: ['reports'],
 			relations: ['user', 'subsection', 'premiumFranchise'],
@@ -122,3 +124,4 @@ export default class FranchiseController {
 		}
 	}
 }
+

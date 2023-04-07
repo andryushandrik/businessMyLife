@@ -26,7 +26,7 @@ export default class PartnersController {
 		}
 
 		try {
-			const partners: ModelPaginatorContract<Partner> = await PartnerService.paginate(payload)
+			const partners: ModelPaginatorContract<Partner> = await PartnerService.paginate({ ...payload, queryString: request.qs() })
 
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS, partners))
 		} catch (err: Err | any) {

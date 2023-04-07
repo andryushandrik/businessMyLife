@@ -19,6 +19,7 @@ export default class BalanceController {
 		const isFiltered: boolean = request.input('isFiltered', false)
 		const config: PaginateConfig<User> = {
 			baseUrl: route!.pattern,
+      queryString: request.qs(),
 			page: request.input('page', 1),
 			limit: request.input('limit', 5),
 			aggregates: ['reports'],

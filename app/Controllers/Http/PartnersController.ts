@@ -18,6 +18,7 @@ export default class PartnersController {
 		const isFiltered: boolean = request.input('isFiltered', false)
 		const config: PaginateConfig<Partner> = {
 			baseUrl: route!.pattern,
+      queryString: request.qs(),
 			page: request.input('page', 1),
 			limit: request.input('limit', 5),
 		}
