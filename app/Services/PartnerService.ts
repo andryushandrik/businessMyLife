@@ -63,7 +63,9 @@ export default class PartnerService {
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
 		}
 
-		if (!payload.mediaType) {
+		// if (!payload.mediaType) {
+		if (payload.media) {
+
 			try {
 				const filePath: string = await this.uploadImage(item.id, payload.media as MultipartFileContract)
 				await item.merge({ media: filePath }).save()

@@ -48,10 +48,17 @@ export default class AuthService {
 			let checkIsBlockedUser = false
 			user = await UserService.get(payload.email, { aggregates: ['favoriteOffers'] })
 
-			if (user.blockedUntil) checkIsBlockedUser = DateTime.now().toMillis() <= user.blockedUntil.toMillis()
 
-			if (!(await Hash.verify(user.password, payload.password)) || checkIsBlockedUser)
-				throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.USER_NOT_FOUND } as Err
+			if (user.blockedUntil) {
+				checkIsBlockedUser = DateTime.now().toMillis() <= user.blockedUntil.toMillis()
+				if (checkIsBlockedUser) {
+					throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.USER_WAS_BANNED } as Err
+				}
+			}
+
+			if (!(await Hash.verify(user.password, payload.password))) {
+				throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.WRONG_PASSWORD } as Err
+			}
 		} catch (err: Err | any) {
 			throw err
 		}
@@ -102,7 +109,6 @@ export default class AuthService {
 	public static async emailVerify({ email }: EmailVerifyValidator['schema']['props'], isForForgotPassword = false): Promise<void> {
 		const code: number = getRandom(100000, 999999) // Only 6-digit code
 		const redisKey: RedisKeys = isForForgotPassword ? RedisKeys.FORGOT_PASSWORD_USER_VERIFY : RedisKeys.EMAIL_VERIFY
-
 		try {
 			await RedisService.set(redisKey, email, code, {
 				expiration: authConfig.userVerifyExpire,
@@ -248,3 +254,4 @@ export default class AuthService {
 		return TokenService.createToken(payload, config)
 	}
 }
+
