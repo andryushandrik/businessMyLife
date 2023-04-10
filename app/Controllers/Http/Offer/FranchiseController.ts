@@ -19,7 +19,6 @@ export default class FranchiseController {
 		const config: OfferServicePaginateConfig = {
 			baseUrl: route!.pattern,
 			page: request.input('page', 1),
-			limit: request.input('limit', 5),
 			queryString: request.qs(),
 			aggregates: ['reports'],
 			relations: ['user', 'subsection', 'premiumFranchise'],
@@ -57,8 +56,7 @@ export default class FranchiseController {
 		const config: OfferServicePaginateConfig = {
 			baseUrl: route!.pattern,
 			page: request.input('page', 1),
-			limit: request.input('limit', 5),
-      queryString: request.qs(),
+			queryString: request.qs(),
 			isVerified: false,
 			aggregates: ['reports'],
 			relations: ['user', 'subsection', 'premiumFranchise'],
@@ -93,8 +91,7 @@ export default class FranchiseController {
 		const config: OfferServicePaginateConfig = {
 			baseUrl: route!.pattern,
 			page: request.input('page', 1),
-			limit: request.input('limit', 5),
-      queryString: request.qs(),
+			queryString: request.qs(),
 			isArchived: true,
 			aggregates: ['reports'],
 			relations: ['user', 'subsection', 'premiumFranchise'],
@@ -124,4 +121,3 @@ export default class FranchiseController {
 		}
 	}
 }
-

@@ -68,4 +68,3 @@ export default class Partner extends BaseModel {
 		if (item.media) await Drive.delete(item.media)
 	}
 }
-

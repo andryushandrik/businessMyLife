@@ -18,9 +18,8 @@ export default class UploadTutorialsController {
 		const isFiltered: boolean = request.input('isFiltered', false)
 		const config: PaginateConfig<UploadTutorial> = {
 			baseUrl: route!.pattern,
-      queryString: request.qs(),
+			queryString: request.qs(),
 			page: request.input('page', 1),
-			limit: request.input('limit', 5),
 		}
 
 		if (isFiltered) {

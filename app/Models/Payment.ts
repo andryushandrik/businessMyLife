@@ -68,7 +68,7 @@ export default class Payment extends BaseModel {
 		query.where('target_table', `${model.table}`).andWhere('target_id', `${id}`)
 	})
 
-  @computed()
+	@computed()
 	public get createdAtForUser(): string {
 		return this.createdAt.setLocale('ru-RU').toFormat('dd.LL.yyyy, HH:mm.ss')
 	}

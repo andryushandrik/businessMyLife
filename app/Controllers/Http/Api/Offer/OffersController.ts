@@ -41,7 +41,7 @@ export default class OffersController {
 		try {
 			const config: OfferServicePaginateConfig = {
 				page: payload.page,
-        queryString: request.qs(),
+				queryString: request.qs(),
 				limit: payload.limit,
 				orderBy: payload.orderBy,
 				orderByColumn: payload.orderByColumn,
@@ -63,7 +63,7 @@ export default class OffersController {
 		}
 	}
 
-  public async paginateUserOnModerationOffers({ request, response, params }: HttpContextContract) {
+	public async paginateUserOnModerationOffers({ request, response, params }: HttpContextContract) {
 		const userId: User['id'] = params.userId
 		let payload: OfferFilterValidator['schema']['props']
 		try {
@@ -79,15 +79,15 @@ export default class OffersController {
 		try {
 			const config: OfferServicePaginateConfig = {
 				page: payload.page,
-        queryString: request.qs(),
+				queryString: request.qs(),
 				limit: payload.limit,
 				orderBy: payload.orderBy,
 				orderByColumn: payload.orderByColumn,
 				userId,
 				preloadArea: true,
 				isArchived: false,
-        isVerified: false,
-        isBanned: false
+				isVerified: false,
+				isBanned: false,
 			}
 			const offers: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload)
 
@@ -97,7 +97,7 @@ export default class OffersController {
 		}
 	}
 
-  public async paginateUserBannedOffers({ request, response, params }: HttpContextContract) {
+	public async paginateUserBannedOffers({ request, response, params }: HttpContextContract) {
 		const userId: User['id'] = params.userId
 		let payload: OfferFilterValidator['schema']['props']
 		try {
@@ -113,7 +113,7 @@ export default class OffersController {
 		try {
 			const config: OfferServicePaginateConfig = {
 				page: payload.page,
-        queryString: request.qs(),
+				queryString: request.qs(),
 				limit: payload.limit,
 				orderBy: payload.orderBy,
 				orderByColumn: payload.orderByColumn,
@@ -128,7 +128,6 @@ export default class OffersController {
 			throw new ExceptionService(err)
 		}
 	}
-
 
 	public async get({ response, params }: HttpContextContract) {
 		const id: Offer['id'] = params.id

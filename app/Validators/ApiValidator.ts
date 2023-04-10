@@ -10,7 +10,7 @@ export default class ApiValidator extends IndexValidator {
 		page: schema.number([rules.unsigned()]),
 
 		/**
-     * * Optional fields
+		 * * Optional fields
 		 */
 		limit: schema.number.optional([rules.unsigned()]),
 		orderBy: schema.enum.optional(['asc', 'desc'] as const),

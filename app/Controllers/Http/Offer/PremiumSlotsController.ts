@@ -17,8 +17,7 @@ export default class PremiumSlotsController {
 		const config: PaginateConfig<PremiumSlot> = {
 			baseUrl: route!.pattern,
 			page: request.input('page', 1),
-			limit: request.input('limit', 5),
-      queryString: request.qs(),
+			queryString: request.qs(),
 		}
 		try {
 			if (isFiltered) {

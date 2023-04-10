@@ -19,10 +19,9 @@ export default class OffersController {
 		const isFiltered: boolean = request.input('isFiltered', false)
 		const config: PaginateConfig<Report> = {
 			baseUrl: route!.pattern,
-      queryString: request.qs(),
+			queryString: request.qs(),
 			relations: ['offer', 'user'],
 			page: request.input('page', 1),
-			limit: request.input('limit', 5),
 		}
 
 		if (isFiltered) {
@@ -53,10 +52,9 @@ export default class OffersController {
 		const isFiltered: boolean = request.input('isFiltered', false)
 		const config: PaginateConfig<Report> = {
 			baseUrl: route!.pattern,
-      queryString: request.qs(),
+			queryString: request.qs(),
 			relations: ['user', 'userTo'],
 			page: request.input('page', 1),
-			limit: request.input('limit', 5),
 		}
 
 		if (isFiltered) {

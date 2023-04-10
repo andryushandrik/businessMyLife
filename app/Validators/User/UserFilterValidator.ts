@@ -54,4 +54,3 @@ export default class UserFilterValidator extends ApiValidator {
 	 */
 	public messages: CustomMessages = this.messages
 }
-

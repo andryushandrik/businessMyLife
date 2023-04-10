@@ -17,9 +17,8 @@ export default class PromoCodesController {
 		const isFiltered: boolean = request.input('isFiltered', false)
 		const config: PaginateConfig<PromoCode> = {
 			baseUrl: route!.pattern,
-      queryString: request.qs(),
+			queryString: request.qs(),
 			page: request.input('page', 1),
-			limit: request.input('limit', 5),
 		}
 
 		if (isFiltered) {

@@ -13,10 +13,9 @@ export default class NewsController {
 	public async index({ request, response, route, view, session }: HttpContextContract) {
 		const baseUrl: string = route!.pattern
 		const page: number = request.input('page', 1)
-		const limit: number = request.input('limit', 5)
 
 		try {
-			const news: ModelPaginatorContract<News> = await NewsService.paginate({ page, limit, baseUrl, queryString: request.qs() })
+			const news: ModelPaginatorContract<News> = await NewsService.paginate({ page, baseUrl, queryString: request.qs() })
 
 			return view.render('pages/news/index', { news })
 		} catch (err: Err | any) {

@@ -22,7 +22,7 @@ export default class AdvertisementController {
 		let filter: Partial<AdvertisementFilterValidator['schema']['props'] | undefined> = undefined
 		const isFiltered: boolean = request.input('isFiltered', false)
 		const page = request.input('page', 1)
-		let paginationConfig = {
+		const paginationConfig = {
 			baseUrl: route!.pattern,
 			queryString: request.qs(),
 			page,
@@ -45,13 +45,11 @@ export default class AdvertisementController {
 	public async moderation({ view, request, response, session, route }: HttpContextContract) {
 		const baseUrl: string = route!.pattern
 		const page: number = request.input('page', 1)
-		const limit: number = request.input('limit', 5)
 
 		try {
 			const ads: ModelPaginatorContract<Advertisement> = await AdvertisementService.paginate(
 				{
 					page,
-					limit,
 					baseUrl,
 					orderByColumn: 'id',
 					orderBy: 'desc',
@@ -60,7 +58,6 @@ export default class AdvertisementController {
 				{
 					page,
 					isVerified: false,
-					limit,
 				},
 				true,
 			)
@@ -75,13 +72,11 @@ export default class AdvertisementController {
 	public async getMyAds({ view, request, response, session, route }: HttpContextContract) {
 		const baseUrl: string = route!.pattern
 		const page: number = request.input('page', 1)
-		const limit: number = request.input('limit', 5)
 
 		try {
 			const ads: ModelPaginatorContract<Advertisement> = await AdvertisementService.paginate(
 				{
 					page,
-					limit,
 					baseUrl,
 					orderByColumn: 'id',
 					orderBy: 'desc',
@@ -90,7 +85,6 @@ export default class AdvertisementController {
 				{
 					page,
 					isVerified: true,
-					limit,
 					userId: request.currentUserId,
 				},
 			)
@@ -237,4 +231,3 @@ export default class AdvertisementController {
 		}
 	}
 }
-

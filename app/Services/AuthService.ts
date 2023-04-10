@@ -108,7 +108,7 @@ export default class AuthService {
 	public static async emailVerify({ email }: EmailVerifyValidator['schema']['props'], isForForgotPassword = false): Promise<void> {
 		const code: number = getRandom(100000, 999999) // Only 6-digit code
 		const redisKey: RedisKeys = isForForgotPassword ? RedisKeys.FORGOT_PASSWORD_USER_VERIFY : RedisKeys.EMAIL_VERIFY
-    console.log(code)
+		console.log(code)
 		try {
 			await RedisService.set(redisKey, email, code, {
 				expiration: authConfig.userVerifyExpire,
@@ -261,4 +261,3 @@ export default class AuthService {
 		return TokenService.createToken(payload, config)
 	}
 }
-

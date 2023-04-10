@@ -22,7 +22,7 @@ Route.group(() => {
 
 	Route.resource('/balance', 'BalanceController').except(['update'])
 
-	Route.resource('/payments', 'PaymentsController').except(['update','show','destroy'])
+	Route.resource('/payments', 'PaymentsController').except(['update', 'show', 'destroy'])
 	Route.delete('/payments/truncate', 'PaymentsController.truncate').as('payments.truncate')
 
 	Route.patch('/balance/update/:userId', 'BalanceController.update').as('balance.update')
@@ -91,7 +91,6 @@ Route.group(() => {
 		Route.patch('/premium/slots/:id', 'Offer/PremiumSlotsController.update').as('premium.slots.update')
 		Route.get('/premium/public', 'Offer/PremiumFranchiseController.public').as('premium.public')
 		Route.get('/premium/moderation', 'Offer/PremiumFranchiseController.moderation').as('premium.moderation')
-
 
 		Route.get('/:id', 'Offer/OffersController.get').as('get')
 		Route.patch('/:id', 'Offer/OffersController.updateBlockDescription').as('updateBlockDescription')

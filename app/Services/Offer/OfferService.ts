@@ -225,7 +225,7 @@ export default class OfferService {
 			if (payload.category == 4) {
 				payload.isPricePerMonthAbsolute = payload.isPricePerMonthAbsolute
 
-				let isRoyaltySane: boolean = true
+				let isRoyaltySane = true
 				if (payload.pricePerMonth) {
 					if (!payload.isPricePerMonthAbsolute) {
 						isRoyaltySane = payload.pricePerMonth <= 100
@@ -624,4 +624,3 @@ export default class OfferService {
 		}
 	}
 }
-

@@ -207,13 +207,15 @@ Route.group(() => {
 		Route.get('/my/moderation', 'Api/Ads/AdvertisementController.getMyOnModerationAds').middleware('CheckAccessToken')
 	}).prefix('ads')
 
-  Route.group(() => {
+	Route.group(() => {
 		Route.get('/', 'Api/OurPartnersController.getAll')
 	}).prefix('ourPartners')
 
-  Route.group(() => {
+	Route.group(() => {
 		Route.get('/', 'Api/PaymentsController.myPayments')
-	}).prefix('payments').middleware('CheckAccessToken')
+	})
+		.prefix('payments')
+		.middleware('CheckAccessToken')
 
 	Route.group(() => {
 		Route.post('/', 'Api/PromocodesController.checkIsValid')
@@ -225,4 +227,3 @@ Route.group(() => {
 		.prefix('conversation')
 		.middleware('CheckAccessToken')
 }).prefix('api')
-
