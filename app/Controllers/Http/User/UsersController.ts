@@ -1,4 +1,4 @@
-import Database from '@ioc:Adonis/Lucid/Database';
+import Database from '@ioc:Adonis/Lucid/Database'
 // * Types
 import type User from 'App/Models/User/User'
 import type { Err } from 'Contracts/response'
@@ -20,9 +20,8 @@ export default class UsersController {
 		const isFiltered: boolean = request.input('isFiltered', false)
 		const config: PaginateConfig<User> = {
 			baseUrl: route!.pattern,
-      queryString: request.qs(),
+			queryString: request.qs(),
 			page: request.input('page', 1),
-			limit: request.input('limit', 5),
 			aggregates: ['reports'],
 		}
 
@@ -35,14 +34,14 @@ export default class UsersController {
 
 		try {
 			const users: ModelPaginatorContract<User> = await UserService.paginate(config, payload)
-      const cities = await Database.rawQuery('select distinct city from users')
+			const cities = await Database.rawQuery('select distinct city from users')
 			return view.render('pages/user/paginate', {
 				users,
 				payload,
 				titleFromController,
 				roles: ROLE_NAMES,
 				roleEnum: RoleNames,
-        cities: cities.rows,
+				cities: cities.rows,
 				usersTypes: USER_TYPE_NAMES,
 			})
 		} catch (err: Err | any) {
@@ -57,9 +56,8 @@ export default class UsersController {
 		const isFiltered: boolean = request.input('isFiltered', false)
 		const config: PaginateConfig<User> = {
 			baseUrl: route!.pattern,
-      queryString: request.qs(),
+			queryString: request.qs(),
 			page: request.input('page', 1),
-			limit: request.input('limit', 5),
 		}
 
 		if (isFiltered) {

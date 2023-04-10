@@ -32,14 +32,13 @@ export default class OffersArchivesController {
 				page: payload.page,
 				limit: payload.limit,
 				orderBy: payload.orderBy,
-        queryString: request.qs(),
+				queryString: request.qs(),
 				orderByColumn: payload.orderByColumn,
 				userId,
 				preloadArea: true,
 				isArchived: false,
-        isVerified: true,
-        isBanned: false
-
+				isVerified: true,
+				isBanned: false,
 			}
 			const offers: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload)
 
@@ -68,14 +67,13 @@ export default class OffersArchivesController {
 				page: payload.page,
 				limit: payload.limit,
 				orderBy: payload.orderBy,
-        queryString: request.qs(),
+				queryString: request.qs(),
 				orderByColumn: payload.orderByColumn,
 
 				userId,
 				preloadArea: true,
 				isArchived: true,
-        isBanned: false
-
+				isBanned: false,
 			}
 			const offers: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload)
 
@@ -102,7 +100,7 @@ export default class OffersArchivesController {
 
 		try {
 			await OfferService.actions(id, 'archive', false)
-      await OfferService.actions(id, 'verify', false)
+			await OfferService.actions(id, 'verify', false)
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS))
 		} catch (err: Err | any) {
 			throw new ExceptionService(err)

@@ -17,8 +17,7 @@ export default class FeedbacksController {
 		const config: PaginateConfig<Feedback> = {
 			baseUrl: route!.pattern,
 			page: request.input('page', 1),
-			limit: request.input('limit', 5),
-      queryString: request.qs()
+			queryString: request.qs(),
 		}
 
 		if (isFiltered) {

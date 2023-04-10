@@ -48,7 +48,7 @@ export default class PartnerService {
 		let item: Partner
 		let media: string = payload.media?.fileName as string
 		let trx: TransactionClientContract | undefined = undefined
-    trx = await Database.transaction()
+		trx = await Database.transaction()
 
 		if (!payload.mediaType) {
 			media = 'tmp'
@@ -65,7 +65,6 @@ export default class PartnerService {
 
 		// if (!payload.mediaType) {
 		if (payload.media) {
-
 			try {
 				const filePath: string = await this.uploadImage(item.id, payload.media as MultipartFileContract)
 				await item.merge({ media: filePath }).save()
@@ -81,9 +80,9 @@ export default class PartnerService {
 	public static async update(id: Partner['id'], payload: (PartnerWithImageValidator | PartnerWithVideoValidator)['schema']['props']): Promise<void> {
 		let item: Partner
 		let media: string = payload.media?.clientName as string
-    console.log(media, payload.mediaType)
+		console.log(media, payload.mediaType)
 		let trx: TransactionClientContract | undefined = undefined
-    trx = await Database.transaction()
+		trx = await Database.transaction()
 
 		if (!payload.mediaType) {
 			media = 'tmp'

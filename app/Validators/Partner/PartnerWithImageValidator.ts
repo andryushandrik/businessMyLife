@@ -32,4 +32,3 @@ export default class PartnerWithImageValidator extends IndexValidator {
 
 	public messages: CustomMessages = this.messages
 }
-

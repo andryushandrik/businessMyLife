@@ -16,9 +16,8 @@ export default class PaymentsController {
 		const isFiltered: boolean = request.input('isFiltered', false)
 		const config: PaginateConfig<Payment> = {
 			baseUrl: route!.pattern,
-      queryString: request.qs(),
+			queryString: request.qs(),
 			page: request.input('page', 1),
-			limit: request.input('limit', 5),
 		}
 
 		if (isFiltered) {
@@ -41,7 +40,7 @@ export default class PaymentsController {
 		}
 	}
 
-  public async truncate({  session, response }: HttpContextContract) {
+	public async truncate({ session, response }: HttpContextContract) {
 		try {
 			await PaymentService.truncate()
 			return response.redirect('/payments')

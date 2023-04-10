@@ -15,15 +15,12 @@ export default class PaymentsController {
 		const config: PaginateConfig<Payment> = {
 			baseUrl: route!.pattern,
 			page: request.input('page', 1),
-			queryString: request.qs(),
-			limit: request.input('limit', 5),
 		}
 		payload = await request.validate(PaymentFilterValidator)
 		config.orderBy = payload.orderBy
 		config.orderByColumn = payload.orderByColumn
 
 		try {
-
 			const payments: ModelPaginatorContract<Payment> = await PaymentService.paginateMyPayments(request.currentUserId, config, payload)
 			return payments
 		} catch (err: Err | any) {
@@ -33,4 +30,3 @@ export default class PaymentsController {
 		}
 	}
 }
-

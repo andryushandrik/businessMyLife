@@ -381,4 +381,3 @@ export default class Offer extends BaseModel {
 		return item
 	}
 }
-

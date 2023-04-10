@@ -20,8 +20,7 @@ export default class SubsectionsController {
 		const config: PaginateConfig<Subsection> = {
 			baseUrl: route!.pattern,
 			page: request.input('page', 1),
-      queryString: request.qs(),
-			limit: request.input('limit', 5),
+			queryString: request.qs(),
 			relations: ['area'],
 		}
 

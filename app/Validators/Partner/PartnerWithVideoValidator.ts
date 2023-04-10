@@ -6,7 +6,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import IndexValidator from '../IndexValidator'
 import { schema } from '@ioc:Adonis/Core/Validator'
 import { getPartnersTitleRules } from '../Rules/partners'
-import {  getUploadTutorialVideoOptions } from '../Rules/uploadTutorial'
+import { getUploadTutorialVideoOptions } from '../Rules/uploadTutorial'
 
 export default class PartnerWithVideoValidator extends IndexValidator {
 	private readonly isUpdating: boolean = this.ctx.request.method() === 'PATCH'
@@ -18,7 +18,7 @@ export default class PartnerWithVideoValidator extends IndexValidator {
 		title: schema.string({ trim: true }, getPartnersTitleRules()),
 		// media: schema.string({ trim: true }, getPartnerVideoRules()),
 		mediaType: schema.boolean(),
-    embed: schema.string.optional({ trim: true }),
+		embed: schema.string.optional({ trim: true }),
 
 		media: this.isUpdating
 			? schema.file.optional(getUploadTutorialVideoOptions(), [rules.requiredIfNotExists('embed')])
@@ -33,4 +33,3 @@ export default class PartnerWithVideoValidator extends IndexValidator {
 
 	public messages: CustomMessages = this.messages
 }
-

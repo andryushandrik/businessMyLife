@@ -279,11 +279,11 @@ export default class User extends BaseModel {
 		query.whereIn('role_id', roleTypesToRoleIds)
 	})
 
-  public static getByTypeId = scope((query: ModelQueryBuilderContract<typeof User>, userType: UserTypeNames) => {
+	public static getByTypeId = scope((query: ModelQueryBuilderContract<typeof User>, userType: UserTypeNames) => {
 		query.where('type', userType)
 	})
 
-  public static getByCity = scope((query: ModelQueryBuilderContract<typeof User>, city: string) => {
+	public static getByCity = scope((query: ModelQueryBuilderContract<typeof User>, city: string) => {
 		query.where('city', city)
 	})
 

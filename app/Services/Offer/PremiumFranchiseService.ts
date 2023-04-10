@@ -16,7 +16,15 @@ export default class PremiumFranchiseService {
 		filter?: PremiumFranchiseFilterValidator['schema']['props'],
 	): Promise<ModelPaginatorContract<PremiumFranchise>> {
 		let query: ModelQueryBuilderContract<typeof PremiumFranchise> = PremiumFranchise.query()
-		query = query.select(['payments.status', 'premium_franchises.id', 'premium_franchises.offer_id', 'premium_franchises.created_at', 'premium_franchises.placedForMonths']).withScopes((scopes) => scopes.getPaymentInfo())
+		query = query
+			.select([
+				'payments.status',
+				'premium_franchises.id',
+				'premium_franchises.offer_id',
+				'premium_franchises.created_at',
+				'premium_franchises.placedForMonths',
+			])
+			.withScopes((scopes) => scopes.getPaymentInfo())
 
 		if (filter) {
 			query = this.filter(query, filter)
@@ -154,9 +162,9 @@ export default class PremiumFranchiseService {
 					case 'offerId':
 						query = query.withScopes((scopes) => scopes.getByOfferId(payload[key]!))
 						break
-            case 'query':
-              query = query.withScopes((scopes) => scopes.getByQuery(payload[key]!))
-              break
+					case 'query':
+						query = query.withScopes((scopes) => scopes.getByQuery(payload[key]!))
+						break
 					default:
 						break
 				}

@@ -43,7 +43,7 @@ export default class OfferFilterValidator extends ApiValidator {
 		random: schema.boolean.optional(),
 		query: schema.string.optional({ trim: true }),
 
-    daysRemains: schema.number.optional(),
+		daysRemains: schema.number.optional(),
 
 		city: schema.string.optional({ trim: true }),
 

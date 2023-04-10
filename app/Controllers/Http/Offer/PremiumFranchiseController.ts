@@ -14,10 +14,9 @@ export default class PremiumFranchiseController {
 		const isFiltered: boolean = request.input('isFiltered', false)
 
 		const config: PaginateConfig<PremiumFranchise> = {
-      queryString: request.qs(),
+			queryString: request.qs(),
 			baseUrl: route!.pattern,
 			page: request.input('page', 1),
-			limit: request.input('limit', 5),
 		}
 
 		config.orderBy = 'desc'
@@ -53,10 +52,9 @@ export default class PremiumFranchiseController {
 		const isFiltered: boolean = request.input('isFiltered', false)
 
 		const config: PaginateConfig<PremiumFranchise> = {
-      queryString: request.qs(),
+			queryString: request.qs(),
 			baseUrl: route!.pattern,
 			page: request.input('page', 1),
-			limit: request.input('limit', 5),
 		}
 
 		config.orderBy = 'desc'
