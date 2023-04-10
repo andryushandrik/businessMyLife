@@ -1,4 +1,4 @@
-import Database  from '@ioc:Adonis/Lucid/Database';
+import Database from '@ioc:Adonis/Lucid/Database'
 import { LucidModel } from '@ioc:Adonis/Lucid/Orm'
 // * Types
 import type { Err } from 'Contracts/response'
@@ -19,6 +19,23 @@ export default class PaymentService {
 		if (filter) query = this.filter(query, filter)
 
 		query = query.preload('promoCode').preload('user')
+		try {
+			return await query.getViaPaginate(config)
+		} catch (err: any) {
+			Logger.error(err)
+			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
+		}
+	}
+
+	public static async paginateMyPayments(
+		userId: number,
+		config: PaginateConfig<Payment>,
+		filter?: PaymentFilterValidator['schema']['props'],
+	): Promise<ModelPaginatorContract<Payment>> {
+		let query: ModelQueryBuilderContract<typeof Payment> = Payment.query()
+
+		if (filter) query = this.filter(query, filter)
+		query = query.where('userId', userId)
 		try {
 			return await query.getViaPaginate(config)
 		} catch (err: any) {
@@ -100,8 +117,7 @@ export default class PaymentService {
 		}
 	}
 
-
-  public static async truncate(): Promise<void> {
+	public static async truncate(): Promise<void> {
 		try {
 			await Database.rawQuery('TRUNCATE payments RESTART IDENTITY;')
 		} catch (err: any) {
@@ -143,3 +159,4 @@ export default class PaymentService {
 		return query
 	}
 }
+
