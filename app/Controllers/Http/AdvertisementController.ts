@@ -22,12 +22,10 @@ export default class AdvertisementController {
 		let filter: Partial<AdvertisementFilterValidator['schema']['props'] | undefined> = undefined
 		const isFiltered: boolean = request.input('isFiltered', false)
 		const page = request.input('page', 1)
-		const limit = request.input('limit', 5)
 		let paginationConfig = {
 			baseUrl: route!.pattern,
-      queryString: request.qs(),
+			queryString: request.qs(),
 			page,
-			limit,
 		}
 		if (isFiltered) {
 			filter = await request.validate(AdvertisementFilterValidator)
@@ -57,14 +55,14 @@ export default class AdvertisementController {
 					baseUrl,
 					orderByColumn: 'id',
 					orderBy: 'desc',
-          queryString: request.qs(),
+					queryString: request.qs(),
 				},
 				{
 					page,
 					isVerified: false,
 					limit,
 				},
-        true
+				true,
 			)
 			return await view.render('pages/ads/moderation', { ads })
 		} catch (err: Err | any) {
@@ -87,7 +85,7 @@ export default class AdvertisementController {
 					baseUrl,
 					orderByColumn: 'id',
 					orderBy: 'desc',
-          queryString: request.qs(),
+					queryString: request.qs(),
 				},
 				{
 					page,

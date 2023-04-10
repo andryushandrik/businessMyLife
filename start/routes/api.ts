@@ -211,6 +211,10 @@ Route.group(() => {
 		Route.get('/', 'Api/OurPartnersController.getAll')
 	}).prefix('ourPartners')
 
+  Route.group(() => {
+		Route.get('/', 'Api/PaymentsController.myPayments')
+	}).prefix('payments').middleware('CheckAccessToken')
+
 	Route.group(() => {
 		Route.post('/', 'Api/PromocodesController.checkIsValid')
 	}).prefix('promo')
