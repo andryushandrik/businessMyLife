@@ -35,7 +35,7 @@ export default class PaymentService {
 		let query: ModelQueryBuilderContract<typeof Payment> = Payment.query()
 
 		if (filter) query = this.filter(query, filter)
-		query = query.where('userId', userId)
+		query = query.where('userId', userId).whereNot('amount',0)
 		try {
 			return await query.getViaPaginate(config)
 		} catch (err: any) {
