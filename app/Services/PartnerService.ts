@@ -80,7 +80,6 @@ export default class PartnerService {
 	public static async update(id: Partner['id'], payload: (PartnerWithImageValidator | PartnerWithVideoValidator)['schema']['props']): Promise<void> {
 		let item: Partner
 		let media: string = payload.media?.clientName as string
-		console.log(media, payload.mediaType)
 		let trx: TransactionClientContract | undefined = undefined
 		trx = await Database.transaction()
 
@@ -96,9 +95,9 @@ export default class PartnerService {
 
 		try {
 			item = await item.merge({ ...payload, media }).save()
+      await trx!.commit()
 		} catch (err: any) {
 			if (trx) trx.rollback()
-
 			Logger.error(err)
 			throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Err
 		}
@@ -203,3 +202,4 @@ export default class PartnerService {
 		return query
 	}
 }
+

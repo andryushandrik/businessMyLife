@@ -63,6 +63,7 @@ export default class OffersController {
 			aggregates: ['reports'],
 			relations: ['user', 'subsection'],
 			isArchived: true,
+      isBanned: false,
 		}
 
 		if (isFiltered) {
@@ -132,6 +133,7 @@ export default class OffersController {
 			page: request.input('page', 1),
 			queryString: request.qs(),
 			isVerified: false,
+			isBanned: false,
 			aggregates: ['reports'],
 			relations: ['user', 'subsection'],
 		}
@@ -160,6 +162,41 @@ export default class OffersController {
 		}
 	}
 
+
+  public async paginateBannedOffers({ request, response, route, view, session }: HttpContextContract) {
+		let payload: OfferFilterValidator['schema']['props'] | undefined = undefined
+		const isFiltered: boolean = request.input('isFiltered', false)
+		const config: OfferServicePaginateConfig = {
+			baseUrl: route!.pattern,
+			queryString: request.qs(),
+			page: request.input('page', 1),
+			aggregates: ['reports'],
+			relations: ['user', 'subsection'],
+			isBanned: true,
+		}
+
+		if (isFiltered) {
+			payload = await request.validate(OfferFilterValidator)
+			config.orderBy = payload.orderBy
+			config.orderByColumn = payload.orderByColumn
+		}
+
+		try {
+			const areas: Area[] = await AreaService.getAll()
+			const offers: ModelPaginatorContract<Offer> = await OfferService.paginate(config, payload)
+
+			return view.render('pages/offer/banned', {
+				areas,
+				offers,
+				payload,
+				categories: OFFER_CATEGORIES,
+			})
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+			return response.redirect().back()
+		}
+	}
+
 	public async get({ view, params, response, session }: HttpContextContract) {
 		const id: Offer['id'] = params.id
 
@@ -172,23 +209,6 @@ export default class OffersController {
 			session.flash('error', err.message)
 			return response.redirect().back()
 		}
-	}
-
-	public async updateBlockDescription({ request, response, session, params }: HttpContextContract) {
-		const id: Offer['id'] = params.id
-		const payload = await request.validate(OfferBlockDescriptionValidator)
-
-		try {
-			await OfferService.updateBlockDescription(id, payload)
-			if (payload.blockDescription) {
-				await OfferService.actions(id, 'archive', true)
-			}
-			session.flash('success', ResponseMessages.SUCCESS)
-		} catch (err: Err | any) {
-			session.flash('error', err.message)
-		}
-
-		return response.redirect().back()
 	}
 
 	/**
@@ -225,8 +245,30 @@ export default class OffersController {
 	 * * Ban
 	 */
 
-	public async ban({ params, response, session }: HttpContextContract) {
+	public async banMenu({ view, params, response, session }: HttpContextContract) {
 		const id: Offer['id'] = params.id
+
+		try {
+			const item = await OfferService.get(id)
+			return view.render('pages/offer/ban/index', { item })
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+		}
+
+		return response.redirect().back()
+	}
+
+	public async ban({ params, response, request, session }: HttpContextContract) {
+		const id: Offer['id'] = params.id
+
+		const payload = await request.validate(OfferBlockDescriptionValidator)
+
+		try {
+			await OfferService.updateBlockDescription(id, payload)
+			session.flash('success', ResponseMessages.SUCCESS)
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+		}
 
 		try {
 			await OfferService.actions(id, 'ban', true)
@@ -239,8 +281,17 @@ export default class OffersController {
 		return response.redirect().back()
 	}
 
-	public async unban({ params, response, session }: HttpContextContract) {
+	public async unban({ params, response, request, session }: HttpContextContract) {
 		const id: Offer['id'] = params.id
+
+		const payload = await request.validate(OfferBlockDescriptionValidator)
+
+		try {
+			await OfferService.updateBlockDescription(id, payload)
+			session.flash('success', ResponseMessages.SUCCESS)
+		} catch (err: Err | any) {
+			session.flash('error', err.message)
+		}
 
 		try {
 			await OfferService.actions(id, 'ban', false)
@@ -297,3 +348,4 @@ export default class OffersController {
 		return response.redirect().back()
 	}
 }
+

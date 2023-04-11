@@ -9,10 +9,10 @@
 <div class="col-lg-12">
 	<div class="card">
 		<div class="card-header">
-       @if (item.blockDescription)
-        <h4 class="card-title text-danger"> <strong>Объявление заблокировано</strong> </h4>
-       @else  
-        <h4 class="card-title text-primary">Объявление не заблокированно</h4>
+       @if (item.isBanned)
+        <h4 class="card-title text-danger"> <strong>Объявление забанено</strong> </h4>
+       @else
+        <h4 class="card-title text-primary">Объявление не забанено</h4>
        @endif
 			{{--  <h4 class="card-title">{{item.blockDescription ? "Объявление заблокировано" : "Объявление не заблокированно" }}</h4>  --}}
 
@@ -40,41 +40,21 @@
             <button type="submit" class="btn btn-primary btn-sm">Опубликовать</button>
           </form>
 				@endif
+
         @if(item.isBanned)
-          <form action="{{ route('offer.unban', { id: item.id }, { qs: { _method: 'DELETE' } }) }}" class="ml-2" method="POST">
+          <form action="{{ route('offer.banMenu', { id: item.id }) }}" class="ml-2" method="GET">
             {{ csrfField() }}
             <button type="submit" class="btn btn-primary btn-sm">Разбанить</button>
           </form>
 				@else
-          <form action="{{ route('offer.ban', { id: item.id }, { qs: { _method: 'PATCH' } }) }}" class="ml-2" method="POST">
+          <form action="{{ route('offer.banMenu', { id: item.id }) }}" class="ml-2" method="GET">
             {{ csrfField() }}
             <button type="submit" class="btn btn-danger btn-sm">Забанить</button>
           </form>
 				@endif
 
+
 				<a href="{{ route('offer.paginate') }}" class="btn btn-primary btn-sm ml-2">Назад</a>
-			</div>
-		</div>
-
-		<div class="card-body">
-			<div class="basic-form">
-				<form action="{{ route('offer.updateBlockDescription', { id: item.id }, { qs: { _method: 'PATCH' } }) }}" method="POST">
-					{{ csrfField() }}
-
-					<div class="form-group">
-						<label class="mb-1">Причина блокировки</label>
-						<textarea id="summernote" class="summernote" name="blockDescription">
-              {{ flashMessages.get('blockDescription', item.blockDescription) ?? '' }}</textarea
-              >
-            {{--  <input type="text" name="blockDescription" value="{{ flashMessages.get('blockDescription', item.blockDescription) ?? '' }}">  --}}
-
-						@if(flashMessages.has('errors.blockDescription'))
-						<div class="invalid-feedback d-block">{{ flashMessages.get('errors.blockDescription')[0] }}</div>
-						@endif
-					</div>
-
-					<button type="submit" class="btn btn-primary btn-sm">Подтвердить</button>
-				</form>
 			</div>
 		</div>
 	</div>

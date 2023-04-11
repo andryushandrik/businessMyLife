@@ -92,11 +92,17 @@ Route.group(() => {
 		Route.get('/premium/public', 'Offer/PremiumFranchiseController.public').as('premium.public')
 		Route.get('/premium/moderation', 'Offer/PremiumFranchiseController.moderation').as('premium.moderation')
 
+		Route.get('/banned', 'Offer/OffersController.paginateBannedOffers').as('banned')
+
+
 		Route.get('/:id', 'Offer/OffersController.get').as('get')
-		Route.patch('/:id', 'Offer/OffersController.updateBlockDescription').as('updateBlockDescription')
 
 		Route.patch('/archive/:id', 'Offer/OffersController.archive').as('archive')
 		Route.delete('/archive/:id', 'Offer/OffersController.unarchive').as('unarchive')
+
+		Route.get('/banMenu/:id', 'Offer/OffersController.banMenu').as('banMenu')
+
+
 
 		Route.patch('/ban/:id', 'Offer/OffersController.ban').as('ban')
 		Route.delete('/ban/:id', 'Offer/OffersController.unban').as('unban')

@@ -1,0 +1,128 @@
+@layout('layouts/index')
+
+@set('title', titleFromController ?? 'Забаненые объявления')
+
+@section('body')
+  @component('components/filter', {
+    payload,
+    columns: [
+      { key: 'id', value: 'ID' },
+      { key: 'title', value: 'Название' },
+      { key: 'city', value: 'Город' },
+      { key: 'reportsCount', value: 'Кол-во жалоб' },
+    ],
+  })
+    <div class="col-6">
+      <div class="dropdown bootstrap-select form-control form-control-lg dropup">
+        <select class="form-control form-control-lg" name="category" tabindex="-98">
+          <option value="">Категория</option>
+
+          @each((item, index) in categories)
+            <option value="{{ index }}" {{ payload?.category == index ? 'selected' : '' }}>{{ item }}</option>
+          @endeach
+        </select>
+      </div>
+    </div>
+
+    <div class="col-6">
+      <div class="dropdown bootstrap-select form-control form-control-lg dropup">
+        <select class="form-control form-control-lg" name="areaId" tabindex="-98">
+          <option value="">Сфера</option>
+
+          @each(item in areas)
+            <option value="{{ item.id }}" {{ payload?.areaId == item.id ? 'selected' : '' }}>{{ item.name }}</option>
+          @endeach
+        </select>
+      </div>
+    </div>
+  @end
+
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">{{ title }}</h4>
+      </div>
+
+      <div class="card-body">
+        <div class="table-responsive">
+
+          <table class="table table-responsive-md">
+            <thead>
+              <tr>
+                <th class="width80"><strong>#</strong></th>
+                <th><strong>Пользователь</strong></th>
+                <th><strong>Категория</strong></th>
+                <th><strong>Название</strong></th>
+                <th><strong>Обложка</strong></th>
+                <th><strong>Город</strong></th>
+                <th><strong>Подраздел</strong></th>
+                <th><strong>Кол-во жалоб</strong></th>
+                <th><strong>Дата создания</strong></th>
+                <th><strong>Дней до архивации</strong></th>
+
+                <th><strong>Действия</strong></th>
+              </tr>
+            </thead>
+            <tbody>
+
+              @each(item in offers)
+                <tr>
+                  <td><strong>{{ item.id }}</strong></td>
+                  <td>
+                    <a href="{{ route('user.get', { id: item.user.id }) }}" class="text-primary">{{ item.user.fullName }}</a>
+                  </td>
+                  <td>{{ item.categoryForUser }}</td>
+                  <td>
+
+                    <a href="{{ route('offer.get', { id: item.id }) }}" class="text-primary">{{ item.title }}</a>
+
+                  </td>
+                  <td>
+                    <img src="{{ getMedia(item.image) }}" width="300" height="200" alt="">
+                  </td>
+
+                  <td>{{ item.city }}</td>
+
+
+                  <td>
+                    <a href="{{ route('subsections.edit', { id: item.subsection.id }) }}" class="text-primary">{{ item.subsection.name }}</a>
+                  </td>
+
+                  <td>{{ item.reportsCount }}</td>
+                  <td>{{ item.createdAtForUser }}</td>
+                  <td>{{ item.timeBeforeArchive }}</td>
+
+                  <td>
+                    <div class="dropdown">
+                      <button type="button" class="btn btn-success light sharp" data-toggle="dropdown"
+                        aria-expanded="false">
+                        <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1">
+                          <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <rect x="0" y="0" width="24" height="24"></rect>
+                            <circle fill="#000000" cx="5" cy="12" r="2"></circle>
+                            <circle fill="#000000" cx="12" cy="12" r="2"></circle>
+                            <circle fill="#000000" cx="19" cy="12" r="2"></circle>
+                          </g>
+                        </svg>
+                      </button>
+                      <div class="dropdown-menu" style="">
+                        <a class="dropdown-item" href="{{ route('offer.get', { id: item.id }) }}">Просмотреть</a>
+                        <a class="dropdown-item" target="_blank" href="https://business-mylife.ru/adv-page/{{item.id}}">Открыть на сайте</a>
+                      </div>
+
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              @endeach
+
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  @!component('components/pagination', { obj: offers })
+@endsection
