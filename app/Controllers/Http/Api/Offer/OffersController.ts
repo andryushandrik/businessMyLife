@@ -221,6 +221,7 @@ export default class OffersController {
 		}
 		try {
 			await OfferService.update(id, payload)
+			OfferService.actions(id, 'ban', false)
 
 			return response.status(200).send(new ResponseService(ResponseMessages.SUCCESS))
 		} catch (err: Err | any) {
@@ -252,3 +253,4 @@ export default class OffersController {
 		}
 	}
 }
+
