@@ -220,8 +220,6 @@ export default class OffersController {
 			})
 		}
 		try {
-			const offer = await OfferService.get(id)
-
 			await OfferService.update(id, payload)
 			OfferService.actions(id, 'ban', false)
 
