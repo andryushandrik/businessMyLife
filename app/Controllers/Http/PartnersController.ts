@@ -54,7 +54,6 @@ export default class PartnersController {
 	public async store({ request, response, session }: HttpContextContract) {
 		const mediaType: boolean = request.input('mediaType') === 'true'
 		let payload: (PartnerWithImageValidator | PartnerWithVideoValidator)['schema']['props']
-		console.log(request.body())
 		if (mediaType) payload = await request.validate(PartnerWithVideoValidator)
 		else payload = await request.validate(PartnerWithImageValidator)
 		payload.isVisible = payload.isVisible ? true : false
@@ -100,7 +99,6 @@ export default class PartnersController {
 		const id: Partner['id'] = params.id
 		const mediaType: boolean = request.input('mediaType') === 'true'
 		let payload: (PartnerWithImageValidator | PartnerWithVideoValidator)['schema']['props']
-
 		if (mediaType) payload = await request.validate(PartnerWithVideoValidator)
 		else payload = await request.validate(PartnerWithImageValidator)
 
@@ -160,3 +158,4 @@ export default class PartnersController {
 		return response.redirect().back()
 	}
 }
+

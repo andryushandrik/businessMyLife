@@ -211,15 +211,6 @@ export default class Offer extends BaseModel {
 	}
 
 	@computed()
-	public get isBlocked(): boolean {
-		let isOfferBlocked = false
-		if (this.blockDescription) {
-			isOfferBlocked = true
-		}
-		return isOfferBlocked
-	}
-
-	@computed()
 	public get isVerifiedForUser(): string {
 		return this.isVerified ? 'Да' : 'Нет'
 	}
@@ -252,10 +243,11 @@ export default class Offer extends BaseModel {
 	public get timeBeforeArchive(): string {
 		const expireDate: DateTime = this.createdAt.plus({ months: this.placedForMonths }).plus({ days: 1 })
 		const daysBeforeArchive: number = expireDate.diff(DateTime.now(), 'days').days
+    if (this.isBanned) {
+      return 'На доработке у пользователя'
+    }
 		if (this.isArchived) {
-			if (daysBeforeArchive > 0) {
-				return 'На доработке у пользователя'
-			}
+
 			return ` Архивирован ${expireDate.setLocale('ru-RU').toFormat('dd MMMM, yyyy')}`
 		}
 		const daysBeforeArchiveWithoutFraction: number = Math.floor(daysBeforeArchive)
@@ -381,3 +373,4 @@ export default class Offer extends BaseModel {
 		return item
 	}
 }
+
