@@ -94,7 +94,6 @@ export default class PartnerService {
 		}
 
 		try {
-			console.log('payload', payload)
 			item = await item.merge({ ...payload, media }).save()
       await trx!.commit()
 		} catch (err: any) {

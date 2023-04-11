@@ -102,6 +102,8 @@ export default class PartnersController {
 		if (mediaType) payload = await request.validate(PartnerWithVideoValidator)
 		else payload = await request.validate(PartnerWithImageValidator)
 
+    payload.isTitleLink = payload.isTitleLink ?? false
+    payload.isVisible = payload.isVisible ?? false
 		try {
 			await PartnerService.update(id, payload)
 
