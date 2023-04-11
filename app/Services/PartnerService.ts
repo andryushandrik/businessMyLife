@@ -83,10 +83,6 @@ export default class PartnerService {
 		let trx: TransactionClientContract | undefined = undefined
 		trx = await Database.transaction()
 
-		if (!payload.mediaType) {
-			media = 'tmp'
-		}
-
 		try {
 			item = await this.get(id, { trx })
 		} catch (err: Err | any) {
