@@ -212,6 +212,7 @@ export default class OffersController {
 			payload = await request.validate(OfferValidator)
 
 			payload.isVerified = false
+      payload.isArchived = false
 		} catch (err: Err | any) {
 			throw new ExceptionService({
 				code: ResponseCodes.VALIDATION_ERROR,
