@@ -63,6 +63,11 @@ export default class UploadTutorialService {
 		if (payload.video) {
 			tutorialPayload.isEmbed = false
 			trx = await Database.transaction()
+		} else {
+			if (!payload.embed) {
+				tutorialPayload.isEmbed = false
+				delete tutorialPayload.media
+			}
 		}
 
 		try {
@@ -105,6 +110,11 @@ export default class UploadTutorialService {
 		if (payload.video) {
 			tutorialPayload.isEmbed = false
 			trx = await Database.transaction()
+		} else {
+			if (!payload.embed) {
+				tutorialPayload.isEmbed = false
+				delete tutorialPayload.media
+			}
 		}
 
 		try {
@@ -201,3 +211,4 @@ export default class UploadTutorialService {
 		return query
 	}
 }
+

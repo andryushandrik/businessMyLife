@@ -34,7 +34,7 @@
 
               @each(item in news)
                 <tr>
-                  <td><strong>{{ item.id }}</strong></td>
+                  <td><strong>{{ (index + (news.currentPage - 1) * news.perPage ) + 1 }}</strong></td>
                   <td>{{ item.title }}</td>
                   <td>{{ item.slug }}</td>
                   <td>{{ item.viewsCount }}</td>

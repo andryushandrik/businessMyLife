@@ -37,7 +37,7 @@
 
               @each(item in areas)
                 <tr>
-                  <td><strong>{{ item.id }}</strong></td>
+                  <td><strong>{{ (index + (areas.currentPage - 1) * areas.perPage ) + 1 }}</strong></td>
                   <td>{{ item.name }}</td>
                   <td>{{ item.createdAtForUser }}</td>
 

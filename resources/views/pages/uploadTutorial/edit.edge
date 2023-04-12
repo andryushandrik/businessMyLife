@@ -73,7 +73,7 @@
               @if(item.isEmbed)
                 {{{ item.media }}}
               @else
-              <video src="{{ getMedia(item.media) }}" height="400" controls />
+                <video src="{{ getMedia(item.media) }}" height="250" controls />
               @endif
             </div>
 
@@ -89,8 +89,8 @@
             </div>
 
             <div class="form-group">
-              <label class="mb-1">Видео</label>
-              <input type="file" class="form-control" name="video">
+              <label class="mb-1">Загрузить новое видео</label>
+              <input type="file" class="form-control" name="video" value="{{ getMedia(item.media) }}">
 
               @if(flashMessages.has('errors.video'))
                 <div class="invalid-feedback d-block">
@@ -102,7 +102,7 @@
             {{ csrfField() }}
 
             <div class="text-right">
-              <button type="submit" class="btn btn-primary btn-block">Редактировать</button>
+              <button type="submit" class="btn btn-primary btn-block">Сохранить</button>
             </div>
 
           </form>

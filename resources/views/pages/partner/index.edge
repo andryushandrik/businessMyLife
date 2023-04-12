@@ -38,8 +38,7 @@
 
               @each(item in partners)
               <tr>
-                <td><strong>{{ item.id }}</strong></td>
-
+                <td><strong>{{ (index + (partners.currentPage - 1) * partners.perPage ) + 1 }}</strong></td>
                 <td><strong>{{ item.isVisibleForUser }}</strong></td>
 
                 @if (item.isTitleLink)

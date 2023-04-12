@@ -56,7 +56,7 @@
 
               @each(item in ads)
                 <tr>
-                  <td><strong>{{ item.id }}</strong></td>
+                  <td><strong>{{ (index + (ads.currentPage - 1) * ads.perPage ) + 1 }}</strong></td>
                   <td>  <a href="https://business-mylife.ru/account/profile/user/{{item.owner.id}}" target="_blank"><b> {{ item?.owner?.firstName }} {{ item?.owner?.lastName }} </b></a> </td>
 
                   <td><img src="{{ getMedia(item.image) }}" alt="" class="banner_cover_img" style="max-width: 100%"/></td>

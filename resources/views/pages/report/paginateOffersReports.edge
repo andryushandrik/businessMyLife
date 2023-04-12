@@ -64,7 +64,7 @@
 
               @each(item in reports)
                 <tr>
-                  <td><strong>{{ item.id }}</strong></td>
+                  <td><strong>{{ (index + (reports.currentPage - 1) * reports.perPage ) + 1 }}</strong></td>
                   <td>{{ categories[item.offer.category] }}</td>
                   <td>
                     <a href="{{ route('offer.get', { id: item.offer.id }) }}" class="text-primary">{{ item.offer.title }}</a>
