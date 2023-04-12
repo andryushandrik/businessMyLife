@@ -9,6 +9,7 @@
       { key: 'id', value: 'ID' },
       { key: 'userId', value: 'UserID' },
       { key: 'amount', value: 'Величина' },
+      { key: 'promoCodeId', value: 'promoCodeId' }
     ],
   })
 
@@ -47,7 +48,9 @@
               @each(item in payments)
                 <tr>
                   <td><strong>{{ item.id }}</strong></td>
-                  <td>{{ item.user?.fullName }}</td>
+                  <td>
+                    <a href="https://business-mylife.ru/account/profile/user/{{item.user.id}}" class="text-primary">{{ item.user.fullName }}</a>
+                  </td>
                   <td>{{ item.amount }}</td>
                   <td>{{ item.description }}</td>
                   @if(item.promoCode)

@@ -41,8 +41,8 @@ export default class UploadTutorialValidator extends IndexValidator {
 		isVisible: schema.boolean.optional(),
 		isTitleLink: schema.boolean.optional(),
 		link: schema.string.optional(),
-		video: schema.file.optional(getUploadTutorialVideoOptions(), [rules.requiredIfNotExists('embed')]),
-		embed: schema.string.optional({ trim: true }, [...getUploadTutorialEmbedRules(), rules.requiredIfNotExists('video')]),
+		video: schema.file.optional(getUploadTutorialVideoOptions()),
+		embed: schema.string.optional({ trim: true }, [...getUploadTutorialEmbedRules()]),
 	})
 
 	/**

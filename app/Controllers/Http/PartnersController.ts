@@ -98,7 +98,9 @@ export default class PartnersController {
 	public async update({ request, response, session, params }: HttpContextContract) {
 		const id: Partner['id'] = params.id
 		const mediaType: boolean = request.input('mediaType') === 'true'
+
 		let payload: (PartnerWithImageValidator | PartnerWithVideoValidator)['schema']['props']
+
 		if (mediaType) payload = await request.validate(PartnerWithVideoValidator)
 		else payload = await request.validate(PartnerWithImageValidator)
 

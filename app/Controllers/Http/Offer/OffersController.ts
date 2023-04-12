@@ -131,6 +131,7 @@ export default class OffersController {
 		const config: OfferServicePaginateConfig = {
 			baseUrl: route!.pattern,
 			page: request.input('page', 1),
+      limit: request.input('limit', 3),
 			queryString: request.qs(),
 			isVerified: false,
 			isBanned: false,
