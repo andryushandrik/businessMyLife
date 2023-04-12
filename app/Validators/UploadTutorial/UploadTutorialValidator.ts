@@ -4,7 +4,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 // * Types
 
 import IndexValidator from '../IndexValidator'
-import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import { schema } from '@ioc:Adonis/Core/Validator'
 import { getUploadTutorialTitleRules, getUploadTutorialEmbedRules, getUploadTutorialVideoOptions } from '../Rules/uploadTutorial'
 
 export default class UploadTutorialValidator extends IndexValidator {
