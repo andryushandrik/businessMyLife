@@ -38,7 +38,7 @@
             </thead>
             <tbody>
 
-              @each(item in reportTypes)
+              @each((item, index) in reportTypes)
                 <tr>
                   <td><strong>{{ (index + (reportTypes.currentPage - 1) * reportTypes.perPage ) + 1 }}</strong></td>
                   <td>{{ item.name }}</td>

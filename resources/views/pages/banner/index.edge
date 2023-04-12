@@ -65,7 +65,7 @@
             </thead>
             <tbody>
 
-              @each(item in banners)
+              @each((item, index) in banners)
                 <tr>
                   <td><strong>{{ (index + (banners.currentPage - 1) * banners.perPage ) + 1 }}</strong></td>
                   <td>{{ item.orderNumber }}</td>

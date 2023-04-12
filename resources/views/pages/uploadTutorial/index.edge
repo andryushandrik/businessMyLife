@@ -37,7 +37,7 @@
             </thead>
             <tbody>
 
-              @each(item in tutorials)
+              @each((item, index) in tutorials)
               <tr>
                 <td><strong>{{ (index + (tutorials.currentPage - 1) * tutorials.perPage ) + 1 }}</strong></td>
                 <td><strong>{{ item.isVisibleForUser }}</strong></td>

@@ -36,7 +36,7 @@
             </thead>
             <tbody>
 
-              @each(item in partners)
+              @each((item, index) in partners)
               <tr>
                 <td><strong>{{ (index + (partners.currentPage - 1) * partners.perPage ) + 1 }}</strong></td>
                 <td><strong>{{ item.isVisibleForUser }}</strong></td>

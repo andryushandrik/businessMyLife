@@ -32,7 +32,7 @@
             </thead>
             <tbody>
 
-              @each(item in news)
+              @each((item, index) in news)
                 <tr>
                   <td><strong>{{ (index + (news.currentPage - 1) * news.perPage ) + 1 }}</strong></td>
                   <td>{{ item.title }}</td>

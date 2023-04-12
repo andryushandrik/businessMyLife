@@ -46,7 +46,7 @@
             </thead>
             <tbody>
 
-              @each(item in franchises)
+              @each((item, index) in franchises)
                 <tr>
                   <td><strong>{{ (index + (franchises.currentPage - 1) * franchises.perPage ) + 1 }}</strong></td>
 

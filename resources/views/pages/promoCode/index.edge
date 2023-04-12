@@ -37,7 +37,7 @@
             </thead>
             <tbody>
 
-              @each(item in promoCodes)
+              @each((item, index) in promoCodes)
                 <tr>
                   <td><strong>{{ (index + (promoCodes.currentPage - 1) * promoCodes.perPage ) + 1 }}</strong></td>
                   <td>{{ item.name }}</td>

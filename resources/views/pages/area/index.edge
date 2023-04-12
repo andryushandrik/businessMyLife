@@ -35,7 +35,7 @@
             </thead>
             <tbody>
 
-              @each(item in areas)
+              @each((item, index) in areas)
                 <tr>
                   <td><strong>{{ (index + (areas.currentPage - 1) * areas.perPage ) + 1 }}</strong></td>
                   <td>{{ item.name }}</td>

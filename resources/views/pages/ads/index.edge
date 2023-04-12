@@ -54,7 +54,7 @@
             </thead>
             <tbody>
 
-              @each(item in ads)
+              @each((item, index) in ads)
                 <tr>
                   <td><strong>{{ (index + (ads.currentPage - 1) * ads.perPage ) + 1 }}</strong></td>
                   <td>  <a href="https://business-mylife.ru/account/profile/user/{{item.owner.id}}" target="_blank"><b> {{ item?.owner?.firstName }} {{ item?.owner?.lastName }} </b></a> </td>

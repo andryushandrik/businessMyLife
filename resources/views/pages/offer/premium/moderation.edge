@@ -47,7 +47,7 @@
             </thead>
             <tbody>
 
-              @each(item in franchises)
+              @each((item, index) in franchises)
                 <tr>
                   <td><strong>{{ (index + (franchises.currentPage - 1) * franchises.perPage ) + 1 }}</strong></td>
                   <td><b> <a target="_blank" href="https://business-mylife.ru/account/profile/user/{{ item.offer.user.id}}">{{ item.offer.user.firstName}} {{ item.offer.user.lastName}}</a></b></td>

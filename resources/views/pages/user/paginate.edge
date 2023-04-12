@@ -66,7 +66,7 @@
             </thead>
             <tbody >
 
-              @each(item in users)
+              @each((item, index) in users)
                 <tr>
                   <td><strong>{{ (index + (users.currentPage - 1) * users.perPage ) + 1 }}</strong></td>
                   <td>{{ roles[item.roleId - 1] }}</td>

@@ -48,7 +48,7 @@
             </thead>
             <tbody>
 
-              @each(item in feedbacks)
+              @each((item, index) in feedbacks)
                 @if(item.isCompleted)
                   <tr class="feedback_completed">
                 @else

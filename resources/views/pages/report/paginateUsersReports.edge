@@ -33,7 +33,7 @@
             </thead>
             <tbody>
 
-              @each(item in reports)
+              @each((item, index) in reports)
                 <tr>
                   <td><strong>{{ (index + (reports.currentPage - 1) * reports.perPage ) + 1 }}</strong></td>
                   <td>

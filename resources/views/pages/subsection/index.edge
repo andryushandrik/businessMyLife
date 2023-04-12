@@ -36,7 +36,7 @@
             </thead>
             <tbody>
 
-              @each(item in subsections)
+              @each((item, index) in subsections)
                 <tr>
                   <td><strong>{{ (index + (subsections.currentPage - 1) * subsections.perPage ) + 1 }}</strong></td>
                   <td>{{ item.name }}</td>

@@ -45,7 +45,7 @@
             </thead>
             <tbody>
 
-              @each(item in payments)
+              @each((item, index) in payments)
                 <tr>
                   <td><strong>{{ (index + (payments.currentPage - 1) * payments.perPage ) + 1 }}</strong></td>
                   <td>

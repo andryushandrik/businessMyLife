@@ -46,9 +46,9 @@
             </thead>
             <tbody>
 
-              @each(item in slots)
+              @each((item, index) in slots)
                 <tr>
-                  <td><strong>{{ item.id }}</strong></td>
+                  <td><strong>{{ (index + (slots.currentPage - 1) * slots.perPage ) + 1 }}</strong></td>
                   <td><b><a target="_blank" href="{{ route('offer.premium.slots.edit', { id: item.id }) }}">{{ item.title }}</a> </b></td>
                   <td>{{ item.type }} </td>
                   <td>{{ item.priceThreeMonths }} </td>
