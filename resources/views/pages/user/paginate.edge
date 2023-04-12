@@ -68,7 +68,7 @@
 
               @each(item in users)
                 <tr>
-                  <td><strong>{{ item.id }}</strong></td>
+                  <td><strong>{{ (index + (users.currentPage - 1) * users.perPage ) + 1 }}</strong></td>
                   <td>{{ roles[item.roleId - 1] }}</td>
                   <td>{{ usersTypes[item.type] }}</td>
                   <td> <a class="text-primary" href="https://business-mylife.ru/account/profile/user/{{item.id}}" target="_blank">{{ item.fullName }}</a></td>

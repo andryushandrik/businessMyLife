@@ -33,7 +33,7 @@
 
               @each(item in ourPartners)
                 <tr>
-                  <td><strong>{{ item.id }}</strong></td>
+                  <td><strong>{{ (index + (ourPartners.currentPage - 1) * ourPartners.perPage ) + 1 }}</strong></td>
                   <td>{{ item.name }}</td>
                   @if(item.isVisible)
                   <td style="color:green"> Да </td>

@@ -68,9 +68,9 @@
             </thead>
             <tbody>
 
-              @each(item in offers)
+              @each((item, index) in offers)
                 <tr>
-                  <td><strong>{{ item.id }}</strong></td>
+                  <td><strong>{{ (index + (offers.currentPage - 1) * offers.perPage ) + 1 }}</strong></td>
                   <td>
                     <a href="{{ route('user.get', { id: item.user.id }) }}" class="text-primary">{{ item.user.fullName }}</a>
                   </td>

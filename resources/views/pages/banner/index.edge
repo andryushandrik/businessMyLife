@@ -67,7 +67,7 @@
 
               @each(item in banners)
                 <tr>
-                  <td><strong>{{ item.id }}</strong></td>
+                  <td><strong>{{ (index + (banners.currentPage - 1) * banners.perPage ) + 1 }}</strong></td>
                   <td>{{ item.orderNumber }}</td>
 
                   <td>{{ item.title }}</td>

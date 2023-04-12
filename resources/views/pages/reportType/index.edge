@@ -40,7 +40,7 @@
 
               @each(item in reportTypes)
                 <tr>
-                  <td><strong>{{ item.id }}</strong></td>
+                  <td><strong>{{ (index + (reportTypes.currentPage - 1) * reportTypes.perPage ) + 1 }}</strong></td>
                   <td>{{ item.name }}</td>
                   <td>{{ item.isForUsersForUser }}</td>
                   <td>{{ item.isForOffersForUser }}</td>

@@ -50,7 +50,7 @@
 
               @each(item in franchises)
                 <tr>
-                  <td><strong>{{ item.id }}</strong></td>
+                  <td><strong>{{ (index + (franchises.currentPage - 1) * franchises.perPage ) + 1 }}</strong></td>
                   <td> <a class="text-primary" target="_blank" href="https://business-mylife.ru/account/profile/user/{{ item.offer.user.id}}">{{ item.offer.user.firstName}} {{ item.offer.user.lastName}}</a></td>
                   <td>  <a class="text-primary" target="_blank" href="https://business-mylife.ru/adv-page/{{item.offer.id}}">{{ item.offer.id }} - {{ item.offer.title }}</a></td>
 

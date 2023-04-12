@@ -38,7 +38,7 @@
 
               @each(item in subsections)
                 <tr>
-                  <td><strong>{{ item.id }}</strong></td>
+                  <td><strong>{{ (index + (subsections.currentPage - 1) * subsections.perPage ) + 1 }}</strong></td>
                   <td>{{ item.name }}</td>
                   <td>
                     <a href="{{ route('areas.edit', { id: item.area.id }) }}" class="text-primary">{{ item.area.name }}</a>

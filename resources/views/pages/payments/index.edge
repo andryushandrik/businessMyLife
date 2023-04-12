@@ -47,7 +47,7 @@
 
               @each(item in payments)
                 <tr>
-                  <td><strong>{{ item.id }}</strong></td>
+                  <td><strong>{{ (index + (payments.currentPage - 1) * payments.perPage ) + 1 }}</strong></td>
                   <td>
                     <a href="https://business-mylife.ru/account/profile/user/{{item.user.id}}" class="text-primary">{{ item.user.fullName }}</a>
                   </td>

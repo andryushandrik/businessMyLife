@@ -54,7 +54,7 @@
                 @else
                   <tr >
                 @endif
-                  <td><strong>{{ item.id }}</strong></td>
+                  <td><strong>{{ (index + (feedbacks.currentPage - 1) * feedbacks.perPage ) + 1 }}</strong></td>
                   <td>{{ item.name }}</td>
                   <td>{{ item.email }}</td>
                   <td>{{ truncate(item.question, 100) }}</td>

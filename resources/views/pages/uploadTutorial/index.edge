@@ -39,14 +39,14 @@
 
               @each(item in tutorials)
               <tr>
-                <td><strong>{{ item.id }}</strong></td>
+                <td><strong>{{ (index + (tutorials.currentPage - 1) * tutorials.perPage ) + 1 }}</strong></td>
                 <td><strong>{{ item.isVisibleForUser }}</strong></td>
                 <td><strong>{{ item.title }}</strong></td>
                 <td style="max-width: 10%;">
                   @if (item.isEmbed)
                     {{ item.media.slice(0,35) }}...
                   @else
-                    <video src="{{ getMedia(item.media) }}"  controls />
+                    <video src="{{ getMedia(item.media) }}" height="200" controls />
                   @endif
                 </td>
                 <td>

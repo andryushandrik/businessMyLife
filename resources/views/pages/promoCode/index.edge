@@ -39,7 +39,7 @@
 
               @each(item in promoCodes)
                 <tr>
-                  <td><strong>{{ item.id }}</strong></td>
+                  <td><strong>{{ (index + (promoCodes.currentPage - 1) * promoCodes.perPage ) + 1 }}</strong></td>
                   <td>{{ item.name }}</td>
                   <td>{{ item.code }}</td>
                   <td>{{ item.discountPrice }}</td>

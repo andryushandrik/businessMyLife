@@ -91,7 +91,8 @@
                           </a>
                         </div>
                       @endif
-                      <strong >{{ item.id }}</strong>
+                      <td><strong>{{ (index + (franchises.currentPage - 1) * franchises.perPage ) + 1 }}</strong></td>
+
 
                     </div>
                   </td>
